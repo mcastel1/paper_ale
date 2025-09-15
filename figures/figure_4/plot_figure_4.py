@@ -52,7 +52,7 @@ h = 1.0
 
 n_ticks_colorbar = 3
 
-n_bins = 20
+n_bins = 100
 
 n_ticks = 4
 font_size = 8
@@ -72,7 +72,7 @@ fig = pplt.figure(figsize=(4, 4), left=5, bottom=5, right=5, top=5, wspace=0, hs
 
 def plot_column(fig, n_file):
     n_snapshot = str(n_file)
-    data_X = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/X_n_12_' + n_snapshot + '.csv', usecols=columns_line_vertices)
+    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_line_vertices)
 
     ax = fig.add_subplot(1, 1, 1)
 
@@ -80,20 +80,16 @@ def plot_column(fig, n_file):
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    print(data_X.to_string())
 
     X = gr.interpolate_curve(data_X, x_min, x_max, n_bins)
 
-    curve = ax.plot_surface(X,
-                                edgecolor='black',
-                                rstride=grid_stride,
-                                cstride=grid_stride,
-                                alpha=0,
-                                linewidth=line_width_grid,
-                                shade=False
-                            )
 
-    gr.set_2d_axes_limits(ax, [x_min, 0], [x_max, h], [0, 0])
+    print(f'X = {X}')
+
+    plt.plot(X[:, 0], X[:, 1], 'b-', linewidth=2, label='Interpolated Curve')
+
+
+    gr.set_2d_axes_limits(ax, [x_min, -h], [x_max, h], [0, 0])
 
     '''
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
@@ -101,7 +97,7 @@ def plot_column(fig, n_file):
                         90, [0, 0], r'$v \, []$', font_size)
     '''
 
-    gr.plot_2d_axes_label(ax, [x_min, 0], [x_max, h], \
+    gr.plot_2d_axes_label(ax, [x_min, -h], [x_max-x_min, 2*h], \
                           0.05, 0.05, 1, \
                           r'$X^1 \, []$', r'$X^2 \, []$', 0, 90, \
                           0.1, 0.1, 0.05, 0.05, 'f', 'f', \
