@@ -3,11 +3,11 @@ import os
 import time
 
 import text.text as text
-import plot_figure_1 as pfig
+import plot_figure_4 as pfig
 import system.system_io as sysio
 
 number_of_frames = sysio.count_v_files('line_mesh_n_', pfig.snapshot_path)
-animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_1.mp4')
+animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_4.mp4')
 
 
 
