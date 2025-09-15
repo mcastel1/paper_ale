@@ -2,18 +2,19 @@ import matplotlib.animation as ani
 import os 
 import time
 
+import graphics.graph as graph
 import text.text as text
 import plot_figure_4 as pfig
 import system.system_io as sysio
 
-number_of_frames = sysio.count_v_files('line_mesh_n_', pfig.snapshot_path)
+number_of_frames = sysio.count_v_files('X_n_12_', pfig.snapshot_path)
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_4.mp4')
 
 
 
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1
 n_first_frame = 1
-frame_stride = 1000
+frame_stride = 1
 
 frames_per_second = 1
 animation_duration_in_sec = (number_of_frames / frame_stride) / frames_per_second
@@ -38,9 +39,9 @@ def update_animation(n):
     for ax in pfig.fig.axes:
         ax.clear()
     # graph.remove_all_axes(pfig.fig)
-    for ax in pfig.fig.axes[:]:
-        if ax.get_label() == "colorbar":
-            pfig.fig.delaxes(ax)
+    # for ax in pfig.fig.axes[:]:
+        # if ax.get_label() == "colorbar":
+            # pfig.fig.delaxes(ax)
 
     # text.clear_labels_with_patterns(pfig.fig, ["\second", "\msecond", "\minute", "\hour"])
     pfig.plot_column(pfig.fig, n)

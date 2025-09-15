@@ -57,7 +57,7 @@ n_bins = 100
 n_ticks = 4
 font_size = 8
 n_early_snapshot = 1
-n_late_snapshot = 10
+n_late_snapshot = 2
 compression_density = 1000
 compression_quality = 60
 # CHANGE PARAMETERS HERE
@@ -84,7 +84,7 @@ def plot_column(fig, n_file):
     X = gr.interpolate_curve(data_X, x_min, x_max, n_bins)
 
 
-    print(f'X = {X}')
+    # print(f'X = {X}')
 
     plt.plot(X[:, 0], X[:, 1], 'b-', linewidth=2, label='Interpolated Curve')
 
@@ -105,11 +105,11 @@ def plot_column(fig, n_file):
 
 
 # fork:  to plot the figure
-plot_column(fig, n_early_snapshot)
+# plot_column(fig, n_early_snapshot)
 # plot_column(fig, n_late_snapshot)
 
 # fork : to plot the animation
-# plot_column(fig, n_early_snapshot)
+plot_column(fig, n_early_snapshot)
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
