@@ -11,6 +11,7 @@ import warnings
 import graphics.graph as gr
 import input_output.input_output as io
 import system.paths as paths
+import system.system_io as sysio
 
 # add the path where to find the shared modules
 module_path = paths.root_path + "/figures/modules/"
@@ -38,23 +39,33 @@ plt.rcParams.update({
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+# solution_path = "/Users/michelecastellana/Documents/finite_elements/dynamics/lagrangian_approach/one_dimension/solution/"
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'figure_4')
 snapshot_path = os.path.join(solution_path, "snapshots/csv/nodal_values/")
 
 parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))   
 
+
+
 x_min = 0.0
 x_max = 1.0
 # CHANGE PARAMETERS HERE
+
 
 
 # labels of columns to read
 columns_X = ["f:0","f:1","f:2",":0", ":1",":2"]
 columns_sigma = ["f",":0", ":1",":2"]
 
+n_min, n_max = sysio.n_min_max('X_n_12_', snapshot_path)
+# number_of_frames = sysio.count_v_files('X_n_12_', pfig.snapshot_path)
+number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 
-fig = pplt.figure(figsize=(6, 3), left=5, bottom=5, right=0, top=5, wspace=0, hspace=0)
+sigma_min, sigma_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
+
+
+fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=5, bottom=5, right=0, top=5, wspace=0, hspace=0)
 
 
 def plot_column(fig, n_file):
@@ -62,10 +73,7 @@ def plot_column(fig, n_file):
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
     
-    sigma_min = np.min(data_sigma['f'])
-    sigma_max = np.max(data_sigma['f'])
-
-    print(f'data_sigma = {data_sigma}')
+    # print(f'data_sigma = {data_sigma}')
 
     # Check if we already have an axis, if not create one
     if len(fig.axes) == 0:
@@ -80,10 +88,9 @@ def plot_column(fig, n_file):
 
     X, t = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
 
-    print(f'X = {X}')
 
-    color_map = gr.cb.make_curve_colorbar(fig, t, data_sigma, sigma_min, sigma_max, 
-                                    [0.1, 0.1], [0.01, 0.1], 90, [0,0], 
+    color_map = gr.cb.make_curve_colorbar(fig, t, data_sigma,
+                                    [0.05, 0.1], [0.01, 0.5], 0, [0,0], 
                                     r'$\sigma \, []$', parameters['font_size'],)
 
     gr.plot_curve_grid(ax, X, color_map)

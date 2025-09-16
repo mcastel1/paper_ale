@@ -6,17 +6,16 @@ import plot_figure_4 as pfig
 import system.system_io as sysio
 import text.text as text
 
-number_of_frames = sysio.count_v_files('X_n_12_', pfig.snapshot_path)
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_4.mp4')
 
 
 
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1
 
-animation_duration_in_sec = (number_of_frames / pfig.parameters['frame_stride']) / pfig.parameters['frames_per_second']
+animation_duration_in_sec = (pfig.number_of_frames / pfig.parameters['frame_stride']) / pfig.parameters['frames_per_second']
 
 print(
-    f"number of frames: {number_of_frames} \n frames per second: {pfig.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {pfig.parameters['frame_stride']}",
+    f"number of frames: {pfig.number_of_frames} \n frames per second: {pfig.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {pfig.parameters['frame_stride']}",
     flush=True)
 
 Writer = ani.writers['ffmpeg']
@@ -47,7 +46,7 @@ def update_animation(n):
 animation = ani.FuncAnimation(
     fig=pfig.fig,
     func=update_animation,
-    frames=range(pfig.parameters['n_first_frame'], number_of_frames, pfig.parameters['frame_stride']),
+    frames=range(pfig.parameters['n_first_frame'], pfig.number_of_frames, pfig.parameters['frame_stride']),
     interval=30
 )
 
