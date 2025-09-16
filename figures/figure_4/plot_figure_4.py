@@ -82,7 +82,7 @@ def plot_column(fig, n_file):
 
     print(f'X = {X}')
 
-    color_map = gr.cb.make_curve_colorbar(fig, data_sigma, sigma_min, sigma_max, 
+    color_map = gr.cb.make_curve_colorbar(fig, t, data_sigma, sigma_min, sigma_max, 
                                     [0.1, 0.1], [0.01, 0.1], 90, [0,0], 
                                     r'$\sigma \, []$', parameters['font_size'],)
 
