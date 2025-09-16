@@ -51,9 +51,7 @@ h = 0.1
 
 
 n_ticks_colorbar = 3
-
 n_bins = 100
-
 n_ticks = 4
 font_size = 8
 n_early_snapshot = 1
