@@ -79,13 +79,14 @@ def plot_column(fig, n_file):
 
     X = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
     
-    color_map = gr.cb.make_colorbar(fig, X, sigma_min, sigma_max, 
-                                    [0.07, 0.45], [0.01, 0.3], 90, 0, 
-                                    r'$\sigma \, []$', parameters['font_size'],)
+    # color_map = gr.cb.make_curve_colorbar(fig, data_sigma, sigma_min, sigma_max, 
+    #                                 [0.1, 0.1], [0.01, 0.3], 90, 0, 
+    #                                 r'$\sigma \, []$', parameters['font_size'],)
 
     # print(f'X = {X}')
 
-    plt.plot(X[:, 0], X[:, 1], 'b-', linewidth=2, label='Interpolated Curve')
+    # plt.plot(X[:, 0], X[:, 1], 'b-', linewidth=2, label='Interpolated Curve')
+    gr.plot_curve_grid(X)
 
     gr.set_2d_axes_limits(ax, [x_min, -parameters['X2_max']], [x_max, parameters['X2_max']], [0, 0])
 
