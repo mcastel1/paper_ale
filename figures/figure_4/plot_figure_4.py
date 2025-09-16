@@ -78,7 +78,7 @@ def plot_column(fig, n_file):
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    X = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
+    X, t = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
 
     print(f'X = {X}')
 
