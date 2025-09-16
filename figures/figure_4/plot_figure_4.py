@@ -47,7 +47,7 @@ snapshot_path = os.path.join(solution_path, "snapshots/csv/nodal_values/")
 # define the folder where to read the data
 x_min = 0.0
 x_max = 1.0
-h = 1.0
+h = 0.1
 
 
 n_ticks_colorbar = 3

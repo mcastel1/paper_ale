@@ -14,9 +14,9 @@ animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'anima
 
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1
 n_first_frame = 1
-frame_stride = 1000
+frame_stride = 100
 
-frames_per_second = 1
+frames_per_second = 30
 animation_duration_in_sec = (number_of_frames / frame_stride) / frames_per_second
 
 print(
