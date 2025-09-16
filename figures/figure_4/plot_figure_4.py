@@ -80,6 +80,7 @@ def plot_column(fig, n_file):
 
     X = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
 
+    print(f'X = {X}')
 
     color_map = gr.cb.make_curve_colorbar(fig, data_sigma, sigma_min, sigma_max, 
                                     [0.1, 0.1], [0.01, 0.1], 90, [0,0], 
