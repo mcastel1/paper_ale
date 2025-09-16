@@ -11,7 +11,6 @@ import warnings
 import graphics.graph as gr
 import input_output.input_output as io
 import system.paths as paths
-import graphics.vector_plot as vec
 
 # add the path where to find the shared modules
 module_path = paths.root_path + "/figures/modules/"
@@ -47,12 +46,12 @@ parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.pa
 
 x_min = 0.0
 x_max = 1.0
-h = 0.1
 # CHANGE PARAMETERS HERE
 
 
 # labels of columns to read
-columns_line_vertices = ["f:0","f:1","f:2",":0", ":1",":2"]
+columns_X = ["f:0","f:1","f:2",":0", ":1",":2"]
+columns_sigma = ["f",":0", ":1",":2"]
 
 
 fig = pplt.figure(figsize=(4, 2), left=5, bottom=5, right=5, top=5, wspace=0, hspace=0)
@@ -60,7 +59,10 @@ fig = pplt.figure(figsize=(4, 2), left=5, bottom=5, right=5, top=5, wspace=0, hs
 
 def plot_column(fig, n_file):
     n_snapshot = str(n_file)
-    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_line_vertices)
+    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
+    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
+
+    print(f'data_sigma = {data_sigma}')
 
     # Check if we already have an axis, if not create one
     if len(fig.axes) == 0:
@@ -73,12 +75,16 @@ def plot_column(fig, n_file):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     X = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
+    
+    color_map = gr.cb.make_colorbar(fig, X, sigma_min, sigma_max, 
+                                    [0.07, 0.45], [0.01, 0.3], 90, 0, 
+                                    r'$\sigma \, []$', parameters['font_size'],)
 
     # print(f'X = {X}')
 
     plt.plot(X[:, 0], X[:, 1], 'b-', linewidth=2, label='Interpolated Curve')
 
-    gr.set_2d_axes_limits(ax, [x_min, -h], [x_max, h], [0, 0])
+    gr.set_2d_axes_limits(ax, [x_min, -parameters['X2_max']], [x_max, parameters['X2_max']], [0, 0])
 
     '''
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
@@ -86,7 +92,7 @@ def plot_column(fig, n_file):
                         90, [0, 0], r'$v \, [\met]$', parameters['font_size'])
     '''
 
-    gr.plot_2d_axes_label(ax, [x_min, -h], [x_max-x_min, 2*h], \
+    gr.plot_2d_axes_label(ax, [x_min, -parameters['X2_max']], [x_max-x_min, 2*parameters['X2_max']], \
                           0.05, 0.05, 1, \
                           r'$X^1 \, [\met]$', r'$X^2 \, [\met]$', 0, 90, \
                           0.1, 0.1, 0.05, 0.05, 'f', 'f', \
