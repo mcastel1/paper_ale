@@ -61,6 +61,9 @@ def plot_column(fig, n_file):
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
+    
+    sigma_min = np.min(data_sigma['f'])
+    sigma_max = np.max(data_sigma['f'])
 
     print(f'data_sigma = {data_sigma}')
 
