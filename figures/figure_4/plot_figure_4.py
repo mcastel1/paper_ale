@@ -54,7 +54,7 @@ columns_X = ["f:0","f:1","f:2",":0", ":1",":2"]
 columns_sigma = ["f",":0", ":1",":2"]
 
 
-fig = pplt.figure(figsize=(4, 2), left=5, bottom=5, right=5, top=5, wspace=0, hspace=0)
+fig = pplt.figure(figsize=(6, 3), left=5, bottom=5, right=0, top=5, wspace=0, hspace=0)
 
 
 def plot_column(fig, n_file):
@@ -72,29 +72,24 @@ def plot_column(fig, n_file):
         ax = fig.add_subplot(1, 1, 1)
     else:
         ax = fig.axes[0]  # Use the existing axis
+    
 
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     X = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
-    
+
+
     color_map = gr.cb.make_curve_colorbar(fig, data_sigma, sigma_min, sigma_max, 
-                                    [0.1, 0.1], [0.1, 0.3], 90, [0,0], 
+                                    [0.1, 0.1], [0.01, 0.1], 90, [0,0], 
                                     r'$\sigma \, []$', parameters['font_size'],)
 
-    # print(f'X = {X}')
+    gr.plot_curve_grid(ax, X, color_map)
 
-    # plt.plot(X[:, 0], X[:, 1], 'b-', linewidth=2, label='Interpolated Curve')
-    gr.plot_curve_grid(X, color_map)
 
     gr.set_2d_axes_limits(ax, [x_min, -parameters['X2_max']], [x_max, parameters['X2_max']], [0, 0])
 
-    '''
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
-                        1, [0.025, 0.2], [0.02, 0.4], \
-                        90, [0, 0], r'$v \, [\met]$', parameters['font_size'])
-    '''
 
     gr.plot_2d_axes_label(ax, [x_min, -parameters['X2_max']], [x_max-x_min, 2*parameters['X2_max']], \
                           0.05, 0.05, 1, \
