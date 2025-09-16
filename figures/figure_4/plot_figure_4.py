@@ -74,8 +74,13 @@ def plot_column(fig, n_file):
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_line_vertices)
 
-    ax = fig.add_subplot(1, 1, 1)
 
+    # Check if we already have an axis, if not create one
+    if len(fig.axes) == 0:
+        ax = fig.add_subplot(1, 1, 1)
+    else:
+        ax = fig.axes[0]  # Use the existing axis
+        
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
@@ -94,12 +99,12 @@ def plot_column(fig, n_file):
     '''
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         1, [0.025, 0.2], [0.02, 0.4], \
-                        90, [0, 0], r'$v \, []$', font_size)
+                        90, [0, 0], r'$v \, [\met]$', font_size)
     '''
 
     gr.plot_2d_axes_label(ax, [x_min, -h], [x_max-x_min, 2*h], \
                           0.05, 0.05, 1, \
-                          r'$X^1 \, []$', r'$X^2 \, []$', 0, 90, \
+                          r'$X^1 \, [\met]$', r'$X^2 \, [\met]$', 0, 90, \
                           0.1, 0.1, 0.05, 0.05, 'f', 'f', \
                           font_size, font_size, 0, r'', [0, 0])
 
