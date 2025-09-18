@@ -65,7 +65,7 @@ number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 sigma_min, sigma_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
 
 
-fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=5, bottom=5, right=0, top=5, wspace=0, hspace=0)
+fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=5, bottom=5, right=5, top=5, wspace=0, hspace=0)
 
 
 def plot_column(fig, n_file):
@@ -96,10 +96,10 @@ def plot_column(fig, n_file):
     gr.plot_curve_grid(ax, X, color_map)
 
 
-    gr.set_2d_axes_limits(ax, [x_min, -parameters['X2_max']], [x_max, parameters['X2_max']], [0, 0])
+    gr.set_2d_axes_limits(ax, [x_min, parameters['y_min']], [x_max, parameters['y_max']], [0, 0])
 
 
-    gr.plot_2d_axes_label(ax, [x_min, -parameters['X2_max']], [x_max-x_min, 2*parameters['X2_max']], \
+    gr.plot_2d_axes_label(ax, [x_min, parameters['y_min']], [x_max-x_min, parameters['y_max']-parameters['y_min']], \
                           0.05, 0.05, 1, \
                           r'$X^1 \, [\met]$', r'$X^2 \, [\met]$', 0, 90, \
                           0.1, 0.1, 0.05, 0.05, 'f', 'f', \
