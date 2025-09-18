@@ -62,13 +62,15 @@ n_min, n_max = sysio.n_min_max('X_n_12_', snapshot_path)
 # number_of_frames = sysio.count_v_files('X_n_12_', pfig.snapshot_path)
 number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 
-sigma_min, sigma_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
-
+# fork
+# to plot the figure
+# to plot the animation
+sigma_min_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=5, bottom=5, right=5, top=5, wspace=0, hspace=0)
 
 
-def plot_column(fig, n_file):
+def plot_column(fig, n_file, sigma_min_max=None):
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
@@ -90,8 +92,8 @@ def plot_column(fig, n_file):
 
 
     color_map = gr.cb.make_curve_colorbar(fig, t, data_sigma,
-                                    [0.05, 0.1], [0.01, 0.5], 0, [0,0], 
-                                    r'$\sigma \, []$', parameters['font_size'],)
+                                    parameters['color_bar_position'], parameters['color_bar_size'], parameters['color_bar_angle'], parameters["color_bar_label_pad"], 
+                                    r'$\sigma \, []$', parameters['font_size'], sigma_min_max)
 
     gr.plot_curve_grid(ax, X, color_map)
 

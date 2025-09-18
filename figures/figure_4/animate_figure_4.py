@@ -36,7 +36,7 @@ def update_animation(n):
             pfig.fig.delaxes(ax)
 
     text.clear_labels_with_patterns(pfig.fig, ["\met", "\msecond", "\minute", "\hour", "a. u."])
-    pfig.plot_column(pfig.fig, n)
+    pfig.plot_column(pfig.fig, n, pfig.sigma_min_max)
 
     # Stop timer
     end_time = time.time()
