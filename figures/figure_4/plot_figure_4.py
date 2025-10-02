@@ -67,10 +67,11 @@ number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 # to plot the animation
 sigma_min_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
 
-fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=5, bottom=5, right=5, top=5, wspace=0, hspace=0)
+fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=parameters['figure_margin_l'], bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], top=parameters['figure_margin_t'], wspace=0, hspace=0)
 
 
 def plot_column(fig, n_file, sigma_min_max=None):
+    
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
@@ -93,9 +94,9 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
     color_map = gr.cb.make_curve_colorbar(fig, t, data_sigma,
                                     parameters['color_bar_position'], parameters['color_bar_size'], parameters['color_bar_angle'], parameters["color_bar_label_pad"], 
-                                    r'$\sigma \, []$', parameters['font_size'], sigma_min_max)
+                                    r'$\sigma \, [\newt/\met]$', parameters['font_size'], sigma_min_max)
 
-    gr.plot_curve_grid(ax, X, color_map)
+    gr.plot_curve_grid(ax, X, color_map, 'black', 2)
 
 
     gr.set_2d_axes_limits(ax, [x_min, parameters['y_min']], [x_max, parameters['y_max']], [0, 0])
@@ -104,7 +105,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
     gr.plot_2d_axes_label(ax, [x_min, parameters['y_min']], [x_max-x_min, parameters['y_max']-parameters['y_min']], \
                           0.05, 0.05, 1, \
                           r'$X^1 \, [\met]$', r'$X^2 \, [\met]$', 0, 90, \
-                          0.1, 0.1, 0.05, 0.05, 'f', 'f', \
+                          parameters['axis_label_offset'][0], parameters['axis_label_offset'][1], parameters['ticks_label_offset'][0], parameters['ticks_label_offset'][1], 'f', 'f', \
                           parameters['font_size'], parameters['font_size'], 0, r'', [0, 0])
 
 
