@@ -56,7 +56,8 @@ x_max = 1.0
 
 
 # labels of columns to read
-columns_X = ["f:0","f:1","f:2",":0", ":1",":2"]
+columns_X = ["f:0","f:1","f:2",":0",":1",":2"]
+columns_v = ["f:0","f:1","f:2",":0",":1",":2"]
 columns_sigma = ["f",":0", ":1",":2"]
 
 n_min, n_max = sysio.n_min_max('X_n_12_', snapshot_path)
@@ -66,7 +67,9 @@ number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 # fork
 # to plot the figure
 # to plot the animation
+'''
 sigma_min_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
+'''
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=parameters['figure_margin_l'], bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], top=parameters['figure_margin_t'], wspace=0, hspace=0)
 
@@ -76,6 +79,8 @@ def plot_column(fig, n_file, sigma_min_max=None):
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
+    data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_snapshot + '.csv'), usecols=columns_v)
+
     
     # print(f'data_sigma = {data_sigma}')
 
@@ -110,12 +115,16 @@ def plot_column(fig, n_file, sigma_min_max=None):
                           parameters['font_size'], parameters['font_size'], 0, r'', [0, 0])
 
 
-# fork:  to plot the figure
-# plot_column(fig, parameters['n_early_snapshot'])
-# plot_column(fig, parameters['n_late_snapshot'])
-
-# fork : to plot the animation
+# fork
+# to plot the figure
+# 
 plot_column(fig, parameters['n_early_snapshot'])
+# plot_column(fig, parameters['n_late_snapshot'])
+# 
+# to plot the animation
+'''
+plot_column(fig, parameters['n_early_snapshot'])
+'''
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
