@@ -90,6 +90,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
     else:
         ax = fig.axes[0]  # Use the existing axis
     
+    result = gr.vp.interpolate_t_vector_field_2d_arc_length_gauge(data_v, data_X, parameters['n_bins'], ':0', ':1', 'f')
 
     ax.set_axis_off()
     ax.set_aspect('equal')
