@@ -41,6 +41,7 @@ print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 # solution_path = "/Users/michelecastellana/Documents/finite_elements/dynamics/lagrangian_approach/one_dimension/solution/"
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+# mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/1d/line/solution/"
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'figure_4')
 snapshot_path = os.path.join(solution_path, "snapshots/csv/nodal_values/")
 
