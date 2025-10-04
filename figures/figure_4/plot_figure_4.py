@@ -9,6 +9,7 @@ import warnings
 
 
 import graphics.graph as gr
+import list.list as lis
 import input_output.input_output as io
 import system.paths as paths
 import system.system_io as sysio
@@ -86,14 +87,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
     data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_snapshot + '.csv'), usecols=columns_v)
 
     # data_omega constains de values of \partial_1 X^alpha
-    data_omega  = pd.DataFrame({
-        'f:0': data_nu[columns_nu[0]]*np.cos(data_psi[columns_psi[0]]),
-        'f:1': -data_nu[columns_nu[0]]*np.sin(data_psi[columns_psi[0]]),
-        'f:2': 0,
-        ':0': data_nu[':0'],
-        ':1': data_nu[':1'],
-        ':2': data_nu[':2']
-    })
+    data_omega  = lis.data_omega(data_nu, data_psi)
 
     
     # print(f'data_sigma = {data_sigma}')
