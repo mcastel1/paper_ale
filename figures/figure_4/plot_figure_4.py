@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import os
 
@@ -13,6 +14,9 @@ import list.list as lis
 import input_output.input_output as io
 import system.paths as paths
 import system.system_io as sysio
+
+matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
+
 
 # add the path where to find the shared modules
 module_path = paths.root_path + "/figures/modules/"
@@ -86,7 +90,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
     data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_snapshot + '.csv'), usecols=columns_v)
 
-    # data_omega constains de values of \partial_1 X^alpha
+    # data_omega contains de values of \partial_1 X^alpha
     data_omega  = lis.data_omega(data_nu, data_psi)
 
     
@@ -98,7 +102,13 @@ def plot_column(fig, n_file, sigma_min_max=None):
     else:
         ax = fig.axes[0]  # Use the existing axis
     
-    V = gr.vp.interpolate_t_vector_field_2d_arc_length_gauge(data_v, data_X, parameters['n_bins'], ':0', ':1', 'f')
+    X_v, Y_v, V_x, V_y = gr.vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins'])
+    
+    
+    gr.vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
+                               parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['head_angle'], 
+                               parameters['line_width'], parameters['alpha'], 'red', 0)
+
 
     ax.set_axis_off()
     ax.set_aspect('equal')
