@@ -59,6 +59,8 @@ x_max = 1.0
 columns_X = ["f:0","f:1","f:2",":0",":1",":2"]
 columns_v = ["f:0","f:1","f:2",":0",":1",":2"]
 columns_sigma = ["f",":0", ":1",":2"]
+columns_nu = ["f",":0", ":1",":2"]
+columns_psi = ["f",":0", ":1",":2"]
 
 n_min, n_max = sysio.n_min_max('X_n_12_', snapshot_path)
 # number_of_frames = sysio.count_v_files('X_n_12_', pfig.snapshot_path)
@@ -78,8 +80,20 @@ def plot_column(fig, n_file, sigma_min_max=None):
     
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
+    data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_snapshot + '.csv'), usecols=columns_nu)
+    data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_snapshot + '.csv'), usecols=columns_psi)
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
     data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_snapshot + '.csv'), usecols=columns_v)
+
+    # data_omega constains de values of \partial_1 X^alpha
+    data_omega  = pd.DataFrame({
+        'f:0': data_nu[columns_nu[0]]*np.cos(data_psi[columns_psi[0]]),
+        'f:1': -data_nu[columns_nu[0]]*np.sin(data_psi[columns_psi[0]]),
+        'f:2': 0,
+        ':0': data_nu[':0'],
+        ':1': data_nu[':1'],
+        ':2': data_nu[':2']
+    })
 
     
     # print(f'data_sigma = {data_sigma}')
