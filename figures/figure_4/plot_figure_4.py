@@ -125,7 +125,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
     
     gr.vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
                                parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['head_angle'], 
-                               parameters['line_width'], parameters['alpha'], 'color_from_map', 0)
+                               parameters['X_line_width'], parameters['alpha'], 'color_from_map', 0)
     
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         1, parameters['v_color_bar_position'], parameters['v_color_bar_size'], \
