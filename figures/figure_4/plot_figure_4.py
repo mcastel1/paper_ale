@@ -102,13 +102,6 @@ def plot_column(fig, n_file, sigma_min_max=None):
     else:
         ax = fig.axes[0]  # Use the existing axis
     
-    X_v, Y_v, V_x, V_y = gr.vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins'])
-    
-    
-    gr.vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
-                               parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['head_angle'], 
-                               parameters['line_width'], parameters['alpha'], 'color_from_map', 0)
-
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -118,10 +111,25 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
 
     color_map = gr.cb.make_curve_colorbar(fig, t, data_sigma,
-                                    parameters['color_bar_position'], parameters['color_bar_size'], parameters['color_bar_angle'], parameters["color_bar_label_pad"], 
+                                    parameters['color_bar_position'], parameters['sigma_color_bar_size'], parameters['sigma_color_bar_angle'], parameters["sigma_color_bar_label_pad"], 
                                     r'$\sigma \, [\newt/\met]$', parameters['font_size'], sigma_min_max)
 
-    gr.plot_curve_grid(ax, X, color_map, 'black', 2)
+    #plot X and sigma 
+    gr.plot_curve_grid(ax, X, color_map, 'black', parameters['X_line_width'])
+
+
+
+    # plot v
+    X_v, Y_v, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = gr.vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins'])
+    
+    
+    gr.vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
+                               parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['head_angle'], 
+                               parameters['line_width'], parameters['alpha'], 'color_from_map', 0)
+    
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
+                        1, parameters['v_color_bar_position'], parameters['v_color_bar_size'], \
+                        90, parameters['v_color_bar_label_pad'], r'$v \, []$', parameters['font_size'])
 
 
     gr.set_2d_axes_limits(ax, [x_min, parameters['y_min']], [x_max, parameters['y_max']], [0, 0])
