@@ -110,12 +110,12 @@ def plot_column(fig, n_file, sigma_min_max=None):
     X, t = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
 
 
-    color_map = gr.cb.make_curve_colorbar(fig, t, data_sigma,
+    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
                                     parameters['color_bar_position'], parameters['sigma_color_bar_size'], parameters['sigma_color_bar_angle'], parameters["sigma_color_bar_label_pad"], 
                                     r'$\sigma \, [\newt/\met]$', parameters['font_size'], sigma_min_max)
 
     #plot X and sigma 
-    gr.plot_curve_grid(ax, X, color_map, 'black', parameters['X_line_width'])
+    gr.plot_curve_grid(ax, X, color_map_sigma, 'black', parameters['X_line_width'])
 
 
 
