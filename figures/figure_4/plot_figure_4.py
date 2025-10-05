@@ -107,7 +107,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
     
     gr.vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
                                parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['head_angle'], 
-                               parameters['line_width'], parameters['alpha'], 'red', 0)
+                               parameters['line_width'], parameters['alpha'], 'color_from_map', 0)
 
 
     ax.set_axis_off()
