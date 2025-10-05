@@ -74,9 +74,9 @@ number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 # fork
 # to plot the figure
 # to plot the animation
-'''
+# 
 sigma_min_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
-'''
+# 
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=parameters['figure_margin_l'], bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], top=parameters['figure_margin_t'], wspace=0, hspace=0)
 
@@ -111,7 +111,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
-                                    parameters['color_bar_position'], parameters['sigma_color_bar_size'], parameters['sigma_color_bar_angle'], parameters["sigma_color_bar_label_pad"], 
+                                    parameters['sigma_color_bar_position'], parameters['sigma_color_bar_size'], parameters['sigma_color_bar_angle'], parameters["sigma_color_bar_label_pad"], 
                                     r'$\sigma \, [\newt/\met]$', parameters['font_size'], sigma_min_max)
 
     #plot X and sigma 
@@ -125,7 +125,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
     
     gr.vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
                                parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['head_angle'], 
-                               parameters['X_line_width'], parameters['alpha'], 'color_from_map', 0)
+                               parameters['X_line_width'], parameters['alpha'], 'color_from_map', 0, parameters['threshold_arrow_length'])
     
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         1, parameters['v_color_bar_position'], parameters['v_color_bar_size'], \
@@ -144,14 +144,13 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
 # fork
 # to plot the figure
-# 
+'''
 plot_column(fig, parameters['n_early_snapshot'])
-# plot_column(fig, parameters['n_late_snapshot'])
-# 
+''' 
 # to plot the animation
-'''
+# 
 plot_column(fig, parameters['n_early_snapshot'])
-'''
+# 
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
