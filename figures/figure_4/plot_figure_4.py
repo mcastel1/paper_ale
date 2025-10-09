@@ -9,11 +9,12 @@ import sys
 import warnings
 
 
-import graphics.graph as gr
-import list.list as lis
-import input_output.input_output as io
+import graphics.utils as gr
+import graphics.vector_plot as vp
+import list.utils as lis
+import input_output.utils as io
 import system.paths as paths
-import system.system_io as sysio
+import system.utils as sysio
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
@@ -120,10 +121,10 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
 
     # plot v
-    X_v, Y_v, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = gr.vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins'])
+    X_v, Y_v, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins'])
     
     
-    gr.vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
+    vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
                                parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['head_angle'], 
                                parameters['X_line_width'], parameters['alpha'], 'color_from_map', 0, parameters['threshold_arrow_length'])
     

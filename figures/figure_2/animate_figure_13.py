@@ -1,5 +1,5 @@
 import matplotlib.animation as ani
-import system.system_io as sysio
+import system.utils as sysio
 import time
 
 import text.utils as text

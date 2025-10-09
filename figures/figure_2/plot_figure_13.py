@@ -8,7 +8,7 @@ import sys
 import warnings
 
 import list.column_labels as clab
-import graphics.graph as gr
+import graphics.utils as gr
 import system.paths as paths
 
 # import vector_plot as vec
