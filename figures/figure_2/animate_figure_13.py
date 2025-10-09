@@ -2,7 +2,7 @@ import matplotlib.animation as ani
 import system.system_io as sysio
 import time
 
-import text.text as text
+import text.utils as text
 import plot_figure_13 as pfig
 
 number_of_frames = sysio.count_v_files('line_mesh_n_', pfig.snapshot_path)
