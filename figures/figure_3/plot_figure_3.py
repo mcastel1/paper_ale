@@ -7,12 +7,12 @@ import proplot as pplt
 import sys
 import warnings
 
-import column_labels as clab
-import graph as gr
-import input_output as io
-import list as lis
-import paths
-import vector_plot as vec
+import list.column_labels as clab
+import graphics.utils as gr
+import input_output.utils as io
+import list.utils as lis
+import system.paths as paths
+import graphics.vector_plot as vec
 
 # add the path where to find the shared modules
 module_path = paths.root_path + "/figures/modules/"
@@ -37,8 +37,8 @@ plt.rcParams.update({
 
 # CHANGE PARAMETERS HERE
 # define the folder where to read the data
-# solution_path = paths.root_path + "figures/figure_14/solution/"
-solution_path = '/Users/michelecastellana/Desktop/elastic_obstacle_2/solution/'
+solution_path = paths.root_path + "figures/figure_3/solution/"
+# solution_path = '/Users/michelecastellana/Desktop/elastic_obstacle_2/solution/'
 snapshot_path = solution_path + "snapshots/csv/"
 
 figure_name = 'figure_14'
@@ -104,7 +104,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_msh_line_vertices, 0.05, 'black', alpha_mesh)
 
 
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = gr.vp.interpolate_2d_vector_field(data_v,
+    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vec.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
                                                                                                     [L, h],
                                                                                                     n_bins_v,
@@ -112,7 +112,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
 
-    X_u_msh, Y_u_msh, U_msh_x, U_msh_y, grid_norm_u_msh, norm_u_msh_min, norm_u_msh_max, norm_u_msh = gr.vp.interpolate_2d_vector_field(data_u_msh,
+    X_u_msh, Y_u_msh, U_msh_x, U_msh_y, grid_norm_u_msh, norm_u_msh_min, norm_u_msh_max, norm_u_msh = vec.interpolate_2d_vector_field(data_u_msh,
                                                                                                                                         [0, 0],
                                                                                                                                         [L, h],
                                                                                                                                         n_bins_v,
