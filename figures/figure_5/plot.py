@@ -83,7 +83,13 @@ columns_line_vertices = [clab.label_start_x_column, clab.label_start_y_column, c
 columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + clab.label_x_column,
              clab.label_v_column + clab.label_y_column]
 
-fig = pplt.figure(figsize=(5, 1.5), left=8, bottom=0, right=2, top=-1, wspace=0, hspace=0)
+fig = pplt.figure(
+    figsize=(4, 2), 
+    left=parameters['figure_margin_l'], 
+    bottom=parameters['figure_margin_b'], 
+    right=parameters['figure_margin_r'], 
+    top=parameters['figure_margin_t'], 
+    wspace=0, hspace=0)
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
@@ -102,9 +108,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     # plot snapshot label
-    fig.text(0.55, 0.85, snapshot_label, fontsize=8, ha='center', va='center')
+    fig.text(0.55, 0.85, snapshot_label, fontsize=font_size, ha='center', va='center')
 
     gr.set_2d_axes_limits(ax, [0, 0], [L, h], [0, 0])
+
 
     # plot mesh under the membrane
     # gr.plot_2d_mesh(ax, data_el_line_vertices, 0.2, 'red', alpha_mesh)
@@ -145,17 +152,17 @@ def plot_snapshot(fig, n_file, snapshot_label):
     '''
 
     gr.plot_2d_axes_label(ax, [0, 0], [L, h], \
-                          0.05, 0.05, 0.3, \
-                          r'$x \, [\met]$', r'$y \, [\met]$', 0, 90, \
-                          0.1, 0.1, 0.3, 0.05, ['f', 'f'], \
-                          font_size, font_size, 0, r'', [0, 0])
+                          parameters['tick_length'], 0.3, \
+                          parameters['axis_labels'], parameters['axis_label_angle'], \
+                          0.0, 0.0, 0.0, 0.0, ['f', 'f'], \
+                          font_size, font_size, 0, r'', [0,0], margin=parameters['margin'], axis_origin=parameters['axis_origin'])
 
 
 
-plot_snapshot(fig, n_early_snapshot, rf'$\sec$')
+plot_snapshot(fig, n_early_snapshot, rf'$t = \,$' + io.time_to_string(n_early_snapshot * T / number_of_frames, 's', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
-plt.savefig(figure_name + '_large.pdf')
-os.system(f'magick -density {compression_density} {figure_name}_large.pdf -quality {compression_quality} -compress JPEG {figure_name}.pdf')
+plt.savefig(figure_path + '_large.pdf')
+os.system(f'magick -density {compression_density} {figure_path}_large.pdf -quality {compression_quality} -compress JPEG {figure_path}.pdf')
 
 # pplt.show()
