@@ -62,13 +62,10 @@ alpha_mesh = 1
 n_ticks_colorbar = 3
 margin = 0.2
 
-# n_bins_v = [30, 20]
-n_bins_v = [3, 3]
 
 n_ticks = 4
 n_early_snapshot = 5700
 n_late_snapshot = 10
-arrow_length = 0.025
 
 compression_density = 1000
 compression_quality = 60
@@ -97,7 +94,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # load data
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + n_snapshot + '.csv'), usecols=columns_line_vertices)
-    # data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_n_' + n_snapshot + '.csv'), usecols=columns_v)
+    data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_snapshot + '.csv'), usecols=columns_v)
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_snapshot + '.csv'), usecols=columns_v)
 
     ax = fig.add_subplot(1, 1, 1)
@@ -116,39 +113,39 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # gr.plot_2d_mesh(ax, data_el_line_vertices, 0.2, 'red', alpha_mesh)
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', alpha_mesh)
 
-    '''
+    
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vec.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
                                                                                                     [L, h],
-                                                                                                    n_bins_v,
+                                                                                                    parameters['n_bins_v'],
                                                                                                     clab.label_x_column,
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
-
+    
     X_u_msh, Y_u_msh, U_msh_x, U_msh_y, grid_norm_u_msh, norm_u_msh_min, norm_u_msh_max, norm_u_msh = vec.interpolate_2d_vector_field(data_u_msh,
                                                                                                                                         [0, 0],
                                                                                                                                         [L, h],
-                                                                                                                                        n_bins_v,
+                                                                                                                                        parameters['n_bins_v'],
                                                                                                                                         clab.label_x_column,
                                                                                                                                         clab.label_y_column,
                                                                                                                                         clab.label_v_column)
-
-    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
+    '''    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
     X_ref = np.array(lis.add_lists_of_lists(X, U_msh_x))
     Y_ref = np.array(lis.add_lists_of_lists(Y, U_msh_y))
     # 2. once the coordinates in the reference configuration are known, assess whether they fall within the elastic body by checking whether they fall wihin the ellipse
     gr.set_inside_ellipse(X_ref, Y_ref, c, a, b, 0, V_x, np.nan)
     gr.set_inside_ellipse(X_ref, Y_ref, c, a, b, 0, V_y, np.nan)
+    '''
 
     # plot velocity of fluid
-    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], arrow_length, 0.3, 30, 0.5, 1, 'color_from_map', 0)
+    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         1, [0.05, 0.3], [0.01, 0.3], \
-                        90, [-3.0, 0.5], r'$v \, [\met/\sec]$', font_size)
+                        90, [-3.0, 0.5], r'$v \, [\met/\sec]$', parameters['colorbar_font_size'])
                         
-    '''
+    
 
     gr.plot_2d_axes_label(ax, [0, 0], [L, h], \
                           parameters['tick_length'], parameters['axis_line_width'], \
