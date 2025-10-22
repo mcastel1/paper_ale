@@ -48,12 +48,11 @@ def update_animation(n):
     end_time = time.time()
     print(f"... done in {end_time - start_time:.2f} s", flush=True)
 
-myrange = range(plot.parameters['n_first_frame'], number_of_frames * plot.parameters['frame_stride'], plot.parameters['frame_stride'])
 
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(plot.parameters['n_first_frame'], number_of_frames, plot.parameters['frame_stride']),
+    frames=range(plot.parameters['n_first_frame'], number_of_frames * plot.parameters['frame_stride'], plot.parameters['frame_stride']),
     interval=30
 )
 
