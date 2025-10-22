@@ -53,7 +53,7 @@ parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.pa
 
 
 # CHANGE PARAMETERS HERE
-L = 2
+L = 1
 h = 1
 T = 1e-3
 number_of_frames = 1000
@@ -66,8 +66,7 @@ margin = 0.2
 n_bins_v = [3, 3]
 
 n_ticks = 4
-font_size = 8
-n_early_snapshot = 1
+n_early_snapshot = 5700
 n_late_snapshot = 10
 arrow_length = 0.025
 
@@ -84,7 +83,7 @@ columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + cla
              clab.label_v_column + clab.label_y_column]
 
 fig = pplt.figure(
-    figsize=(4, 2), 
+    figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
     left=parameters['figure_margin_l'], 
     bottom=parameters['figure_margin_b'], 
     right=parameters['figure_margin_r'], 
@@ -108,14 +107,14 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     # plot snapshot label
-    fig.text(0.55, 0.85, snapshot_label, fontsize=font_size, ha='center', va='center')
+    fig.text(0.55, 0.85, snapshot_label, fontsize=parameters['plot_label_font_size'], ha='center', va='center')
 
     gr.set_2d_axes_limits(ax, [0, 0], [L, h], [0, 0])
 
 
     # plot mesh under the membrane
     # gr.plot_2d_mesh(ax, data_el_line_vertices, 0.2, 'red', alpha_mesh)
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, 0.05, 'black', alpha_mesh)
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', alpha_mesh)
 
     '''
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vec.interpolate_2d_vector_field(data_v,
@@ -152,10 +151,11 @@ def plot_snapshot(fig, n_file, snapshot_label):
     '''
 
     gr.plot_2d_axes_label(ax, [0, 0], [L, h], \
-                          parameters['tick_length'], 0.3, \
+                          parameters['tick_length'], parameters['axis_line_width'], \
                           parameters['axis_labels'], parameters['axis_label_angle'], \
-                          0.0, 0.0, 0.0, 0.0, ['f', 'f'], \
-                          font_size, font_size, 0, r'', [0,0], margin=parameters['margin'], axis_origin=parameters['axis_origin'])
+                          parameters['axis_label_offset'], parameters['tick_label_offset'], ['f', 'f'], \
+                          parameters['axis_font_size'], parameters['plot_label_font_size'], 
+                          0, r'', parameters['plot_label_offset'], margin=parameters['margin'], axis_origin=parameters['axis_origin'])
 
 
 
