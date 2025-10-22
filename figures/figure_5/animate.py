@@ -1,3 +1,4 @@
+import gc
 import matplotlib.animation as ani
 import os
 import system.utils as sys_utils
@@ -38,11 +39,20 @@ def update_animation(n):
 
     for ax in plot.fig.axes:
         ax.clear()
+        
+    for ax in plot.fig.axes[:]:
+        if ax.get_label() == "colorbar":
+            plot.fig.delaxes(ax)
+            
     plot.gr.delete_all_axes(plot.fig)
 
     text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour", "\met"])
 
-    plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / number_of_frames, 's', 2))
+    plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / number_of_frames, 's', 0))
+
+    # garbace collection to avoid memory leaks
+    gc.collect()
+
 
     # Stop timer
     end_time = time.time()
