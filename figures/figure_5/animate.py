@@ -8,7 +8,7 @@ import text.utils as text
 import plot
 
 
-animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_' +  plot.figure_name + '.mp4')
+animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_' +  plot.parameters['figure_name'] + '.mp4')
 print(f'snapshot_path = {plot.snapshot_path}')
 number_of_frames = sys_utils.count_v_files('line_mesh_n_', plot.snapshot_path)
 
@@ -40,7 +40,7 @@ def update_animation(n):
         ax.clear()
     plot.gr.delete_all_axes(plot.fig)
 
-    text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour"])
+    text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour", "\met"])
 
     plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / number_of_frames, 's', 2))
 
@@ -52,7 +52,7 @@ def update_animation(n):
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(plot.parameters['n_first_frame'], number_of_frames * plot.parameters['frame_stride'], plot.parameters['frame_stride']),
+    frames=range(plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride']),
     interval=30
 )
 
