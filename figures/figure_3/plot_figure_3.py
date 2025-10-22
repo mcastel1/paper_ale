@@ -122,8 +122,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
-    X_ref = np.array(lis.add_lists_of_lists(X, U_msh_x))
-    Y_ref = np.array(lis.add_lists_of_lists(Y, U_msh_y))
+    X_ref = np.array(lis.substract_lists_of_lists(X, U_msh_x))
+    Y_ref = np.array(lis.substract_lists_of_lists(Y, U_msh_y))
     # 2. once the coordinates in the reference configuration are known, assess whether they fall within the elastic body by checking whether they fall wihin the ellipse
     gr.set_inside_ellipse(X_ref, Y_ref, c, a, b, 0, V_x, np.nan)
     gr.set_inside_ellipse(X_ref, Y_ref, c, a, b, 0, V_y, np.nan)

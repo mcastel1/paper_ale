@@ -64,8 +64,7 @@ margin = 0.2
 
 
 n_ticks = 4
-n_early_snapshot = 5700
-n_late_snapshot = 10
+
 
 compression_density = 1000
 compression_quality = 60
@@ -97,6 +96,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_snapshot + '.csv'), usecols=columns_v)
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_snapshot + '.csv'), usecols=columns_v)
 
+
     ax = fig.add_subplot(1, 1, 1)
 
     ax.set_axis_off()
@@ -114,7 +114,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', alpha_mesh)
 
     
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vec.interpolate_2d_vector_field(data_v,
+    # here X_ref, Y_ref are the coordinates of the points in the reference configuration of the mesh
+    X_ref, Y_ref, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vec.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
                                                                                                     [L, h],
                                                                                                     parameters['n_bins_v'],
@@ -122,24 +123,25 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
     
-    X_u_msh, Y_u_msh, U_msh_x, U_msh_y, grid_norm_u_msh, norm_u_msh_min, norm_u_msh_max, norm_u_msh = vec.interpolate_2d_vector_field(data_u_msh,
-                                                                                                                                        [0, 0],
-                                                                                                                                        [L, h],
-                                                                                                                                        parameters['n_bins_v'],
-                                                                                                                                        clab.label_x_column,
-                                                                                                                                        clab.label_y_column,
-                                                                                                                                        clab.label_v_column)
-    '''    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
-    X_ref = np.array(lis.add_lists_of_lists(X, U_msh_x))
-    Y_ref = np.array(lis.add_lists_of_lists(Y, U_msh_y))
-    # 2. once the coordinates in the reference configuration are known, assess whether they fall within the elastic body by checking whether they fall wihin the ellipse
-    gr.set_inside_ellipse(X_ref, Y_ref, c, a, b, 0, V_x, np.nan)
-    gr.set_inside_ellipse(X_ref, Y_ref, c, a, b, 0, V_y, np.nan)
-    '''
+    print(f'data_v = {data_v}\n Y={Y_ref}')
+
+    
+    X_ref, Y_ref, u_n_X, u_n_Y, grid_norm_u_n, norm_u_n_min, norm_u_n_max, norm_u_n = vec.interpolate_2d_vector_field(data_u_msh,
+                                                                                                                    [0, 0],
+                                                                                                                    [L, h],
+                                                                                                                    parameters['n_bins_v'],
+                                                                                                                    clab.label_x_column,
+                                                                                                                    clab.label_y_column,
+                                                                                                                    clab.label_v_column)
+
+    #X, Y are the positions of the mesh nodes in the current configuration    
+    X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
+    Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
+
+    
 
     # plot velocity of fluid
-    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
+    vec.plot_2d_vector_field(ax, [X_ref, Y_ref], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         1, [0.05, 0.3], [0.01, 0.3], \
@@ -156,7 +158,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-plot_snapshot(fig, n_early_snapshot, rf'$t = \,$' + io.time_to_string(n_early_snapshot * T / number_of_frames, 's', 0))
+plot_snapshot(fig, parameters['n_late_snapshot'], rf'$t = \,$' + io.time_to_string(parameters['n_late_snapshot'] * T / number_of_frames, 's', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
