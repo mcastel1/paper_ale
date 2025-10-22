@@ -86,6 +86,11 @@ fig = pplt.figure(
     wspace=0, hspace=0)
 
 
+'''
+compute absolute min and max of the axes across all snapshots
+'''
+axis_min_max = [[0,1],[0,1]]
+
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
@@ -129,8 +134,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
     Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
 
-    #obtain the min and max of the X and Y values of the mesh in the current configuration, in order to get the correct boundaries of the plot 
-    axis_min_max = [lis.min_max(X),lis.min_max(Y)]
+    # #obtain the min and max of the X and Y values of the mesh in the current configuration, in order to get the correct boundaries of the plot 
+    # axis_min_max = [lis.min_max(X),lis.min_max(Y)]
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
