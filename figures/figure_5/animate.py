@@ -1,12 +1,15 @@
 import matplotlib.animation as ani
-import system_io as sysio
+import os
+import system.utils as sys_utils
 import time
 
 import input_output as io
 import text
-import plot_figure_14 as pfig
+import plot as pfig
 
-number_of_frames = sysio.count_v_files('line_mesh_msh_n_', pfig.snapshot_path)
+
+print(f'snapshot_path = {pfig.snapshot_path}')
+number_of_frames = sys_utils.count_v_files('line_mesh_n_', pfig.snapshot_path)
 
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1
 # n_first_frame = 1

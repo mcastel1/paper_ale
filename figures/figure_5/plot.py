@@ -64,23 +64,6 @@ parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.pa
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 
-# CHANGE PARAMETERS HERE
-L = 1
-h = 0.2
-T = 1e-3
-number_of_frames = 1000
-
-alpha_mesh = 1
-n_ticks_colorbar = 3
-margin = 0.2
-
-
-n_ticks = 4
-
-
-compression_density = 1000
-compression_quality = 60
-# CHANGE PARAMETERS HERE
 
 
 # labels of columns to read
@@ -118,18 +101,11 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot snapshot label
     fig.text(0.55, 0.85, snapshot_label, fontsize=parameters['plot_label_font_size'], ha='center', va='center')
 
-    gr.set_2d_axes_limits(ax, [0, 0], [L, h], [0, 0])
-
-
-    # plot mesh under the membrane
-    # gr.plot_2d_mesh(ax, data_el_line_vertices, 0.2, 'red', alpha_mesh)
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', alpha_mesh)
-
-    
+        
     # here X_ref, Y_ref are the coordinates of the points in the reference configuration of the mesh
     X_ref, Y_ref, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vec.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
-                                                                                                    [L, h],
+                                                                                                    [parameters['L'], parameters['h']],
                                                                                                     parameters['n_bins_v'],
                                                                                                     clab.label_x_column,
                                                                                                     clab.label_y_column,
@@ -139,7 +115,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     
     X_ref, Y_ref, u_n_X, u_n_Y, grid_norm_u_n, norm_u_n_min, norm_u_n_max, norm_u_n = vec.interpolate_2d_vector_field(data_u_msh,
                                                                                                                     [0, 0],
-                                                                                                                    [L, h],
+                                                                                                                    [parameters['L'], parameters['h']],
                                                                                                                     parameters['n_bins_v'],
                                                                                                                     clab.label_x_column,
                                                                                                                     clab.label_y_column,
@@ -149,23 +125,28 @@ def plot_snapshot(fig, n_file, snapshot_label):
     X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
     Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
 
-    
+    #obtain the min and max of the X and Y values of the mesh in the current configuration, in order to get the correct boundaries of the plot 
+    axis_min_max = [lis.min_max(X),lis.min_max(Y)]
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
-                        1, [0.05, 0.3], [0.01, 0.3], \
-                        90, [-3.0, 0.5], r'$v \, [\met/\sec]$', parameters['colorbar_font_size'], tick_label_angle=45)
+                        1, parameters['color_bar_position'], parameters['color_bar_size'], \
+                        90, [-3.0, 0.5], r'$v \, [\met/\sec]$', parameters['colorbar_font_size'], tick_label_angle=parameters['colorbar_tick_label_angle'])
                         
     
 
-    gr.plot_2d_axes_label(ax, [0, 0], [L, h], \
+    gr.plot_2d_axes_label(ax, [0, 0], [parameters['L'], parameters['h']], \
                           parameters['tick_length'], parameters['axis_line_width'], \
                           parameters['axis_labels'], parameters['axis_label_angle'], \
                           parameters['axis_label_offset'], parameters['tick_label_offset'], ['f', 'f'], \
                           parameters['axis_font_size'], parameters['plot_label_font_size'], 
-                          0, r'', parameters['plot_label_offset'], margin=parameters['margin'], axis_origin=parameters['axis_origin'])
+                          0, r'', parameters['plot_label_offset'], axis_origin=parameters['axis_origin'], 
+                          axis_bounds=axis_min_max, margin=parameters['axis_margin'])
 
 
 
@@ -174,6 +155,6 @@ plot_snapshot(fig, snapshot_max, rf'$n = \,$' + str(snapshot_max))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
-os.system(f'magick -density {compression_density} {figure_path}_large.pdf -quality {compression_quality} -compress JPEG {figure_path}.pdf')
+os.system(f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf')
 
 # pplt.show()
