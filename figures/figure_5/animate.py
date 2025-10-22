@@ -44,11 +44,15 @@ def update_animation(n):
         if ax.get_label() == "colorbar":
             plot.fig.delaxes(ax)
             
+    # remove all figure texts
+    for txt in plot.fig.texts[:]: 
+        txt.remove()
+            
     plot.gr.delete_all_axes(plot.fig)
 
     text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour", "\met"])
 
-    plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / number_of_frames, 's', 0))
+    plot.plot_snapshot(plot.fig, n, rf'$n = \,' + str(n) + '$')
 
     # garbace collection to avoid memory leaks
     gc.collect()

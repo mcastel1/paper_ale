@@ -2,7 +2,7 @@ import matplotlib.animation as ani
 import os 
 import time
 
-import plot_figure_4 as pfig
+import plot as pfig
 import system.utils as sysio
 import text.utils as text
 

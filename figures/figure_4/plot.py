@@ -113,7 +113,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
                                     parameters['sigma_color_bar_position'], parameters['sigma_color_bar_size'], parameters['sigma_color_bar_angle'], parameters["sigma_color_bar_label_pad"], 
-                                    r'$\sigma \, [\newt/\met]$', parameters['font_size'], sigma_min_max)
+                                    r'$\sigma \, [\newt/\met]$', parameters['color_map_font_size'], sigma_min_max)
 
     #plot X and sigma 
     gr.plot_curve_grid(ax, X, color_map_sigma, 'black', parameters['X_line_width'])
@@ -130,17 +130,22 @@ def plot_column(fig, n_file, sigma_min_max=None):
     
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         1, parameters['v_color_bar_position'], parameters['v_color_bar_size'], \
-                        90, parameters['v_color_bar_label_pad'], r'$v \, []$', parameters['font_size'])
+                        90, parameters['v_color_bar_label_pad'], r'$v \, []$', parameters['color_map_font_size'])
 
 
     gr.set_2d_axes_limits(ax, [x_min, parameters['y_min']], [x_max, parameters['y_max']], [0, 0])
 
+    xx = parameters['font_size']
 
-    gr.plot_2d_axes_label(ax, [x_min, parameters['y_min']], [x_max-x_min, parameters['y_max']-parameters['y_min']], \
-                          0.05, 0.05, 1, \
-                          r'$X^1 \, [\met]$', r'$X^2 \, [\met]$', 0, 90, \
-                          parameters['axis_label_offset'][0], parameters['axis_label_offset'][1], parameters['ticks_label_offset'][0], parameters['ticks_label_offset'][1], 'f', 'f', \
-                          parameters['font_size'], parameters['font_size'], 0, r'', [0, 0])
+    gr.plot_2d_axes(ax, [x_min, parameters['y_min']], [x_max-x_min, parameters['y_max']-parameters['y_min']],
+                    axis_label=parameters['axis_label'],
+                    axis_label_angle=parameters['axis_label_angle'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    tick_label_offset=parameters['tick_label_offset'],
+                    tick_label_format=parameters['tick_label_format'],
+                    font_size=parameters['font_size']
+                )
+
 
 
 # fork
