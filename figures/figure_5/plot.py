@@ -13,6 +13,7 @@ import graphics.utils as gr
 import input_output.utils as io
 import list.utils as lis
 import system.paths as paths
+import system.utils as sys_utils
 import graphics.vector_plot as vec
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -46,18 +47,22 @@ plt.rcParams.update({
 
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
-root_path = os.path.dirname(os.path.abspath(__file__))
-
-
+# 1) choose the path as the path where this code is located 
+# root_path = os.path.dirname(os.path.abspath(__file__))
+# mesh_path = os.path.join(root_path, "mesh/solution/")
+# 2) choose the  path as an external one
+root_path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane'
+mesh_path = '/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/solution'
 
 solution_path = os.path.join(root_path, "solution/")
-mesh_path = os.path.join(root_path, "mesh/solution/")
-figure_path = os.path.join(root_path, figure_name)
+figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), figure_name)
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
 
-parameters = io.read_parameters_from_csv_file(os.path.join(root_path, 'parameters.csv'))   
+parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))   
 
+# compute the min and max snapshot present in the solution path
+snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 
 # CHANGE PARAMETERS HERE
 L = 1
@@ -165,7 +170,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-plot_snapshot(fig, parameters['n_late_snapshot'], rf'$t = \,$' + io.time_to_string(parameters['n_late_snapshot'] * T / number_of_frames, 's', 0))
+plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max * T / number_of_frames, 's', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
