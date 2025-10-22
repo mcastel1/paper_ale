@@ -66,7 +66,7 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 
 # CHANGE PARAMETERS HERE
 L = 1
-h = 1
+h = 0.2
 T = 1e-3
 number_of_frames = 1000
 
@@ -135,7 +135,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
     
-    print(f'data_v = {data_v}')
 
     
     X_ref, Y_ref, u_n_X, u_n_Y, grid_norm_u_n, norm_u_n_min, norm_u_n_max, norm_u_n = vec.interpolate_2d_vector_field(data_u_msh,
@@ -157,7 +156,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         1, [0.05, 0.3], [0.01, 0.3], \
-                        90, [-3.0, 0.5], r'$v \, [\met/\sec]$', parameters['colorbar_font_size'])
+                        90, [-3.0, 0.5], r'$v \, [\met/\sec]$', parameters['colorbar_font_size'], tick_label_angle=45)
                         
     
 
@@ -170,7 +169,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max * T / number_of_frames, 's', 0))
+# plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max * T / number_of_frames, 's', 0))
+plot_snapshot(fig, snapshot_max, rf'$n = \,$' + str(snapshot_max))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
