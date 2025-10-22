@@ -17,6 +17,9 @@ import graphics.vector_plot as vec
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
+# Show all rows and columns when printing a Pandas array
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
 
 figure_name = 'figure_5'
 
@@ -42,14 +45,18 @@ plt.rcParams.update({
 })
 
 print("Current working directory:", os.getcwd())
-print("Script location:", os.path.dirname(os.path.abspath(__file__)))
-solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
-mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), figure_name)
+print("root_path:", os.path.dirname(os.path.abspath(__file__)))
+root_path = os.path.dirname(os.path.abspath(__file__))
+
+
+
+solution_path = os.path.join(root_path, "solution/")
+mesh_path = os.path.join(root_path, "mesh/solution/")
+figure_path = os.path.join(root_path, figure_name)
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
 
-parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))   
+parameters = io.read_parameters_from_csv_file(os.path.join(root_path, 'parameters.csv'))   
 
 
 # CHANGE PARAMETERS HERE
@@ -123,7 +130,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
     
-    print(f'data_v = {data_v}\n Y={Y_ref}')
+    print(f'data_v = {data_v}')
 
     
     X_ref, Y_ref, u_n_X, u_n_Y, grid_norm_u_n, norm_u_n_min, norm_u_n_max, norm_u_n = vec.interpolate_2d_vector_field(data_u_msh,
@@ -141,7 +148,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     
 
     # plot velocity of fluid
-    vec.plot_2d_vector_field(ax, [X_ref, Y_ref], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
+    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         1, [0.05, 0.3], [0.01, 0.3], \
