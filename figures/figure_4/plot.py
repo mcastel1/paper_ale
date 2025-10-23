@@ -14,7 +14,7 @@ import graphics.vector_plot as vp
 import list.utils as lis
 import input_output.utils as io
 import system.paths as paths
-import system.utils as sysio
+import system.utils as sys_utils
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
@@ -41,7 +41,6 @@ plt.rcParams.update({
 })
 
 
-# CHANGE PARAMETERS HERE
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
@@ -54,10 +53,12 @@ snapshot_path = os.path.join(solution_path, "snapshots/csv/nodal_values/")
 parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))   
 
 
-
+# CHANGE PARAMETERS HERE
 x_min = 0.0
 x_max = 1.0
 # CHANGE PARAMETERS HERE
+
+snapshot_min, snapshot_max = sys_utils.n_min_max('sigma_n_12_', snapshot_path)
 
 
 
@@ -68,13 +69,13 @@ columns_sigma = ["f",":0", ":1",":2"]
 columns_nu = ["f",":0", ":1",":2"]
 columns_psi = ["f",":0", ":1",":2"]
 
-n_min, n_max = sysio.n_min_max('X_n_12_', snapshot_path)
-# number_of_frames = sysio.count_v_files('X_n_12_', pfig.snapshot_path)
+n_min, n_max = sys_utils.n_min_max('X_n_12_', snapshot_path)
+# number_of_frames = sys_utils.count_v_files('X_n_12_', pfig.snapshot_path)
 number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 
 # fork
-# to plot the figure
-# to plot the animation
+# 1) to plot the figure
+# 2) to plot the animation
 # 
 sigma_min_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
 # 
@@ -95,8 +96,6 @@ def plot_column(fig, n_file, sigma_min_max=None):
     data_omega  = lis.data_omega(data_nu, data_psi)
 
     
-    # print(f'data_sigma = {data_sigma}')
-
     # Check if we already have an axis, if not create one
     if len(fig.axes) == 0:
         ax = fig.add_subplot(1, 1, 1)
@@ -135,7 +134,6 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
     gr.set_2d_axes_limits(ax, [x_min, parameters['y_min']], [x_max, parameters['y_max']], [0, 0])
 
-    xx = parameters['font_size']
 
     gr.plot_2d_axes(ax, [x_min, parameters['y_min']], [x_max-x_min, parameters['y_max']-parameters['y_min']],
                     axis_label=parameters['axis_label'],
@@ -143,20 +141,15 @@ def plot_column(fig, n_file, sigma_min_max=None):
                     axis_label_offset=parameters['axis_label_offset'],
                     tick_label_offset=parameters['tick_label_offset'],
                     tick_label_format=parameters['tick_label_format'],
-                    font_size=parameters['font_size']
+                    font_size=parameters['font_size'],
+                    line_width=parameters['axis_line_width']
                 )
 
 
 
-# fork
-# to plot the figure
-'''
-plot_column(fig, parameters['n_early_snapshot'])
-''' 
-# to plot the animation
-# 
-plot_column(fig, parameters['n_early_snapshot'])
-# 
+
+plot_column(fig, snapshot_max)
+
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')

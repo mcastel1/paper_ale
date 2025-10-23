@@ -14,8 +14,12 @@ import list.utils as lis
 import system.paths as paths
 import graphics.vector_plot as vec
 
+parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))   
+
+
+
 # add the path where to find the shared modules
-module_path = paths.root_path + "/figures/modules/"
+module_path = parameters['root_path'] + "/figures/modules/"
 sys.path.append(module_path)
 
 # Suppress the specific warning
@@ -37,9 +41,8 @@ plt.rcParams.update({
 
 # CHANGE PARAMETERS HERE
 # define the folder where to read the data
-solution_path = paths.root_path + "figures/figure_3/solution/"
-# solution_path = '/Users/michelecastellana/Desktop/elastic_obstacle_2/solution/'
-snapshot_path = solution_path + "snapshots/csv/"
+solution_path = os.path.join(parameters['root_path'], 'figures/figure_3/solution/')
+snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 figure_name = 'figure_14'
 L = 2.2
