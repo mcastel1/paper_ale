@@ -88,7 +88,7 @@ fig = pplt.figure(
 
 # fork: 2) to plot the animation
 # compute absolute min and max of the axes across all snapshots
-'''
+# 
 # initialize the values of axis_min_max
 axis_min_max = [[np.inf,-np.inf],[np.inf,-np.inf]]
 
@@ -119,7 +119,7 @@ for n_snapshot in range(snapshot_min, snapshot_max, parameters['frame_stride']):
             
         if axis_min_max_snapshot[i][1] > axis_min_max[i][1]:
             axis_min_max[i][1] = axis_min_max_snapshot[i][1]
-'''
+# 
             
             
 
@@ -167,10 +167,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
     Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
 
     # fork: 1) to plot the figure
-    # 
+    '''
     #obtain the min and max of the X and Y values of the mesh in the current configuration, in order to get the correct boundaries of the plot 
     axis_min_max = [lis.min_max(X),lis.min_max(Y)]
-    # 
+    '''
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
