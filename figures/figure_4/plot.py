@@ -53,11 +53,6 @@ snapshot_path = os.path.join(solution_path, "snapshots/csv/nodal_values/")
 parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))   
 
 
-# CHANGE PARAMETERS HERE
-x_min = 0.0
-x_max = 1.0
-# CHANGE PARAMETERS HERE
-
 snapshot_min, snapshot_max = sys_utils.n_min_max('sigma_n_12_', snapshot_path)
 
 
@@ -107,7 +102,10 @@ def plot_column(fig, n_file, sigma_min_max=None):
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    X, t = gr.interpolate_curve(data_X, x_min, x_max, parameters['n_bins'])
+    # obtain the min and max spanned by data_X
+    axis_min_max = [[min(data_X['f:0']), max(data_X['f:0'])], [min(data_X['f:1']), max(data_X['f:1'])]]
+
+    X, t = gr.interpolate_curve(data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins'])
 
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
