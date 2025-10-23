@@ -133,17 +133,20 @@ def plot_column(fig, n_file, sigma_min_max=None):
                         font_size=parameters['color_map_font_size'])
 
 
-    gr.set_2d_axes_limits(ax, [x_min, parameters['y_min']], [x_max, parameters['y_max']], [0, 0])
 
 
-    gr.plot_2d_axes(ax, [x_min, parameters['y_min']], [x_max-x_min, parameters['y_max']-parameters['y_min']],
+    gr.plot_2d_axes(ax, 
+                    [axis_min_max[0][0], axis_min_max[1][0]], 
+                    [axis_min_max[0][1] - axis_min_max[0][0], axis_min_max[1][1] - axis_min_max[1][0]],
+                    axis_origin=parameters['axis_origin'],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
                     axis_label_offset=parameters['axis_label_offset'],
                     tick_label_offset=parameters['tick_label_offset'],
                     tick_label_format=parameters['tick_label_format'],
                     font_size=parameters['font_size'],
-                    line_width=parameters['axis_line_width']
+                    line_width=parameters['axis_line_width'],
+                    tick_length=parameters['tick_length']
                 )
 
 
