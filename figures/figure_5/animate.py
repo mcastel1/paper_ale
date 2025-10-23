@@ -1,0 +1,73 @@
+import gc
+import matplotlib.animation as ani
+import os
+import system.utils as sys_utils
+import time
+
+import input_output.utils as io
+import text.utils as text
+import plot
+
+
+animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_' +  plot.parameters['figure_name'] + '.mp4')
+print(f'snapshot_path = {plot.snapshot_path}')
+number_of_frames = sys_utils.count_v_files('line_mesh_n_', plot.snapshot_path)
+
+
+
+# frames_per_second = 30
+# plot.parameters['frames_per_second'] = 1
+
+animation_duration_in_sec = (number_of_frames / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
+
+print(
+    f"number of frames: {number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}",
+    flush=True)
+
+# plot.parameters['bit_rate'] = 300000
+# plot.parameters['dpi'] = 300
+
+Writer = ani.writers['ffmpeg']
+writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(artist='Michele'), bitrate=(int)(plot.parameters['bit_rate']))
+
+text.empty_texts(plot.fig)
+
+
+def update_animation(n):
+    print("Calling update_animation with n = ", n, " ... ", flush=True)
+    start_time = time.time()
+
+    for ax in plot.fig.axes:
+        ax.clear()
+        
+    for ax in plot.fig.axes[:]:
+        if ax.get_label() == "colorbar":
+            plot.fig.delaxes(ax)
+            
+    # remove all figure texts
+    for txt in plot.fig.texts[:]: 
+        txt.remove()
+            
+    plot.gr.delete_all_axes(plot.fig)
+
+    text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour", "\met"])
+
+    plot.plot_snapshot(plot.fig, n, rf'$n = \,' + str(n) + '$')
+
+    # garbace collection to avoid memory leaks
+    gc.collect()
+
+
+    # Stop timer
+    end_time = time.time()
+    print(f"... done in {end_time - start_time:.2f} s", flush=True)
+
+
+animation = ani.FuncAnimation(
+    fig=plot.fig,
+    func=update_animation,
+    frames=range(plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride']),
+    interval=30
+)
+
+animation.save(animation_path, dpi=plot.parameters['dpi'], writer=writer)

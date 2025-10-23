@@ -2,8 +2,7 @@ import matplotlib.animation as ani
 import os 
 import time
 
-import plot_figure_4 as pfig
-import system.utils as sysio
+import plot as pfig
 import text.utils as text
 
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_4.mp4')
