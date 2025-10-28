@@ -1,3 +1,4 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import os
 
@@ -7,12 +8,15 @@ import proplot as pplt
 import sys
 import warnings
 
-
-
 import list.column_labels as clab
 import graphics.utils as gr
-import system.paths as paths
 import graphics.vector_plot as vec
+import input_output.utils as io
+import system.paths as paths
+import graphics.vector_plot as vp
+
+matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
+
 
 # add the path where to find the shared modules
 module_path = paths.root_path + "/figures/modules/"
@@ -36,39 +40,17 @@ plt.rcParams.update({
 })
 
 
-# CHANGE PARAMETERS HERE
+# LOAD PARAMETERS FROM CSV
 
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
+
+parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'figure_1')
+figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
-
-
-
-# define the folder where to read the data
-L = 2.2
-h = 0.41
-c = [0.25, 0.2, 0]
-a = 0.1
-b = 0.05
-
-alpha_mesh = 1
-n_ticks_colorbar = 3
-
-n_bins_v = [40, 20]
-# n_bins_v = [3, 3]
-
-n_ticks = 4
-font_size = 8
-n_early_snapshot = 1
-n_late_snapshot = 1358
-arrow_length = 0.025
-
-compression_density = 1000
-compression_quality = 60
-# CHANGE PARAMETERS HERE
 
 
 # labels of columns to read
@@ -82,7 +64,9 @@ columns_theta_omega = ["theta", "omega"]
 data_theta_omega = pd.read_csv(solution_path + 'theta_omega.csv', usecols=columns_theta_omega)
 
 
-fig = pplt.figure(figsize=(8, 2), left=10, bottom=0, right=10, top=0, wspace=0, hspace=0)
+fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_margin_l'], 
+                  bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], 
+                  top=parameters['figure_margin_t'], wspace=0, hspace=0)
 
 
 def plot_column(fig, n_file):
@@ -96,44 +80,53 @@ def plot_column(fig, n_file):
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    gr.set_2d_axes_limits(ax, [0, 0], [L, h], [0, 0])
+    gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
 
-    gr.plot_2d_mesh(ax, data_line_vertices, 0.1, 'black', alpha_mesh)
+    gr.plot_2d_mesh(ax, data_line_vertices, 0.1, 'black', parameters['alpha_mesh'])
 
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = gr.vp.interpolate_2d_vector_field(data_v,
+    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vp.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
-                                                                                                    [L, h],
-                                                                                                    n_bins_v,
+                                                                                                    [parameters['L'], parameters['h']],
+                                                                                                    parameters['n_bins_v'],
                                                                                                     clab.label_x_column,
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    gr.set_inside_ellipse(X, Y, c, a, b, data_theta_omega.loc[n_file-1, 'theta'], V_x, np.nan)
-    gr.set_inside_ellipse(X, Y, c, a, b, data_theta_omega.loc[n_file-1, 'theta'], V_y, np.nan)
+    gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], V_x, np.nan)
+    gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], V_y, np.nan)
 
-    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], arrow_length, 0.3, 30, 1, 1, 'color_from_map', 0)
+    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0)
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
-                        1, [0.025, 0.2], [0.02, 0.4], \
-                        90, [0, 0], r'$v \, []$', font_size)
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, parameters['color_bar_position'], parameters['color_bar_size'], 
+                        label=r'$z \, [\mic]$', 
+                        font_size=parameters['colorbar_font_size'],
+                        tick_length=parameters['colorbar_tick_length'],
+                        label_pad=parameters['colorbar_label_offset'], 
+                        tick_label_offset=parameters['colorbar_tick_label_offset'],
+                        tick_label_angle=parameters['colorbar_tick_label_angle'],
+                        line_width=parameters['colorbar_line_width'])
 
-    gr.plot_2d_axes_label(ax, [0, 0], [L, h], \
-                          0.05, 0.05, 0.3, \
-                          r'$x \, [\met]$', r'$y \, [\met]$', 0, 90, \
-                          0.4, 0.1, 0.15, 0.05, 'f', 'f', \
-                          font_size, font_size, 0, r'', [0, 0])
+    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
+                          tick_length=[0.05, 0.05], 
+                          line_width=parameters['axis_line_width'], 
+                          axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
+                          tick_label_format=['f', 'f'], 
+                          font_size=[parameters['font_size'], parameters['font_size']],
+                          tick_label_offset=parameters['tick_label_offset'],
+                          axis_label_offset=parameters['axis_label_offset'])
 
 
-# fork:  to plot the figure
-# plot_column(fig, n_early_snapshot)
-# plot_column(fig, n_late_snapshot)
+# fork
+# 1) to plot the figure
+# plot_column(fig, parameters['n_early_snapshot'])
+# plot_column(fig, parameters['n_late_snapshot'])
 
-# fork : to plot the animation
-plot_column(fig, n_early_snapshot)
+# 2) to plot the animation
+plot_column(fig, parameters['n_early_snapshot'])
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
-os.system(f'magick -density {compression_density} {figure_path}_large.pdf -quality {compression_quality} -compress JPEG {figure_path}.pdf')
+os.system(f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf')
 
 # pplt.show()

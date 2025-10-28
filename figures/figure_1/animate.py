@@ -5,28 +5,24 @@ import time
 import text.utils as text
 import plot_figure_1 as pfig
 import system.utils as sysio
+import input_output.utils as io
+
+parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
 
 number_of_frames = sysio.count_v_files('line_mesh_n_', pfig.snapshot_path)
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_1.mp4')
 
 
-
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1
-n_first_frame = 1
-frame_stride = 1000
 
-frames_per_second = 1
-animation_duration_in_sec = (number_of_frames / frame_stride) / frames_per_second
+animation_duration_in_sec = (number_of_frames / parameters['frame_stride']) / parameters['frames_per_second']
 
 print(
-    f"number of frames: {number_of_frames} \n frames per second: {frames_per_second} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {frame_stride}",
+    f"number of frames: {number_of_frames} \n frames per second: {parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {parameters['frame_stride']}",
     flush=True)
 
-bit_rate = 300000
-dpi = 300
-
 Writer = ani.writers['ffmpeg']
-writer = Writer(fps=frames_per_second, metadata=dict(artist='Michele'), bitrate=(int)(bit_rate))
+writer = Writer(fps=parameters['frames_per_second'], metadata=dict(artist='Michele'), bitrate=(int)(parameters['bit_rate']))
 
 text.empty_texts(pfig.fig)
 
@@ -53,8 +49,8 @@ def update_animation(n):
 animation = ani.FuncAnimation(
     fig=pfig.fig,
     func=update_animation,
-    frames=range(n_first_frame, number_of_frames, frame_stride),
+    frames=range(parameters['n_first_frame'], number_of_frames, parameters['frame_stride']),
     interval=30
 )
 
-animation.save(animation_path, dpi=dpi, writer=writer)
+animation.save(animation_path, dpi=parameters['dpi'], writer=writer)
