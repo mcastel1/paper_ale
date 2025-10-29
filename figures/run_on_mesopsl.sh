@@ -53,7 +53,7 @@ rsync -av --delete $FIGURES_PATH/*.tex mesopslt:paper_ale/figures
 rsync -av --delete $LATEX_MODULES_PATH/* mesopslt:latex_modules
 
 # replace path for latex modules with the path for latex modules on the cluster
-ssh "$OUT" "find /obs/mcastellana/latex_modules/ -type f -exec sed -i 's|/Users/michelecastellana/Documents/latex_modules/finite_elements/|/obs/mcastellana/latex_modules/|g' {} +"
+ssh "$OUT" "find /obs/mcastellana/latex_modules/ -type f -exec sed -i 's|/Users/michelecastellana/Documents/latex_modules|/obs/mcastellana/latex_modules|g' {} +"
 ssh "$OUT" "find /obs/mcastellana/python_modules/ -type f -exec sed -i 's|/Users/michelecastellana/Documents/latex_modules/|/obs/mcastellana/latex_modules/|g' {} +"
 
 
