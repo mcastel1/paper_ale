@@ -13,6 +13,7 @@ import graphics.utils as gr
 import graphics.vector_plot as vec
 import input_output.utils as io
 import system.paths as paths
+import system.utils as sys_utils
 import graphics.vector_plot as vp
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -39,9 +40,6 @@ plt.rcParams.update({
     )
 })
 
-
-# LOAD PARAMETERS FROM CSV
-
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
@@ -51,6 +49,8 @@ solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "soluti
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
+
+number_of_frames = sys_utils.count_v_files('line_mesh_n_', snapshot_path)
 
 
 # labels of columns to read
@@ -68,29 +68,70 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
                   bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], 
                   top=parameters['figure_margin_t'], wspace=0, hspace=0)
 
+# initialize norm_v_min_max
+norm_v_min_max = [np.inf,-np.inf]
 
-def plot_column(fig, n_file):
-    n_snapshot = str(n_file)
-    data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
-    data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
+# fork
+# 2) to plot the animation: compute absolute min and max of norm v across  snapshots
+# 
 
-    ax = fig.add_subplot(1, 1, 1)
+for n_snapshot in range(parameters['n_first_frame'], number_of_frames, parameters['frame_stride']):
+    
+    data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + str(n_snapshot) + '.csv', usecols=columns_v)
 
-    ax.set_axis_off()
-    ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
-
-    gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
-
-    gr.plot_2d_mesh(ax, data_line_vertices, 0.1, 'black', parameters['alpha_mesh'])
-
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vp.interpolate_2d_vector_field(data_v,
+    _, _, _, _, _, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
                                                                                                     [parameters['L'], parameters['h']],
                                                                                                     parameters['n_bins_v'],
                                                                                                     clab.label_x_column,
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
+    
+    if norm_v_min < norm_v_min_max[0]:
+        norm_v_min_max[0] = norm_v_min
+        
+    if norm_v_max > norm_v_min_max[1]:
+        norm_v_min_max[1] = norm_v_max
+    
+# 
+
+def plot_column(fig, n_file, snapshot_label):
+    
+    n_snapshot = str(n_file)
+    data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
+    data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
+
+    # Check if we already have an axis, if not create one
+    if len(fig.axes) == 0:
+        ax = fig.add_subplot(1, 1, 1)
+    else:
+        ax = fig.axes[0]  # Use the existing axis
+        
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+
+     # plot snapshot label
+    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
+
+
+
+    gr.plot_2d_mesh(ax, data_line_vertices, 0.1, 'black', parameters['alpha_mesh'])
+
+    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
+                                                                                                    [0, 0],
+                                                                                                    [parameters['L'], parameters['h']],
+                                                                                                    parameters['n_bins_v'],
+                                                                                                    clab.label_x_column,
+                                                                                                    clab.label_y_column,
+                                                                                                    clab.label_v_column)
+    # fork
+    # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
+    '''
+    norm_v_min_max[0] = norm_v_min        
+    norm_v_min_max[1] = norm_v_max
+    '''
+
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], V_x, np.nan)
@@ -98,7 +139,7 @@ def plot_column(fig, n_file):
 
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0)
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, parameters['color_bar_position'], parameters['color_bar_size'], 
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['colorbar_position'], parameters['color_bar_size'], 
                         label=r'$z \, [\mic]$', 
                         font_size=parameters['colorbar_font_size'],
                         tick_length=parameters['colorbar_tick_length'],
@@ -108,23 +149,19 @@ def plot_column(fig, n_file):
                         line_width=parameters['colorbar_line_width'])
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
-                          tick_length=[0.05, 0.05], 
+                          tick_length=parameters['tick_length'], 
                           line_width=parameters['axis_line_width'], 
                           axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
                           tick_label_format=['f', 'f'], 
                           font_size=[parameters['font_size'], parameters['font_size']],
                           tick_label_offset=parameters['tick_label_offset'],
                           axis_label_offset=parameters['axis_label_offset'],
-                          axis_origin=parameters['axis_origin'])
+                          axis_origin=parameters['axis_origin'],
+                          n_minor_ticks=parameters['n_minor_ticks'])
 
 
-# fork
-# 1) to plot the figure
-# plot_column(fig, parameters['n_early_snapshot'])
-# plot_column(fig, parameters['n_late_snapshot'])
 
-# 2) to plot the animation
-plot_column(fig, parameters['n_early_snapshot'])
+plot_column(fig, parameters['n_early_snapshot'], rf'$t = \,$' + io.time_to_string(parameters['n_early_snapshot'] * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')

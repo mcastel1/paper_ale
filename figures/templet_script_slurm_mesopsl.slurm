@@ -1,6 +1,6 @@
 #!/bin/sh
 #SBATCH --job-name=ani-FIGURE_TO_PLOT
-#SBATCH --time=01-00:0:00
+#SBATCH --time=00-00:10:00
 #SBATCH --clusters=mesopsl2
 #SBATCH --qos=mesopsl2_hi_normal
 #SBATCH --account=castellana_hi
