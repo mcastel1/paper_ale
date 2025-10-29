@@ -1,6 +1,6 @@
 #!/bin/sh
-#SBATCH --job-name=ani-figure_5
-#SBATCH --time=01-00:0:00
+#SBATCH --job-name=ani-figure_1
+#SBATCH --time=00-00:10:00
 #SBATCH --clusters=mesopsl2
 #SBATCH --qos=mesopsl2_hi_normal
 #SBATCH --account=castellana_hi
@@ -14,7 +14,7 @@ source ~/miniconda3/bin/activate myenv
 echo " .. done."
 
 
-FIGURE_NAME='figure_5'
+FIGURE_NAME='figure_1'
 RUN=$HOME/"paper_ale/figures/"$FIGURE_NAME
 
 cd $RUN

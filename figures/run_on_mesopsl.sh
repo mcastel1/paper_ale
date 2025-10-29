@@ -1,15 +1,17 @@
 #!/bin/bash
 # run with ./run_on_mesopsl [name of folder on local] 
-# run with ./run_on_mesopsl.sh figure_14
+# run with ./run_on_mesopsl.sh figure_1
 
 clear
 clear
 
 # define the paths 
 ROOT_PATH=/Users/michelecastellana/Documents/paper_ale/
+PYTHON_MODULES_PATH=/Users/michelecastellana/Documents/python_modules/
+LATEX_MODULES_PATH=/Users/michelecastellana/Documents/latex_modules/
 FIGURES_PATH=$ROOT_PATH'figures/'
 FIGURE_PATH=$FIGURES_PATH''$1
-MODULES_PATH=/Users/michelecastellana/Documents/python_modules
+
 OUT=mesopslt    
 
 echo 'root path = ' $ROOT_PATH
@@ -45,9 +47,16 @@ rsync -avz --delete \
   --exclude='*.pdf' \
   --exclude='*.pyc' \
   "$FIGURE_PATH/" mesopslt:paper_ale/figures/"$1"
-rsync -av --delete $MODULES_PATH/* mesopslt:paper_ale/figures/modules 
+rsync -av --delete $PYTHON_MODULES_PATH/* mesopslt:python_modules
 rsync -av --delete $ROOT_PATH/*.tex mesopslt:paper_ale
 rsync -av --delete $FIGURES_PATH/*.tex mesopslt:paper_ale/figures
+rsync -av --delete $LATEX_MODULES_PATH/* mesopslt:latex_modules
+
+# replace path for latex modules with the path for latex modules on the cluster
+ssh "$OUT" "find /obs/mcastellana/latex_modules/ -type f -exec sed -i 's|/Users/michelecastellana/Documents/latex_modules/finite_elements/|/obs/mcastellana/latex_modules/|g' {} +"
+ssh "$OUT" "find /obs/mcastellana/python_modules/ -type f -exec sed -i 's|/Users/michelecastellana/Documents/latex_modules/|/obs/mcastellana/latex_modules/|g' {} +"
+
+
 
 # replace FIGURE_TO_PLOT with the name of the actual figure to plot in the slurm script 
 sed 's/FIGURE_TO_PLOT/'$1'/g' templet_script_slurm_mesopsl.slurm > script_slurm_mesopsl.slurm
