@@ -114,7 +114,8 @@ def plot_column(fig, n_file):
                           tick_label_format=['f', 'f'], 
                           font_size=[parameters['font_size'], parameters['font_size']],
                           tick_label_offset=parameters['tick_label_offset'],
-                          axis_label_offset=parameters['axis_label_offset'])
+                          axis_label_offset=parameters['axis_label_offset'],
+                          axis_origin=parameters['axis_origin'])
 
 
 # fork
