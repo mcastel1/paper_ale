@@ -97,7 +97,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
     
-    axis_min_max = [lis.min_max(X),lis.min_max(Y)]
 
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
@@ -120,8 +119,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['shaft_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
-                        1, [0.05, 0.3], [0.01, 0.3], \
-                        90, [-3.0, 0.5], r'$v \, [\met/\sec]$', parameters['color_map_font_size'])
+                        parameters['v_colorbar_position'], parameters['v_colorbar_size'], 
+                        label_pad=parameters['v_colorbar_label_pad'], 
+                        label=r'$v \, [\met/\sec]$', 
+                        font_size=parameters['color_map_font_size'])
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], \
                     axis_label=parameters['axis_label'],
