@@ -51,7 +51,8 @@ mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solut
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 
-number_of_frames = sys_utils.count_v_files('line_mesh_n_', snapshot_path)
+snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
+number_of_frames = snapshot_max - snapshot_min + 1
 
 
 # labels of columns to read
@@ -72,7 +73,7 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-# 
+'''
 norm_v_min_max = cal.min_max_vector_field(parameters['n_first_frame'], 
                          number_of_frames, parameters['frame_stride'], 
                          os.path.join(solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_', 
@@ -80,7 +81,7 @@ norm_v_min_max = cal.min_max_vector_field(parameters['n_first_frame'],
                          [[0, 0],[parameters['L'], parameters['h']]]
                         )
 
-# 
+'''
 
 def plot_column(fig, n_file, snapshot_label):
     
@@ -90,7 +91,7 @@ def plot_column(fig, n_file, snapshot_label):
 
     # Check if we already have an axis, if not create one
     if len(fig.axes) == 0:
-        ax = fig.add_subplot(1, 1, 1)
+        ax = fig.add_subplot(2, 1, 1)
     else:
         ax = fig.axes[0]  # Use the existing axis
         
@@ -114,10 +115,9 @@ def plot_column(fig, n_file, snapshot_label):
                                                                                                     clab.label_v_column)
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    '''
-    norm_v_min_max[0] = norm_v_min        
-    norm_v_min_max[1] = norm_v_max
-    '''
+    # 
+    norm_v_min_max = [norm_v_min, norm_v_max]
+    # 
 
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
@@ -148,7 +148,7 @@ def plot_column(fig, n_file, snapshot_label):
 
 
 
-plot_column(fig, parameters['n_early_snapshot'], rf'$t = \,$' + io.time_to_string(parameters['n_early_snapshot'] * parameters['T'] / number_of_frames, 's', 1))
+plot_column(fig, parameters['n_snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['n_snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
