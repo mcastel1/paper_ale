@@ -14,7 +14,7 @@ animation_duration_in_sec = (plot.number_of_frames / plot.parameters['frame_stri
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_' + plot.parameters['figure_name'] + '.mp4')
 
 print(
-    f"number of frames: {plot.number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}",
+    f"number of frames: {plot.number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.number_of_frames/plot.parameters['frame_stride'])}", 
     flush=True)
 
 

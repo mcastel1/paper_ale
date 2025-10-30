@@ -24,9 +24,6 @@ parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.pa
 
 
 
-# add the path where to find the shared modules
-module_path = parameters['root_path'] + "/figures/modules/"
-sys.path.append(module_path)
 
 # Suppress the specific warning
 warnings.filterwarnings("ignore", message=".*Z contains NaN values.*", category=UserWarning)
@@ -46,9 +43,10 @@ plt.rcParams.update({
 })
 
 # define the folder where to read the data
-solution_path = os.path.join(parameters['root_path'], 'figures/figure_3/solution/')
+solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
+
 
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_msh_n_', snapshot_path)
