@@ -95,7 +95,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     # plot snapshot label
-    fig.text(0.55, 0.85, snapshot_label, fontsize=8, ha='center', va='center')
+    fig.text(0.5, 0.85, snapshot_label, fontsize=8, ha='center', va='center')
 
     gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
 
@@ -139,9 +139,14 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'], 
-                        label_pad=parameters['v_colorbar_label_pad'], 
+                        label_pad=parameters['v_colorbar_label_offset'], 
                         label=r'$v \, [\met/\sec]$', 
-                        font_size=parameters['color_map_font_size'])
+                        font_size=parameters['color_map_font_size'],
+                        tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                        tick_label_angle=parameters['v_colorbar_tick_label_angle'],
+                        tick_length=parameters['v_colorbar_tick_length'],
+                        line_width=parameters['v_colorbar_line_width']
+                    )
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], \
                     axis_label=parameters['axis_label'],
