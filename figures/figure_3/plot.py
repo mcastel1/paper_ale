@@ -168,7 +168,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-plot_snapshot(fig, parameters['n_late_snapshot'], rf'$t = \,$' + io.time_to_string(parameters['n_late_snapshot'] * parameters['T'] / number_of_frames, 's', parameters['n_decimals_snapshot_label']))
+plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', parameters['n_decimals_snapshot_label']))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
