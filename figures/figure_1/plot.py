@@ -8,6 +8,7 @@ import proplot as pplt
 import sys
 import warnings
 
+import calculus.utils as cal
 import list.column_labels as clab
 import graphics.utils as gr
 import graphics.vector_plot as vec
@@ -68,31 +69,17 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
                   bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], 
                   top=parameters['figure_margin_t'], wspace=0, hspace=0)
 
-# initialize norm_v_min_max
-norm_v_min_max = [np.inf,-np.inf]
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
 # 
+norm_v_min_max = cal.min_max_vector_field(parameters['n_first_frame'], 
+                         number_of_frames, parameters['frame_stride'], 
+                         os.path.join(solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_', 
+                         parameters['n_bins_v'],
+                         [[0, 0],[parameters['L'], parameters['h']]]
+                        )
 
-for n_snapshot in range(parameters['n_first_frame'], number_of_frames, parameters['frame_stride']):
-    
-    data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + str(n_snapshot) + '.csv', usecols=columns_v)
-
-    _, _, _, _, _, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
-                                                                                                    [0, 0],
-                                                                                                    [parameters['L'], parameters['h']],
-                                                                                                    parameters['n_bins_v'],
-                                                                                                    clab.label_x_column,
-                                                                                                    clab.label_y_column,
-                                                                                                    clab.label_v_column)
-    
-    if norm_v_min < norm_v_min_max[0]:
-        norm_v_min_max[0] = norm_v_min
-        
-    if norm_v_max > norm_v_min_max[1]:
-        norm_v_min_max[1] = norm_v_max
-    
 # 
 
 def plot_column(fig, n_file, snapshot_label):
