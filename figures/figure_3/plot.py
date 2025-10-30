@@ -53,7 +53,7 @@ figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameter
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_msh_n_', snapshot_path)
 
-number_of_frames = snapshot_max
+number_of_frames = snapshot_max - snapshot_min + 1
 
 # labels of columns to read
 columns_line_vertices = [clab.label_start_x_column, clab.label_start_y_column, clab.label_start_z_column,
@@ -66,17 +66,17 @@ columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + cla
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-'''
-norm_v_min_max = cal.min_max_vector_field(parameters['n_first_frame'], 
-                         number_of_frames, parameters['frame_stride'], 
+# 
+norm_v_min_max = cal.min_max_vector_field(snapshot_min, 
+                         snapshot_max, parameters['frame_stride'], 
                          os.path.join(solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_', 
                          parameters['n_bins_v'],
                          [[0, 0],[parameters['L'], parameters['h']]]
                         )
-'''
+# 
 
 
-fig = pplt.figure(figsize=(5, 1.5), left=8, bottom=0, right=2, top=-1, wspace=0, hspace=0)
+fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=8, bottom=0, right=2, top=-1, wspace=0, hspace=0)
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
@@ -114,9 +114,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    # 
+    '''    
     norm_v_min_max= [norm_v_min, norm_v_max]     
-    # 
+    '''
+
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                         [0, 0],

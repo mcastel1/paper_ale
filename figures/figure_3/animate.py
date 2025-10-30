@@ -7,15 +7,14 @@ import input_output.utils as io
 import text.utils as text
 import plot
 
-number_of_frames = sys_utils.count_v_files('line_mesh_msh_n_', plot.snapshot_path)
 
 
 
-animation_duration_in_sec = (number_of_frames / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
+animation_duration_in_sec = (plot.number_of_frames / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_' + plot.parameters['figure_name'] + '.mp4')
 
 print(
-    f"number of frames: {number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}",
+    f"number of frames: {plot.number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}",
     flush=True)
 
 
@@ -36,7 +35,7 @@ def update_animation(n):
 
     text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour"])
 
-    plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / number_of_frames, 's', 2))
+    plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 's', 2))
 
     # Stop timer
     end_time = time.time()
@@ -47,7 +46,7 @@ def update_animation(n):
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(plot.parameters['n_first_frame'], number_of_frames, plot.parameters['frame_stride']),
+    frames=range(plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride']),
     interval=30
 )
 
