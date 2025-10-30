@@ -43,7 +43,7 @@ def update_animation(n):
     plot.plot_column(
                         plot.fig, 
                         n, 
-                        rf'$t = \,$' + io.time_to_string(n * parameters['T'] / plot.number_of_frames, 's', 1)
+                        rf'$t = \,$' + io.time_to_string(n * parameters['T'] / plot.number_of_frames, 's', parameters['n_decimals_snapshot_label'])
                      )
 
     # Stop timer
