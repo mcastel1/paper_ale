@@ -76,7 +76,12 @@ norm_v_min_max = cal.min_max_vector_field(snapshot_min,
 # 
 
 
-fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=8, bottom=0, right=2, top=-1, wspace=0, hspace=0)
+fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
+                  left=parameters['figure_margin_l'], 
+                  bottom=parameters['figure_margin_b'], 
+                  right=parameters['figure_margin_r'], 
+                  top=parameters['figure_margin_t'], 
+                  wspace=0, hspace=0)
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
