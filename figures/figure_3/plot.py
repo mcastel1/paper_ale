@@ -8,6 +8,7 @@ import proplot as pplt
 import sys
 import warnings
 
+import calculus.utils as cal
 import list.column_labels as clab
 import graphics.utils as gr
 import input_output.utils as io
@@ -61,6 +62,20 @@ columns_line_vertices = [clab.label_start_x_column, clab.label_start_y_column, c
 columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + clab.label_x_column,
              clab.label_v_column + clab.label_y_column]
 
+
+
+# fork
+# 2) to plot the animation: compute absolute min and max of norm v across  snapshots
+'''
+norm_v_min_max = cal.min_max_vector_field(parameters['n_first_frame'], 
+                         number_of_frames, parameters['frame_stride'], 
+                         os.path.join(solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_', 
+                         parameters['n_bins_v'],
+                         [[0, 0],[parameters['L'], parameters['h']]]
+                        )
+'''
+
+
 fig = pplt.figure(figsize=(5, 1.5), left=8, bottom=0, right=2, top=-1, wspace=0, hspace=0)
 
 
@@ -89,15 +104,19 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_msh_line_vertices, 0.05, 'black', parameters['alpha_mesh'])
 
 
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vec.interpolate_2d_vector_field(data_v,
-                                                                                                    [0, 0],
-                                                                                                    [parameters['L'], parameters['h']],
-                                                                                                    parameters['n_bins_v'],
-                                                                                                    clab.label_x_column,
-                                                                                                    clab.label_y_column,
-                                                                                                    clab.label_v_column)
+    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
+                                                                                                data_v,
+                                                                                                [0, 0],
+                                                                                                [parameters['L'], parameters['h']],
+                                                                                                parameters['n_bins_v']
+                                                                                            )
     
 
+    # fork
+    # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
+    # 
+    norm_v_min_max= [norm_v_min, norm_v_max]     
+    # 
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                         [0, 0],
@@ -116,9 +135,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.set_inside_ellipse(X_ref, Y_ref, parameters['c'], parameters['a'], parameters['b'], 0, V_y, np.nan)
 
     # plot velocity of fluid
-    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['shaft_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
+    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['arrow_head_angle'], parameters['arrow_line_width'], 1, 'color_from_map', 0)
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'], 
                         label_pad=parameters['v_colorbar_label_pad'], 
                         label=r'$v \, [\met/\sec]$', 
@@ -138,10 +157,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-plot_snapshot(fig, parameters['n_late_snapshot'], rf'$t = \,$' + io.time_to_string(parameters['n_late_snapshot'] * parameters['T'] / number_of_frames, 's', 0))
+plot_snapshot(fig, parameters['n_late_snapshot'], rf'$t = \,$' + io.time_to_string(parameters['n_late_snapshot'] * parameters['T'] / number_of_frames, 's', parameters['n_decimals_snapshot_label']))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
 os.system(f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf')
 
-# pplt.show()
