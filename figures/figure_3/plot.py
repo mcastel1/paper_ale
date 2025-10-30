@@ -100,13 +100,13 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     # plot snapshot label
-    fig.text(0.5, 0.85, snapshot_label, fontsize=8, ha='center', va='center')
+    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=8, ha='center', va='center')
 
     gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
-    gr.plot_2d_mesh(ax, data_el_line_vertices, 0.2, 'red', parameters['alpha_mesh'])
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, 0.05, 'black', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
 
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
