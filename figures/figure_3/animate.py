@@ -11,11 +11,10 @@ number_of_frames = sys_utils.count_v_files('line_mesh_msh_n_', plot.snapshot_pat
 
 
 
-# frames_per_second = 30
 animation_duration_in_sec = (number_of_frames / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
 
 print(
-    f"number of frames: {number_of_frames} \n frames per second: {frames_per_second} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {frame_stride}",
+    f"number of frames: {number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}",
     flush=True)
 
 bit_rate = 300000
