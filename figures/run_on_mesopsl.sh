@@ -9,8 +9,8 @@ clear
 ROOT_PATH=/Users/michelecastellana/Documents/paper_ale
 PYTHON_MODULES_PATH=/Users/michelecastellana/Documents/python_modules
 LATEX_MODULES_PATH=/Users/michelecastellana/Documents/latex_modules
-FIGURES_PATH=$ROOT_PATH'figures'
-FIGURE_PATH=$FIGURES_PATH''$1
+FIGURES_PATH=$ROOT_PATH'/figures'
+FIGURE_PATH=$FIGURES_PATH'/'$1
 
 OUT=mesopslt    
 
@@ -37,7 +37,6 @@ rsync -avz --delete \
   --exclude='u_msh_dot*' \
   --exclude='def_v_bar*' \
   --exclude='def_phi*' \
-  --exclude='def_sigma*' \
   --exclude='sigma_*' \
   --exclude='*.msh' \
   --exclude='.DS_Store' \

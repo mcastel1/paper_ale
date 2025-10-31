@@ -8,11 +8,13 @@ import proplot as pplt
 import sys
 import warnings
 
+import calculus.geometry as geo
 import calculus.utils as cal
 import list.column_labels as clab
 import graphics.utils as gr
 import graphics.vector_plot as vec
 import input_output.utils as io
+import list.utils as lis
 import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vp
@@ -87,16 +89,28 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
 
 
 # fork
-# 2) to plot the animation: compute absolute min and max of norm v across  snapshots
+# 2) to make the animation: compute absolute min and max of norm v across  snapshots
+# 
+norm_v_min_max = cal.min_max_vector_field(
+                                            snapshot_min, snapshot_max, parameters['frame_stride'], 
+                                            os.path.join(solution_path + 'snapshots/csv/nodal_values'), 
+                                            'def_v_n_', 
+                                            parameters['n_bins_v'],
+                                            [[0, 0],[parameters['L'], parameters['h']]]
+                                        )
+# fork
+# 2) to make the animation: compute absolute min and max of sigma across  snapshots
 '''
-norm_v_min_max = cal.min_max_vector_field(parameters['n_first_frame'], 
-                         number_of_frames, parameters['frame_stride'], 
-                         os.path.join(solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_', 
-                         parameters['n_bins_v'],
-                         [[0, 0],[parameters['L'], parameters['h']]]
-                        )
+sigma_min_max = gr.min_max_files(
+                'def_sigma_n_12_', 
+                os.path.join(solution_path + 'snapshots/csv/nodal_values'),
+                snapshot_min, 
+                snapshot_max, 
+                parameters['frame_stride']
+                 )
+'''
 
-'''
+# 
 
 def plot_column(fig, n_file, snapshot_label):
     
@@ -104,11 +118,13 @@ def plot_column(fig, n_file, snapshot_label):
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
     data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
+    # data_u = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_n_' + n_snapshot + '.csv', usecols=columns_v)
+
 
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
-    '''    
+    
     # =============
     # v subplot
     # =============    
@@ -167,7 +183,7 @@ def plot_column(fig, n_file, snapshot_label):
                           axis_origin=parameters['axis_origin'],
                           n_minor_ticks=parameters['n_minor_ticks'])
     
-    '''
+    
     
     # =============
     # sigma subplot
@@ -193,14 +209,43 @@ def plot_column(fig, n_file, snapshot_label):
     
   
     
-    # sigma = np.random.rand(50, 50)
+    '''
+    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u,
+                                                                        [0, 0],
+                                                                        [parameters['L'], parameters['h']],
+                                                                        parameters['n_bins_sigma'],
+                                                                        clab.label_x_column,
+                                                                        clab.label_y_column,
+                                                                        clab.label_v_column)
+
+    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
+    # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
+    X_sigma_ref = np.array(lis.substract_lists_of_lists(X_sigma, U_msh_x))
+    Y_sigma_ref = np.array(lis.substract_lists_of_lists(Y_sigma, U_msh_y))
+    
+    # print(f'X_sigma_ref = {X_sigma_ref}')
+    
+    for i in range(X_sigma_ref.shape[0]):  # Loop over rows
+        for j in range(X_sigma_ref.shape[1]):  # Loop over columns
+            x = X_sigma_ref[i, j]
+            y = Y_sigma_ref[i, j]
+            point = [x, y]
+            # Do something with point
+            # print(f"Point at ({i}, {j}): [{x}, {y}]")
+            
+            if (geo.point_in_mesh(os.path.join(mesh_path, 'triangles.csv'), point) == False):
+                    # print(f"Point at ({i}, {j}): [{x}, {y}]")
+                    Z_sigma[i, j] = np.nan
+
+
+    '''
 
     # set to nan the values of sigma which lie within the ellipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     gr.set_inside_ellipse(X_sigma, Y_sigma, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], Z_sigma, np.nan)
     
 
     
-        # fork
+    # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
     # 
     sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
