@@ -93,7 +93,7 @@ def plot_column(fig, n_file, snapshot_label):
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
-
+    '''    
     # =============
     # v subplot
     # =============    
@@ -152,7 +152,7 @@ def plot_column(fig, n_file, snapshot_label):
                           axis_origin=parameters['axis_origin'],
                           n_minor_ticks=parameters['n_minor_ticks'])
     
-    
+    '''
     
     # =============
     # sigma subplot
@@ -164,29 +164,64 @@ def plot_column(fig, n_file, snapshot_label):
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
     
-    # fork
-    # 1) to plot the figure: compute sigma_min and sigma_max for the current snapshot
-    sigma_min, sigma_max = gr.min_max_files('def_sigma_n_12_', 
-                                    os.path.join(solution_path + 'snapshots/csv/nodal_values') + '/',
-                                    clab.label_sigma_column, 
-                                    n_file,
-                                    n_file, 
-                                    1)
 
     
     gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
     
-    X_sigma, Y_sigma, Z_sigma = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], sigma_min, parameters['n_bins_sigma'], 1)
     
-    color_map_sigma = gr.cb.make_colorbar(fig, Z_sigma, sigma_min, sigma_max, 
-                                          parameters['sigma_colorbar_position'], parameters['sigma_color_bar_size'], 
-                                          label_pad=parameters['sigma_colorbar_label_pad'],
-                                          label=r'$\sigma \, [\textrm{Pa} \, \met]$', 
-                                          font_size=parameters['sigma_colorbar_font_size'],
-                                          line_width=parameters['sigma_colorbar_tick_line_width'],
-                                          tick_length=parameters['sigma_colorbar_tick_length'],
-                                          tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-                                          tick_label_angle=parameters['sigma_colorbar_tick_label_angle'])
+    
+    X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
+    
+    
+    
+
+    
+  
+    
+    # sigma = np.random.rand(50, 50)
+
+    # set to nan the values of sigma which lie within the ellipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
+    gr.set_inside_ellipse(X_sigma, Y_sigma, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], Z_sigma, np.nan)
+    
+
+    
+        # fork
+    # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
+    # 
+    sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
+    sigma_min_max = [sigma_min, sigma_max]
+    # 
+
+    contour_plot = ax.imshow(Z_sigma.T, 
+              origin='lower', 
+              cmap=gr.cb.color_map_type, 
+              aspect='equal', 
+              extent=[0, parameters['L'], 0, parameters['h']],
+              vmin=sigma_min_max[0], vmax=sigma_min_max[1])
+
+    
+    # Corrected make_colorbar call (remove 'location')
+    gr.cb.make_colorbar(
+        figure=fig,
+        grid_values=Z_sigma,
+        min_value=sigma_min_max[0],
+        max_value=sigma_min_max[1],
+        position=parameters['sigma_colorbar_position'],
+        size=parameters['sigma_colorbar_size'],
+        label_pad=parameters['sigma_colorbar_label_offset'],
+        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+        line_width=parameters['sigma_colorbar_tick_line_width'],
+        tick_length=parameters['sigma_colorbar_tick_length'],
+        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+        label=r"$\sigma \, [\pas \met]$",
+        mappable = contour_plot
+    )
+    
+    '''
+    # Use standard matplotlib colorbar instead
+    cbar = fig.colorbar(im, ax=ax, location='left', pad=0.1, shrink=0.8)
+    cbar.set_label(r"$\sigma$")
+    '''
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
