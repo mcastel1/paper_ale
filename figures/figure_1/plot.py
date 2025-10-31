@@ -99,7 +99,7 @@ norm_v_min_max = cal.min_max_vector_field(
                                             [[0, 0],[parameters['L'], parameters['h']]]
                                         )
 # fork
-# 2) to make the animation: compute absolute min and max of sigma across  snapshots
+# 2) to make the animation: compute absolute min and max of sigma across snapshots
 '''
 sigma_min_max = gr.min_max_files(
                 'def_sigma_n_12_', 
@@ -151,9 +151,9 @@ def plot_column(fig, n_file, snapshot_label):
                                                                                                     clab.label_v_column)
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    # 
+    ''' 
     norm_v_min_max = [norm_v_min, norm_v_max]
-    # 
+    '''
 
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
@@ -246,7 +246,7 @@ def plot_column(fig, n_file, snapshot_label):
 
     
     # fork
-    # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
+    # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
     # 
     sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
     sigma_min_max = [sigma_min, sigma_max]
@@ -273,7 +273,7 @@ def plot_column(fig, n_file, snapshot_label):
         line_width=parameters['sigma_colorbar_tick_line_width'],
         tick_length=parameters['sigma_colorbar_tick_length'],
         tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=r"$\sigma \, [\pas \met]$",
+        label=r"$\sigma \, [\pas \, \met]$",
         mappable = contour_plot
     )
     
