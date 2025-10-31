@@ -46,6 +46,7 @@ plt.rcParams.update({
 # define the folder where to read the data
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+sub_mesh_0_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/sub_meshes/in/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 
@@ -219,7 +220,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                     [0, 0],
                                                                     [parameters['L'], parameters['h']],
-                                                                    parameters['n_bins_v'])
+                                                                    parameters['n_bins_sigma'])
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
@@ -233,7 +234,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
             point = [X_sigma_ref[i, j], Y_sigma_ref[i, j]]
             
-            if (geo.point_in_mesh(os.path.join(mesh_path, 'triangles.csv'), point) == False):
+            if (geo.point_in_mesh(os.path.join(sub_mesh_0_path, 'triangles.csv'), point) == True):
                     # print(f"Point at ({i}, {j}): [{x}, {y}]")
                     Z_sigma[i, j] = np.nan
 
