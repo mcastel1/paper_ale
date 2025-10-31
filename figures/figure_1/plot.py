@@ -89,6 +89,14 @@ def plot_column(fig, n_file, snapshot_label):
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
 
+    # plot snapshot label
+    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
+
+
+    # =============
+    # v subplot
+    # =============    
+    
     # Check if we already have an axis, if not create one
     if len(fig.axes) == 0:
         ax = fig.add_subplot(2, 1, 1)
@@ -99,12 +107,8 @@ def plot_column(fig, n_file, snapshot_label):
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-     # plot snapshot label
-    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
-
-
-
-    gr.plot_2d_mesh(ax, data_line_vertices, 0.1, 'black', parameters['alpha_mesh'])
+    
+    gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
@@ -127,14 +131,14 @@ def plot_column(fig, n_file, snapshot_label):
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0,
                              clip_on=False)
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['colorbar_position'], parameters['color_bar_size'], 
-                        label=r'$z \, [\mic]$', 
-                        font_size=parameters['colorbar_font_size'],
-                        tick_length=parameters['colorbar_tick_length'],
-                        label_pad=parameters['colorbar_label_offset'], 
-                        tick_label_offset=parameters['colorbar_tick_label_offset'],
-                        tick_label_angle=parameters['colorbar_tick_label_angle'],
-                        line_width=parameters['colorbar_line_width'])
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['color_bar_size'], 
+                        label=r'$v \, [\met/\sec]$', 
+                        font_size=parameters['v_colorbar_font_size'],
+                        tick_length=parameters['v_colorbar_tick_length'],
+                        label_pad=parameters['v_colorbar_label_offset'], 
+                        tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                        tick_label_angle=parameters['v_colorbar_tick_label_angle'],
+                        line_width=parameters['v_colorbar_line_width'])
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
@@ -146,7 +150,32 @@ def plot_column(fig, n_file, snapshot_label):
                           axis_label_offset=parameters['axis_label_offset'],
                           axis_origin=parameters['axis_origin'],
                           n_minor_ticks=parameters['n_minor_ticks'])
+    
+    
+    
+    # =============
+    # sigma subplot
+    # =============
+    
+    ax = fig.add_subplot(2, 1, 2)
+        
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
+    
+    gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
+
+    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
+                          tick_length=parameters['tick_length'], 
+                          line_width=parameters['axis_line_width'], 
+                          axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
+                          tick_label_format=['f', 'f'], 
+                          font_size=[parameters['font_size'], parameters['font_size']],
+                          tick_label_offset=parameters['tick_label_offset'],
+                          axis_label_offset=parameters['axis_label_offset'],
+                          axis_origin=parameters['axis_origin'],
+                          n_minor_ticks=parameters['n_minor_ticks'])
 
 
 plot_column(fig, parameters['n_snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['n_snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
