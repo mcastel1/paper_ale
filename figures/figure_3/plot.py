@@ -46,7 +46,7 @@ plt.rcParams.update({
 # define the folder where to read the data
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-sub_mesh_0_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/sub_meshes/in/")
+sub_mesh_1_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/sub_meshes/out/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 
@@ -108,7 +108,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
 
 
-    '''
+    
     # =============
     # v subplot
     # =============    
@@ -190,7 +190,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     axis_origin=parameters['axis_origin'],
                     tick_length=parameters['tick_length']
                 )
-    '''
+    
     
         
     # =============
@@ -216,30 +216,29 @@ def plot_snapshot(fig, n_file, snapshot_label):
     sigma_min_max = [sigma_min, sigma_max]
     # 
 
-    # 
+    #set to nan the values of Z_sigma which do not lie in sub_mesh_1
+    # i) compute the mesh displacement field
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                     [0, 0],
                                                                     [parameters['L'], parameters['h']],
                                                                     parameters['n_bins_sigma'])
 
-    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
+
+    # ii) obtain the coordinates of the points X_sigma, Y_sigma of the scalar field  sigma in the reference configuration of the mesh by subtracting X_sigma, Y_sigma and U_msh_x, U_msh_y, respectively 
     X_sigma_ref = np.array(lis.substract_lists_of_lists(X_sigma, U_msh_x))
     Y_sigma_ref = np.array(lis.substract_lists_of_lists(Y_sigma, U_msh_y))
     
-    # print(f'X_sigma_ref = {X_sigma_ref}')
-    
+    # iii) run through the points in the reference configuration of the mesh, and set to nan the points that do not lie in sub_mesh_1
     for i in range(X_sigma_ref.shape[0]):  # Loop over rows
         for j in range(X_sigma_ref.shape[1]):  # Loop over columns
 
             point = [X_sigma_ref[i, j], Y_sigma_ref[i, j]]
             
-            if (geo.point_in_mesh(os.path.join(sub_mesh_0_path, 'triangles.csv'), point) == True):
-                    # print(f"Point at ({i}, {j}): [{x}, {y}]")
+            if (
+                    (geo.point_in_mesh(os.path.join(sub_mesh_1_path, 'triangles.csv'), point) == False)
+                ):
+
                     Z_sigma[i, j] = np.nan
-
-
-    
     # 
 
     contour_plot = ax.imshow(
@@ -248,7 +247,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                 cmap=gr.cb.color_map_type, 
                                 aspect='equal', 
                                 extent=[0, parameters['L'], 0, parameters['h']],
-                                vmin=sigma_min_max[0], vmax=sigma_min_max[1]
+                                vmin=sigma_min_max[0], vmax=sigma_min_max[1],
+                                interpolation='bilinear' 
                             )
 
     
