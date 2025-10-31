@@ -6,10 +6,10 @@ clear
 clear
 
 # define the paths 
-ROOT_PATH=/Users/michelecastellana/Documents/paper_ale/
-PYTHON_MODULES_PATH=/Users/michelecastellana/Documents/python_modules/
-LATEX_MODULES_PATH=/Users/michelecastellana/Documents/latex_modules/
-FIGURES_PATH=$ROOT_PATH'figures/'
+ROOT_PATH=/Users/michelecastellana/Documents/paper_ale
+PYTHON_MODULES_PATH=/Users/michelecastellana/Documents/python_modules
+LATEX_MODULES_PATH=/Users/michelecastellana/Documents/latex_modules
+FIGURES_PATH=$ROOT_PATH'figures'
 FIGURE_PATH=$FIGURES_PATH''$1
 
 OUT=mesopslt    
@@ -48,8 +48,9 @@ rsync -avz --delete \
   --exclude='*.pyc' \
   "$FIGURE_PATH/" mesopslt:paper_ale/figures/"$1"
 rsync -av --delete $PYTHON_MODULES_PATH/* mesopslt:python_modules
-rsync -av --delete $ROOT_PATH/*.tex mesopslt:paper_ale
-rsync -av --delete $FIGURES_PATH/*.tex mesopslt:paper_ale/figures
+# uncomment this to copy .tex files from ROOT_PATH which may be needed to plot the figures
+# rsync -av --delete $ROOT_PATH/*.tex mesopslt:paper_ale
+# rsync -av --delete $FIGURES_PATH/*.tex mesopslt:paper_ale/figures
 rsync -av --delete $LATEX_MODULES_PATH/* mesopslt:latex_modules
 
 # replace path for latex modules with the path for latex modules on the cluster

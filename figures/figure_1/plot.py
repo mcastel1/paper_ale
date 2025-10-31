@@ -132,7 +132,7 @@ def plot_column(fig, n_file, snapshot_label):
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0,
                              clip_on=False)
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['color_bar_size'], 
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'], 
                         label=r'$v \, [\met/\sec]$', 
                         font_size=parameters['v_colorbar_font_size'],
                         tick_length=parameters['v_colorbar_tick_length'],
@@ -177,6 +177,16 @@ def plot_column(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
     
     X_sigma, Y_sigma, Z_sigma = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], sigma_min, parameters['n_bins_sigma'], 1)
+    
+    color_map_sigma = gr.cb.make_colorbar(fig, Z_sigma, sigma_min, sigma_max, 
+                                          parameters['sigma_colorbar_position'], parameters['sigma_color_bar_size'], 
+                                          label_pad=parameters['sigma_colorbar_label_pad'],
+                                          label=r'$\sigma \, [\textrm{Pa} \, \met]$', 
+                                          font_size=parameters['sigma_colorbar_font_size'],
+                                          line_width=parameters['sigma_colorbar_tick_line_width'],
+                                          tick_length=parameters['sigma_colorbar_tick_length'],
+                                          tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+                                          tick_label_angle=parameters['sigma_colorbar_tick_label_angle'])
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
