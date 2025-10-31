@@ -101,9 +101,21 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_msh_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_msh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
     data_u_msh = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_msh_n_' + n_snapshot + '.csv', usecols=columns_v)
+    data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
 
-    ax = fig.add_subplot(1, 1, 1)
 
+    
+    # =============
+    # v subplot
+    # =============    
+    
+    # Check if we already have an axis, if not create one
+    if len(fig.axes) == 0:
+        ax = fig.add_subplot(2, 1, 1)
+    else:
+        ax = fig.axes[0]  # Use the existing axis
+        
+        
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
@@ -111,7 +123,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=8, ha='center', va='center')
 
-    gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
+    # gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
@@ -174,6 +186,37 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     axis_origin=parameters['axis_origin'],
                     tick_length=parameters['tick_length']
                 )
+    
+    
+        
+    # =============
+    # sigma subplot
+    # =============
+
+    ax = fig.add_subplot(2, 1, 2)
+        
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    # plot mesh for elastic problem and for mesh oustide the elastic body
+    gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
+    
+    
+    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], \
+                axis_label=parameters['axis_label'],
+                axis_label_angle=parameters['axis_label_angle'],
+                axis_label_offset=parameters['axis_label_offset'],
+                tick_label_offset=parameters['tick_label_offset'],
+                tick_label_format=parameters['tick_label_format'],
+                font_size=parameters['font_size'],
+                line_width=parameters['axis_line_width'],
+                axis_origin=parameters['axis_origin'],
+                tick_length=parameters['tick_length']
+            )
+
+    
 
 
 
