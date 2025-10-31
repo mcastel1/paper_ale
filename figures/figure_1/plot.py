@@ -101,7 +101,7 @@ norm_v_min_max = cal.min_max_vector_field(
 # fork
 # 2) to make the animation: compute absolute min and max of sigma across snapshots
 '''
-sigma_min_max = gr.min_max_files(
+sigma_min_max = cal.min_max_files(
                 'def_sigma_n_12_', 
                 os.path.join(solution_path + 'snapshots/csv/nodal_values'),
                 snapshot_min, 
