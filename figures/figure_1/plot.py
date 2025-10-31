@@ -163,9 +163,20 @@ def plot_column(fig, n_file, snapshot_label):
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    # fork
+    # 1) to plot the figure: compute sigma_min and sigma_max for the current snapshot
+    sigma_min, sigma_max = gr.min_max_files('def_sigma_n_12_', 
+                                    os.path.join(solution_path + 'snapshots/csv/nodal_values') + '/',
+                                    clab.label_sigma_column, 
+                                    n_file,
+                                    n_file, 
+                                    1)
 
     
     gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
+    
+    X_sigma, Y_sigma, Z_sigma = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], sigma_min, parameters['n_bins_sigma'], 1)
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
