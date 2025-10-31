@@ -66,6 +66,21 @@ columns_theta_omega = ["theta", "omega"]
 data_theta_omega = pd.read_csv(solution_path + 'theta_omega.csv', usecols=columns_theta_omega)
 
 
+'''
+import calculus.geometry as geo
+
+p1 = [0, 0]
+p2 = [1, 0]
+p3 = [2, 1]
+
+q = [0.25,0.1]
+
+# X = geo.point_in_triangle(p1, p2, p3, q)
+
+X = geo.point_in_mesh(os.path.join(mesh_path, 'triangles.csv'), q)
+'''
+
+
 fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_margin_l'], 
                   bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], 
                   top=parameters['figure_margin_t'], wspace=0, hspace=0)
