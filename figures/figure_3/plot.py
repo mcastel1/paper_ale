@@ -203,6 +203,43 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
     
+    X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
+    
+    # fork
+    # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
+    # 
+    sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
+    sigma_min_max = [sigma_min, sigma_max]
+    # 
+
+    contour_plot = ax.imshow(
+                                Z_sigma.T, 
+                                origin='lower', 
+                                cmap=gr.cb.color_map_type, 
+                                aspect='equal', 
+                                extent=[0, parameters['L'], 0, parameters['h']],
+                                vmin=sigma_min_max[0], vmax=sigma_min_max[1]
+                            )
+
+    
+    # Corrected make_colorbar call (remove 'location')
+    gr.cb.make_colorbar(
+        figure=fig,
+        grid_values=Z_sigma,
+        min_value=sigma_min_max[0],
+        max_value=sigma_min_max[1],
+        position=parameters['sigma_colorbar_position'],
+        size=parameters['sigma_colorbar_size'],
+        label_pad=parameters['sigma_colorbar_label_offset'],
+        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+        line_width=parameters['sigma_colorbar_tick_line_width'],
+        tick_length=parameters['sigma_colorbar_tick_length'],
+        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+        label=r"$\sigma \, [\pas \, \met]$",
+        mappable = contour_plot
+    )
+    
+    
     
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], \
                 axis_label=parameters['axis_label'],
