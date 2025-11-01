@@ -6,6 +6,7 @@
 #SBATCH --account=castellana_hi
 #SBATCH --partition=hi
 #SBATCH --ntasks-per-node=1
+#SBATCH--mem=50G
 #SBATCH --nodes=1
 
 
