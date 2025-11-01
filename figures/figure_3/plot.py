@@ -70,14 +70,15 @@ columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + cla
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-'''
+# 
 norm_v_min_max = cal.min_max_vector_field(snapshot_min, 
                          snapshot_max, parameters['frame_stride'], 
                          os.path.join(solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_', 
                          parameters['n_bins_v'],
                          [[0, 0],[parameters['L'], parameters['h']]]
                         )
-
+# 
+'''
 sigma_min_max = cal.min_max_files(
                 'def_sigma_n_12_', 
                 os.path.join(solution_path + 'snapshots/csv/nodal_values'),
@@ -157,9 +158,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    #    
+    '''  
     norm_v_min_max= [norm_v_min, norm_v_max]     
-    # 
+    '''
 
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
