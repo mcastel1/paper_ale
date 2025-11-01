@@ -11,14 +11,14 @@ import warnings
 
 import calculus.geometry as geo
 import calculus.utils as cal
-import list.column_labels as clab
+import constants.utils as const
 import graphics.utils as gr
-import graphics.vector_plot as vec
+import graphics.vector_plot as vp
 import input_output.utils as io
+import list.column_labels as clab
 import list.utils as lis
 import system.paths as paths
 import system.utils as sys_utils
-import graphics.vector_plot as vp
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
@@ -126,7 +126,7 @@ def plot_column(fig, n_file, snapshot_label):
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
-    
+    '''
     # =============
     # v subplot
     # =============    
@@ -162,7 +162,7 @@ def plot_column(fig, n_file, snapshot_label):
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], V_x, np.nan)
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], V_y, np.nan)
 
-    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0,
+    vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0,
                              clip_on=False)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'], 
@@ -185,18 +185,9 @@ def plot_column(fig, n_file, snapshot_label):
                           axis_origin=parameters['axis_origin'],
                           n_minor_ticks=parameters['n_minor_ticks'])
     
-    # 
-    theta = np.arange(0, 2*np.pi, 0.5)
-    r = 0.1
-
-    xs = r * np.cos(theta)
-    ys = r * np.sin(theta)
-
-    poly = Polygon(np.column_stack([xs, ys]), fill=False, linewidth=1.0)
-    ax.add_patch(poly)
-    # 
-    
     '''
+    
+    
     # =============
     # sigma subplot
     # =============
@@ -252,7 +243,16 @@ def plot_column(fig, n_file, snapshot_label):
         mappable = contour_plot
     )
     
-    
+    '''
+    theta = np.arange(0, 2*np.pi, 0.5)
+    r = 0.1
+
+    xs = np.add(r * np.cos(theta), [parameters['c'][0]] * len(theta))
+    ys = np.add(r * np.sin(theta), [parameters['c'][1]] * len(theta))
+
+    poly = Polygon(np.column_stack([xs, ys]), fill=True, linewidth=1.0, edgecolor='red', facecolor='green', zorder=const.high_z_order)
+    ax.add_patch(poly)
+    '''
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
@@ -265,7 +265,7 @@ def plot_column(fig, n_file, snapshot_label):
                           axis_origin=parameters['axis_origin'],
                           n_minor_ticks=parameters['n_minor_ticks'])
                           
-    '''
+    
 
 
 plot_column(fig, parameters['n_snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['n_snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
