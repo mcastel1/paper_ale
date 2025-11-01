@@ -106,7 +106,8 @@ fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size
                   bottom=parameters['figure_margin_b'], 
                   right=parameters['figure_margin_r'], 
                   top=parameters['figure_margin_t'], 
-                  wspace=0, hspace=0)
+                  wspace=parameters['wspace'], 
+                  hspace=parameters['hspace'])
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
@@ -120,7 +121,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
 
 
-    '''
+    
     # =============
     # v subplot
     # =============    
@@ -202,7 +203,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     axis_origin=parameters['axis_origin'],
                     tick_length=parameters['tick_length']
                 )
-    '''
+    
     
         
     # =============
