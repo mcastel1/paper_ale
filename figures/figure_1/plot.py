@@ -91,14 +91,15 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
 
 # fork
 # 2) to make the animation: compute absolute min and max of norm v across  snapshots
-# 
+'''
 norm_v_min_max = cal.min_max_vector_field(
                                             snapshot_min, snapshot_max, parameters['frame_stride'], 
                                             os.path.join(solution_path + 'snapshots/csv/nodal_values'), 
                                             'def_v_n_', 
                                             parameters['n_bins_v'],
                                             [[0, 0],[parameters['L'], parameters['h']]]
-                                        )
+                                        )   
+'''
 # fork
 # 2) to make the animation: compute absolute min and max of sigma across snapshots
 '''
@@ -152,9 +153,9 @@ def plot_column(fig, n_file, snapshot_label):
                                                                                                     clab.label_v_column)
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    ''' 
+    # 
     norm_v_min_max = [norm_v_min, norm_v_max]
-    '''
+    # 
 
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
@@ -184,8 +185,18 @@ def plot_column(fig, n_file, snapshot_label):
                           axis_origin=parameters['axis_origin'],
                           n_minor_ticks=parameters['n_minor_ticks'])
     
+    # 
+    theta = np.arange(0, 2*np.pi, 0.5)
+    r = 0.1
+
+    xs = r * np.cos(theta)
+    ys = r * np.sin(theta)
+
+    poly = Polygon(np.column_stack([xs, ys]), fill=False, linewidth=1.0)
+    ax.add_patch(poly)
+    # 
     
-    
+    '''
     # =============
     # sigma subplot
     # =============
@@ -204,43 +215,6 @@ def plot_column(fig, n_file, snapshot_label):
     
     X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
     
-    
-    
-
-    
-  
-    
-    '''
-    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u,
-                                                                        [0, 0],
-                                                                        [parameters['L'], parameters['h']],
-                                                                        parameters['n_bins_sigma'],
-                                                                        clab.label_x_column,
-                                                                        clab.label_y_column,
-                                                                        clab.label_v_column)
-
-    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
-    X_sigma_ref = np.array(lis.substract_lists_of_lists(X_sigma, U_msh_x))
-    Y_sigma_ref = np.array(lis.substract_lists_of_lists(Y_sigma, U_msh_y))
-    
-    # print(f'X_sigma_ref = {X_sigma_ref}')
-    
-    for i in range(X_sigma_ref.shape[0]):  # Loop over rows
-        for j in range(X_sigma_ref.shape[1]):  # Loop over columns
-            x = X_sigma_ref[i, j]
-            y = Y_sigma_ref[i, j]
-            point = [x, y]
-            # Do something with point
-            # print(f"Point at ({i}, {j}): [{x}, {y}]")
-            
-            if (geo.point_in_mesh(os.path.join(mesh_path, 'triangles.csv'), point) == False):
-                    # print(f"Point at ({i}, {j}): [{x}, {y}]")
-                    Z_sigma[i, j] = np.nan
-
-
-    '''
-
     # set to nan the values of sigma which lie within the ellipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     gr.set_inside_ellipse(X_sigma, Y_sigma, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], Z_sigma, np.nan)
     
@@ -278,11 +252,7 @@ def plot_column(fig, n_file, snapshot_label):
         mappable = contour_plot
     )
     
-    '''
-    # Use standard matplotlib colorbar instead
-    cbar = fig.colorbar(im, ax=ax, location='left', pad=0.1, shrink=0.8)
-    cbar.set_label(r"$\sigma$")
-    '''
+    
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
@@ -294,6 +264,8 @@ def plot_column(fig, n_file, snapshot_label):
                           axis_label_offset=parameters['axis_label_offset'],
                           axis_origin=parameters['axis_origin'],
                           n_minor_ticks=parameters['n_minor_ticks'])
+                          
+    '''
 
 
 plot_column(fig, parameters['n_snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['n_snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
