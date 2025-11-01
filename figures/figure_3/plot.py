@@ -85,6 +85,7 @@ sigma_min_max = cal.min_max_files(
                  )
 '''
 
+data_boundary_vertices_ellipse = pd.read_csv(os.path.join(mesh_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
 
 
 
