@@ -9,8 +9,9 @@ import sys
 import warnings
 
 import calculus.utils as cal
-import list.column_labels as clab
+import calculus.geometry as geo
 import graphics.utils as gr
+import list.column_labels as clab
 import input_output.utils as io
 import list.utils as lis
 import system.paths as paths
@@ -44,8 +45,11 @@ plt.rcParams.update({
 
 # define the folder where to read the data
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+sub_mesh_1_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/sub_meshes/out/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
+
 
 
 # compute the min and max snapshot present in the solution path
@@ -64,14 +68,25 @@ columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + cla
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-# 
+'''
 norm_v_min_max = cal.min_max_vector_field(snapshot_min, 
                          snapshot_max, parameters['frame_stride'], 
                          os.path.join(solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_', 
                          parameters['n_bins_v'],
                          [[0, 0],[parameters['L'], parameters['h']]]
                         )
-# 
+
+sigma_min_max = cal.min_max_files(
+                'def_sigma_n_12_', 
+                os.path.join(solution_path + 'snapshots/csv/nodal_values'),
+                snapshot_min, 
+                snapshot_max, 
+                parameters['frame_stride']
+                 )
+'''
+
+
+
 
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
@@ -90,9 +105,21 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_msh_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_msh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
     data_u_msh = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_msh_n_' + n_snapshot + '.csv', usecols=columns_v)
+    data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
 
-    ax = fig.add_subplot(1, 1, 1)
 
+    
+    # =============
+    # v subplot
+    # =============    
+    
+    # Check if we already have an axis, if not create one
+    if len(fig.axes) == 0:
+        ax = fig.add_subplot(2, 1, 1)
+    else:
+        ax = fig.axes[0]  # Use the existing axis
+        
+        
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
@@ -100,7 +127,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=8, ha='center', va='center')
 
-    gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
+    # gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
@@ -117,9 +144,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    '''    
+    #    
     norm_v_min_max= [norm_v_min, norm_v_max]     
-    '''
+    # 
 
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
@@ -163,6 +190,100 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     axis_origin=parameters['axis_origin'],
                     tick_length=parameters['tick_length']
                 )
+    
+    
+        
+    # =============
+    # sigma subplot
+    # =============
+
+    ax = fig.add_subplot(2, 1, 2)
+        
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    # plot mesh for elastic problem and for mesh oustide the elastic body
+    gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
+    
+    X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
+    
+    # fork
+    # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
+    # 
+    sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
+    sigma_min_max = [sigma_min, sigma_max]
+    # 
+
+    #set to nan the values of Z_sigma which do not lie in sub_mesh_1
+    # i) compute the mesh displacement field
+    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
+                                                                    [0, 0],
+                                                                    [parameters['L'], parameters['h']],
+                                                                    parameters['n_bins_sigma'])
+
+
+    # ii) obtain the coordinates of the points X_sigma, Y_sigma of the scalar field  sigma in the reference configuration of the mesh by subtracting X_sigma, Y_sigma and U_msh_x, U_msh_y, respectively 
+    X_sigma_ref = np.array(lis.substract_lists_of_lists(X_sigma, U_msh_x))
+    Y_sigma_ref = np.array(lis.substract_lists_of_lists(Y_sigma, U_msh_y))
+    
+    # iii) run through the points in the reference configuration of the mesh, and set to nan the points that do not lie in sub_mesh_1
+    for i in range(X_sigma_ref.shape[0]):  # Loop over rows
+        for j in range(X_sigma_ref.shape[1]):  # Loop over columns
+
+            point = [X_sigma_ref[i, j], Y_sigma_ref[i, j]]
+            
+            if (
+                    (geo.point_in_mesh(os.path.join(sub_mesh_1_path, 'triangles.csv'), point) == False)
+                ):
+
+                    Z_sigma[i, j] = np.nan
+    # 
+
+    contour_plot = ax.imshow(
+                                Z_sigma.T, 
+                                origin='lower', 
+                                cmap=gr.cb.color_map_type, 
+                                aspect='equal', 
+                                extent=[0, parameters['L'], 0, parameters['h']],
+                                vmin=sigma_min_max[0], vmax=sigma_min_max[1],
+                                interpolation='bilinear' 
+                            )
+
+    
+    # Corrected make_colorbar call (remove 'location')
+    gr.cb.make_colorbar(
+        figure=fig,
+        grid_values=Z_sigma,
+        min_value=sigma_min_max[0],
+        max_value=sigma_min_max[1],
+        position=parameters['sigma_colorbar_position'],
+        size=parameters['sigma_colorbar_size'],
+        label_pad=parameters['sigma_colorbar_label_offset'],
+        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+        line_width=parameters['sigma_colorbar_tick_line_width'],
+        tick_length=parameters['sigma_colorbar_tick_length'],
+        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+        label=r"$\sigma \, [\pas \, \met]$",
+        mappable = contour_plot
+    )
+    
+    
+    
+    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], \
+                axis_label=parameters['axis_label'],
+                axis_label_angle=parameters['axis_label_angle'],
+                axis_label_offset=parameters['axis_label_offset'],
+                tick_label_offset=parameters['tick_label_offset'],
+                tick_label_format=parameters['tick_label_format'],
+                font_size=parameters['font_size'],
+                line_width=parameters['axis_line_width'],
+                axis_origin=parameters['axis_origin'],
+                tick_length=parameters['tick_length']
+            )
+
+    
 
 
 

@@ -8,7 +8,7 @@ import proplot as pplt
 import sys
 import warnings
 
-
+import calculus.utils as cal
 import graphics.utils as gr
 import graphics.vector_plot as vp
 import list.utils as lis
@@ -72,7 +72,7 @@ number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 # 1) to plot the figure
 # 2) to plot the animation
 # 
-sigma_min_max = gr.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
+sigma_min_max = cal.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
 # 
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=parameters['figure_margin_l'], bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], top=parameters['figure_margin_t'], wspace=0, hspace=0)
