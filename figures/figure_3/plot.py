@@ -1,4 +1,5 @@
 import matplotlib
+from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
 import os
 
@@ -10,6 +11,7 @@ import warnings
 
 import calculus.utils as cal
 import calculus.geometry as geo
+import constants.utils as const
 import graphics.utils as gr
 import list.column_labels as clab
 import input_output.utils as io
@@ -88,6 +90,15 @@ sigma_min_max = cal.min_max_files(
 data_boundary_vertices_ellipse = pd.read_csv(os.path.join(mesh_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
 
 
+# theta = np.arange(0, 2*np.pi, 0.5)
+# r = 0.1
+# xs = np.add(r * np.cos(theta), [parameters['c'][0]] * len(theta))
+# ys = np.add(r * np.sin(theta), [parameters['c'][1]] * len(theta))
+
+# xs = np.array(data_boundary_vertices_ellipse[':0'])
+# ys = np.array(data_boundary_vertices_ellipse[':1'])
+
+
 
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
@@ -109,7 +120,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
 
 
-    
+    '''
     # =============
     # v subplot
     # =============    
@@ -191,7 +202,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     axis_origin=parameters['axis_origin'],
                     tick_length=parameters['tick_length']
                 )
-    
+    '''
     
         
     # =============
@@ -207,6 +218,20 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
+    
+    # 
+    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_msh)
+    
+    data_def_boundary_vertices_ellipse = []
+    for index, row in data_boundary_vertices_ellipse.iterrows():
+        data_def_boundary_vertices_ellipse.append([row[':0'], row[':1']])
+        
+    poly = Polygon(np.array(data_def_boundary_vertices_ellipse), fill=True, linewidth=1.0, edgecolor='red', facecolor='green', zorder=const.high_z_order)
+    ax.add_patch(poly)
+    
+    
+    x = U_interp_x(0.4, 0.4)
+    # 
     
     X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
     
