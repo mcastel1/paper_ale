@@ -216,22 +216,13 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
     
     # plot mesh for elastic problem and for mesh oustide the elastic body
-    gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
-    
-    # 
-    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_msh)
-    
-    data_def_boundary_vertices_ellipse = []
-    for index, row in data_boundary_vertices_ellipse.iterrows():
-        data_def_boundary_vertices_ellipse.append([row[':0'], row[':1']])
-        
-    poly = Polygon(np.array(data_def_boundary_vertices_ellipse), fill=True, linewidth=1.0, edgecolor='red', facecolor='green', zorder=const.high_z_order)
-    ax.add_patch(poly)
+    gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'], zorder=2)
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'], zorder=1)
     
     
-    x = U_interp_x(0.4, 0.4)
-    # 
+    
+    
+    
     
     X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
     
@@ -242,30 +233,27 @@ def plot_snapshot(fig, n_file, snapshot_label):
     sigma_min_max = [sigma_min, sigma_max]
     # 
 
-    #set to nan the values of Z_sigma which do not lie in sub_mesh_1
-    # i) compute the mesh displacement field
-    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
-                                                                    [0, 0],
-                                                                    [parameters['L'], parameters['h']],
-                                                                    parameters['n_bins_sigma'])
 
-
-    # ii) obtain the coordinates of the points X_sigma, Y_sigma of the scalar field  sigma in the reference configuration of the mesh by subtracting X_sigma, Y_sigma and U_msh_x, U_msh_y, respectively 
-    X_sigma_ref = np.array(lis.substract_lists_of_lists(X_sigma, U_msh_x))
-    Y_sigma_ref = np.array(lis.substract_lists_of_lists(Y_sigma, U_msh_y))
-    
-    # iii) run through the points in the reference configuration of the mesh, and set to nan the points that do not lie in sub_mesh_1
-    for i in range(X_sigma_ref.shape[0]):  # Loop over rows
-        for j in range(X_sigma_ref.shape[1]):  # Loop over columns
-
-            point = [X_sigma_ref[i, j], Y_sigma_ref[i, j]]
-            
-            if (
-                    (geo.point_in_mesh(os.path.join(sub_mesh_1_path, 'triangles.csv'), point) == False)
-                ):
-
-                    Z_sigma[i, j] = np.nan
+    # plot the polygon of the boundary 'ellipse_loop_id'
     # 
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_msh)
+    
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration 
+    data_def_boundary_vertices_ellipse = []
+    for index, row in data_boundary_vertices_ellipse.iterrows():
+        data_def_boundary_vertices_ellipse.append(
+            np.add(
+                [row[':0'], row[':1']], 
+                [U_interp_x(row[':0'], row[':1']), U_interp_y(row[':0'], row[':1'])]
+                )
+            )
+    
+    # plot the boundary polygon in the current configuration 
+    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True, linewidth=parameters['mesh_el_line_width'], edgecolor='red', facecolor='white', zorder=1)
+    ax.add_patch(poly)
+    # 
+
 
     contour_plot = ax.imshow(
                                 Z_sigma.T, 
@@ -274,7 +262,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                 aspect='equal', 
                                 extent=[0, parameters['L'], 0, parameters['h']],
                                 vmin=sigma_min_max[0], vmax=sigma_min_max[1],
-                                interpolation='bilinear' 
+                                interpolation='bilinear',
+                                zorder=0
                             )
 
     
