@@ -135,7 +135,10 @@ def plot_column(fig, n_file, snapshot_label):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     
-    gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_line_vertices, 
+                    line_width=parameters['mesh_line_width_v_plot'], 
+                    color='black',
+                    alpha=parameters['alpha_mesh'])
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
@@ -177,7 +180,8 @@ def plot_column(fig, n_file, snapshot_label):
                           tick_label_offset=parameters['tick_label_offset'],
                           axis_label_offset=parameters['axis_label_offset'],
                           axis_origin=parameters['axis_origin'],
-                          n_minor_ticks=parameters['n_minor_ticks'])
+                          n_minor_ticks=parameters['n_minor_ticks'],
+                          minor_tick_length=parameters['minor_tick_length'])
     
     
     
@@ -194,7 +198,11 @@ def plot_column(fig, n_file, snapshot_label):
     
 
     
-    gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_line_vertices, 
+                    line_width=parameters['mesh_line_width_sigma_plot'], 
+                    color='black', 
+                    alpha=parameters['alpha_mesh'], 
+                    zorder=1)
     
     
     
@@ -225,7 +233,7 @@ def plot_column(fig, n_file, snapshot_label):
             )
     
     # plot the boundary polygon in the current configuration 
-    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True, linewidth=parameters['mesh_line_width'], edgecolor='red', facecolor='white', zorder=1)
+    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True, linewidth=parameters['mesh_line_width_sigma_plot'], edgecolor='red', facecolor='white', zorder=1)
     ax.add_patch(poly)
     # 
 
@@ -236,6 +244,7 @@ def plot_column(fig, n_file, snapshot_label):
                         extent=[0, parameters['L'], 0, parameters['h']],
                         vmin=sigma_min_max[0], vmax=sigma_min_max[1],
                         interpolation='bilinear',
+                        zorder=0
                         )
 
     
@@ -266,7 +275,8 @@ def plot_column(fig, n_file, snapshot_label):
                           tick_label_offset=parameters['tick_label_offset'],
                           axis_label_offset=parameters['axis_label_offset'],
                           axis_origin=parameters['axis_origin'],
-                          n_minor_ticks=parameters['n_minor_ticks'])
+                          n_minor_ticks=parameters['n_minor_ticks'],
+                          minor_tick_length=parameters['minor_tick_length'])
                           
     
 

@@ -41,6 +41,7 @@ plt.rcParams.update({
 })
 
 
+
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
@@ -108,9 +109,14 @@ def plot_column(fig, n_file, sigma_min_max=None):
     X, t = gr.interpolate_curve(data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins'])
 
 
-    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
-                                    parameters['sigma_colorbar_position'], parameters['sigma_colorbar_size'], parameters['sigma_colorbar_angle'], parameters["sigma_colorbar_label_pad"], 
-                                    r'$\sigma \, [\newt/\met]$', parameters['color_map_font_size'], sigma_min_max)
+    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma, parameters['sigma_colorbar_position'], parameters['sigma_colorbar_size'], 
+                                                min_max=sigma_min_max,
+                                                tick_label_angle=parameters['sigma_colorbar_tick_label_angle'], 
+                                                label=r'$\sigma \, [\newt/\met]$', 
+                                                font_size=parameters['color_map_font_size'], 
+                                                label_offset=parameters["sigma_colorbar_label_offset"], 
+                                                tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+                                                label_angle=parameters['sigma_colorbar_label_angle'])
 
     #plot X and sigma 
     gr.plot_curve_grid(ax, X, color_map_sigma, 'black', parameters['X_line_width'])
@@ -128,9 +134,12 @@ def plot_column(fig, n_file, sigma_min_max=None):
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         position=parameters['v_colorbar_position'], 
                         size=parameters['v_colorbar_size'], 
-                        label_pad=parameters['v_colorbar_label_pad'], 
+                        label_pad=parameters['v_colorbar_label_offset'], 
                         label=r'$v \, []$', 
-                        font_size=parameters['color_map_font_size'])
+                        label_angle=parameters['v_colorbar_label_angle'],
+                        font_size=parameters['color_map_font_size'],
+                        tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                        tick_label_angle=parameters['v_colorbar_tick_label_angle'])
 
 
 
@@ -146,7 +155,9 @@ def plot_column(fig, n_file, sigma_min_max=None):
                     tick_label_format=parameters['tick_label_format'],
                     font_size=parameters['font_size'],
                     line_width=parameters['axis_line_width'],
-                    tick_length=parameters['tick_length']
+                    tick_length=parameters['tick_length'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length']
                 )
 
 
