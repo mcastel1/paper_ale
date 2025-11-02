@@ -93,7 +93,7 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
 
 # fork
 # 2) to make the animation: compute absolute min and max of norm v across  snapshots
-'''
+# 
 norm_v_min_max = cal.min_max_vector_field(
                                             snapshot_min, snapshot_max, parameters['frame_stride'], 
                                             os.path.join(solution_path + 'snapshots/csv/nodal_values'), 
@@ -101,19 +101,14 @@ norm_v_min_max = cal.min_max_vector_field(
                                             parameters['n_bins_v'],
                                             [[0, 0],[parameters['L'], parameters['h']]]
                                         )   
-'''
-# fork
-# 2) to make the animation: compute absolute min and max of sigma across snapshots
-'''
+
 sigma_min_max = cal.min_max_files(
                 'def_sigma_n_12_', 
                 os.path.join(solution_path + 'snapshots/csv/nodal_values'),
-                snapshot_min, 
+                snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'], 
                 snapshot_max, 
                 parameters['frame_stride']
                  )
-'''
-
 # 
 
 def plot_column(fig, n_file, snapshot_label):
@@ -151,9 +146,9 @@ def plot_column(fig, n_file, snapshot_label):
                                                                                                     clab.label_v_column)
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    # 
+    ''' 
     norm_v_min_max = [norm_v_min, norm_v_max]
-    # 
+    '''
 
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
@@ -208,11 +203,11 @@ def plot_column(fig, n_file, snapshot_label):
     
     # fork
     # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
-    # 
+    '''
     sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
     sigma_min_max = [sigma_min, sigma_max]
-    # 
-    
+    ''' 
+
     
         # plot the polygon of the boundary 'ellipse_loop_id'
     # 
