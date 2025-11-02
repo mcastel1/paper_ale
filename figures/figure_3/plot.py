@@ -111,6 +111,20 @@ fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size
                   hspace=parameters['hspace'])
 
 
+# pre-create subplots and axes
+fig.add_subplot(2, 1, 1)
+fig.add_subplot(2, 1, 2)
+
+v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
+                           parameters['v_colorbar_position'][1],
+                           parameters['v_colorbar_size'][0],
+                           parameters['v_colorbar_size'][1]])
+sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
+                               parameters['sigma_colorbar_position'][1], 
+                               parameters['sigma_colorbar_size'][0],
+                               parameters['sigma_colorbar_size'][1]])
+
+
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
@@ -128,10 +142,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # =============    
     
     # Check if we already have an axis, if not create one
-    if len(fig.axes) == 0:
-        ax = fig.add_subplot(2, 1, 1)
-    else:
-        ax = fig.axes[0]  # Use the existing axis
+    ax = fig.axes[0]  # Use the existing axis
         
         
     ax.set_axis_off()
@@ -190,7 +201,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
                         tick_length=parameters['v_colorbar_tick_length'],
-                        line_width=parameters['v_colorbar_line_width']
+                        line_width=parameters['v_colorbar_line_width'],
+                        axis=v_colorbar_axis
                     )
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], \
@@ -211,8 +223,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # sigma subplot
     # =============
 
-    ax = fig.add_subplot(2, 1, 2)
-        
+
+    ax = fig.axes[1]  # Use the existing axis
+                
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
@@ -283,7 +296,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
         tick_length=parameters['sigma_colorbar_tick_length'],
         tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
         label=r"$\sigma \, [\pas \, \met]$",
-        mappable = contour_plot
+        mappable = contour_plot,
+        axis=sigma_colorbar_axis
     )
     
     
