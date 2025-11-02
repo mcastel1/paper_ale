@@ -26,8 +26,6 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))   
 
 
-
-
 # Suppress the specific warning
 warnings.filterwarnings("ignore", message=".*Z contains NaN values.*", category=UserWarning)
 # clean the matplotlib cache to load the correct version of definitions.tex
@@ -90,18 +88,6 @@ sigma_min_max = cal.min_max_files(
 
 data_boundary_vertices_ellipse = pd.read_csv(os.path.join(mesh_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
 
-
-# theta = np.arange(0, 2*np.pi, 0.5)
-# r = 0.1
-# xs = np.add(r * np.cos(theta), [parameters['c'][0]] * len(theta))
-# ys = np.add(r * np.sin(theta), [parameters['c'][1]] * len(theta))
-
-# xs = np.array(data_boundary_vertices_ellipse[':0'])
-# ys = np.array(data_boundary_vertices_ellipse[':1'])
-
-
-
-
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
                   left=parameters['figure_margin_l'], 
                   bottom=parameters['figure_margin_b'], 
@@ -141,10 +127,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # v subplot
     # =============    
     
-    # Check if we already have an axis, if not create one
     ax = fig.axes[0]  # Use the existing axis
-        
-        
+                
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
@@ -234,10 +218,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'], zorder=2)
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'], zorder=1)
     
-    
-    
-    
-    
+
     
     X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
     
