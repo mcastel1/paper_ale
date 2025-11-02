@@ -71,9 +71,9 @@ number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 # fork
 # 1) to plot the figure
 # 2) to plot the animation
-# 
+'''
 sigma_min_max = cal.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
-# 
+'''
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=parameters['figure_margin_l'], bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], top=parameters['figure_margin_t'], wspace=0, hspace=0)
 
@@ -109,7 +109,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
-                                    parameters['sigma_color_bar_position'], parameters['sigma_color_bar_size'], parameters['sigma_color_bar_angle'], parameters["sigma_color_bar_label_pad"], 
+                                    parameters['sigma_colorbar_position'], parameters['sigma_colorbar_size'], parameters['sigma_colorbar_angle'], parameters["sigma_colorbar_label_pad"], 
                                     r'$\sigma \, [\newt/\met]$', parameters['color_map_font_size'], sigma_min_max)
 
     #plot X and sigma 
@@ -126,9 +126,9 @@ def plot_column(fig, n_file, sigma_min_max=None):
                                parameters['X_line_width'], parameters['alpha'], 'color_from_map', 0, parameters['threshold_arrow_length'])
     
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
-                        position=parameters['v_color_bar_position'], 
-                        size=parameters['v_color_bar_size'], 
-                        label_pad=parameters['v_color_bar_label_pad'], 
+                        position=parameters['v_colorbar_position'], 
+                        size=parameters['v_colorbar_size'], 
+                        label_pad=parameters['v_colorbar_label_pad'], 
                         label=r'$v \, []$', 
                         font_size=parameters['color_map_font_size'])
 
