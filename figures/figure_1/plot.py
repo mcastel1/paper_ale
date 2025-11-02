@@ -1,5 +1,5 @@
 import matplotlib
-# from matplotlib.patches import Polygon
+from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
 import os
 
@@ -69,24 +69,26 @@ columns_theta_omega = ["theta", "omega"]
 data_theta_omega = pd.read_csv(solution_path + 'theta_omega.csv', usecols=columns_theta_omega)
 
 
-'''
-import calculus.geometry as geo
+data_boundary_vertices_ellipse = pd.read_csv(os.path.join(mesh_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
 
-p1 = [0, 0]
-p2 = [1, 0]
-p3 = [2, 1]
-
-q = [0.25,0.1]
-
-# X = geo.point_in_triangle(p1, p2, p3, q)
-
-X = geo.point_in_mesh(os.path.join(mesh_path, 'triangles.csv'), q)
-'''
 
 
 fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_margin_l'], 
                   bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], 
                   top=parameters['figure_margin_t'], wspace=0, hspace=0)
+
+# pre-create subplots and axes
+fig.add_subplot(2, 1, 1)
+fig.add_subplot(2, 1, 2)
+
+v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
+                           parameters['v_colorbar_position'][1],
+                           parameters['v_colorbar_size'][0],
+                           parameters['v_colorbar_size'][1]])
+sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
+                               parameters['sigma_colorbar_position'][1], 
+                               parameters['sigma_colorbar_size'][0],
+                               parameters['sigma_colorbar_size'][1]])
 
 
 # fork
@@ -99,20 +101,15 @@ norm_v_min_max = cal.min_max_vector_field(
                                             parameters['n_bins_v'],
                                             [[0, 0],[parameters['L'], parameters['h']]]
                                         )   
-'''
-# fork
-# 2) to make the animation: compute absolute min and max of sigma across snapshots
-'''
+
 sigma_min_max = cal.min_max_files(
                 'def_sigma_n_12_', 
                 os.path.join(solution_path + 'snapshots/csv/nodal_values'),
-                snapshot_min, 
+                snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'], 
                 snapshot_max, 
                 parameters['frame_stride']
                  )
 '''
-
-# 
 
 def plot_column(fig, n_file, snapshot_label):
     
@@ -120,22 +117,18 @@ def plot_column(fig, n_file, snapshot_label):
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
     data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
-    # data_u = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_n_' + n_snapshot + '.csv', usecols=columns_v)
+    data_u = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_n_' + n_snapshot + '.csv', usecols=columns_v)
 
 
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
-    '''
+    
     # =============
     # v subplot
     # =============    
     
-    # Check if we already have an axis, if not create one
-    if len(fig.axes) == 0:
-        ax = fig.add_subplot(2, 1, 1)
-    else:
-        ax = fig.axes[0]  # Use the existing axis
+    ax = fig.axes[0]  # Use the existing axis
         
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -153,7 +146,7 @@ def plot_column(fig, n_file, snapshot_label):
                                                                                                     clab.label_v_column)
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    # 
+    #  
     norm_v_min_max = [norm_v_min, norm_v_max]
     # 
 
@@ -172,7 +165,8 @@ def plot_column(fig, n_file, snapshot_label):
                         label_pad=parameters['v_colorbar_label_offset'], 
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
-                        line_width=parameters['v_colorbar_line_width'])
+                        line_width=parameters['v_colorbar_line_width'],
+                        axis=v_colorbar_axis)
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
@@ -185,14 +179,14 @@ def plot_column(fig, n_file, snapshot_label):
                           axis_origin=parameters['axis_origin'],
                           n_minor_ticks=parameters['n_minor_ticks'])
     
-    '''
+    
     
     
     # =============
     # sigma subplot
     # =============
     
-    ax = fig.add_subplot(2, 1, 2)
+    ax = fig.axes[1]  # Use the existing axis
         
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -206,24 +200,43 @@ def plot_column(fig, n_file, snapshot_label):
     
     X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
     
-    # set to nan the values of sigma which lie within the ellipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    gr.set_inside_ellipse(X_sigma, Y_sigma, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], Z_sigma, np.nan)
-    
-
     
     # fork
     # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
     # 
     sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
     sigma_min_max = [sigma_min, sigma_max]
+    #  
+
+    
+        # plot the polygon of the boundary 'ellipse_loop_id'
+    # 
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u)
+    
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration 
+    data_def_boundary_vertices_ellipse = []
+    for index, row in data_boundary_vertices_ellipse.iterrows():
+        data_def_boundary_vertices_ellipse.append(
+            np.add(
+                [row[':0'], row[':1']], 
+                [U_interp_x(row[':0'], row[':1']), U_interp_y(row[':0'], row[':1'])]
+                )
+            )
+    
+    # plot the boundary polygon in the current configuration 
+    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True, linewidth=parameters['mesh_line_width'], edgecolor='red', facecolor='white', zorder=1)
+    ax.add_patch(poly)
     # 
 
     contour_plot = ax.imshow(Z_sigma.T, 
-              origin='lower', 
-              cmap=gr.cb.color_map_type, 
-              aspect='equal', 
-              extent=[0, parameters['L'], 0, parameters['h']],
-              vmin=sigma_min_max[0], vmax=sigma_min_max[1])
+                        origin='lower', 
+                        cmap=gr.cb.color_map_type, 
+                        aspect='equal', 
+                        extent=[0, parameters['L'], 0, parameters['h']],
+                        vmin=sigma_min_max[0], vmax=sigma_min_max[1],
+                        interpolation='bilinear',
+                        )
 
     
     # Corrected make_colorbar call (remove 'location')
@@ -240,20 +253,10 @@ def plot_column(fig, n_file, snapshot_label):
         tick_length=parameters['sigma_colorbar_tick_length'],
         tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
         label=r"$\sigma \, [\pas \, \met]$",
-        mappable = contour_plot
+        mappable = contour_plot,
+        axis=sigma_colorbar_axis
     )
     
-    '''
-    theta = np.arange(0, 2*np.pi, 0.5)
-    r = 0.1
-
-    xs = np.add(r * np.cos(theta), [parameters['c'][0]] * len(theta))
-    ys = np.add(r * np.sin(theta), [parameters['c'][1]] * len(theta))
-
-    poly = Polygon(np.column_stack([xs, ys]), fill=True, linewidth=1.0, edgecolor='red', facecolor='green', zorder=const.high_z_order)
-    ax.add_patch(poly)
-    '''
-
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
                           line_width=parameters['axis_line_width'], 
@@ -268,7 +271,8 @@ def plot_column(fig, n_file, snapshot_label):
     
 
 
-plot_column(fig, parameters['n_snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['n_snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
+# plot_column(fig, parameters['n_snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['n_snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
+plot_column(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')

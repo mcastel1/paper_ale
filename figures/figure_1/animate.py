@@ -29,16 +29,16 @@ def update_animation(n):
     print("Calling update_animation with n = ", n, " ... ", flush=True)
     start_time = time.time()
 
-    for ax in plot.fig.axes:
+    # clear only the major axes of the plot. The colorbar axes need not be cleaned because make_colorbar already clears them
+    for ax in plot.fig.axes[:2]:
         ax.clear()
-    # graph.remove_all_axes(plot.fig)
-    for ax in plot.fig.axes[:]:
-        if ax.get_label() == "colorbar":
-            plot.fig.delaxes(ax)
-
-    # remove all figure texts
-    for txt in plot.fig.texts[:]: 
+        
+    # Clear text objects (the snapshot label accumulates)
+    for txt in plot.fig.texts[:]:
         txt.remove()
+    # plot.gr.delete_all_axes(plot.fig)
+    
+    text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
     plot.plot_column(
                         plot.fig, 
