@@ -1,4 +1,5 @@
 import matplotlib
+from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
 import os
 
@@ -10,6 +11,7 @@ import warnings
 
 import calculus.utils as cal
 import calculus.geometry as geo
+import constants.utils as const
 import graphics.utils as gr
 import list.column_labels as clab
 import input_output.utils as io
@@ -68,23 +70,34 @@ columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + cla
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-'''
+# 
 norm_v_min_max = cal.min_max_vector_field(snapshot_min, 
                          snapshot_max, parameters['frame_stride'], 
                          os.path.join(solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_', 
                          parameters['n_bins_v'],
                          [[0, 0],[parameters['L'], parameters['h']]]
                         )
-
+# I compute sigma_min_max from snapshots between snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of sigma and an odd colorbars
 sigma_min_max = cal.min_max_files(
                 'def_sigma_n_12_', 
                 os.path.join(solution_path + 'snapshots/csv/nodal_values'),
-                snapshot_min, 
+                snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'], 
                 snapshot_max, 
                 parameters['frame_stride']
                  )
-'''
+# 
 
+
+data_boundary_vertices_ellipse = pd.read_csv(os.path.join(mesh_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
+
+
+# theta = np.arange(0, 2*np.pi, 0.5)
+# r = 0.1
+# xs = np.add(r * np.cos(theta), [parameters['c'][0]] * len(theta))
+# ys = np.add(r * np.sin(theta), [parameters['c'][1]] * len(theta))
+
+# xs = np.array(data_boundary_vertices_ellipse[':0'])
+# ys = np.array(data_boundary_vertices_ellipse[':1'])
 
 
 
@@ -94,7 +107,22 @@ fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size
                   bottom=parameters['figure_margin_b'], 
                   right=parameters['figure_margin_r'], 
                   top=parameters['figure_margin_t'], 
-                  wspace=0, hspace=0)
+                  wspace=parameters['wspace'], 
+                  hspace=parameters['hspace'])
+
+
+# pre-create subplots and axes
+fig.add_subplot(2, 1, 1)
+fig.add_subplot(2, 1, 2)
+
+v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
+                           parameters['v_colorbar_position'][1],
+                           parameters['v_colorbar_size'][0],
+                           parameters['v_colorbar_size'][1]])
+sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
+                               parameters['sigma_colorbar_position'][1], 
+                               parameters['sigma_colorbar_size'][0],
+                               parameters['sigma_colorbar_size'][1]])
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
@@ -114,10 +142,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # =============    
     
     # Check if we already have an axis, if not create one
-    if len(fig.axes) == 0:
-        ax = fig.add_subplot(2, 1, 1)
-    else:
-        ax = fig.axes[0]  # Use the existing axis
+    ax = fig.axes[0]  # Use the existing axis
         
         
     ax.set_axis_off()
@@ -144,9 +169,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    #    
+    '''  
     norm_v_min_max= [norm_v_min, norm_v_max]     
-    # 
+    '''
 
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
@@ -176,7 +201,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
                         tick_length=parameters['v_colorbar_tick_length'],
-                        line_width=parameters['v_colorbar_line_width']
+                        line_width=parameters['v_colorbar_line_width'],
+                        axis=v_colorbar_axis
                     )
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], \
@@ -197,49 +223,52 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # sigma subplot
     # =============
 
-    ax = fig.add_subplot(2, 1, 2)
-        
+
+    ax = fig.axes[1]  # Use the existing axis
+                
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
     
     # plot mesh for elastic problem and for mesh oustide the elastic body
-    gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_el_line_vertices, parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'], zorder=2)
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'], zorder=1)
+    
+    
+    
+    
+    
     
     X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
     
     # fork
     # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
-    # 
+    '''
     sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
     sigma_min_max = [sigma_min, sigma_max]
+    '''
+
+
+    # plot the polygon of the boundary 'ellipse_loop_id'
     # 
-
-    #set to nan the values of Z_sigma which do not lie in sub_mesh_1
-    # i) compute the mesh displacement field
-    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
-                                                                    [0, 0],
-                                                                    [parameters['L'], parameters['h']],
-                                                                    parameters['n_bins_sigma'])
-
-
-    # ii) obtain the coordinates of the points X_sigma, Y_sigma of the scalar field  sigma in the reference configuration of the mesh by subtracting X_sigma, Y_sigma and U_msh_x, U_msh_y, respectively 
-    X_sigma_ref = np.array(lis.substract_lists_of_lists(X_sigma, U_msh_x))
-    Y_sigma_ref = np.array(lis.substract_lists_of_lists(Y_sigma, U_msh_y))
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_msh)
     
-    # iii) run through the points in the reference configuration of the mesh, and set to nan the points that do not lie in sub_mesh_1
-    for i in range(X_sigma_ref.shape[0]):  # Loop over rows
-        for j in range(X_sigma_ref.shape[1]):  # Loop over columns
-
-            point = [X_sigma_ref[i, j], Y_sigma_ref[i, j]]
-            
-            if (
-                    (geo.point_in_mesh(os.path.join(sub_mesh_1_path, 'triangles.csv'), point) == False)
-                ):
-
-                    Z_sigma[i, j] = np.nan
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration 
+    data_def_boundary_vertices_ellipse = []
+    for index, row in data_boundary_vertices_ellipse.iterrows():
+        data_def_boundary_vertices_ellipse.append(
+            np.add(
+                [row[':0'], row[':1']], 
+                [U_interp_x(row[':0'], row[':1']), U_interp_y(row[':0'], row[':1'])]
+                )
+            )
+    
+    # plot the boundary polygon in the current configuration 
+    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True, linewidth=parameters['mesh_el_line_width'], edgecolor='red', facecolor='white', zorder=1)
+    ax.add_patch(poly)
     # 
+
 
     contour_plot = ax.imshow(
                                 Z_sigma.T, 
@@ -248,7 +277,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                 aspect='equal', 
                                 extent=[0, parameters['L'], 0, parameters['h']],
                                 vmin=sigma_min_max[0], vmax=sigma_min_max[1],
-                                interpolation='bilinear' 
+                                interpolation='bilinear',
+                                zorder=0
                             )
 
     
@@ -266,7 +296,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
         tick_length=parameters['sigma_colorbar_tick_length'],
         tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
         label=r"$\sigma \, [\pas \, \met]$",
-        mappable = contour_plot
+        mappable = contour_plot,
+        axis=sigma_colorbar_axis
     )
     
     
