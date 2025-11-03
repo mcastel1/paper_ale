@@ -73,12 +73,12 @@ number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 # fork
 # 2) to plot the animation: compute min and max of axes and sigma bounds across all frames
  
-X_min_max = [
+X_min_max_abs = [
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
     ]
-w_min_max = cal.min_max_files('w_n_', snapshot_path, n_min, n_max, parameters['frame_stride'])
-sigma_min_max = cal.min_max_files('sigma_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'])
+w_min_max_abs = cal.min_max_files('w_n_', snapshot_path, n_min, n_max, parameters['frame_stride'])
+sigma_min_max_abs = cal.min_max_files('sigma_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'])
 
 
 fig = pplt.figure(
@@ -115,7 +115,10 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
 
 
 def plot_snapshot(fig, n_file, 
-                  snapshot_label=''):
+                  snapshot_label='',
+                  X_min_max=None,
+                  sigma_min_max=None,
+                  w_min_max=None):
     
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
@@ -130,12 +133,15 @@ def plot_snapshot(fig, n_file,
     # fork:
     
     # 1) to plot the figure: obtain the min and max spanned by data_X 
-    # X_min_max = [
-    #     cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
-    #     cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
-    #     ]
-    # sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
-    # w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+    if X_min_max == None:
+        X_min_max = [
+            cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
+            cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
+            ]
+    if sigma_min_max == None:
+        sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
+    if w_min_max == None:
+        w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
     
     
     X, t = gr.interpolate_curve(data_X, X_min_max[0][0], X_min_max[0][1], parameters['n_bins_X'])
