@@ -44,10 +44,10 @@ plt.rcParams.update({
 
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
-solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
-# solution_path = "/Users/michelecastellana/Documents/finite_elements/dynamics/lagrangian_approach/one_dimension/solution/"
-mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-# mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/1d/line/solution/"
+# solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+solution_path = "/Users/michelecastellana/Documents/finite_elements/dynamics/lagrangian_approach/one_dimension/solution/"
+# mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/1d/line/solution/"
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'figure_4')
 snapshot_path = os.path.join(solution_path, "snapshots/csv/nodal_values/")
 
@@ -70,14 +70,6 @@ n_min, n_max = sys_utils.n_min_max('X_n_12_', snapshot_path)
 # number_of_frames = sys_utils.count_v_files('X_n_12_', pfig.snapshot_path)
 number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 
-
-X_min_max_abs = [
-    cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
-    cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
-    ]
-norm_v_min_max_abs = cal.norm_min_max_files('v_n_', snapshot_path, n_min, n_max, parameters['frame_stride'])
-w_min_max_abs = cal.min_max_files('w_n_', snapshot_path, n_min, n_max, parameters['frame_stride'])
-sigma_min_max_abs = cal.min_max_files('sigma_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'])
 
 
 fig = pplt.figure(

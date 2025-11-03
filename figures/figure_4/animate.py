@@ -2,10 +2,20 @@ import matplotlib.animation as ani
 import os 
 import time
 
+import calculus.utils as cal
 import plot
 import text.utils as text
 
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_4.mp4')
+
+# compute min and max of fields across all snapshots
+X_min_max_abs = [
+    cal.min_max_files('X_n_12_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'], field_column_name='f:0'),
+    cal.min_max_files('X_n_12_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'], field_column_name='f:1')
+    ]
+norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'])
+w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'])
+sigma_min_max_abs = cal.min_max_files('sigma_n_12_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'])
 
 
 
@@ -38,10 +48,10 @@ def update_animation(n):
     text.clear_labels_with_patterns(plot.fig, ["\met", "\msecond", "\minute", "\hour", "a. u."])
     
     plot.plot_snapshot(plot.fig, n,
-                       X_min_max=plot.X_min_max_abs,
-                       norm_v_min_max=plot.norm_v_min_max_abs,
-                       w_min_max=plot.w_min_max_abs,
-                       sigma_min_max=plot.sigma_min_max_abs)
+                       X_min_max=X_min_max_abs,
+                       norm_v_min_max=norm_v_min_max_abs,
+                       w_min_max=w_min_max_abs,
+                       sigma_min_max=sigma_min_max_abs)
 
     # Stop timer
     end_time = time.time()
