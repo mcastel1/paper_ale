@@ -1,3 +1,9 @@
+'''
+copy data for this plot with 
+
+./copy_from_abacus.sh line_1/solution/snapshots/csv/  'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' ~/Documents/paper_ale/figures/figure_4 1 1000000 1000
+
+'''
 import matplotlib
 import matplotlib.pyplot as plt
 import os
@@ -57,7 +63,7 @@ parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.pa
 snapshot_min, snapshot_max = sys_utils.n_min_max('sigma_n_12_', snapshot_path)
 
 # add a margin to the last snapshot in order not to plot the very last one
-snapshot_max=snapshot_max-parameters['snapshot_max_margin']
+# snapshot_max=snapshot_max-parameters['snapshot_max_margin']
 
 # labels of columns to read
 columns_X = ["f:0","f:1","f:2",":0",":1",":2"]
