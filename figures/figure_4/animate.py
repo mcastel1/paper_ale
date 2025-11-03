@@ -51,7 +51,9 @@ def update_animation(n):
                        X_min_max=X_min_max_abs,
                        norm_v_min_max=norm_v_min_max_abs,
                        w_min_max=w_min_max_abs,
-                       sigma_min_max=sigma_min_max_abs)
+                       sigma_min_max=sigma_min_max_abs,
+                       snapshot_label=rf'$t = \,$' + io.time_to_string(plot.snapshot_max * plot.parameters['T'] / plot.number_of_frames, 's', 1)
+    )
 
     # Stop timer
     end_time = time.time()
