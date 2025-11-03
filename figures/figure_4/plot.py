@@ -70,16 +70,39 @@ n_min, n_max = sys_utils.n_min_max('X_n_12_', snapshot_path)
 number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 
 # fork
-# 1) to plot the figure
-# 2) to plot the animation
-'''
-sigma_min_max = cal.min_max_files('sigma_n_12_', snapshot_path, columns_sigma[0], n_min, n_max, parameters['frame_stride'])
-'''
+# 2) to plot the animation: comoute min and max of axes and sigma bounds across all frames
+# 
+axis_min_max = [
+    cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
+    cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
+    ]
+sigma_min_max = cal.min_max_files('sigma_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'])
+# 
 
-fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), left=parameters['figure_margin_l'], bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'], top=parameters['figure_margin_t'], wspace=0, hspace=0)
+fig = pplt.figure(
+    figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
+    left=parameters['figure_margin_l'], 
+    bottom=parameters['figure_margin_b'], 
+    right=parameters['figure_margin_r'], 
+    top=parameters['figure_margin_t'], 
+    wspace=parameters['wspace'], 
+    hspace=parameters['hspace'])
 
 
-def plot_column(fig, n_file, sigma_min_max=None):
+# pre-create subplots and axes
+fig.add_subplot(1, 1, 1)
+
+v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
+                           parameters['v_colorbar_position'][1],
+                           parameters['v_colorbar_size'][0],
+                           parameters['v_colorbar_size'][1]])
+sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
+                               parameters['sigma_colorbar_position'][1], 
+                               parameters['sigma_colorbar_size'][0],
+                               parameters['sigma_colorbar_size'][1]])
+
+
+def plot_snapshot(fig, n_file, sigma_min_max=None):
     
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
@@ -92,20 +115,26 @@ def plot_column(fig, n_file, sigma_min_max=None):
     data_omega  = lis.data_omega(data_nu, data_psi)
 
     
-    # Check if we already have an axis, if not create one
-    if len(fig.axes) == 0:
-        ax = fig.add_subplot(1, 1, 1)
-    else:
-        ax = fig.axes[0]  # Use the existing axis
-    
+    # =============
+    # v subplot
+    # =============   
 
+    ax = fig.axes[0]  # Use the existing axis
+    
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    # obtain the min and max spanned by data_X
-    axis_min_max = [[min(data_X['f:0']), max(data_X['f:0'])], [min(data_X['f:1']), max(data_X['f:1'])]]
-
+    # fork:
+    '''
+    # 1) to plot the figure: obtain the min and max spanned by data_X 
+    axis_min_max = [
+        cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
+        cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
+        ]
+    sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
+    '''
+    
     X, t = gr.interpolate_curve(data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins'])
 
 
@@ -116,7 +145,10 @@ def plot_column(fig, n_file, sigma_min_max=None):
                                                 font_size=parameters['color_map_font_size'], 
                                                 label_offset=parameters["sigma_colorbar_label_offset"], 
                                                 tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-                                                label_angle=parameters['sigma_colorbar_label_angle'])
+                                                label_angle=parameters['sigma_colorbar_label_angle'],
+                                                line_width=parameters['sigma_colorbar_tick_line_width'],
+                                                tick_length=parameters['sigma_colorbar_tick_length'],
+                                                axis=sigma_colorbar_axis)
 
     #plot X and sigma 
     gr.plot_curve_grid(ax, X, color_map_sigma, 'black', parameters['X_line_width'])
@@ -135,11 +167,14 @@ def plot_column(fig, n_file, sigma_min_max=None):
                         position=parameters['v_colorbar_position'], 
                         size=parameters['v_colorbar_size'], 
                         label_pad=parameters['v_colorbar_label_offset'], 
-                        label=r'$v \, []$', 
+                        label=r'$v \, [\met / \sec]$', 
                         label_angle=parameters['v_colorbar_label_angle'],
                         font_size=parameters['color_map_font_size'],
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
-                        tick_label_angle=parameters['v_colorbar_tick_label_angle'])
+                        tick_label_angle=parameters['v_colorbar_tick_label_angle'],
+                        axis=v_colorbar_axis,
+                        tick_length=parameters['v_colorbar_tick_length'],
+                        line_width=parameters['v_colorbar_tick_line_width'])
 
 
 
@@ -163,7 +198,7 @@ def plot_column(fig, n_file, sigma_min_max=None):
 
 
 
-plot_column(fig, snapshot_max)
+plot_snapshot(fig, snapshot_max)
 
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
