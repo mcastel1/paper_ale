@@ -77,10 +77,7 @@ X_min_max_abs = [
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
     ]
-v_min_max_abs = [
-    cal.min_max_files('v_n_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
-    cal.min_max_files('v_n_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
-    ]
+norm_v_min_max_abs = cal.norm_min_max_files('v_n_', snapshot_path, n_min, n_max, parameters['frame_stride'])
 w_min_max_abs = cal.min_max_files('w_n_', snapshot_path, n_min, n_max, parameters['frame_stride'])
 sigma_min_max_abs = cal.min_max_files('sigma_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'])
 
@@ -144,7 +141,7 @@ def plot_snapshot(fig, n_file,
             cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
             ]
     if norm_v_min_max == None:
-        norm_v_min_max=[0,1]
+        norm_v_min_max=cal.norm_min_max_file(os.path.join(snapshot_path, 'v_n_' + str(n_file) + '.csv'))
     if sigma_min_max == None:
         sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
     if w_min_max == None:
