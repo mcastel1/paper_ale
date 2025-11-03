@@ -39,6 +39,7 @@ def update_animation(n):
     
     plot.plot_snapshot(plot.fig, n,
                        X_min_max=plot.X_min_max_abs,
+                       norm_v_min_max=plot.v_min_max_abs,
                        w_min_max=plot.w_min_max_abs,
                        sigma_min_max=plot.sigma_min_max_abs)
 

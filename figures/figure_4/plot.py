@@ -77,6 +77,10 @@ X_min_max_abs = [
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
     ]
+v_min_max_abs = [
+    cal.min_max_files('v_n_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
+    cal.min_max_files('v_n_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
+    ]
 w_min_max_abs = cal.min_max_files('w_n_', snapshot_path, n_min, n_max, parameters['frame_stride'])
 sigma_min_max_abs = cal.min_max_files('sigma_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'])
 
@@ -117,6 +121,7 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
 def plot_snapshot(fig, n_file, 
                   snapshot_label='',
                   X_min_max=None,
+                  norm_v_min_max=None,
                   sigma_min_max=None,
                   w_min_max=None):
     
@@ -138,6 +143,8 @@ def plot_snapshot(fig, n_file,
             cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
             cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
             ]
+    if norm_v_min_max == None:
+        norm_v_min_max=[0,1]
     if sigma_min_max == None:
         sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
     if w_min_max == None:
@@ -174,7 +181,7 @@ def plot_snapshot(fig, n_file,
 
 
     # plot v
-    X_v, Y_v, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins_v'])
+    X_v, Y_v, V_x, V_y, grid_norm_v, _, _, _ = vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins_v'])
     
     
     vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
@@ -186,7 +193,7 @@ def plot_snapshot(fig, n_file,
                             color='color_from_map', 
                             threshold_arrow_length=parameters['threshold_arrow_length'])
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
                         position=parameters['v_colorbar_position'], 
                         size=parameters['v_colorbar_size'], 
                         label_pad=parameters['v_colorbar_label_offset'], 
