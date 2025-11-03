@@ -70,9 +70,7 @@ n_min, n_max = sys_utils.n_min_max('X_n_12_', snapshot_path)
 # number_of_frames = sys_utils.count_v_files('X_n_12_', pfig.snapshot_path)
 number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 
-# fork
-# 2) to plot the animation: compute min and max of axes and sigma bounds across all frames
- 
+
 X_min_max_abs = [
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
@@ -132,9 +130,7 @@ def plot_snapshot(fig, n_file,
     # data_omega contains de values of \partial_1 X^alpha
     data_omega  = lis.data_omega(data_nu, data_psi)
     
-    # fork:
-    
-    # 1) to plot the figure: obtain the min and max spanned by data_X 
+
     if X_min_max == None:
         X_min_max = [
             cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
