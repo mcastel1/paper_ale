@@ -91,33 +91,21 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                parameters['sigma_colorbar_size'][1]])
 
 
-# fork
-# 2) to make the animation: compute absolute min and max of norm v across  snapshots
-'''
-norm_v_min_max = cal.min_max_vector_field(
-                                            snapshot_min, snapshot_max, parameters['frame_stride'], 
-                                            os.path.join(solution_path + 'snapshots/csv/nodal_values'), 
-                                            'def_v_n_', 
-                                            parameters['n_bins_v'],
-                                            [[0, 0],[parameters['L'], parameters['h']]]
-                                        )   
 
-sigma_min_max = cal.min_max_files(
-                'def_sigma_n_12_', 
-                os.path.join(solution_path + 'snapshots/csv/nodal_values'),
-                snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'], 
-                snapshot_max, 
-                parameters['frame_stride']
-                 )
-'''
 
-def plot_column(fig, n_file, snapshot_label):
+def plot_snapshot(fig, n_file, 
+                snapshot_label='',
+                norm_v_min_max=None,
+                sigma_min_max=None):
     
     n_snapshot = str(n_file)
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
     data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
     data_u = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_n_' + n_snapshot + '.csv', usecols=columns_v)
+    
+
+
 
 
     # plot snapshot label
@@ -135,7 +123,10 @@ def plot_column(fig, n_file, snapshot_label):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     
-    gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_line_vertices, 
+                    line_width=parameters['mesh_line_width_v_plot'], 
+                    color='black',
+                    alpha=parameters['alpha_mesh'])
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
@@ -144,12 +135,9 @@ def plot_column(fig, n_file, snapshot_label):
                                                                                                     clab.label_x_column,
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
-    # fork
-    # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    #  
-    norm_v_min_max = [norm_v_min, norm_v_max]
-    # 
 
+    if norm_v_min_max == None:
+        norm_v_min_max = [norm_v_min, norm_v_max]
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], V_x, np.nan)
@@ -177,7 +165,9 @@ def plot_column(fig, n_file, snapshot_label):
                           tick_label_offset=parameters['tick_label_offset'],
                           axis_label_offset=parameters['axis_label_offset'],
                           axis_origin=parameters['axis_origin'],
-                          n_minor_ticks=parameters['n_minor_ticks'])
+                          n_minor_ticks=parameters['n_minor_ticks'],
+                          minor_tick_length=parameters['minor_tick_length'],
+                          tick_label_angle=parameters['tick_label_angle'])
     
     
     
@@ -194,22 +184,23 @@ def plot_column(fig, n_file, snapshot_label):
     
 
     
-    gr.plot_2d_mesh(ax, data_line_vertices, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_line_vertices, 
+                    line_width=parameters['mesh_line_width_sigma_plot'], 
+                    color='black', 
+                    alpha=parameters['alpha_mesh'], 
+                    zorder=1)
     
     
     
     X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
     
     
-    # fork
-    # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
-    # 
-    sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
-    sigma_min_max = [sigma_min, sigma_max]
-    #  
-
+    if sigma_min_max == None:
+        sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
+        sigma_min_max = [sigma_min, sigma_max]
+ 
     
-        # plot the polygon of the boundary 'ellipse_loop_id'
+    # plot the polygon of the boundary 'ellipse_loop_id'
     # 
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u)
@@ -225,7 +216,7 @@ def plot_column(fig, n_file, snapshot_label):
             )
     
     # plot the boundary polygon in the current configuration 
-    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True, linewidth=parameters['mesh_line_width'], edgecolor='red', facecolor='white', zorder=1)
+    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True, linewidth=parameters['mesh_line_width_sigma_plot'], edgecolor='red', facecolor='white', zorder=1)
     ax.add_patch(poly)
     # 
 
@@ -236,6 +227,7 @@ def plot_column(fig, n_file, snapshot_label):
                         extent=[0, parameters['L'], 0, parameters['h']],
                         vmin=sigma_min_max[0], vmax=sigma_min_max[1],
                         interpolation='bilinear',
+                        zorder=0
                         )
 
     
@@ -266,13 +258,16 @@ def plot_column(fig, n_file, snapshot_label):
                           tick_label_offset=parameters['tick_label_offset'],
                           axis_label_offset=parameters['axis_label_offset'],
                           axis_origin=parameters['axis_origin'],
-                          n_minor_ticks=parameters['n_minor_ticks'])
+                          n_minor_ticks=parameters['n_minor_ticks'],
+                          minor_tick_length=parameters['minor_tick_length'],
+                          tick_label_angle=parameters['tick_label_angle'])
                           
     
 
 
 # plot_column(fig, parameters['n_snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['n_snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
-plot_column(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+plot_snapshot(fig, snapshot_max, 
+            snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
