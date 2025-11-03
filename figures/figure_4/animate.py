@@ -9,8 +9,10 @@ import text.utils as text
 
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_4.mp4')
 
-# this is used to compute the absolute mins and maxs not on the entire range [snapshot_min, snapshot_max] but on part of it, because on the first few frames some fields may be large and thus give unreasonable absolute mins and max
-snapshot_min_with_margin = plot.snapshot_min + plot.parameters['snapsho_min_margin']
+'''
+this is used to compute the absolute mins and maxs not on the entire range [snapshot_min, snapshot_max] but on part of it, because on the first few frames some fields may be large and thus give unreasonable absolute mins and max
+'''
+snapshot_min_with_margin = plot.snapshot_min + plot.parameters['snapshot_min_margin']
 
 # compute min and max of fields across all snapshots
 X_min_max_abs = [
