@@ -70,14 +70,14 @@ n_min, n_max = sys_utils.n_min_max('X_n_12_', snapshot_path)
 number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 
 # fork
-# 2) to plot the animation: comoute min and max of axes and sigma bounds across all frames
-# 
+# 2) to plot the animation: compute min and max of axes and sigma bounds across all frames
+'''
 axis_min_max = [
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
     ]
 sigma_min_max = cal.min_max_files('sigma_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'])
-# 
+'''
 
 fig = pplt.figure(
     figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
@@ -90,12 +90,22 @@ fig = pplt.figure(
 
 
 # pre-create subplots and axes
-fig.add_subplot(1, 1, 1)
+fig.add_subplot(3, 1, 1)
+fig.add_subplot(3, 1, 2)
+fig.add_subplot(3, 1, 3)
 
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
                            parameters['v_colorbar_position'][1],
                            parameters['v_colorbar_size'][0],
                            parameters['v_colorbar_size'][1]])
+
+
+
+# w_colorbar_axis = fig.add_axes([parameters['w_colorbar_position'][0], 
+#                            parameters['w_colorbar_position'][1],
+#                            parameters['w_colorbar_size'][0],
+#                            parameters['w_colorbar_size'][1]])
+
 sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                parameters['sigma_colorbar_position'][1], 
                                parameters['sigma_colorbar_size'][0],
@@ -109,10 +119,23 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
     data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_snapshot + '.csv'), usecols=columns_nu)
     data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_snapshot + '.csv'), usecols=columns_psi)
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
+    # data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + n_snapshot + '.csv'), usecols=columns_sigma)
     data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_snapshot + '.csv'), usecols=columns_v)
 
     # data_omega contains de values of \partial_1 X^alpha
     data_omega  = lis.data_omega(data_nu, data_psi)
+    
+    # fork:
+    # 
+    # 1) to plot the figure: obtain the min and max spanned by data_X 
+    axis_min_max = [
+        cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
+        cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
+        ]
+    sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
+    # 
+    
+    X, t = gr.interpolate_curve(data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
     
     # =============
@@ -125,44 +148,28 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    # fork:
-    '''
-    # 1) to plot the figure: obtain the min and max spanned by data_X 
-    axis_min_max = [
-        cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
-        cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
-        ]
-    sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
-    '''
-    
-    X, t = gr.interpolate_curve(data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins'])
-
-
-    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma, parameters['sigma_colorbar_position'], parameters['sigma_colorbar_size'], 
-                                                min_max=sigma_min_max,
-                                                tick_label_angle=parameters['sigma_colorbar_tick_label_angle'], 
-                                                label=r'$\sigma \, [\newt/\met]$', 
-                                                font_size=parameters['color_map_font_size'], 
-                                                label_offset=parameters["sigma_colorbar_label_offset"], 
-                                                tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-                                                label_angle=parameters['sigma_colorbar_label_angle'],
-                                                line_width=parameters['sigma_colorbar_tick_line_width'],
-                                                tick_length=parameters['sigma_colorbar_tick_length'],
-                                                axis=sigma_colorbar_axis)
-
     #plot X and sigma 
-    gr.plot_curve_grid(ax, X, color_map_sigma, 'black', parameters['X_line_width'])
+    gr.plot_curve_grid(ax, X,  
+                       line_color='black', 
+                       line_width=parameters['X_line_width'],
+                       alpha=parameters['alpha_X']
+                       )
 
 
 
     # plot v
-    X_v, Y_v, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins'])
+    X_v, Y_v, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins_v'])
     
     
     vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
-                               parameters['shaft_length'], parameters['head_over_shaft_length'], parameters['head_angle'], 
-                               parameters['X_line_width'], parameters['alpha'], 'color_from_map', 0, parameters['threshold_arrow_length'])
-    
+                            shaft_length=parameters['shaft_length'], 
+                            head_over_shaft_length=parameters['head_over_shaft_length'], 
+                            head_angle=parameters['head_angle'], 
+                            line_width=parameters['arrow_line_width'], 
+                            alpha=parameters['alpha'], 
+                            color='color_from_map', 
+                            threshold_arrow_length=parameters['threshold_arrow_length'])
+
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
                         position=parameters['v_colorbar_position'], 
                         size=parameters['v_colorbar_size'], 
@@ -175,9 +182,6 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
                         axis=v_colorbar_axis,
                         tick_length=parameters['v_colorbar_tick_length'],
                         line_width=parameters['v_colorbar_tick_line_width'])
-
-
-
 
     gr.plot_2d_axes(ax, 
                     [axis_min_max[0][0], axis_min_max[1][0]], 
@@ -194,6 +198,98 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                 )
+    
+    ''' 
+    # =============
+    # w subplot
+    # =============   
+    
+    ax = fig.axes[1]  # Use the existing axis
+    
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w, parameters['w_colorbar_position'], parameters['w_colorbar_size'], 
+                                        min_max=w_min_max,
+                                        tick_label_angle=parameters['w_colorbar_tick_label_angle'], 
+                                        label=r'$\w \, [\newt/\met]$', 
+                                        font_size=parameters['color_map_font_size'], 
+                                        label_offset=parameters["w_colorbar_label_offset"], 
+                                        tick_label_offset=parameters['w_colorbar_tick_label_offset'],
+                                        label_angle=parameters['w_colorbar_label_angle'],
+                                        line_width=parameters['w_colorbar_tick_line_width'],
+                                        tick_length=parameters['w_colorbar_tick_length'],
+                                        axis=sigma_colorbar_axis)
+    
+
+    
+    #plot X and w
+    gr.plot_curve_grid(ax, X, 
+                       color_map=color_map_w, 
+                       line_color='black', 
+                       line_width=parameters['w_line_width'])
+    
+    gr.plot_2d_axes(ax, 
+                [axis_min_max[0][0], axis_min_max[1][0]], 
+                [axis_min_max[0][1] - axis_min_max[0][0], axis_min_max[1][1] - axis_min_max[1][0]],
+                axis_origin=parameters['axis_origin'],
+                axis_label=parameters['axis_label'],
+                axis_label_angle=parameters['axis_label_angle'],
+                axis_label_offset=parameters['axis_label_offset'],
+                tick_label_offset=parameters['tick_label_offset'],
+                tick_label_format=parameters['tick_label_format'],
+                font_size=parameters['font_size'],
+                line_width=parameters['axis_line_width'],
+                tick_length=parameters['tick_length'],
+                n_minor_ticks=parameters['n_minor_ticks'],
+                minor_tick_length=parameters['minor_tick_length']
+            )
+    '''
+    
+    # =============
+    # sigma subplot
+    # =============   
+    
+    ax = fig.axes[2]  # Use the existing axis
+    
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma, parameters['sigma_colorbar_position'], parameters['sigma_colorbar_size'], 
+                                            min_max=sigma_min_max,
+                                            tick_label_angle=parameters['sigma_colorbar_tick_label_angle'], 
+                                            label=r'$\sigma \, [\newt/\met]$', 
+                                            font_size=parameters['color_map_font_size'], 
+                                            label_offset=parameters["sigma_colorbar_label_offset"], 
+                                            tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+                                            label_angle=parameters['sigma_colorbar_label_angle'],
+                                            line_width=parameters['sigma_colorbar_tick_line_width'],
+                                            tick_length=parameters['sigma_colorbar_tick_length'],
+                                            axis=sigma_colorbar_axis)
+    
+    #plot X and sigma 
+    gr.plot_curve_grid(ax, X, 
+                       color_map=color_map_sigma, 
+                       line_color='black', 
+                       line_width=parameters['sigma_line_width'])
+    
+    gr.plot_2d_axes(ax, 
+                [axis_min_max[0][0], axis_min_max[1][0]], 
+                [axis_min_max[0][1] - axis_min_max[0][0], axis_min_max[1][1] - axis_min_max[1][0]],
+                axis_origin=parameters['axis_origin'],
+                axis_label=parameters['axis_label'],
+                axis_label_angle=parameters['axis_label_angle'],
+                axis_label_offset=parameters['axis_label_offset'],
+                tick_label_offset=parameters['tick_label_offset'],
+                tick_label_format=parameters['tick_label_format'],
+                font_size=parameters['font_size'],
+                line_width=parameters['axis_line_width'],
+                tick_length=parameters['tick_length'],
+                n_minor_ticks=parameters['n_minor_ticks'],
+                minor_tick_length=parameters['minor_tick_length']
+            )
 
 
 
