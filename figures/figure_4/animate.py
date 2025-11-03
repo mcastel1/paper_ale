@@ -9,14 +9,17 @@ import text.utils as text
 
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_4.mp4')
 
+# this is used to compute the absolute mins and maxs not on the entire range [snapshot_min, snapshot_max] but on part of it, because on the first few frames some fields may be large and thus give unreasonable absolute mins and max
+snapshot_min_with_margin = plot.snapshot_min + plot.parameters['snapsho_min_margin']
+
 # compute min and max of fields across all snapshots
 X_min_max_abs = [
-    cal.min_max_files('X_n_12_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'], field_column_name='f:0'),
-    cal.min_max_files('X_n_12_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'], field_column_name='f:1')
+    cal.min_max_files('X_n_12_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'], field_column_name='f:0'),
+    cal.min_max_files('X_n_12_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'], field_column_name='f:1')
     ]
-norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
-w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
-sigma_min_max_abs = cal.min_max_files('sigma_n_12_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
+norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
+w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
+sigma_min_max_abs = cal.min_max_files('sigma_n_12_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
 
 
 
