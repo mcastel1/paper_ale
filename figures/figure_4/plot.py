@@ -72,9 +72,9 @@ columns_sigma = ["f",":0", ":1",":2"]
 columns_nu = ["f",":0", ":1",":2"]
 columns_psi = ["f",":0", ":1",":2"]
 
-n_min, n_max = sys_utils.n_min_max('X_n_12_', snapshot_path)
+snapshot_min, snapshot_max = sys_utils.n_min_max('X_n_12_', snapshot_path)
 # number_of_frames = sys_utils.count_v_files('X_n_12_', pfig.snapshot_path)
-number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
+number_of_frames = snapshot_max - snapshot_min + 1  # +1 because the frames start from 0
 
 
 

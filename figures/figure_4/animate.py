@@ -11,12 +11,12 @@ animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'anima
 
 # compute min and max of fields across all snapshots
 X_min_max_abs = [
-    cal.min_max_files('X_n_12_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'], field_column_name='f:0'),
-    cal.min_max_files('X_n_12_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'], field_column_name='f:1')
+    cal.min_max_files('X_n_12_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'], field_column_name='f:0'),
+    cal.min_max_files('X_n_12_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'], field_column_name='f:1')
     ]
-norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'])
-w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'])
-sigma_min_max_abs = cal.min_max_files('sigma_n_12_', plot.snapshot_path, plot.n_min, plot.n_max, plot.parameters['frame_stride'])
+norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
+w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
+sigma_min_max_abs = cal.min_max_files('sigma_n_12_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
 
 
 
@@ -53,7 +53,7 @@ def update_animation(n):
                        norm_v_min_max=norm_v_min_max_abs,
                        w_min_max=w_min_max_abs,
                        sigma_min_max=sigma_min_max_abs,
-                       snapshot_label=rf'$t = \,$' + io.time_to_string(plot.snapshot_max * plot.parameters['T'] / plot.number_of_frames, 's', 1)
+                       snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 's', 1)
     )
 
     # Stop timer
