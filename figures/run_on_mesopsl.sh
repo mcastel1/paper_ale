@@ -37,7 +37,6 @@ rsync -avz --delete \
   --exclude='u_msh_dot*' \
   --exclude='def_v_bar*' \
   --exclude='def_phi*' \
-  --exclude='sigma_*' \
   --exclude='*.msh' \
   --exclude='.DS_Store' \
   --exclude='*.xdmf' \
