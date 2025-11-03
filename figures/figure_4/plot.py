@@ -56,7 +56,8 @@ parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.pa
 
 snapshot_min, snapshot_max = sys_utils.n_min_max('sigma_n_12_', snapshot_path)
 
-
+# add a margin to the last snapshot in order not to plot the very last one
+snapshot_max=snapshot_max-parameters['snapshot_max_margin']
 
 # labels of columns to read
 columns_X = ["f:0","f:1","f:2",":0",":1",":2"]
@@ -71,13 +72,14 @@ number_of_frames = n_max-n_min + 1  # +1 because the frames start from 0
 
 # fork
 # 2) to plot the animation: compute min and max of axes and sigma bounds across all frames
-'''
-axis_min_max = [
+ 
+X_min_max = [
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:0'),
     cal.min_max_files('X_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'], field_column_name='f:1')
     ]
+w_min_max = cal.min_max_files('w_n_', snapshot_path, n_min, n_max, parameters['frame_stride'])
 sigma_min_max = cal.min_max_files('sigma_n_12_', snapshot_path, n_min, n_max, parameters['frame_stride'])
-'''
+
 
 fig = pplt.figure(
     figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
@@ -101,10 +103,10 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
 
 
 
-# w_colorbar_axis = fig.add_axes([parameters['w_colorbar_position'][0], 
-#                            parameters['w_colorbar_position'][1],
-#                            parameters['w_colorbar_size'][0],
-#                            parameters['w_colorbar_size'][1]])
+w_colorbar_axis = fig.add_axes([parameters['w_colorbar_position'][0], 
+                           parameters['w_colorbar_position'][1],
+                           parameters['w_colorbar_size'][0],
+                           parameters['w_colorbar_size'][1]])
 
 sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                parameters['sigma_colorbar_position'][1], 
@@ -112,31 +114,39 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                parameters['sigma_colorbar_size'][1]])
 
 
-def plot_snapshot(fig, n_file, sigma_min_max=None):
+def plot_snapshot(fig, n_file, 
+                  snapshot_label=''):
     
     n_snapshot = str(n_file)
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_snapshot + '.csv'), usecols=columns_X)
-    data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_snapshot + '.csv'), usecols=columns_nu)
-    data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_snapshot + '.csv'), usecols=columns_psi)
-    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'), usecols=columns_sigma)
-    # data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + n_snapshot + '.csv'), usecols=columns_sigma)
+    data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_snapshot + '.csv'))
+    data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_snapshot + '.csv'))
+    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_snapshot + '.csv'))
+    data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + n_snapshot + '.csv'))
     data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_snapshot + '.csv'), usecols=columns_v)
-
     # data_omega contains de values of \partial_1 X^alpha
     data_omega  = lis.data_omega(data_nu, data_psi)
     
     # fork:
-    # 
-    # 1) to plot the figure: obtain the min and max spanned by data_X 
-    axis_min_max = [
-        cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
-        cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
-        ]
-    sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
-    # 
     
-    X, t = gr.interpolate_curve(data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
+    # 1) to plot the figure: obtain the min and max spanned by data_X 
+    # X_min_max = [
+    #     cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
+    #     cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
+    #     ]
+    # sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
+    # w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+    
+    
+    X, t = gr.interpolate_curve(data_X, X_min_max[0][0], X_min_max[0][1], parameters['n_bins_X'])
 
+
+
+    # plot snapshot label
+    if snapshot_label != '':
+        fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
+
+   
     
     # =============
     # v subplot
@@ -184,8 +194,8 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
                         line_width=parameters['v_colorbar_tick_line_width'])
 
     gr.plot_2d_axes(ax, 
-                    [axis_min_max[0][0], axis_min_max[1][0]], 
-                    [axis_min_max[0][1] - axis_min_max[0][0], axis_min_max[1][1] - axis_min_max[1][0]],
+                    [X_min_max[0][0], X_min_max[1][0]], 
+                    [X_min_max[0][1] - X_min_max[0][0], X_min_max[1][1] - X_min_max[1][0]],
                     axis_origin=parameters['axis_origin'],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
@@ -199,7 +209,7 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
                     minor_tick_length=parameters['minor_tick_length']
                 )
     
-    ''' 
+    
     # =============
     # w subplot
     # =============   
@@ -213,14 +223,14 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w, parameters['w_colorbar_position'], parameters['w_colorbar_size'], 
                                         min_max=w_min_max,
                                         tick_label_angle=parameters['w_colorbar_tick_label_angle'], 
-                                        label=r'$\w \, [\newt/\met]$', 
+                                        label=r'$w \, [\newt/\met]$', 
                                         font_size=parameters['color_map_font_size'], 
                                         label_offset=parameters["w_colorbar_label_offset"], 
                                         tick_label_offset=parameters['w_colorbar_tick_label_offset'],
                                         label_angle=parameters['w_colorbar_label_angle'],
                                         line_width=parameters['w_colorbar_tick_line_width'],
                                         tick_length=parameters['w_colorbar_tick_length'],
-                                        axis=sigma_colorbar_axis)
+                                        axis=w_colorbar_axis)
     
 
     
@@ -231,8 +241,8 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
                        line_width=parameters['w_line_width'])
     
     gr.plot_2d_axes(ax, 
-                [axis_min_max[0][0], axis_min_max[1][0]], 
-                [axis_min_max[0][1] - axis_min_max[0][0], axis_min_max[1][1] - axis_min_max[1][0]],
+                [X_min_max[0][0], X_min_max[1][0]], 
+                [X_min_max[0][1] - X_min_max[0][0], X_min_max[1][1] - X_min_max[1][0]],
                 axis_origin=parameters['axis_origin'],
                 axis_label=parameters['axis_label'],
                 axis_label_angle=parameters['axis_label_angle'],
@@ -245,7 +255,7 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
                 n_minor_ticks=parameters['n_minor_ticks'],
                 minor_tick_length=parameters['minor_tick_length']
             )
-    '''
+    
     
     # =============
     # sigma subplot
@@ -276,8 +286,8 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
                        line_width=parameters['sigma_line_width'])
     
     gr.plot_2d_axes(ax, 
-                [axis_min_max[0][0], axis_min_max[1][0]], 
-                [axis_min_max[0][1] - axis_min_max[0][0], axis_min_max[1][1] - axis_min_max[1][0]],
+                [X_min_max[0][0], X_min_max[1][0]], 
+                [X_min_max[0][1] - X_min_max[0][0], X_min_max[1][1] - X_min_max[1][0]],
                 axis_origin=parameters['axis_origin'],
                 axis_label=parameters['axis_label'],
                 axis_label_angle=parameters['axis_label_angle'],
@@ -294,7 +304,10 @@ def plot_snapshot(fig, n_file, sigma_min_max=None):
 
 
 
-plot_snapshot(fig, snapshot_max)
+plot_snapshot(fig, 
+              snapshot_max, 
+              rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1)
+              )
 
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame

@@ -37,7 +37,7 @@ def update_animation(n):
 
     text.clear_labels_with_patterns(plot.fig, ["\met", "\msecond", "\minute", "\hour", "a. u."])
     
-    plot.plot_snapshot(plot.fig, n, plot.sigma_min_max)
+    plot.plot_snapshot(plot.fig, n)
 
     # Stop timer
     end_time = time.time()
