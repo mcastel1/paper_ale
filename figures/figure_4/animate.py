@@ -20,10 +20,9 @@ X_min_max_abs = [
     cal.min_max_files('X_n_12_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'], field_column_name='f:1')
     ]
 norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
-w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
-sigma_min_max_abs = cal.min_max_files('sigma_n_12_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
+# w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
+# sigma_min_max_abs = cal.min_max_files('sigma_n_12_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
 
-print(f'sigma_min_max_abs = {sigma_min_max_abs}')
 
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1
 
@@ -56,8 +55,8 @@ def update_animation(n):
     plot.plot_snapshot(plot.fig, n,
                        X_min_max=X_min_max_abs,
                        norm_v_min_max=norm_v_min_max_abs,
-                       w_min_max=w_min_max_abs,
-                       sigma_min_max=sigma_min_max_abs,
+                        # w_min_max=w_min_max_abs,
+                        # sigma_min_max=sigma_min_max_abs,
                        snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 's', 1)
     )
 
@@ -69,7 +68,7 @@ def update_animation(n):
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(plot.parameters['n_first_frame'], plot.number_of_frames, plot.parameters['frame_stride']),
+    frames=range(snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride']),
     interval=30
 )
 
