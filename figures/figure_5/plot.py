@@ -83,7 +83,7 @@ fig = pplt.figure(
 
 # pre-create subplots and axes
 fig.add_subplot(2, 3, 1)
-# fig.add_subplot(2, 3, 2)
+fig.add_subplot(2, 3, 2)
 fig.add_subplot(2, 3, 4)
 fig.add_subplot(2, 3, 5)
 
@@ -225,23 +225,54 @@ def plot_snapshot(fig, n_file,
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length'])
     
-    '''
+    
     # =============
     # sigma_fl subplot
     # =============   
     
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[1]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
     
-    
-    
-    
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
+    
+    X_sigma_fl, Y_sigma_fl, Z_sigma_fl, _, _, _ = gr.interpolate_surface(data_sigma_fl, [axis_min_max[0][0], axis_min_max[1][0]], [axis_min_max[0][1], axis_min_max[1][1]], parameters['n_bins_sigma_fl'])
 
+
+    if sigma_fl_min_max == None:
+        sigma_fl_min, sigma_fl_max, _ = cal.min_max_scalar_field(Z_sigma_fl)
+        sigma_fl_min_max = [sigma_fl_min, sigma_fl_max]
+        
+    contour_plot = ax.imshow(Z_sigma_fl.T, 
+                    origin='lower', 
+                    cmap=gr.cb.color_map_type, 
+                    aspect='equal', 
+                    extent=[axis_min_max[0][0], axis_min_max[0][1], axis_min_max[1][0], axis_min_max[1][1]],
+                    vmin=sigma_fl_min_max[0], vmax=sigma_fl_min_max[1],
+                    interpolation='bilinear',
+                    zorder=0
+                    )
+    
+    gr.cb.make_colorbar(
+        figure=fig,
+        grid_values=Z_sigma_fl,
+        min_value=sigma_fl_min_max[0],
+        max_value=sigma_fl_min_max[1],
+        position=parameters['sigma_fl_colorbar_position'],
+        size=parameters['sigma_fl_colorbar_size'],
+        label_pad=parameters['sigma_fl_colorbar_label_offset'],
+        tick_label_offset=parameters['sigma_fl_colorbar_tick_label_offset'],
+        line_width=parameters['sigma_fl_colorbar_tick_line_width'],
+        tick_length=parameters['sigma_fl_colorbar_tick_length'],
+        tick_label_angle=parameters['sigma_fl_colorbar_tick_label_angle'],
+        label=parameters['sigma_fl_colorbar_axis_label'],
+        font_size=parameters['sigma_fl_colorbar_font_size'], 
+        mappable = contour_plot,
+        axis=sigma_fl_colorbar_axis
+    )
     
     gr.plot_2d_axes(
                 ax, [0, 0], [parameters['L'], parameters['h']], 
@@ -260,13 +291,13 @@ def plot_snapshot(fig, n_file,
                 margin=parameters['axis_margin'],
                 n_minor_ticks=parameters['n_minor_ticks'],
                 minor_tick_length=parameters['minor_tick_length'])
-    '''
+    
     
     # =============
     # w subplot
     # =============   
     
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[2]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -315,7 +346,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============   
     
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[3]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
