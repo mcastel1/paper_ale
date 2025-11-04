@@ -48,18 +48,10 @@ plt.rcParams.update({
 
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
-# 1) choose the path as the path where this code is located 
-# 
-root_path = os.path.dirname(os.path.abspath(__file__))
-mesh_path = os.path.join(root_path, "mesh/solution/")
-# 
-# 2) choose the  path as an external one
-'''
-root_path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane'
-mesh_path = '/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/solution'
-'''
 
-solution_path = os.path.join(root_path, "solution/")
+
+
+solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
@@ -83,7 +75,8 @@ fig = pplt.figure(
     bottom=parameters['figure_margin_b'], 
     right=parameters['figure_margin_r'], 
     top=parameters['figure_margin_t'], 
-    wspace=0, hspace=0)
+    wspace=parameters['wspace'], 
+    hspace=parameters['hspace'])
 
 
 # fork: 2) to plot the animation
