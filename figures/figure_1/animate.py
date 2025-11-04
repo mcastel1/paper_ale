@@ -12,6 +12,12 @@ parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.pa
 animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'animation_figure_1.mp4')
 
 '''
+this is used to compute the absolute mins and maxs not on the entire range [snapshot_min, snapshot_max] but on part of it, because on the first few frames some fields may be large and thus give unreasonable absolute mins and max
+'''
+snapshot_min_with_margin = plot.snapshot_min + plot.parameters['snapshot_min_margin']
+
+
+'''
 compute absolute mins and maxs across multiple files
 '''
 norm_v_min_max_abs = cal.min_max_vector_field(
@@ -22,13 +28,13 @@ norm_v_min_max_abs = cal.min_max_vector_field(
                                             [[0, 0],[parameters['L'], parameters['h']]]
                                         )   
 
-sigma_min_max_abs = cal.min_max_files(
-                'def_sigma_n_12_', 
-                os.path.join(plot.solution_path + 'snapshots/csv/nodal_values'),
-                plot.snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'], 
-                plot.snapshot_max, 
-                parameters['frame_stride']
-                 )
+# sigma_min_max_abs = cal.min_max_files(
+#                 'def_sigma_n_12_', 
+#                 os.path.join(plot.solution_path + 'snapshots/csv/nodal_values'),
+#                 plot.snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'], 
+#                 plot.snapshot_max, 
+#                 parameters['frame_stride']
+#                  )
 
 
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1
@@ -36,7 +42,7 @@ sigma_min_max_abs = cal.min_max_files(
 animation_duration_in_sec = (plot.number_of_frames / parameters['frame_stride']) / parameters['frames_per_second']
 
 print(
-    f"number of frames: {plot.number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.number_of_frames/plot.parameters['frame_stride'])}", 
+    f"number of frames: {plot.number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.number_of_frames/plot.parameters['frame_stride'])}\n snapshot_min/max: {[plot.snapshot_min, plot.snapshot_max]}", 
     flush=True)
 
 Writer = ani.writers['ffmpeg']
@@ -76,7 +82,7 @@ def update_animation(n):
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(parameters['n_first_frame'], plot.number_of_frames, parameters['frame_stride']),
+    frames=range(snapshot_min_with_margin, plot.snapshot_max, parameters['frame_stride']),
     interval=30
 )
 
