@@ -235,12 +235,12 @@ def plot_snapshot(fig, n_file,
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w, parameters['w_colorbar_position'], parameters['w_colorbar_size'], 
                                         min_max=w_min_max,
                                         tick_label_angle=parameters['w_colorbar_tick_label_angle'], 
-                                        label=r'$w \, [\newt/\met]$', 
+                                        label=parameters['w_colorbar_axis_label'],
                                         font_size=parameters['w_colorbar_font_size'], 
-                                        label_offset=parameters["w_colorbar_label_offset"], 
                                         tick_label_offset=parameters['w_colorbar_tick_label_offset'],
                                         label_angle=parameters['w_colorbar_label_angle'],
                                         tick_length=parameters['w_colorbar_tick_length'],
+                                        label_offset=parameters['w_colorbar_axis_label_offset'],
                                         axis=w_colorbar_axis)
     
     #plot X and w
