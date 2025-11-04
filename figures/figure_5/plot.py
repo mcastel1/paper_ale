@@ -8,6 +8,7 @@ import proplot as pplt
 import sys
 import warnings
 
+import calculus.utils as cal
 import list.column_labels as clab
 import graphics.utils as gr
 import input_output.utils as io
@@ -93,7 +94,8 @@ v_colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
 
 def plot_snapshot(fig, n_file, 
                   snapshot_label='',
-                  X_min_max=None):
+                  X_min_max=None,
+                  norm_v_min_max=None):
     
     n_snapshot = str(n_file)
 
@@ -104,9 +106,11 @@ def plot_snapshot(fig, n_file,
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_snapshot + '.csv'), usecols=columns_v)
 
 
-    if X_min_max != None:
-        #plot_snapshot has  been called with X_min_max = None -> compute X_min_max on snapshot n_snapshot
-        pass 
+    if X_min_max == None:
+        X_min_max = [
+            cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
+            cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
+            ]
     
     # =============
     # v subplot
@@ -123,7 +127,7 @@ def plot_snapshot(fig, n_file,
 
         
     # here X_ref, Y_ref are the coordinates of the points in the reference configuration of the mesh
-    X_ref, Y_ref, V_x, V_y, grid_norm_v, _, _, _ = vec.interpolate_2d_vector_field(data_v,
+    X_ref, Y_ref, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
                                                                                                     [parameters['L'], parameters['h']],
                                                                                                     parameters['n_bins_v'],
@@ -131,6 +135,9 @@ def plot_snapshot(fig, n_file,
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
     
+
+    if norm_v_min_max == None:
+        norm_v_min_max = [norm_v_min, norm_v_max]
 
     
     X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
