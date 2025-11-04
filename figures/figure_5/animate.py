@@ -56,7 +56,7 @@ norm_v_min_max_abs = cal.norm_min_max_files('def_v_fl_n_', plot.snapshot_path, p
 animation_duration_in_sec = (number_of_frames / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
 
 print(
-    f"number of frames: {number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n snapshot_min/max: {[plot.snapshot_min, plot.snapshot_max]} \n snapshot_min/max: {[plot.snapshot_min, plot.snapshot_max]}",
+    f"number of frames: {number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.number_of_frames/plot.parameters['frame_stride'])} \n snapshot_min/max: {[plot.snapshot_min, plot.snapshot_max]}",
     flush=True)
 
 Writer = ani.writers['ffmpeg']

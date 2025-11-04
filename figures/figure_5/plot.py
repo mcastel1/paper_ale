@@ -18,6 +18,11 @@ import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
 
+'''
+you can copy the data from abacus with 
+./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' ~/Documents/paper_ale/figures/figure_5 1 1000000 10 
+'''
+
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 # Show all rows and columns when printing a Pandas array
@@ -179,11 +184,13 @@ def plot_snapshot(fig, n_file,
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
                         position=parameters['v_colorbar_position'], 
                         size=parameters['v_colorbar_size'], \
-                        label_pad=parameters['v_colorbar_label_offset'], 
-                        label=r'$v \, [\met/\sec]$',
+                        label_pad=parameters['v_colorbar_axis_label_offset'], 
+                        label=parameters['v_colorbar_axis_label'],
                         font_size=parameters['v_colorbar_font_size'], 
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                        line_width=parameters['v_colorbar_line_width'],
+                        tick_length=parameters['v_colorbar_tick_length'],
                         axis=v_colorbar_axis)
                         
     
