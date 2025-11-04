@@ -79,46 +79,22 @@ fig = pplt.figure(
     wspace=parameters['wspace'], 
     hspace=parameters['hspace'])
 
+# pre-create subplots and axes
+fig.add_subplot(1, 1, 1)
 
-# fork: 2) to plot the animation
-# compute absolute min and max of the axes across all snapshots
-# 
-# initialize the values of axis_min_max
-axis_min_max = [[np.inf,-np.inf],[np.inf,-np.inf]]
+v_colorbar_axis = fig.add_axes([parameters['colorbar_position'][0], 
+                           parameters['colorbar_position'][1],
+                           parameters['colorbar_size'][0],
+                           parameters['colorbar_size'][1]])
 
-# run through all snapshots
-for n_snapshot in range(snapshot_min, snapshot_max, parameters['frame_stride']):
 
-    data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_snapshot) + '.csv'), usecols=columns_v)
-
-    X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
-                                                                            [0, 0],
-                                                                            [parameters['L'], parameters['h']],
-                                                                            parameters['n_bins_v'],
-                                                                            clab.label_x_column,
-                                                                            clab.label_y_column,
-                                                                            clab.label_v_column)
-    
-    #X, Y are the positions of the mesh nodes in the current configuration    
-    X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
-    Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
-
-    # compute the min-max of the snapshot
-    axis_min_max_snapshot = [lis.min_max(X),lis.min_max(Y)]
-    
-    # update the absolute min and max according to the min-max of the snapshot 
-    for i in range(2):
-        if axis_min_max_snapshot[i][0] < axis_min_max[i][0]:
-            axis_min_max[i][0] = axis_min_max_snapshot[i][0]
-            
-        if axis_min_max_snapshot[i][1] > axis_min_max[i][1]:
-            axis_min_max[i][1] = axis_min_max_snapshot[i][1]
-# 
-            
+           
             
 
 def plot_snapshot(fig, n_file, 
-                  snapshot_label=''):
+                  snapshot_label='',
+                  X_min_max=None):
+    
     n_snapshot = str(n_file)
 
     # load data
@@ -128,7 +104,15 @@ def plot_snapshot(fig, n_file,
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_snapshot + '.csv'), usecols=columns_v)
 
 
-    ax = fig.add_subplot(1, 1, 1)
+    if X_min_max != None:
+        #plot_snapshot has  been called with X_min_max = None -> compute X_min_max on snapshot n_snapshot
+        pass 
+    
+    # =============
+    # v subplot
+    # =============    
+    
+    ax = fig.axes[0]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -139,7 +123,7 @@ def plot_snapshot(fig, n_file,
 
         
     # here X_ref, Y_ref are the coordinates of the points in the reference configuration of the mesh
-    X_ref, Y_ref, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, norm_v = vec.interpolate_2d_vector_field(data_v,
+    X_ref, Y_ref, V_x, V_y, grid_norm_v, _, _, _ = vec.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
                                                                                                     [parameters['L'], parameters['h']],
                                                                                                     parameters['n_bins_v'],
@@ -149,7 +133,7 @@ def plot_snapshot(fig, n_file,
     
 
     
-    X_ref, Y_ref, u_n_X, u_n_Y, grid_norm_u_n, norm_u_n_min, norm_u_n_max, norm_u_n = vec.interpolate_2d_vector_field(data_u_msh,
+    X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                                                                     [0, 0],
                                                                                                                     [parameters['L'], parameters['h']],
                                                                                                                     parameters['n_bins_v'],
@@ -173,13 +157,14 @@ def plot_snapshot(fig, n_file,
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min, norm_v_max, \
-                        position=parameters['color_bar_position'], 
-                        size=parameters['color_bar_size'], \
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
+                        position=parameters['colorbar_position'], 
+                        size=parameters['colorbar_size'], \
                         label_pad=[-3.0, 0.5], 
                         label=r'$v \, [\met/\sec]$',
                         font_size=parameters['colorbar_font_size'], 
-                        tick_label_angle=parameters['colorbar_tick_label_angle'])
+                        tick_label_angle=parameters['colorbar_tick_label_angle'],
+                        axis=v_colorbar_axis)
                         
     
 
@@ -195,7 +180,7 @@ def plot_snapshot(fig, n_file,
                           plot_label_font_size=parameters['plot_label_font_size'], 
                           plot_label_offset=parameters['plot_label_offset'], 
                           axis_origin=parameters['axis_origin'], 
-                          axis_bounds=axis_min_max, 
+                          axis_bounds=X_min_max, 
                           margin=parameters['axis_margin'])
 
 
