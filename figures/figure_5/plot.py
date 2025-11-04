@@ -240,7 +240,6 @@ def plot_snapshot(fig, n_file,
                                         label_offset=parameters["w_colorbar_label_offset"], 
                                         tick_label_offset=parameters['w_colorbar_tick_label_offset'],
                                         label_angle=parameters['w_colorbar_label_angle'],
-                                        line_width=parameters['w_colorbar_tick_line_width'],
                                         tick_length=parameters['w_colorbar_tick_length'],
                                         axis=w_colorbar_axis)
     
@@ -249,6 +248,28 @@ def plot_snapshot(fig, n_file,
                        color_map=color_map_w, 
                        line_color='black', 
                        line_width=parameters['w_line_width'])
+    
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
+
+    
+    gr.plot_2d_axes(
+                ax, [0, 0], [parameters['L'], parameters['h']], 
+                tick_length=parameters['tick_length'], 
+                line_width=parameters['axis_line_width'], 
+                axis_label=parameters['axis_label'], 
+                axis_label_angle=parameters['axis_label_angle'], 
+                axis_label_offset=parameters['axis_label_offset'], 
+                tick_label_offset=parameters['tick_label_offset'], 
+                tick_label_format=['f', 'f'], \
+                font_size=parameters['axis_font_size'], 
+                plot_label_font_size=parameters['plot_label_font_size'], 
+                plot_label_offset=parameters['plot_label_offset'], 
+                axis_origin=parameters['axis_origin'], 
+                axis_bounds=axis_min_max, 
+                margin=parameters['axis_margin'],
+                n_minor_ticks=parameters['n_minor_ticks'],
+                minor_tick_length=parameters['minor_tick_length'])
  
 
 
