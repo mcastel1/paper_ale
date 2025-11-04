@@ -175,7 +175,7 @@ def plot_snapshot(fig, n_file,
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['plot_label_font_size'], ha='center', va='center')
 
         
-    # here X, Y are the coordinates of the points in the current configuration of the mesh
+    # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
     X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
                                                                                                     [axis_min_max[0][0], axis_min_max[1][0]],
                                                                                                     [axis_min_max[0][1], axis_min_max[1][1]],
