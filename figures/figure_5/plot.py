@@ -87,8 +87,9 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(2, 1, 1)
-fig.add_subplot(2, 1, 2)
+fig.add_subplot(3, 1, 1)
+fig.add_subplot(3, 1, 2)
+fig.add_subplot(3, 1, 3)
 
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
                            parameters['v_colorbar_position'][1],
@@ -100,6 +101,11 @@ w_colorbar_axis = fig.add_axes([parameters['w_colorbar_position'][0],
                            parameters['w_colorbar_size'][0],
                            parameters['w_colorbar_size'][1]])
 
+sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0], 
+                           parameters['sigma_colorbar_position'][1],
+                           parameters['sigma_colorbar_size'][0],
+                           parameters['sigma_colorbar_size'][1]])
+
 
            
             
@@ -108,7 +114,8 @@ def plot_snapshot(fig, n_file,
                   snapshot_label='',
                   axis_min_max=None,
                   norm_v_min_max=None,
-                  w_min_max=None):
+                  w_min_max=None,
+                  sigma_min_max=None):
     
 
     # load data
@@ -117,6 +124,7 @@ def plot_snapshot(fig, n_file,
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'))
     data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'), usecols=columns_v)
     data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'), usecols=columns_v)
 
 
@@ -271,6 +279,54 @@ def plot_snapshot(fig, n_file,
                 n_minor_ticks=parameters['n_minor_ticks'],
                 minor_tick_length=parameters['minor_tick_length'])
  
+   # =============
+    # sigma subplot
+    # =============   
+    
+    ax = fig.axes[2]  # Use the existing axis
+    
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma, parameters['sigma_colorbar_position'], parameters['sigma_colorbar_size'], 
+                                        min_max=sigma_min_max,
+                                        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'], 
+                                        label=parameters['sigma_colorbar_axis_label'],
+                                        font_size=parameters['sigma_colorbar_font_size'], 
+                                        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+                                        label_angle=parameters['sigma_colorbar_label_angle'],
+                                        tick_length=parameters['sigma_colorbar_tick_length'],
+                                        label_offset=parameters['sigma_colorbar_axis_label_offset'],
+                                        axis=sigma_colorbar_axis)
+    
+    #plot X and sigma
+    gr.plot_curve_grid(ax, X_t, 
+                       color_map=color_map_sigma, 
+                       line_color='black', 
+                       line_width=parameters['sigma_line_width'])
+    
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
+
+    
+    gr.plot_2d_axes(
+                ax, [0, 0], [parameters['L'], parameters['h']], 
+                tick_length=parameters['tick_length'], 
+                line_width=parameters['axis_line_width'], 
+                axis_label=parameters['axis_label'], 
+                axis_label_angle=parameters['axis_label_angle'], 
+                axis_label_offset=parameters['axis_label_offset'], 
+                tick_label_offset=parameters['tick_label_offset'], 
+                tick_label_format=['f', 'f'], \
+                font_size=parameters['axis_font_size'], 
+                plot_label_font_size=parameters['plot_label_font_size'], 
+                plot_label_offset=parameters['plot_label_offset'], 
+                axis_origin=parameters['axis_origin'], 
+                axis_bounds=axis_min_max, 
+                margin=parameters['axis_margin'],
+                n_minor_ticks=parameters['n_minor_ticks'],
+                minor_tick_length=parameters['minor_tick_length'])
 
 
 

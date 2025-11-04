@@ -48,6 +48,7 @@ for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['f
             axis_min_max_abs[i][1] = X_min_max[i][1]
 # 
 norm_v_min_max_abs = cal.norm_min_max_files('def_v_fl_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
+w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
 
  
 
@@ -70,7 +71,7 @@ def update_animation(n):
     start_time = time.time()
 
     # clear only the major axes of the plot. The colorbar axes need not be cleaned because make_colorbar already clears them
-    for ax in plot.fig.axes[:2]:
+    for ax in plot.fig.axes[:3]:
         ax.clear()
         
     # Clear text objects (the snapshot label accumulates)
@@ -83,7 +84,8 @@ def update_animation(n):
     plot.plot_snapshot(plot.fig, n, 
                     snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 's', plot.parameters['n_decimals_snapshot_label']),
                     axis_min_max=axis_min_max_abs,
-                    norm_v_min_max=norm_v_min_max_abs     
+                    norm_v_min_max=norm_v_min_max_abs,
+                    w_min_max=w_min_max_abs
                     )
 
     # garbace collection to avoid memory leaks
