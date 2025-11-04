@@ -59,6 +59,7 @@ snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
 
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
+number_of_frames = snapshot_max - snapshot_min + 1
 
 
 
@@ -116,7 +117,8 @@ for n_snapshot in range(snapshot_min, snapshot_max, parameters['frame_stride']):
             
             
 
-def plot_snapshot(fig, n_file, snapshot_label):
+def plot_snapshot(fig, n_file, 
+                  snapshot_label=''):
     n_snapshot = str(n_file)
 
     # load data
@@ -198,8 +200,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-# plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max * T / number_of_frames, 's', 0))
-plot_snapshot(fig, snapshot_max, rf'$n = \,$' + str(snapshot_max))
+plot_snapshot(fig, snapshot_max, 
+              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')

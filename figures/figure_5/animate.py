@@ -52,7 +52,8 @@ def update_animation(n):
 
     text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour", "\met"])
 
-    plot.plot_snapshot(plot.fig, n, rf'$n = \,' + str(n) + '$')
+    plot.plot_snapshot(plot.fig, n, 
+                    snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 's', plot.parameters['n_decimals_snapshot_label'])                       )
 
     # garbace collection to avoid memory leaks
     gc.collect()
