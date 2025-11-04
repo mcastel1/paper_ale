@@ -25,7 +25,7 @@ axis_min_max_abs = [[np.inf,-np.inf],[np.inf,-np.inf]]
 # run through all snapshots
 for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride']):
 
-    data_u_msh = pd.read_csv(os.path.join(plot.snapshot_nodal_values_path, 'u_n_' + str(n_snapshot) + '.csv'), usecols=plot.columns_v)
+    data_u_msh = pd.read_csv(os.path.join(plot.snapshot_nodal_values_path, 'u_n_' + str(n_snapshot) + '.csv'))
 
     X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
                                                                             [0, 0],
@@ -47,7 +47,7 @@ for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['f
         if X_min_max[i][1] > axis_min_max_abs[i][1]:
             axis_min_max_abs[i][1] = X_min_max[i][1]
 # 
-norm_v_min_max_abs = cal.norm_min_max_files('def_v_fl_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
+norm_v_fl_min_max_abs = cal.norm_min_max_files('def_v_fl_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
 w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
 
  
@@ -84,7 +84,7 @@ def update_animation(n):
     plot.plot_snapshot(plot.fig, n, 
                     snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 's', plot.parameters['n_decimals_snapshot_label']),
                     axis_min_max=axis_min_max_abs,
-                    norm_v_min_max=norm_v_min_max_abs,
+                    norm_v_fl_min_max=norm_v_fl_min_max_abs,
                     w_min_max=w_min_max_abs
                     )
 

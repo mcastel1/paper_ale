@@ -70,12 +70,7 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 
 
-# labels of columns to read
-columns_line_vertices = [clab.label_start_x_column, clab.label_start_y_column, clab.label_start_z_column,
-                         clab.label_end_x_column,
-                         clab.label_end_y_column, clab.label_end_z_column]
-columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + clab.label_x_column,
-             clab.label_v_column + clab.label_y_column]
+
 
 fig = pplt.figure(
     figsize=(parameters['figure_size'][0], parameters['figure_size'][1]), 
@@ -91,10 +86,10 @@ fig.add_subplot(2, 3, 1)
 fig.add_subplot(2, 3, 4)
 fig.add_subplot(2, 3, 5)
 
-v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
-                           parameters['v_colorbar_position'][1],
-                           parameters['v_colorbar_size'][0],
-                           parameters['v_colorbar_size'][1]])
+v_fl_colorbar_axis = fig.add_axes([parameters['v_fl_colorbar_position'][0], 
+                           parameters['v_fl_colorbar_position'][1],
+                           parameters['v_fl_colorbar_size'][0],
+                           parameters['v_fl_colorbar_size'][1]])
 
 w_colorbar_axis = fig.add_axes([parameters['w_colorbar_position'][0], 
                            parameters['w_colorbar_position'][1],
@@ -113,16 +108,16 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
 def plot_snapshot(fig, n_file, 
                   snapshot_label='',
                   axis_min_max=None,
-                  norm_v_min_max=None,
+                  norm_v_fl_min_max=None,
                   w_min_max=None,
                   sigma_min_max=None):
     
 
     # load data
-    # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv', usecols=columns_line_vertices)
+    # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv')
     data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + str(n_file) + '.csv'))
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'))
-    data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'))
+    data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'))
     data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
@@ -151,7 +146,7 @@ def plot_snapshot(fig, n_file,
 
     
     # =============
-    # v subplot
+    # v_fl subplot
     # =============    
     
     ax = fig.axes[0]  # Use the existing axis
@@ -165,7 +160,7 @@ def plot_snapshot(fig, n_file,
 
         
     # here X_ref, Y_ref are the coordinates of the points in the reference configuration of the mesh
-    X_ref, Y_ref, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(data_v,
+    X_ref, Y_ref, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
                                                                                                     [0, 0],
                                                                                                     [parameters['L'], parameters['h']],
                                                                                                     parameters['n_bins_v'],
@@ -174,8 +169,8 @@ def plot_snapshot(fig, n_file,
                                                                                                     clab.label_v_column)
     
 
-    if norm_v_min_max == None:
-        norm_v_min_max = [norm_v_min, norm_v_max]
+    if norm_v_fl_min_max == None:
+        norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
 
     
     X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
@@ -198,17 +193,17 @@ def plot_snapshot(fig, n_file,
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
-                        position=parameters['v_colorbar_position'], 
-                        size=parameters['v_colorbar_size'], \
-                        label_pad=parameters['v_colorbar_axis_label_offset'], 
-                        label=parameters['v_colorbar_axis_label'],
-                        font_size=parameters['v_colorbar_font_size'], 
-                        tick_label_angle=parameters['v_colorbar_tick_label_angle'],
-                        tick_label_offset=parameters['v_colorbar_tick_label_offset'],
-                        line_width=parameters['v_colorbar_line_width'],
-                        tick_length=parameters['v_colorbar_tick_length'],
-                        axis=v_colorbar_axis)
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_fl_min_max[0], norm_v_fl_min_max[1], \
+                        position=parameters['v_fl_colorbar_position'], 
+                        size=parameters['v_fl_colorbar_size'], \
+                        label_pad=parameters['v_fl_colorbar_axis_label_offset'], 
+                        label=parameters['v_fl_colorbar_axis_label'],
+                        font_size=parameters['v_fl_colorbar_font_size'], 
+                        tick_label_angle=parameters['v_fl_colorbar_tick_label_angle'],
+                        tick_label_offset=parameters['v_fl_colorbar_tick_label_offset'],
+                        line_width=parameters['v_fl_colorbar_line_width'],
+                        tick_length=parameters['v_fl_colorbar_tick_length'],
+                        axis=v_fl_colorbar_axis)
                         
     
 
@@ -279,7 +274,7 @@ def plot_snapshot(fig, n_file,
                 n_minor_ticks=parameters['n_minor_ticks'],
                 minor_tick_length=parameters['minor_tick_length'])
  
-   # =============
+    # =============
     # sigma subplot
     # =============   
     
