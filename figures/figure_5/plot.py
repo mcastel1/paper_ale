@@ -83,6 +83,7 @@ fig = pplt.figure(
 
 # pre-create subplots and axes
 fig.add_subplot(2, 3, 1)
+fig.add_subplot(2, 3, 2)
 fig.add_subplot(2, 3, 4)
 fig.add_subplot(2, 3, 5)
 
@@ -90,6 +91,11 @@ v_fl_colorbar_axis = fig.add_axes([parameters['v_fl_colorbar_position'][0],
                            parameters['v_fl_colorbar_position'][1],
                            parameters['v_fl_colorbar_size'][0],
                            parameters['v_fl_colorbar_size'][1]])
+
+sigma_fl_colorbar_axis = fig.add_axes([parameters['sigma_fl_colorbar_position'][0], 
+                           parameters['sigma_fl_colorbar_position'][1],
+                           parameters['sigma_fl_colorbar_size'][0],
+                           parameters['sigma_fl_colorbar_size'][1]])
 
 w_colorbar_axis = fig.add_axes([parameters['w_colorbar_position'][0], 
                            parameters['w_colorbar_position'][1],
@@ -109,6 +115,7 @@ def plot_snapshot(fig, n_file,
                   snapshot_label='',
                   axis_min_max=None,
                   norm_v_fl_min_max=None,
+                  sigma_fl_min_max=None,
                   w_min_max=None,
                   sigma_min_max=None):
     
@@ -118,6 +125,7 @@ def plot_snapshot(fig, n_file,
     data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + str(n_file) + '.csv'))
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'))
     data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'))
+    data_sigma_fl = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + str(n_file) + '.csv')
     data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
@@ -143,6 +151,14 @@ def plot_snapshot(fig, n_file,
         # 
         
     X_t, t = gr.interpolate_curve(data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
+    
+    X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
+                                                                                                                [0, 0],
+                                                                                                                [parameters['L'], parameters['h']],
+                                                                                                                parameters['n_bins_v'],
+                                                                                                                clab.label_x_column,
+                                                                                                                clab.label_y_column,
+                                                                                                                clab.label_v_column)
 
     
     # =============
@@ -172,20 +188,9 @@ def plot_snapshot(fig, n_file,
     if norm_v_fl_min_max == None:
         norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
 
-    
-    X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
-                                                                                                                    [0, 0],
-                                                                                                                    [parameters['L'], parameters['h']],
-                                                                                                                    parameters['n_bins_v'],
-                                                                                                                    clab.label_x_column,
-                                                                                                                    clab.label_y_column,
-                                                                                                                    clab.label_v_column)
-
-    #X, Y are the positions of the mesh nodes in the current configuration    
+        #X, Y are the positions of the mesh nodes in the current configuration    
     X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
     Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
-
-
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
@@ -225,11 +230,48 @@ def plot_snapshot(fig, n_file,
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length'])
     
+    
+    # =============
+    # sigma_fl subplot
+    # =============   
+    
+    ax = fig.axes[2]  # Use the existing axis
+    
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    
+    
+    
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
+
+    
+    gr.plot_2d_axes(
+                ax, [0, 0], [parameters['L'], parameters['h']], 
+                tick_length=parameters['tick_length'], 
+                line_width=parameters['axis_line_width'], 
+                axis_label=parameters['axis_label'], 
+                axis_label_angle=parameters['axis_label_angle'], 
+                axis_label_offset=parameters['axis_label_offset'], 
+                tick_label_offset=parameters['tick_label_offset'], 
+                tick_label_format=['f', 'f'], \
+                font_size=parameters['axis_font_size'], 
+                plot_label_font_size=parameters['plot_label_font_size'], 
+                plot_label_offset=parameters['plot_label_offset'], 
+                axis_origin=parameters['axis_origin'], 
+                axis_bounds=axis_min_max, 
+                margin=parameters['axis_margin'],
+                n_minor_ticks=parameters['n_minor_ticks'],
+                minor_tick_length=parameters['minor_tick_length'])
+    
+    
     # =============
     # w subplot
     # =============   
     
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[3]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -278,7 +320,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============   
     
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[4]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
