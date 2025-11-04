@@ -11,6 +11,7 @@ import warnings
 import calculus.utils as cal
 import list.column_labels as clab
 import graphics.utils as gr
+import graphics.vector_plot as vp
 import input_output.utils as io
 import list.utils as lis
 import system.paths as paths
@@ -83,10 +84,10 @@ fig = pplt.figure(
 # pre-create subplots and axes
 fig.add_subplot(1, 1, 1)
 
-v_colorbar_axis = fig.add_axes([parameters['colorbar_position'][0], 
-                           parameters['colorbar_position'][1],
-                           parameters['colorbar_size'][0],
-                           parameters['colorbar_size'][1]])
+v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
+                           parameters['v_colorbar_position'][1],
+                           parameters['v_colorbar_size'][0],
+                           parameters['v_colorbar_size'][1]])
 
 
            
@@ -94,23 +95,38 @@ v_colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
 
 def plot_snapshot(fig, n_file, 
                   snapshot_label='',
-                  X_min_max=None,
+                  axis_min_max=None,
                   norm_v_min_max=None):
     
-    n_snapshot = str(n_file)
 
     # load data
-    # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
-    data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + n_snapshot + '.csv'), usecols=columns_line_vertices)
-    data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_snapshot + '.csv'), usecols=columns_v)
-    data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_snapshot + '.csv'), usecols=columns_v)
+    # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv', usecols=columns_line_vertices)
+    data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + str(n_file) + '.csv'), usecols=columns_line_vertices)
+    data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'), usecols=columns_v)
+    data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'), usecols=columns_v)
 
 
-    if X_min_max == None:
-        X_min_max = [
-            cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:0'),
-            cal.min_max_file(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
-            ]
+    if axis_min_max == None:
+
+        # compute the min and max of the axes
+        # 
+        data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
+
+        X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
+                                                                                [0, 0],
+                                                                                [parameters['L'], parameters['h']],
+                                                                                parameters['n_bins_v'])
+        
+        #X, Y are the positions of the mesh nodes in the current configuration    
+        X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
+        Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
+
+        # compute the min-max of the snapshot
+        axis_min_max = [lis.min_max(X),lis.min_max(Y)]
+        # 
+        
+        
+
     
     # =============
     # v subplot
@@ -123,7 +139,7 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     # plot snapshot label
-    fig.text(0.55, 0.85, snapshot_label, fontsize=parameters['plot_label_font_size'], ha='center', va='center')
+    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['plot_label_font_size'], ha='center', va='center')
 
         
     # here X_ref, Y_ref are the coordinates of the points in the reference configuration of the mesh
@@ -152,11 +168,7 @@ def plot_snapshot(fig, n_file,
     X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
     Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
 
-    # fork: 1) to plot the figure
-    '''
-    #obtain the min and max of the X and Y values of the mesh in the current configuration, in order to get the correct boundaries of the plot 
-    axis_min_max = [lis.min_max(X),lis.min_max(Y)]
-    '''
+
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
@@ -165,30 +177,34 @@ def plot_snapshot(fig, n_file,
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
-                        position=parameters['colorbar_position'], 
-                        size=parameters['colorbar_size'], \
-                        label_pad=[-3.0, 0.5], 
+                        position=parameters['v_colorbar_position'], 
+                        size=parameters['v_colorbar_size'], \
+                        label_pad=parameters['v_colorbar_label_offset'], 
                         label=r'$v \, [\met/\sec]$',
-                        font_size=parameters['colorbar_font_size'], 
-                        tick_label_angle=parameters['colorbar_tick_label_angle'],
+                        font_size=parameters['v_colorbar_font_size'], 
+                        tick_label_angle=parameters['v_colorbar_tick_label_angle'],
+                        tick_label_offset=parameters['v_colorbar_tick_label_offset'],
                         axis=v_colorbar_axis)
                         
     
 
-    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], 
-                          tick_length=parameters['tick_length'], 
-                          line_width=parameters['axis_line_width'], 
-                          axis_label=parameters['axis_label'], 
-                          axis_label_angle=parameters['axis_label_angle'], 
-                          axis_label_offset=parameters['axis_label_offset'], 
-                          tick_label_offset=parameters['tick_label_offset'], 
-                          tick_label_format=['f', 'f'], \
-                          font_size=parameters['axis_font_size'], 
-                          plot_label_font_size=parameters['plot_label_font_size'], 
-                          plot_label_offset=parameters['plot_label_offset'], 
-                          axis_origin=parameters['axis_origin'], 
-                          axis_bounds=X_min_max, 
-                          margin=parameters['axis_margin'])
+    gr.plot_2d_axes(
+                    ax, [0, 0], [parameters['L'], parameters['h']], 
+                    tick_length=parameters['tick_length'], 
+                    line_width=parameters['axis_line_width'], 
+                    axis_label=parameters['axis_label'], 
+                    axis_label_angle=parameters['axis_label_angle'], 
+                    axis_label_offset=parameters['axis_label_offset'], 
+                    tick_label_offset=parameters['tick_label_offset'], 
+                    tick_label_format=['f', 'f'], \
+                    font_size=parameters['axis_font_size'], 
+                    plot_label_font_size=parameters['plot_label_font_size'], 
+                    plot_label_offset=parameters['plot_label_offset'], 
+                    axis_origin=parameters['axis_origin'], 
+                    axis_bounds=axis_min_max, 
+                    margin=parameters['axis_margin'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length'])
 
 
 

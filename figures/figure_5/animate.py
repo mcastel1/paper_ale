@@ -6,6 +6,7 @@ import pandas as pd
 import system.utils as sys_utils
 import time
 
+import calculus.utils as cal
 import graphics.vector_plot as vp
 import input_output.utils as io
 import list.utils as lis
@@ -19,12 +20,7 @@ number_of_frames = sys_utils.count_v_files('line_mesh_n_', plot.snapshot_path)
 
 
 
-
-# fork: 2) to plot the animation
-# compute absolute min and max of the axes across all snapshots
-# 
-# initialize the values of axis_min_max
-X_min_max_abs = [[np.inf,-np.inf],[np.inf,-np.inf]]
+axis_min_max_abs = [[np.inf,-np.inf],[np.inf,-np.inf]]
 
 # run through all snapshots
 for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride']):
@@ -45,12 +41,14 @@ for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['f
     
     # update the absolute min and max according to the min-max of the snapshot 
     for i in range(2):
-        if X_min_max[i][0] < X_min_max_abs[i][0]:
-            X_min_max_abs[i][0] = X_min_max[i][0]
+        if X_min_max[i][0] < axis_min_max_abs[i][0]:
+            axis_min_max_abs[i][0] = X_min_max[i][0]
             
-        if X_min_max[i][1] > X_min_max_abs[i][1]:
-            X_min_max_abs[i][1] = X_min_max[i][1]
+        if X_min_max[i][1] > axis_min_max_abs[i][1]:
+            axis_min_max_abs[i][1] = X_min_max[i][1]
 # 
+norm_v_min_max_abs = cal.norm_min_max_files('def_v_fl_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
+
  
 
 
@@ -58,7 +56,7 @@ for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['f
 animation_duration_in_sec = (number_of_frames / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
 
 print(
-    f"number of frames: {number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n snapshot_min/max: {[plot.snapshot_min, plot.snapshot_max]}",
+    f"number of frames: {number_of_frames} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n snapshot_min/max: {[plot.snapshot_min, plot.snapshot_max]} \n snapshot_min/max: {[plot.snapshot_min, plot.snapshot_max]}",
     flush=True)
 
 Writer = ani.writers['ffmpeg']
@@ -84,7 +82,8 @@ def update_animation(n):
 
     plot.plot_snapshot(plot.fig, n, 
                     snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 's', plot.parameters['n_decimals_snapshot_label']),
-                    X_min_max=X_min_max_abs       
+                    axis_min_max=axis_min_max_abs,
+                    norm_v_min_max=norm_v_min_max_abs     
                     )
 
     # garbace collection to avoid memory leaks
