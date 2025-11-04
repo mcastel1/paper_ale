@@ -83,7 +83,7 @@ fig = pplt.figure(
 
 # pre-create subplots and axes
 fig.add_subplot(2, 3, 1)
-fig.add_subplot(2, 3, 2)
+# fig.add_subplot(2, 3, 2)
 fig.add_subplot(2, 3, 4)
 fig.add_subplot(2, 3, 5)
 
@@ -175,22 +175,17 @@ def plot_snapshot(fig, n_file,
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['plot_label_font_size'], ha='center', va='center')
 
         
-    # here X_ref, Y_ref are the coordinates of the points in the reference configuration of the mesh
-    X_ref, Y_ref, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
-                                                                                                    [0, 0],
-                                                                                                    [parameters['L'], parameters['h']],
-                                                                                                    parameters['n_bins_v'],
-                                                                                                    clab.label_x_column,
-                                                                                                    clab.label_y_column,
-                                                                                                    clab.label_v_column)
+    # here X, Y are the coordinates of the points in the current configuration of the mesh
+    X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
+                                                                                                    [axis_min_max[0][0], axis_min_max[1][0]],
+                                                                                                    [axis_min_max[0][1], axis_min_max[1][1]],
+                                                                                                    parameters['n_bins_v'])
     
 
     if norm_v_fl_min_max == None:
         norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
 
-        #X, Y are the positions of the mesh nodes in the current configuration    
-    X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
-    Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
+
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
@@ -230,7 +225,7 @@ def plot_snapshot(fig, n_file,
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length'])
     
-    
+    '''
     # =============
     # sigma_fl subplot
     # =============   
@@ -265,13 +260,13 @@ def plot_snapshot(fig, n_file,
                 margin=parameters['axis_margin'],
                 n_minor_ticks=parameters['n_minor_ticks'],
                 minor_tick_length=parameters['minor_tick_length'])
-    
+    '''
     
     # =============
     # w subplot
     # =============   
     
-    ax = fig.axes[3]  # Use the existing axis
+    ax = fig.axes[1]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -320,7 +315,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============   
     
-    ax = fig.axes[4]  # Use the existing axis
+    ax = fig.axes[2]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
