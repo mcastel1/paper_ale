@@ -120,12 +120,12 @@ def plot_snapshot(fig, n_file,
 
     # load data
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv', usecols=columns_line_vertices)
-    data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + str(n_file) + '.csv'), usecols=columns_line_vertices)
+    data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + str(n_file) + '.csv'))
     data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'))
-    data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'), usecols=columns_v)
+    data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'))
     data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
-    data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'), usecols=columns_v)
+    data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
 
 
     if axis_min_max == None:
