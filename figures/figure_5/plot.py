@@ -87,12 +87,18 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(1, 1, 1)
+fig.add_subplot(2, 1, 1)
+fig.add_subplot(2, 1, 2)
 
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
                            parameters['v_colorbar_position'][1],
                            parameters['v_colorbar_size'][0],
                            parameters['v_colorbar_size'][1]])
+
+w_colorbar_axis = fig.add_axes([parameters['w_colorbar_position'][0], 
+                           parameters['w_colorbar_position'][1],
+                           parameters['w_colorbar_size'][0],
+                           parameters['w_colorbar_size'][1]])
 
 
            
@@ -101,13 +107,15 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
 def plot_snapshot(fig, n_file, 
                   snapshot_label='',
                   axis_min_max=None,
-                  norm_v_min_max=None):
+                  norm_v_min_max=None,
+                  w_min_max=None):
     
 
     # load data
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv', usecols=columns_line_vertices)
     data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + str(n_file) + '.csv'), usecols=columns_line_vertices)
     data_v = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'), usecols=columns_v)
+    data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'), usecols=columns_v)
 
 
@@ -116,6 +124,7 @@ def plot_snapshot(fig, n_file,
         # compute the min and max of the axes
         # 
         data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
+        data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'))
 
         X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
                                                                                 [0, 0],
@@ -130,7 +139,7 @@ def plot_snapshot(fig, n_file,
         axis_min_max = [lis.min_max(X),lis.min_max(Y)]
         # 
         
-        
+    X_t, t = gr.interpolate_curve(data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
     
     # =============
@@ -212,6 +221,35 @@ def plot_snapshot(fig, n_file,
                     margin=parameters['axis_margin'],
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length'])
+    
+    # =============
+    # w subplot
+    # =============   
+    
+    ax = fig.axes[1]  # Use the existing axis
+    
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w, parameters['w_colorbar_position'], parameters['w_colorbar_size'], 
+                                        min_max=w_min_max,
+                                        tick_label_angle=parameters['w_colorbar_tick_label_angle'], 
+                                        label=r'$w \, [\newt/\met]$', 
+                                        font_size=parameters['w_colorbar_font_size'], 
+                                        label_offset=parameters["w_colorbar_label_offset"], 
+                                        tick_label_offset=parameters['w_colorbar_tick_label_offset'],
+                                        label_angle=parameters['w_colorbar_label_angle'],
+                                        line_width=parameters['w_colorbar_tick_line_width'],
+                                        tick_length=parameters['w_colorbar_tick_length'],
+                                        axis=w_colorbar_axis)
+    
+    #plot X and w
+    gr.plot_curve_grid(ax, X_t, 
+                       color_map=color_map_w, 
+                       line_color='black', 
+                       line_width=parameters['w_line_width'])
+ 
 
 
 
