@@ -187,6 +187,7 @@ def plot_snapshot(fig, n_file,
     if norm_v_fl_min_max == None:
         norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
 
+    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u_msh)
 
 
     # plot mesh under the membrane
