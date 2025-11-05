@@ -1,10 +1,10 @@
 #!/bin/sh
 #SBATCH --job-name=ani-FIGURE_TO_PLOT
-#SBATCH --time=01-00:0:00
+#SBATCH --time=04-00:0:00
 #SBATCH --clusters=mesopsl2
-#SBATCH --qos=mesopsl2_hi_normal
-#SBATCH --account=castellana_hi
-#SBATCH --partition=hi
+#SBATCH --qos=mesopsl2_def_long
+#SBATCH --account=castellana
+#SBATCH --partition=def
 #SBATCH --ntasks-per-node=1
 #SBATCH--mem=50G
 #SBATCH --nodes=1
