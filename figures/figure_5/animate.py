@@ -71,7 +71,7 @@ def update_animation(n):
     start_time = time.time()
 
     # clear only the major axes of the plot. The colorbar axes need not be cleaned because make_colorbar already clears them
-    for ax in plot.fig.axes[:3]:
+    for ax in plot.fig.axes[:5]:
         ax.clear()
         
     # Clear text objects (the snapshot label accumulates)

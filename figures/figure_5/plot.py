@@ -88,6 +88,7 @@ fig = pplt.figure(
 # pre-create subplots and axes
 fig.add_subplot(2, 3, 1)
 fig.add_subplot(2, 3, 2)
+fig.add_subplot(2, 3, 4)
 fig.add_subplot(2, 3, 5)
 fig.add_subplot(2, 3, 6)
 
@@ -100,6 +101,11 @@ sigma_fl_colorbar_axis = fig.add_axes([parameters['sigma_fl_colorbar_position'][
                            parameters['sigma_fl_colorbar_position'][1],
                            parameters['sigma_fl_colorbar_size'][0],
                            parameters['sigma_fl_colorbar_size'][1]])
+
+v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0], 
+                           parameters['v_colorbar_position'][1],
+                           parameters['v_colorbar_size'][0],
+                           parameters['v_colorbar_size'][1]])
 
 w_colorbar_axis = fig.add_axes([parameters['w_colorbar_position'][0], 
                            parameters['w_colorbar_position'][1],
@@ -150,16 +156,24 @@ def plot_snapshot(fig, n_file,
                   w_min_max=None,
                   sigma_min_max=None):
     
+    n_file_string = str(n_file)
+    
 
     # load data
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv')
-    data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + str(n_file) + '.csv'))
-    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + str(n_file) + '.csv'))
-    data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + str(n_file) + '.csv'))
-    data_sigma_fl = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + str(n_file) + '.csv')
-    data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
-    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
-    data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
+    data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
+    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
+    data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_file_string + '.csv'))
+    data_sigma_fl = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv')
+    data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + n_file_string + '.csv'))
+    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_file_string + '.csv'))
+    data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_file_string + '.csv'))
+    data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
+    data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
+    data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
+    
+    # data_omega contains de values of \partial_1 X^alpha
+    data_omega  = lis.data_omega(data_nu, data_psi)
 
 
     if axis_min_max == None:
