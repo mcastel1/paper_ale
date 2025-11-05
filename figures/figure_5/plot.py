@@ -120,11 +120,15 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
 '''
 plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration   
 Input values: 
-    - 'ax': the axis where the polygon will be drawn
-    - 'axis_min_max': the bounds of the X values in the current configuration
-    - 'data_u_msh': the data for the mesh displacement field
+    * Mandatory: 
+        - 'ax': the axis where the polygon will be drawn
+        - 'axis_min_max': the bounds of the X values in the current configuration
+        - 'data_u_msh': the data for the mesh displacement field
+    * Optional: 
+        - 'margin': a margin, measured as relative to axis_min_max[1][1] - axis_mim_max[1][0] which is used to expand the region on top 
 '''
-def draw_masking_area(ax, axis_min_max, data_u_msh):
+def draw_masking_area(ax, axis_min_max, data_u_msh,
+                      margin=0):
     
     # 1)interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field 
     
@@ -139,9 +143,13 @@ def draw_masking_area(ax, axis_min_max, data_u_msh):
                 )
             )
     
-    #2) add to the sequence of lines above the top-left and top-right vertices of the region to cover
-    data_def_boundary_vertices_sub_mesh_1.append((0, axis_min_max[1][1]))
-    data_def_boundary_vertices_sub_mesh_1.append((axis_min_max[0][1], axis_min_max[1][1]))
+    #2) add to the sequence of lines above the top-left and top-right and bottom-right vertices of the region to cover
+    data_def_boundary_vertices_sub_mesh_1.insert(0, (
+                                                    parameters['L'] + U_interp_x(parameters['L'], parameters['h']), 
+                                                    parameters['h'] + U_interp_y(parameters['L'], parameters['h']))
+                                                 )
+    data_def_boundary_vertices_sub_mesh_1.append((0, axis_min_max[1][1] + margin * (axis_min_max[1][1] - axis_min_max[1][0])))
+    data_def_boundary_vertices_sub_mesh_1.append((axis_min_max[0][1], axis_min_max[1][1]  + margin * (axis_min_max[1][1] - axis_min_max[1][0])))
         
     #3) plot the  polygon in order to hide the arrows
     poly = Polygon(data_def_boundary_vertices_sub_mesh_1, fill=True, linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
@@ -243,7 +251,7 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
     
     # plot the area that masks arrows which lie outside the mesh in the current configuration
-    draw_masking_area(ax, axis_min_max, data_u_msh)
+    draw_masking_area(ax, axis_min_max, data_u_msh, parameters['masking_area_margin'])
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
@@ -306,7 +314,7 @@ def plot_snapshot(fig, n_file,
         sigma_fl_min_max = [sigma_fl_min, sigma_fl_max]
         
     # plot the area that masks arrows which lie outside the mesh in the current configuration
-    draw_masking_area(ax, axis_min_max, data_u_msh)
+    draw_masking_area(ax, axis_min_max, data_u_msh, parameters['masking_area_margin'])
         
     contour_plot = ax.imshow(Z_sigma_fl.T, 
                     origin='lower', 
@@ -522,8 +530,8 @@ def plot_snapshot(fig, n_file,
 
 
 
-plot_snapshot(fig, snapshot_max, 
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+plot_snapshot(fig, snapshot_min, 
+              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_min * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
