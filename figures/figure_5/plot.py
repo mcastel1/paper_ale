@@ -153,6 +153,7 @@ def plot_snapshot(fig, n_file,
                   axis_min_max=None,
                   norm_v_fl_min_max=None,
                   sigma_fl_min_max=None,
+                  norm_v_min_max=None,
                   w_min_max=None,
                   sigma_min_max=None):
     
@@ -253,7 +254,7 @@ def plot_snapshot(fig, n_file,
                         font_size=parameters['v_fl_colorbar_font_size'], 
                         tick_label_angle=parameters['v_fl_colorbar_tick_label_angle'],
                         tick_label_offset=parameters['v_fl_colorbar_tick_label_offset'],
-                        line_width=parameters['v_fl_colorbar_line_width'],
+                        line_width=parameters['v_fl_colorbar_tick_line_width'],
                         tick_length=parameters['v_fl_colorbar_tick_length'],
                         axis=v_fl_colorbar_axis)
                         
@@ -353,10 +354,75 @@ def plot_snapshot(fig, n_file,
     
     
     # =============
-    # w subplot
+    # v subplot
     # =============   
     
     ax = fig.axes[2]  # Use the existing axis
+    
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, 
+                    line_width=parameters['plot_line_width'], 
+                    color='black', 
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
+    
+    # plot v
+    X_v, Y_v, V_x, V_y, grid_norm_v, _, _, _ = vp.interpolate_t_vector_field_2d_arc_length_gauge(data_X, data_omega, data_v, parameters['n_bins_v'])
+    
+    if norm_v_min_max == None:
+        norm_v_min_max=cal.norm_min_max_file(os.path.join(snapshot_path, 'v_n_' + str(n_file) + '.csv'))
+    
+    vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y], 
+                        shaft_length=parameters['shaft_length'], 
+                        head_over_shaft_length=parameters['head_over_shaft_length'], 
+                        head_angle=parameters['head_angle'], 
+                        line_width=parameters['arrow_line_width'], 
+                        alpha=parameters['alpha'], 
+                        color='color_from_map', 
+                        threshold_arrow_length=parameters['threshold_arrow_length_v'])
+    
+    
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
+                        position=parameters['v_fl_colorbar_position'], 
+                        size=parameters['v_fl_colorbar_size'], 
+                        label_pad=parameters['v_fl_colorbar_axis_label_offset'], 
+                        label=parameters['v_fl_colorbar_axis_label'], 
+                        label_angle=parameters['v_fl_colorbar_tick_label_angle'],
+                        font_size=parameters['v_fl_colorbar_font_size'],
+                        tick_label_offset=parameters['v_fl_colorbar_tick_label_offset'],
+                        tick_label_angle=parameters['v_fl_colorbar_tick_label_angle'],
+                        axis=v_fl_colorbar_axis,
+                        tick_length=parameters['v_fl_colorbar_tick_length'],
+                        line_width=parameters['v_fl_colorbar_tick_line_width'])
+    
+    
+    gr.plot_2d_axes(
+            ax, [0, 0], [parameters['L'], parameters['h']], 
+            tick_length=parameters['tick_length'], 
+            line_width=parameters['axis_line_width'], 
+            axis_label=parameters['axis_label'], 
+            axis_label_angle=parameters['axis_label_angle'], 
+            axis_label_offset=parameters['axis_label_offset'], 
+            tick_label_offset=parameters['tick_label_offset'], 
+            tick_label_format=['f', 'f'], \
+            font_size=parameters['axis_font_size'], 
+            plot_label_font_size=parameters['plot_label_font_size'], 
+            plot_label_offset=parameters['plot_label_offset'], 
+            axis_origin=parameters['axis_origin'], 
+            axis_bounds=axis_min_max, 
+            margin=parameters['axis_margin'],
+            n_minor_ticks=parameters['n_minor_ticks'],
+            minor_tick_length=parameters['minor_tick_length'])
+    
+    # =============
+    # w subplot
+    # =============   
+    
+    ax = fig.axes[3]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -408,7 +474,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============   
     
-    ax = fig.axes[3]  # Use the existing axis
+    ax = fig.axes[4]  # Use the existing axis
     
     ax.set_axis_off()
     ax.set_aspect('equal')
