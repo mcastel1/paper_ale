@@ -59,6 +59,7 @@ print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
 
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
@@ -69,7 +70,9 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
 
 
-
+       
+data_boundary_vertices_sub_mesh_1 = pd.read_csv(os.path.join(mesh_path, 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))    
+      
 
 
 fig = pplt.figure(
@@ -108,8 +111,7 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                            parameters['sigma_colorbar_size'][1]])
 
 
-           
-            
+      
 
 def plot_snapshot(fig, n_file, 
                   snapshot_label='',
