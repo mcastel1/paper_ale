@@ -388,17 +388,17 @@ def plot_snapshot(fig, n_file,
     
     
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], \
-                        position=parameters['v_fl_colorbar_position'], 
-                        size=parameters['v_fl_colorbar_size'], 
-                        label_pad=parameters['v_fl_colorbar_axis_label_offset'], 
-                        label=parameters['v_fl_colorbar_axis_label'], 
+                        position=parameters['v_colorbar_position'], 
+                        size=parameters['v_colorbar_size'], 
+                        label_pad=parameters['v_colorbar_axis_label_offset'], 
+                        label=parameters['v_colorbar_axis_label'], 
                         label_angle=parameters['v_colorbar_label_angle'],
-                        font_size=parameters['v_fl_colorbar_font_size'],
-                        tick_label_offset=parameters['v_fl_colorbar_tick_label_offset'],
-                        tick_label_angle=parameters['v_fl_colorbar_tick_label_angle'],
+                        font_size=parameters['v_colorbar_font_size'],
+                        tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                        tick_label_angle=parameters['v_colorbar_tick_label_angle'],
                         axis=v_colorbar_axis,
-                        tick_length=parameters['v_fl_colorbar_tick_length'],
-                        line_width=parameters['v_fl_colorbar_tick_line_width'])
+                        tick_length=parameters['v_colorbar_tick_length'],
+                        line_width=parameters['v_colorbar_tick_line_width'])
     
     
     gr.plot_2d_axes(
