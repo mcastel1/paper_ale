@@ -71,7 +71,7 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 
        
-data_boundary_vertices_sub_mesh_1 = pd.read_csv(os.path.join(mesh_path, 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))    
+data_ref_boundary_vertices_sub_mesh_1 = pd.read_csv(os.path.join(mesh_path, 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))    
       
 
 
@@ -192,6 +192,15 @@ def plot_snapshot(fig, n_file,
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
+
+    data_def_boundary_vertices_sub_mesh_1 = []
+    for index, row in data_ref_boundary_vertices_sub_mesh_1.iterrows():
+        data_def_boundary_vertices_sub_mesh_1.append(
+            np.add(
+                [row[':0'], row[':1']], 
+                [U_interp_x(row[':0'], row[':1']), U_interp_y(row[':0'], row[':1'])]
+                )
+            )
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
