@@ -21,7 +21,7 @@ import graphics.vector_plot as vec
 
 '''
 you can copy the data from abacus with 
-./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' ~/Documents/paper_ale/figures/figure_5 1 1000000 10 
+./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/paper_ale/figures/figure_5 1 1000000 10 
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -175,6 +175,9 @@ def plot_snapshot(fig, n_file,
     
     # data_omega contains de values of \partial_1 X^alpha
     data_omega  = lis.data_omega(data_nu, data_psi)
+    
+    # plot snapshot label
+    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
 
     if axis_min_max == None:
@@ -217,8 +220,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    # plot snapshot label
-    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1], snapshot_label, fontsize=parameters['plot_label_font_size'], ha='center', va='center')
+
 
         
     # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
@@ -271,7 +273,6 @@ def plot_snapshot(fig, n_file,
                     tick_label_offset=parameters['tick_label_offset'], 
                     tick_label_format=['f', 'f'], \
                     font_size=parameters['axis_font_size'], 
-                    plot_label_font_size=parameters['plot_label_font_size'], 
                     plot_label_offset=parameters['plot_label_offset'], 
                     axis_origin=parameters['axis_origin'], 
                     axis_bounds=axis_min_max, 
@@ -345,7 +346,6 @@ def plot_snapshot(fig, n_file,
                 tick_label_offset=parameters['tick_label_offset'], 
                 tick_label_format=['f', 'f'], \
                 font_size=parameters['axis_font_size'], 
-                plot_label_font_size=parameters['plot_label_font_size'], 
                 plot_label_offset=parameters['plot_label_offset'], 
                 axis_origin=parameters['axis_origin'], 
                 axis_bounds=axis_min_max, 
@@ -411,7 +411,6 @@ def plot_snapshot(fig, n_file,
             tick_label_offset=parameters['tick_label_offset'], 
             tick_label_format=['f', 'f'], \
             font_size=parameters['axis_font_size'], 
-            plot_label_font_size=parameters['plot_label_font_size'], 
             plot_label_offset=parameters['plot_label_offset'], 
             axis_origin=parameters['axis_origin'], 
             axis_bounds=axis_min_max, 
@@ -463,7 +462,6 @@ def plot_snapshot(fig, n_file,
                 tick_label_offset=parameters['tick_label_offset'], 
                 tick_label_format=['f', 'f'], \
                 font_size=parameters['axis_font_size'], 
-                plot_label_font_size=parameters['plot_label_font_size'], 
                 plot_label_offset=parameters['plot_label_offset'], 
                 axis_origin=parameters['axis_origin'], 
                 axis_bounds=axis_min_max, 
@@ -515,7 +513,6 @@ def plot_snapshot(fig, n_file,
                 tick_label_offset=parameters['tick_label_offset'], 
                 tick_label_format=['f', 'f'], \
                 font_size=parameters['axis_font_size'], 
-                plot_label_font_size=parameters['plot_label_font_size'], 
                 plot_label_offset=parameters['plot_label_offset'], 
                 axis_origin=parameters['axis_origin'], 
                 axis_bounds=axis_min_max, 
