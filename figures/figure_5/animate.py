@@ -30,7 +30,7 @@ for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['f
     X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
                                                                             [0, 0],
                                                                             [plot.parameters['L'], plot.parameters['h']],
-                                                                            plot.parameters['n_bins_v'])
+                                                                            plot.parameters['n_bins_v_fl'])
     
     #X, Y are the positions of the mesh nodes in the current configuration    
     X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
