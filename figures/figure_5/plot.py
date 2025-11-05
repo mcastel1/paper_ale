@@ -1,4 +1,5 @@
 import matplotlib
+from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
 import os
 
@@ -110,8 +111,36 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                            parameters['sigma_colorbar_size'][0],
                            parameters['sigma_colorbar_size'][1]])
 
+'''
+plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration   
+Input values: 
+    - 'ax': the axis where the polygon will be drawn
+    - 'axis_min_max': the bounds of the X values in the current configuration
+    - 'data_u_msh': the data for the mesh displacement field
+'''
+def draw_masking_area(ax, axis_min_max, data_u_msh):
+    
+    # 1)interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field 
+    
+    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u_msh)
 
-      
+    data_def_boundary_vertices_sub_mesh_1 = []
+    for index, row in data_ref_boundary_vertices_sub_mesh_1.iterrows():
+        data_def_boundary_vertices_sub_mesh_1.append(
+            np.add(
+                [row[':0'], row[':1']], 
+                [U_interp_x(row[':0'], row[':1']), U_interp_y(row[':0'], row[':1'])]
+                )
+            )
+    
+    #2) add to the sequence of lines above the top-left and top-right vertices of the region to cover
+    data_def_boundary_vertices_sub_mesh_1.append((0, axis_min_max[1][1]))
+    data_def_boundary_vertices_sub_mesh_1.append((axis_min_max[0][1], axis_min_max[1][1]))
+        
+    #3) plot the  polygon in order to hide the arrows
+    poly = Polygon(data_def_boundary_vertices_sub_mesh_1, fill=True, linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
+    ax.add_patch(poly)
+    # 
 
 def plot_snapshot(fig, n_file, 
                   snapshot_label='',
@@ -187,20 +216,17 @@ def plot_snapshot(fig, n_file,
     if norm_v_fl_min_max == None:
         norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
 
-    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u_msh)
 
 
     # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
-
-    data_def_boundary_vertices_sub_mesh_1 = []
-    for index, row in data_ref_boundary_vertices_sub_mesh_1.iterrows():
-        data_def_boundary_vertices_sub_mesh_1.append(
-            np.add(
-                [row[':0'], row[':1']], 
-                [U_interp_x(row[':0'], row[':1']), U_interp_y(row[':0'], row[':1'])]
-                )
-            )
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, 
+                    line_width=parameters['plot_line_width'], 
+                    color='black', 
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
+    
+    # plot the area that masks arrows which lie outside the mesh in the current configuration
+    draw_masking_area(ax, axis_min_max, data_u_msh)
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
@@ -249,7 +275,11 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
     
     # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, 
+                    line_width=parameters['plot_line_width'], 
+                    color='black', 
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
     
     X_sigma_fl, Y_sigma_fl, Z_sigma_fl, _, _, _ = gr.interpolate_surface(data_sigma_fl, [axis_min_max[0][0], axis_min_max[1][0]], [axis_min_max[0][1], axis_min_max[1][1]], parameters['n_bins_sigma_fl'])
 
@@ -257,6 +287,9 @@ def plot_snapshot(fig, n_file,
     if sigma_fl_min_max == None:
         sigma_fl_min, sigma_fl_max, _ = cal.min_max_scalar_field(Z_sigma_fl)
         sigma_fl_min_max = [sigma_fl_min, sigma_fl_max]
+        
+    # plot the area that masks arrows which lie outside the mesh in the current configuration
+    draw_masking_area(ax, axis_min_max, data_u_msh)
         
     contour_plot = ax.imshow(Z_sigma_fl.T, 
                     origin='lower', 
@@ -333,8 +366,11 @@ def plot_snapshot(fig, n_file,
                        line_width=parameters['w_line_width'])
     
     # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
-
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, 
+                    line_width=parameters['plot_line_width'], 
+                    color='black', 
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
     
     gr.plot_2d_axes(
                 ax, [0, 0], [parameters['L'], parameters['h']], 
@@ -382,8 +418,11 @@ def plot_snapshot(fig, n_file,
                        line_width=parameters['sigma_line_width'])
     
     # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_line_vertices, parameters['plot_line_width'], 'black', parameters['alpha_mesh'])
-
+    gr.plot_2d_mesh(ax, data_msh_line_vertices, 
+                    line_width=parameters['plot_line_width'], 
+                    color='black', 
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
     
     gr.plot_2d_axes(
                 ax, [0, 0], [parameters['L'], parameters['h']], 
