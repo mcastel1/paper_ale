@@ -10,6 +10,7 @@ import sys
 import warnings
 
 import calculus.utils as cal
+import constants.utils as const
 import list.column_labels as clab
 import graphics.utils as gr
 import graphics.vector_plot as vp
@@ -228,8 +229,6 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-
-
         
     # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
     X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
@@ -271,6 +270,8 @@ def plot_snapshot(fig, n_file,
                         
     
 
+    # fig.text(parameters['v_fl_panel_label_position'][0], parameters['v_fl_panel_label_position'][1], rf'${parameters["v_fl_panel_label"]}$', fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
+
     gr.plot_2d_axes(
                     ax, [0, 0], [parameters['L'], parameters['h']], 
                     tick_length=parameters['tick_length'], 
@@ -281,12 +282,14 @@ def plot_snapshot(fig, n_file,
                     tick_label_offset=parameters['tick_label_offset'], 
                     tick_label_format=['f', 'f'], \
                     font_size=parameters['axis_font_size'], 
-                    plot_label_offset=parameters['plot_label_offset'], 
+                    plot_label=parameters["v_fl_panel_label"],
+                    plot_label_offset=parameters['panel_label_offset'], 
                     axis_origin=parameters['axis_origin'], 
                     axis_bounds=axis_min_max, 
                     margin=parameters['axis_margin'],
                     n_minor_ticks=parameters['n_minor_ticks'],
-                    minor_tick_length=parameters['minor_tick_length'])
+                    minor_tick_length=parameters['minor_tick_length'],
+                    z_order=const.high_z_order)
     
     
     # =============
@@ -354,12 +357,14 @@ def plot_snapshot(fig, n_file,
                 tick_label_offset=parameters['tick_label_offset'], 
                 tick_label_format=['f', 'f'], \
                 font_size=parameters['axis_font_size'], 
-                plot_label_offset=parameters['plot_label_offset'], 
+                plot_label=parameters["sigma_fl_panel_label"],
+                plot_label_offset=parameters['panel_label_offset'],
                 axis_origin=parameters['axis_origin'], 
                 axis_bounds=axis_min_max, 
                 margin=parameters['axis_margin'],
                 n_minor_ticks=parameters['n_minor_ticks'],
-                minor_tick_length=parameters['minor_tick_length'])
+                minor_tick_length=parameters['minor_tick_length'],
+                z_order=const.high_z_order)
     
     
     # =============
@@ -419,12 +424,15 @@ def plot_snapshot(fig, n_file,
             tick_label_offset=parameters['tick_label_offset'], 
             tick_label_format=['f', 'f'], \
             font_size=parameters['axis_font_size'], 
-            plot_label_offset=parameters['plot_label_offset'], 
+            plot_label=parameters["v_panel_label"],
+            plot_label_offset=parameters['panel_label_offset'], 
             axis_origin=parameters['axis_origin'], 
             axis_bounds=axis_min_max, 
             margin=parameters['axis_margin'],
             n_minor_ticks=parameters['n_minor_ticks'],
-            minor_tick_length=parameters['minor_tick_length'])
+            minor_tick_length=parameters['minor_tick_length'],
+            z_order=const.high_z_order)
+
     
     # =============
     # w subplot
@@ -470,12 +478,14 @@ def plot_snapshot(fig, n_file,
                 tick_label_offset=parameters['tick_label_offset'], 
                 tick_label_format=['f', 'f'], \
                 font_size=parameters['axis_font_size'], 
-                plot_label_offset=parameters['plot_label_offset'], 
+                plot_label=parameters["w_panel_label"],
+                plot_label_offset=parameters['panel_label_offset'], 
                 axis_origin=parameters['axis_origin'], 
                 axis_bounds=axis_min_max, 
                 margin=parameters['axis_margin'],
                 n_minor_ticks=parameters['n_minor_ticks'],
-                minor_tick_length=parameters['minor_tick_length'])
+                minor_tick_length=parameters['minor_tick_length'],
+                z_order=const.high_z_order)
  
     # =============
     # sigma subplot
@@ -521,12 +531,14 @@ def plot_snapshot(fig, n_file,
                 tick_label_offset=parameters['tick_label_offset'], 
                 tick_label_format=['f', 'f'], \
                 font_size=parameters['axis_font_size'], 
-                plot_label_offset=parameters['plot_label_offset'], 
+                plot_label=parameters["sigma_panel_label"],
+                plot_label_offset=parameters['panel_label_offset'], 
                 axis_origin=parameters['axis_origin'], 
                 axis_bounds=axis_min_max, 
                 margin=parameters['axis_margin'],
                 n_minor_ticks=parameters['n_minor_ticks'],
-                minor_tick_length=parameters['minor_tick_length'])
+                minor_tick_length=parameters['minor_tick_length'],
+                z_order=const.high_z_order)
 
 
 
