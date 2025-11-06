@@ -157,8 +157,18 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
                                                     )
                                                  )
 
+    # bottom-left point
+    data_def_boundary_vertices_sub_mesh_1.append(np.subtract(
+                                                            data_def_boundary_vertices_sub_mesh_1[-1],
+                                                            (margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]), 0)
+                                                            )
+                                                )
+
     # top-left point
-    data_def_boundary_vertices_sub_mesh_1.append((0, axis_min_max[1][1] + margin[1] * (axis_min_max[1][1] - axis_min_max[1][0])))
+    data_def_boundary_vertices_sub_mesh_1.append((
+                                                    -margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]), 
+                                                    axis_min_max[1][1] + margin[1] * (axis_min_max[1][1] - axis_min_max[1][0])
+                                                ))
     # top-right point
     data_def_boundary_vertices_sub_mesh_1.append((
                                                     axis_min_max[0][1] + margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]), 
