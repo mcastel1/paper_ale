@@ -129,7 +129,7 @@ Input values:
         - 'margin': a margin, measured as relative to axis_min_max[1][1] - axis_mim_max[1][0] which is used to expand the region on top 
 '''
 def draw_masking_area(ax, axis_min_max, data_u_msh,
-                      margin=0):
+                      margin=[0]*2):
     
     # 1)interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field 
     
@@ -144,13 +144,36 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
                 )
             )
     
-    #2) add to the sequence of lines above the top-left and top-right and bottom-right vertices of the region to cover
+    #2) add to the sequence of lines above the top-left and top-right and bottom-right extremal points of the region to cover
+    # two points at the bottom-right corner
     data_def_boundary_vertices_sub_mesh_1.insert(0, (
-                                                    parameters['L'] + U_interp_x(parameters['L'], parameters['h']), 
-                                                    parameters['h'] + U_interp_y(parameters['L'], parameters['h']))
+                                                        parameters['L'] + U_interp_x(parameters['L'], parameters['h']), 
+                                                        parameters['h'] + U_interp_y(parameters['L'], parameters['h'])
+                                                    )
                                                  )
-    data_def_boundary_vertices_sub_mesh_1.append((0, axis_min_max[1][1] + margin * (axis_min_max[1][1] - axis_min_max[1][0])))
-    data_def_boundary_vertices_sub_mesh_1.append((axis_min_max[0][1], axis_min_max[1][1]  + margin * (axis_min_max[1][1] - axis_min_max[1][0])))
+    data_def_boundary_vertices_sub_mesh_1.insert(0, (
+                                                        parameters['L'] + U_interp_x(parameters['L'], parameters['h']) + margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]), 
+                                                        parameters['h'] + U_interp_y(parameters['L'], parameters['h'])
+                                                    )
+                                                 )
+
+    # bottom-left point
+    data_def_boundary_vertices_sub_mesh_1.append(np.subtract(
+                                                            data_def_boundary_vertices_sub_mesh_1[-1],
+                                                            (margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]), 0)
+                                                            )
+                                                )
+
+    # top-left point
+    data_def_boundary_vertices_sub_mesh_1.append((
+                                                    -margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]), 
+                                                    axis_min_max[1][1] + margin[1] * (axis_min_max[1][1] - axis_min_max[1][0])
+                                                ))
+    # top-right point
+    data_def_boundary_vertices_sub_mesh_1.append((
+                                                    axis_min_max[0][1] + margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]), 
+                                                    axis_min_max[1][1] + margin[1] * (axis_min_max[1][1] - axis_min_max[1][0])
+                                                ))
         
     #3) plot the  polygon in order to hide the arrows
     poly = Polygon(data_def_boundary_vertices_sub_mesh_1, fill=True, linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
