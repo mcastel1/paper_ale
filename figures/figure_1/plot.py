@@ -1,4 +1,5 @@
 import matplotlib
+from matplotlib.patches import Arc
 from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
 import os
@@ -85,6 +86,7 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                            parameters['v_colorbar_position'][1],
                            parameters['v_colorbar_size'][0],
                            parameters['v_colorbar_size'][1]])
+
 sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                parameters['sigma_colorbar_position'][1], 
                                parameters['sigma_colorbar_size'][0],
@@ -127,7 +129,7 @@ def plot_snapshot(fig, n_file,
                     line_width=parameters['mesh_line_width_v_plot'], 
                     color='black',
                     alpha=parameters['alpha_mesh'])
-
+    
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
                                                                                                     [0, 0],
                                                                                                     [parameters['L'], parameters['h']],
@@ -135,6 +137,7 @@ def plot_snapshot(fig, n_file,
                                                                                                     clab.label_x_column,
                                                                                                     clab.label_y_column,
                                                                                                     clab.label_v_column)
+    
 
     if norm_v_min_max == None:
         norm_v_min_max = [norm_v_min, norm_v_max]
@@ -143,6 +146,7 @@ def plot_snapshot(fig, n_file,
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], V_x, np.nan)
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'], parameters['b'], data_theta_omega.loc[n_file-1, 'theta'], V_y, np.nan)
 
+    
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0,
                              clip_on=False)
 
@@ -155,6 +159,52 @@ def plot_snapshot(fig, n_file,
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
                         line_width=parameters['v_colorbar_line_width'],
                         axis=v_colorbar_axis)
+    
+    
+    #plot the ellipse focus 
+    focal_point_position = [parameters['c'][0] -  np.sqrt(parameters['a']**2-parameters['b']**2), parameters['c'][1]]
+    theta_1 = min(0, data_theta_omega.loc[n_file-1, 'theta'])
+    theta_2 = max(0, data_theta_omega.loc[n_file-1, 'theta'])
+
+        
+    ax.scatter(focal_point_position[0], focal_point_position[1],  color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'])
+    
+    # plot the axes that define the angle theta
+    # 1) plot fixed axis
+    ax.plot(
+                [focal_point_position[0], focal_point_position[0] + parameters['ellipse_angle_axis_length']], 
+                [focal_point_position[1]] * 2, 
+                color=parameters['ellipse_angle_axis_color'], 
+                linewidth=parameters['mesh_line_width_v_plot'],
+                linestyle='--',
+                zorder=const.high_z_order
+            )
+    # 2) plot moving axis
+    delta =  np.dot(
+                        gr.R_2d(data_theta_omega.loc[n_file-1, 'theta']),
+                        [parameters['ellipse_angle_axis_length'], 0]
+                    )
+                
+    ax.plot(
+                [focal_point_position[0], focal_point_position[0] + delta[0]], 
+                [focal_point_position[1], focal_point_position[1] + delta[1]], 
+                color=parameters['ellipse_angle_axis_color'], 
+                linewidth=parameters['mesh_line_width_v_plot'],
+                linestyle='--',
+                zorder=const.high_z_order
+            )
+    
+    theta_arc = Arc(focal_point_position,
+        theta1=const.rad_to_deg * theta_1, 
+        theta2=const.rad_to_deg * theta_2, 
+        width=parameters['ellipse_angle_axis_length'], 
+        height=parameters['ellipse_angle_axis_length'],
+        color=parameters['ellipse_angle_axis_color'],
+        zorder=const.high_z_order
+        )
+    
+    ax.add_patch(theta_arc)
+
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],     
                           tick_length=parameters['tick_length'], 
@@ -262,10 +312,11 @@ def plot_snapshot(fig, n_file,
                           minor_tick_length=parameters['minor_tick_length'],
                           tick_label_angle=parameters['tick_label_angle'])
                           
-    
+     
 
 
-# plot_column(fig, parameters['n_snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['n_snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
+# plot_snapshot(fig, parameters['snapshot_to_plot'], 
+#             snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
 plot_snapshot(fig, snapshot_max, 
             snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
 
