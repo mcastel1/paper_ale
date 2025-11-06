@@ -176,7 +176,7 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
                                                 ))
         
     #3) plot the  polygon in order to hide the arrows
-    poly = Polygon(data_def_boundary_vertices_sub_mesh_1, fill=True, linewidth=parameters['plot_line_width'], edgecolor='red', facecolor='white', zorder=1)
+    poly = Polygon(data_def_boundary_vertices_sub_mesh_1, fill=True, linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
     ax.add_patch(poly)
     # 
 
@@ -565,8 +565,8 @@ def plot_snapshot(fig, n_file,
 
 
 
-plot_snapshot(fig, snapshot_min, 
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_min * parameters['T'] / number_of_frames, 's', 1))
+plot_snapshot(fig, snapshot_max, 
+              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
