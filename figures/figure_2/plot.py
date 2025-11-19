@@ -60,12 +60,6 @@ compression_density = 1000
 compression_quality = 60
 # CHANGE PARAMETERS HERE
 
-
-# labels of columns to read
-columns_line_vertices = [clab.label_start_x_column, clab.label_start_y_column, clab.label_start_z_column,
-                         clab.label_end_x_column,
-                         clab.label_end_y_column, clab.label_end_z_column]
-
 fig, ax = plt.subplots(figsize=(3, 2))
 
 # fig = pplt.figure(figsize=(8, 2), left=10, bottom=0, right=10, top=0, wspace=0, hspace=0)
@@ -74,7 +68,7 @@ fig, ax = plt.subplots(figsize=(3, 2))
 
 def plot_column(ax, n_file):
     n_snapshot = str(n_file)
-    data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
+    data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
     # data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
 
     ax.set_axis_off()
