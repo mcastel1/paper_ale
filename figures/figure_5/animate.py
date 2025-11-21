@@ -21,33 +21,50 @@ print(f'snapshot_path = {plot.snapshot_path}')
 # compute absolute minima and maxima across snapshots
 norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
 
-axis_min_max_abs = [[np.inf,-np.inf],[np.inf,-np.inf]]
+# axis_min_max_abs = [[np.inf,-np.inf],[np.inf,-np.inf]]
 
-# run through all snapshots
-for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride']):
+# # run through all snapshots
+# for n_snapshot in range(plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride']):
 
-    data_u_msh = pd.read_csv(os.path.join(plot.snapshot_nodal_values_path, 'u_n_' + str(n_snapshot) + '.csv'))
+#     data_u_msh = pd.read_csv(os.path.join(plot.snapshot_nodal_values_path, 'u_n_' + str(n_snapshot) + '.csv'))
 
-    X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
-                                                                            [0, 0],
-                                                                            [plot.parameters['L'], plot.parameters['h']],
-                                                                            plot.parameters['n_bins_v_fl'])
+#     X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
+#                                                                             [0, 0],
+#                                                                             [plot.parameters['L'], plot.parameters['h']],
+#                                                                             plot.parameters['n_bins_v_fl'])
     
-    #X, Y are the positions of the mesh nodes in the current configuration    
-    X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
-    Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
+#     #X, Y are the positions of the mesh nodes in the current configuration    
+#     X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
+#     Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
 
-    # compute the min-max of the snapshot
-    X_min_max = [lis.min_max(X),lis.min_max(Y)]
+#     # compute the min-max of the snapshot
+#     X_min_max = [lis.min_max(X),lis.min_max(Y)]
     
-    # update the absolute min and max according to the min-max of the snapshot 
-    for i in range(2):
-        if X_min_max[i][0] < axis_min_max_abs[i][0]:
-            axis_min_max_abs[i][0] = X_min_max[i][0]
+#     # update the absolute min and max according to the min-max of the snapshot 
+#     for i in range(2):
+#         if X_min_max[i][0] < axis_min_max_abs[i][0]:
+#             axis_min_max_abs[i][0] = X_min_max[i][0]
             
-        if X_min_max[i][1] > axis_min_max_abs[i][1]:
-            axis_min_max_abs[i][1] = X_min_max[i][1]
-# 
+#         if X_min_max[i][1] > axis_min_max_abs[i][1]:
+#             axis_min_max_abs[i][1] = X_min_max[i][1]
+# # 
+
+axis_min_max_abs = cal.X_curr_min_max_abs(
+                                            plot.snapshot_min, 
+                                            plot.snapshot_max, 
+                                            plot.parameters['frame_stride'],
+                                            plot.snapshot_nodal_values_path,
+                                            [[0, plot.parameters['L']], [0, plot.parameters['h']]],
+                                            plot.parameters['n_bins_v_fl']
+                                        )
+
+'''
+0 =
+[-2.220446049250313e-15, 1.0000000000000044]
+1 =
+[-4.263256414560601e-14, 0.6938291116765043]
+'''
+
 norm_v_fl_min_max_abs = cal.norm_min_max_files('def_v_fl_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
 w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
 
