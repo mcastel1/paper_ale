@@ -1,0 +1,16 @@
+\begin{enumerate}
+    \item Dereny study the steady state with arc-length gauge
+    \item In the dynamics, arc-length gauge does not work
+    \item We show how to use a generalized arc-length gauge and how to correctly incorporate it into the dynamics to obtain a proper dynamics
+    \item In this dynamics we implement the Crank-Nicolson method and prove it to be numerically stable
+    \item We couple the membrane dynamics to a bulk fluid. The membrane is a complex elastic body -> We proceed by steps:
+          \begin{enumerate}
+              \item Bulk fluid + rigid body
+              \item Elastic body with stable elastic model (stable under compression)
+              \item Bulk fluid + elastic body with stable elastic model
+              \item Bulk fluid + membrane
+                    \begin{itemize}
+                        \item Bulk fluid and membrane both described with Crank-Nicolson method -> we prove that the resulting dynamics is numerically stable
+                    \end{itemize}
+          \end{enumerate}
+\end{enumerate}
