@@ -1,10 +1,29 @@
-\documentclass[pre,onecolumn]{article}
+\documentclass[%
+ reprint,
+%superscriptaddress,
+%groupedaddress,
+%unsortedaddress,
+%runinaddress,
+%frontmatterverbose, 
+%preprint,
+%preprintnumbers,
+%nofootinbib,
+%nobibnotes,
+%bibnotes,
+ amsmath,amssymb,
+ aps,
+%pra,
+%prb,
+%rmp,
+%prstab,
+%prstper,
+%floatfix,
+]{revtex4-2}
 
 
-
-\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/packages}
-\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/acronyms}
-\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/glossary}
+% \input{/Users/michelecastellana/Documents/latex_modules/finite_elements/packages}
+% \input{/Users/michelecastellana/Documents/latex_modules/finite_elements/acronyms}
+% \input{/Users/michelecastellana/Documents/latex_modules/finite_elements/glossary}
 
 \input{/Users/michelecastellana/Documents/paper_ale/definitions}
 
@@ -12,30 +31,73 @@
 
 
 % Ensure glossaries work
-\makenoidxglossaries  
-
-\title{\mtitle}
+% \makenoidxglossaries  
 
 
-
-\author[1,2]{Michele Castellana\thanks{Corresponding author:  \href{michele.castellana@curie.fr}{michele.castellana@curie.fr}}}
-\affil[1]{\small{Institut Curie, PSL Research University, Paris, France}}
-\affil[2]{\small{CNRS UMR168, 11 rue Pierre et Marie Curie, 75005, Paris,France}}
+% \author[1,2]{Michele Castellana\thanks{Corresponding author:  \href{michele.castellana@curie.fr}{michele.castellana@curie.fr}}}
+% \affil[1]{\small{Institut Curie, PSL Research University, Paris, France}}
+% \affil[2]{\small{CNRS UMR168, 11 rue Pierre et Marie Curie, 75005, Paris,France}}
 
 
 \date{}
 
 
 \begin{document}
-\setlength\intextsep{0pt}
-\setlength{\parskip}{5pt plus 0pt minus 0pt}
 
+\preprint{APS/123-QED}
 
-\maketitle
+% \setlength\intextsep{0pt}
+% \setlength{\parskip}{5pt plus 0pt minus 0pt}
+
+\title{\mtitle}% Force line breaks with \\
+\thanks{A footnote to the article title}%
+
+\author{Ann Author}
+\altaffiliation[Also at ]{Physics Department, XYZ University.}%Lines break automatically or can be forced with \\
+\author{Second Author}%
+\email{Second.Author@institution.edu}
+\affiliation{%
+    Authors' institution and/or address\\
+    This line break forced with \textbackslash\textbackslash
+}%
+
+\collaboration{MUSO Collaboration}%\noaffiliation
+
+\author{Charlie Author}
+\homepage{http://www.Second.institution.edu/~Charlie.Author}
+\affiliation{
+    Second institution and/or address\\
+    This line break forced% with \\
+}%
+\affiliation{
+    Third institution, the second for Charlie Author
+}%
+\author{Delta Author}
+\affiliation{%
+    Authors' institution and/or address\\
+    This line break forced with \textbackslash\textbackslash
+}%
+
+\collaboration{CLEO Collaboration}%\noaffiliation
+
+\date{\today}% It is always \today, today,
+%  but any date may be explicitly specified
 
 \begin{abstract}
+    An article usually includes an abstract, a concise summary of the work
+    covered at length in the main body of the article.
+    \begin{description}
+        \item[Usage]
+              Secondary publications and information retrieval purposes.
+        \item[Structure]
+              You may use the \texttt{description} environment to structure your abstract;
+              use the optional argument of the \verb+\item+ command to give the category of each item.
+    \end{description}
 \end{abstract}
 
+%\keywords{Suggested keywords}%Use showkeys class option if keyword
+%display desired
+\maketitle
 
 
 
@@ -44,10 +106,8 @@
 % \end{appendices}
 
 
-% Force inclusion of all glossary entries
-\glsaddall
+% \glsaddall
 % \printnoidxglossary
-
 
 % \bibliographystyle{unsrt}
 \bibliographystyle{unsrt-abbr}
