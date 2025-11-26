@@ -1,0 +1,58 @@
+\documentclass[pre,onecolumn]{article}
+
+
+
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/packages}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/acronyms}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/glossary}
+
+\input{/Users/michelecastellana/Documents/paper_ale/definitions}
+
+% \externaldocument{supplementary}
+
+
+% Ensure glossaries work
+\makenoidxglossaries  
+
+\title{\mtitle}
+
+
+
+\author[1,2]{Michele Castellana\thanks{Corresponding author:  \href{michele.castellana@curie.fr}{michele.castellana@curie.fr}}}
+\affil[1]{\small{Institut Curie, PSL Research University, Paris, France}}
+\affil[2]{\small{CNRS UMR168, 11 rue Pierre et Marie Curie, 75005, Paris,France}}
+
+
+\date{}
+
+
+\begin{document}
+\setlength\intextsep{0pt}
+\setlength{\parskip}{5pt plus 0pt minus 0pt}
+
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+
+
+
+% \begin{appendices}
+%   \input{text_appendix}
+% \end{appendices}
+
+
+% Force inclusion of all glossary entries
+\glsaddall
+% \printnoidxglossary
+
+
+% \bibliographystyle{unsrt}
+\bibliographystyle{unsrt-abbr}
+\bibliography{/User/michelecastellana/Documents/my_bibliography/bibliography}
+
+
+\end{document}
+

@@ -1,0 +1,2 @@
+K,mu,rho,g,num_steps,T,code,problem,notes
+1e1,1e1,1.0,1e-1,100000,1000.0,/Users/michelecastellana/Documents/finite_elements/elasticity/rod/dynamics/solve.py,square_no_circle_a,"to reproduce this figure, replace ela.P with ela.N everywhere in /Users/michelecastellana/Documents/finite_elements/elasticity/rod/dynamics"
