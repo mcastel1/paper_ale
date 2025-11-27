@@ -197,10 +197,14 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     axis_label_offset=parameters['axis_label_offset'],
                     tick_label_offset=parameters['tick_label_offset'],
                     tick_label_format=parameters['tick_label_format'],
+                    tick_label_angle=parameters['tick_label_angle'],
                     font_size=parameters['font_size'],
                     line_width=parameters['axis_line_width'],
                     axis_origin=parameters['axis_origin'],
-                    tick_length=parameters['tick_length']
+                    tick_length=parameters['tick_length'],
+                    plot_label=parameters["v_plot_panel_label"],
+                    plot_label_offset=parameters['panel_label_position'],
+                    plot_label_font_size=parameters['panel_label_font_size']
                 )
     
     
@@ -286,16 +290,20 @@ def plot_snapshot(fig, n_file, snapshot_label):
     
     
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']], \
-                axis_label=parameters['axis_label'],
-                axis_label_angle=parameters['axis_label_angle'],
-                axis_label_offset=parameters['axis_label_offset'],
-                tick_label_offset=parameters['tick_label_offset'],
-                tick_label_format=parameters['tick_label_format'],
-                font_size=parameters['font_size'],
-                line_width=parameters['axis_line_width'],
-                axis_origin=parameters['axis_origin'],
-                tick_length=parameters['tick_length']
-            )
+                    axis_label=parameters['axis_label'],
+                    axis_label_angle=parameters['axis_label_angle'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    tick_label_offset=parameters['tick_label_offset'],
+                    tick_label_format=parameters['tick_label_format'],
+                    tick_label_angle=parameters['tick_label_angle'],
+                    font_size=parameters['font_size'],
+                    line_width=parameters['axis_line_width'],
+                    axis_origin=parameters['axis_origin'],
+                    tick_length=parameters['tick_length'],
+                    plot_label=parameters["sigma_plot_panel_label"],
+                    plot_label_offset=parameters['panel_label_position'],
+                    plot_label_font_size=parameters['panel_label_font_size']
+                )
 
     
 
