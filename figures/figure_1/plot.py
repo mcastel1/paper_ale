@@ -158,6 +158,7 @@ def plot_snapshot(fig, n_file,
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
                         line_width=parameters['v_colorbar_line_width'],
+                        custom_ticks=parameters['v_colorbar_custom_ticks'],
                         axis=v_colorbar_axis)
     
     
