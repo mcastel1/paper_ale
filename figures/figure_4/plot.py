@@ -70,6 +70,7 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('X_n_12_', snapshot_path)
 # number_of_frames = sys_utils.count_v_files('X_n_12_', pfig.snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1  # +1 because the frames start from 0
 
+snapshot_max_with_margin = snapshot_max - parameters['snapshot_max_margin']
 
 
 fig = pplt.figure(
@@ -303,8 +304,8 @@ def plot_snapshot(fig, n_file,
 
 
 plot_snapshot(fig, 
-              snapshot_max, 
-              rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1)
+              snapshot_max_with_margin, 
+              rf'$t = \,$' + io.time_to_string(snapshot_max_with_margin * parameters['T'] / number_of_frames, 's', parameters['snapshot_label_decimals'])
               )
 
 
