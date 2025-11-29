@@ -21,6 +21,12 @@ import list.utils as lis
 import system.paths as paths
 import system.utils as sys_utils
 
+'''
+Parameter meaning: 
+- solution_stride: the stride with which data were saved as during the solution of the finite-element problem
+- animation_stride: the stride with which frames will be read by animate.py to generate the animation
+'''
+
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 
@@ -146,9 +152,9 @@ def plot_snapshot(fig, n_file,
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
-                          parameters['b'], data_theta_omega.loc[int(n_file/parameters['frame_stride']-1), 'theta'], V_x, np.nan)
+                          parameters['b'], data_theta_omega.loc[int(n_file/parameters['solution_frame_stride']-1), 'theta'], V_x, np.nan)
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
-                          parameters['b'], data_theta_omega.loc[int(n_file/parameters['frame_stride']-1), 'theta'], V_y, np.nan)
+                          parameters['b'], data_theta_omega.loc[int(n_file/parameters['solution_frame_stride']-1), 'theta'], V_y, np.nan)
 
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
@@ -169,9 +175,9 @@ def plot_snapshot(fig, n_file,
     focal_point_position = [
         parameters['c'][0] - np.sqrt(parameters['a']**2-parameters['b']**2), parameters['c'][1]]
     theta_1 = min(0, data_theta_omega.loc[int(
-        n_file/parameters['frame_stride']-1), 'theta'])
+        n_file/parameters['solution_frame_stride']-1), 'theta'])
     theta_2 = max(0, data_theta_omega.loc[int(
-        n_file/parameters['frame_stride']-1), 'theta'])
+        n_file/parameters['solution_frame_stride']-1), 'theta'])
 
     ax.scatter(focal_point_position[0], focal_point_position[1],
                color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'])
@@ -190,7 +196,7 @@ def plot_snapshot(fig, n_file,
     # 2) plot moving axis
     delta = np.dot(
         gr.R_2d(data_theta_omega.loc[int(
-            n_file/parameters['frame_stride']-1), 'theta']),
+            n_file/parameters['solution_frame_stride']-1), 'theta']),
         [parameters['ellipse_angle_axis_length'], 0]
     )
 
