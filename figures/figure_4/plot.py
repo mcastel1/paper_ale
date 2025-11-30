@@ -1,5 +1,5 @@
 '''
-copy data for this plot with 
+copy data for this plot with
 
 ./copy_from_abacus.sh line_1/solution/snapshots/csv/  'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' ~/Documents/paper_ale/figures/figure_4 1 1000000 1000
 
@@ -168,6 +168,16 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+
+    data_u = []
+    for _, row in data_X.iterrows():
+        data_u.append(
+            np.subtract(
+                [row['f:0'], row['f:1']],
+                [row[':0'], 0]
+
+            )
+        )
 
     gr.plot_2d_axes(ax,
                     [X_min_max[0][0], X_min_max[1][0]],
