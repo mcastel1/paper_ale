@@ -89,9 +89,9 @@ fig = pplt.figure(
 
 
 # pre-create subplots and axes
-fig.add_subplot(2, 2, 1)
 fig.add_subplot(2, 2, 2)
 fig.add_subplot(2, 2, 3)
+fig.add_subplot(2, 2, 4)
 
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
