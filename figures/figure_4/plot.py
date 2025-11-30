@@ -151,7 +151,7 @@ def plot_snapshot(fig, n_file,
         w_min_max = cal.min_max_file(os.path.join(
             snapshot_path, 'w_n_' + str(n_file) + '.csv'))
 
-    X, t = gr.interpolate_curve(
+    X_curr, t = gr.interpolate_curve(
         data_X, X_min_max[0][0], X_min_max[0][1], parameters['n_bins_X'])
 
     # plot snapshot label
@@ -169,6 +169,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
+    # compute the vector field u and store it in U_x, U_y and its related coordinates X_u, Y_u in the current configuration
     U_x = []
     U_y = []
     X_u = []
@@ -180,6 +181,40 @@ def plot_snapshot(fig, n_file,
 
         U_x.append(row['f:0'] - row[':0'])
         U_y.append(row['f:1'] - 0)
+
+    # Convert to numpy arrays
+    X_u = np.array(X_u)
+    Y_u = np.array(Y_u)
+    U_x = np.array(U_x)
+    U_y = np.array(U_y)
+
+    # coordinates of the curve in the reference configuration
+    X_ref = np.array(list(zip(X_u, Y_u)))
+
+    # plot the vector field u
+    vp.plot_1d_vector_field(ax, [X_u, Y_u], [U_x, U_y],
+                            shaft_length=None,
+                            head_over_shaft_length=parameters['head_over_shaft_length'],
+                            head_length=parameters['u_arrow_head_length'],
+                            head_angle=parameters['head_angle'],
+                            line_width=parameters['u_arrow_line_width'],
+                            alpha=parameters['alpha'],
+                            color=parameters['u_arrow_color'],
+                            threshold_arrow_length=parameters['threshold_arrow_length'])
+
+    # plot X_curr
+    gr.plot_curve_grid(ax, X_curr,
+                       line_color='green',
+                       line_width=parameters['X_dummy_line_width'],
+                       alpha=parameters['alpha_X']
+                       )
+
+    # plot X_ref
+    gr.plot_curve_grid(ax, X_ref,
+                       line_color='red',
+                       line_width=parameters['X_dummy_line_width'],
+                       alpha=parameters['alpha_X']
+                       )
 
     gr.plot_2d_axes(ax,
                     [X_min_max[0][0], X_min_max[1][0]],
@@ -211,10 +246,10 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    # plot X and sigma
-    gr.plot_curve_grid(ax, X,
+    # plot X_curr
+    gr.plot_curve_grid(ax, X_curr,
                        line_color='black',
-                       line_width=parameters['X_line_width'],
+                       line_width=parameters['X_dummy_line_width'],
                        alpha=parameters['alpha_X']
                        )
 
@@ -226,7 +261,7 @@ def plot_snapshot(fig, n_file,
                             shaft_length=parameters['shaft_length'],
                             head_over_shaft_length=parameters['head_over_shaft_length'],
                             head_angle=parameters['head_angle'],
-                            line_width=parameters['arrow_line_width'],
+                            line_width=parameters['v_arrow_line_width'],
                             alpha=parameters['alpha'],
                             color='color_from_map',
                             threshold_arrow_length=parameters['threshold_arrow_length'])
@@ -288,8 +323,8 @@ def plot_snapshot(fig, n_file,
                                             tick_length=parameters['w_colorbar_tick_length'],
                                             axis=w_colorbar_axis)
 
-    # plot X and w
-    gr.plot_curve_grid(ax, X,
+    # plot X_curr and w
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_w,
                        line_color='black',
                        line_width=parameters['w_line_width']
@@ -339,7 +374,7 @@ def plot_snapshot(fig, n_file,
                                                 axis=sigma_colorbar_axis)
 
     # plot X and sigma
-    gr.plot_curve_grid(ax, X,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_sigma,
                        line_color='black',
                        line_width=parameters['sigma_line_width'])
@@ -368,7 +403,7 @@ def plot_snapshot(fig, n_file,
 plot_snapshot(fig,
               snapshot_max_with_margin,
               rf'$t = \,$' + io.time_to_string(snapshot_max_with_margin *
-                                               parameters['T'] / number_of_frames, 's', parameters['snapshot_label_decimals'])
+                                               parameters['T'] / number_of_frames, 'min_s', parameters['snapshot_label_decimals'])
               )
 
 
