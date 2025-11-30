@@ -169,15 +169,17 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    data_u = []
+    U_x = []
+    U_y = []
+    X_u = []
+    Y_u = []
     for _, row in data_X.iterrows():
-        data_u.append(
-            np.subtract(
-                [row['f:0'], row['f:1']],
-                [row[':0'], 0]
 
-            )
-        )
+        X_u.append(row[':0'])
+        Y_u.append(0)
+
+        U_x.append(row['f:0'] - row[':0'])
+        U_y.append(row['f:1'] - 0)
 
     gr.plot_2d_axes(ax,
                     [X_min_max[0][0], X_min_max[1][0]],
