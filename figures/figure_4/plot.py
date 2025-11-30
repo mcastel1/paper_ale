@@ -89,6 +89,7 @@ fig = pplt.figure(
 
 
 # pre-create subplots and axes
+fig.add_subplot(2, 2, 1)
 fig.add_subplot(2, 2, 2)
 fig.add_subplot(2, 2, 3)
 fig.add_subplot(2, 2, 4)
@@ -159,10 +160,40 @@ def plot_snapshot(fig, n_file,
                  snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
     # =============
-    # v subplot
+    # u subplot
     # =============
 
     ax = fig.axes[0]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+
+    gr.plot_2d_axes(ax,
+                    [X_min_max[0][0], X_min_max[1][0]],
+                    [X_min_max[0][1] - X_min_max[0][0],
+                     X_min_max[1][1] - X_min_max[1][0]],
+                    axis_origin=parameters['axis_origin'],
+                    axis_label=parameters['axis_label'],
+                    axis_label_angle=parameters['axis_label_angle'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    tick_label_offset=parameters['tick_label_offset'],
+                    tick_label_format=parameters['tick_label_format'],
+                    font_size=parameters['font_size'],
+                    line_width=parameters['axis_line_width'],
+                    tick_length=parameters['tick_length'],
+                    plot_label=parameters['u_plot_label'],
+                    plot_label_offset=parameters['plot_label_offset'],
+                    plot_label_font_size=parameters['plot_label_font_size'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length']
+                    )
+
+    # =============
+    # v subplot
+    # =============
+
+    ax = fig.axes[1]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -226,7 +257,7 @@ def plot_snapshot(fig, n_file,
     # w subplot
     # =============
 
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[2]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -276,7 +307,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============
 
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[3]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
