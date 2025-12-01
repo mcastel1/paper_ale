@@ -200,20 +200,21 @@ def plot_snapshot(fig, n_file,
                             line_width=parameters['u_arrow_line_width'],
                             alpha=parameters['alpha'],
                             color=parameters['u_arrow_color'],
-                            threshold_arrow_length=parameters['threshold_arrow_length'])
+                            threshold_arrow_length=parameters['threshold_arrow_length'],
+                            z_order=1)
 
     # plot X_curr
     gr.plot_curve_grid(ax, X_curr,
                        line_color='green',
-                       line_width=parameters['X_dummy_line_width'],
-                       alpha=parameters['alpha_X']
+                       line_width=parameters['X_curr_line_width'],
+                       z_order=0
                        )
 
     # plot X_ref
     gr.plot_curve_grid(ax, X_ref,
                        line_color='red',
-                       line_width=parameters['X_dummy_line_width'],
-                       alpha=parameters['alpha_X']
+                       line_width=parameters['X_ref_line_width'],
+                       z_order=0
                        )
 
     gr.plot_2d_axes(ax,
