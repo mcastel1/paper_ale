@@ -51,7 +51,7 @@ def update_animation(n):
     start_time = time.time()
 
     # clear only the major axes of the plot. The colorbar axes need not be cleaned because make_colorbar already clears them
-    for ax in plot.fig.axes[:3]:
+    for ax in plot.fig.axes[:7]:
         ax.clear()
 
     # Clear text objects (the snapshot label accumulates)
@@ -68,7 +68,7 @@ def update_animation(n):
                        # sigma_min_max=sigma_min_max_abs,
                        snapshot_label=rf'$t = \,$' +
                        io.time_to_string(
-                           n * plot.parameters['T'] / plot.number_of_frames, 's', 1)
+                           n * plot.parameters['T'] / plot.number_of_frames, 'min_s', 0)
                        )
 
     # Stop timer

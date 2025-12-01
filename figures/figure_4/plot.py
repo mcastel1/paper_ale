@@ -1,5 +1,5 @@
 '''
-copy data for this plot with 
+copy data for this plot with
 
 ./copy_from_abacus.sh line_1/solution/snapshots/csv/  'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' ~/Documents/paper_ale/figures/figure_4 1 1000000 1000
 
@@ -92,6 +92,7 @@ fig = pplt.figure(
 fig.add_subplot(2, 2, 1)
 fig.add_subplot(2, 2, 2)
 fig.add_subplot(2, 2, 3)
+fig.add_subplot(2, 2, 4)
 
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
@@ -150,7 +151,7 @@ def plot_snapshot(fig, n_file,
         w_min_max = cal.min_max_file(os.path.join(
             snapshot_path, 'w_n_' + str(n_file) + '.csv'))
 
-    X, t = gr.interpolate_curve(
+    X_curr, t = gr.interpolate_curve(
         data_X, X_min_max[0][0], X_min_max[0][1], parameters['n_bins_X'])
 
     # plot snapshot label
@@ -159,7 +160,7 @@ def plot_snapshot(fig, n_file,
                  snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
     # =============
-    # v subplot
+    # u subplot
     # =============
 
     ax = fig.axes[0]  # Use the existing axis
@@ -168,10 +169,99 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
-    # plot X and sigma
-    gr.plot_curve_grid(ax, X,
+    # compute the vector field u and store it in U_x, U_y and its related coordinates X_u, Y_u in the current configuration
+    U_x = []
+    U_y = []
+    X_u = []
+    Y_u = []
+    for _, row in data_X.iterrows():
+
+        X_u.append(row[':0'])
+        Y_u.append(0)
+
+        U_x.append(row['f:0'] - row[':0'])
+        U_y.append(row['f:1'] - 0)
+
+    # Convert to numpy arrays
+    X_u = np.array(X_u)
+    Y_u = np.array(Y_u)
+    U_x = np.array(U_x)
+    U_y = np.array(U_y)
+
+    # coordinates of the curve in the reference configuration
+    X_ref = np.array(list(zip(X_u, Y_u)))
+
+    # plot the vector field u
+    vp.plot_1d_vector_field(ax, [X_u, Y_u], [U_x, U_y],
+                            shaft_length=None,
+                            head_over_shaft_length=parameters['head_over_shaft_length'],
+                            head_length=parameters['u_arrow_head_length'],
+                            head_angle=parameters['head_angle'],
+                            line_width=parameters['u_arrow_line_width'],
+                            alpha=parameters['alpha'],
+                            color=parameters['u_arrow_color'],
+                            threshold_arrow_length=parameters['threshold_arrow_length'],
+                            legend='$\int$',
+                            legend_font_size=8,
+                            legend_position=[0.5, 0.5],
+                            z_order=1)
+
+    # plot X_curr
+    gr.plot_curve_grid(ax, X_curr,
+                       line_color='green',
+                       legend='$\\text{Current}$',
+                       legend_position=[-0.55, 0.9],
+                       legend_inner_location='upper left',
+                       line_width=parameters['X_curr_line_width'],
+                       z_order=0
+                       )
+
+    # plot X_ref
+    gr.plot_curve_grid(ax, X_ref,
+                       line_color='red',
+                       legend='$\\text{Reference}$',
+                       legend_position=[-0.55, 1],
+                       legend_inner_location='upper left',
+                       line_width=parameters['X_ref_line_width'],
+                       z_order=0
+                       )
+
+    gr.plot_2d_axes(ax,
+                    [X_min_max[0][0], X_min_max[1][0]],
+                    [X_min_max[0][1] - X_min_max[0][0],
+                     X_min_max[1][1] - X_min_max[1][0]],
+                    axis_origin=parameters['axis_origin'],
+                    axis_label=parameters['axis_label'],
+                    axis_label_angle=parameters['axis_label_angle'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    tick_label_offset=parameters['tick_label_offset'],
+                    tick_label_format=parameters['tick_label_format'],
+                    font_size=parameters['font_size'],
+                    line_width=parameters['axis_line_width'],
+                    tick_length=parameters['tick_length'],
+                    plot_label=parameters['u_plot_label'],
+                    plot_label_offset=parameters['plot_label_offset'],
+                    plot_label_font_size=parameters['plot_label_font_size'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length']
+                    )
+
+
+'''
+    # =============
+    # v subplot
+    # =============
+
+    ax = fig.axes[1]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+
+    # plot X_curr
+    gr.plot_curve_grid(ax, X_curr,
                        line_color='black',
-                       line_width=parameters['X_line_width'],
+                       line_width=parameters['X_dummy_line_width'],
                        alpha=parameters['alpha_X']
                        )
 
@@ -183,7 +273,7 @@ def plot_snapshot(fig, n_file,
                             shaft_length=parameters['shaft_length'],
                             head_over_shaft_length=parameters['head_over_shaft_length'],
                             head_angle=parameters['head_angle'],
-                            line_width=parameters['arrow_line_width'],
+                            line_width=parameters['v_arrow_line_width'],
                             alpha=parameters['alpha'],
                             color='color_from_map',
                             threshold_arrow_length=parameters['threshold_arrow_length'])
@@ -226,7 +316,7 @@ def plot_snapshot(fig, n_file,
     # w subplot
     # =============
 
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[2]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -235,7 +325,7 @@ def plot_snapshot(fig, n_file,
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w, parameters['w_colorbar_position'], parameters['w_colorbar_size'],
                                             min_max=w_min_max,
                                             tick_label_angle=parameters['w_colorbar_tick_label_angle'],
-                                            label=r'$w \, [\newt/\met]$',
+                                            label=r'$w \, [\met/\sec]$',
                                             font_size=parameters['color_map_font_size'],
                                             label_offset=parameters["colorbar_label_offset"],
                                             tick_label_offset=parameters['w_colorbar_tick_label_offset'],
@@ -245,8 +335,8 @@ def plot_snapshot(fig, n_file,
                                             tick_length=parameters['w_colorbar_tick_length'],
                                             axis=w_colorbar_axis)
 
-    # plot X and w
-    gr.plot_curve_grid(ax, X,
+    # plot X_curr and w
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_w,
                        line_color='black',
                        line_width=parameters['w_line_width']
@@ -276,7 +366,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============
 
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[3]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -296,7 +386,7 @@ def plot_snapshot(fig, n_file,
                                                 axis=sigma_colorbar_axis)
 
     # plot X and sigma
-    gr.plot_curve_grid(ax, X,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_sigma,
                        line_color='black',
                        line_width=parameters['sigma_line_width'])
@@ -320,12 +410,12 @@ def plot_snapshot(fig, n_file,
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-
+'''
 
 plot_snapshot(fig,
               snapshot_max_with_margin,
               rf'$t = \,$' + io.time_to_string(snapshot_max_with_margin *
-                                               parameters['T'] / number_of_frames, 's', parameters['snapshot_label_decimals'])
+                                               parameters['T'] / number_of_frames, 'min_s', parameters['snapshot_label_decimals'])
               )
 
 
