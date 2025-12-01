@@ -68,7 +68,7 @@ def update_animation(n):
                        # sigma_min_max=sigma_min_max_abs,
                        snapshot_label=rf'$t = \,$' +
                        io.time_to_string(
-                           n * plot.parameters['T'] / plot.number_of_frames, 's', 1)
+                           n * plot.parameters['T'] / plot.number_of_frames, 'min_s', 1)
                        )
 
     # Stop timer
