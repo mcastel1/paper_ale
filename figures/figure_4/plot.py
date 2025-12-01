@@ -194,16 +194,18 @@ def plot_snapshot(fig, n_file,
     # plot the vector field u
     vp.plot_1d_vector_field(ax, [X_u, Y_u], [U_x, U_y],
                             shaft_length=None,
-                            head_over_shaft_length=parameters['head_over_shaft_length'],
                             head_length=parameters['u_arrow_head_length'],
                             head_angle=parameters['head_angle'],
                             line_width=parameters['u_arrow_line_width'],
                             alpha=parameters['alpha'],
                             color=parameters['u_arrow_color'],
                             threshold_arrow_length=parameters['threshold_arrow_length'],
-                            legend='$\int$',
+                            legend='$\\vec{U}$',
                             legend_font_size=8,
-                            legend_position=[0.5, 0.5],
+                            legend_arrow_length=0.15,
+                            legend_text_arrow_space=0.2,
+                            legend_head_over_shaft_length=parameters['legend_head_over_shaft_length'],
+                            legend_position=[-0.92, 0.65],
                             z_order=1)
 
     # plot X_curr
@@ -246,8 +248,6 @@ def plot_snapshot(fig, n_file,
                     minor_tick_length=parameters['minor_tick_length']
                     )
 
-
-'''
     # =============
     # v subplot
     # =============
@@ -271,7 +271,7 @@ def plot_snapshot(fig, n_file,
 
     vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y],
                             shaft_length=parameters['shaft_length'],
-                            head_over_shaft_length=parameters['head_over_shaft_length'],
+                            head_over_shaft_length=parameters['v_head_over_shaft_length'],
                             head_angle=parameters['head_angle'],
                             line_width=parameters['v_arrow_line_width'],
                             alpha=parameters['alpha'],
@@ -410,7 +410,7 @@ def plot_snapshot(fig, n_file,
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-'''
+
 
 plot_snapshot(fig,
               snapshot_max_with_margin,
