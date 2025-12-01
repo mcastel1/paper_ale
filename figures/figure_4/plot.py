@@ -206,6 +206,9 @@ def plot_snapshot(fig, n_file,
     # plot X_curr
     gr.plot_curve_grid(ax, X_curr,
                        line_color='green',
+                       legend='$\\text{Current}$',
+                       legend_position=[-0.55, 0.9],
+                       legend_inner_location='upper left',
                        line_width=parameters['X_curr_line_width'],
                        z_order=0
                        )
@@ -213,6 +216,9 @@ def plot_snapshot(fig, n_file,
     # plot X_ref
     gr.plot_curve_grid(ax, X_ref,
                        line_color='red',
+                       legend='$\\text{Reference}$',
+                       legend_position=[-0.55, 1],
+                       legend_inner_location='upper left',
                        line_width=parameters['X_ref_line_width'],
                        z_order=0
                        )
@@ -314,7 +320,7 @@ def plot_snapshot(fig, n_file,
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w, parameters['w_colorbar_position'], parameters['w_colorbar_size'],
                                             min_max=w_min_max,
                                             tick_label_angle=parameters['w_colorbar_tick_label_angle'],
-                                            label=r'$w \, [\newt/\met]$',
+                                            label=r'$w \, [\met/\sec]$',
                                             font_size=parameters['color_map_font_size'],
                                             label_offset=parameters["colorbar_label_offset"],
                                             tick_label_offset=parameters['w_colorbar_tick_label_offset'],
