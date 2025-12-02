@@ -248,6 +248,8 @@ def plot_snapshot(fig, n_file,
                     minor_tick_length=parameters['minor_tick_length']
                     )
 
+
+'''
     # =============
     # v subplot
     # =============
@@ -410,7 +412,7 @@ def plot_snapshot(fig, n_file,
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-
+'''
 
 plot_snapshot(fig,
               snapshot_max_with_margin,
