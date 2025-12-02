@@ -205,7 +205,7 @@ def plot_snapshot(fig, n_file,
                             legend_arrow_length=0.15,
                             legend_text_arrow_space=0.2,
                             legend_head_over_shaft_length=parameters['legend_head_over_shaft_length'],
-                            legend_position=[-0.92, 0.65],
+                            legend_position=[0.5, 0.5],
                             z_order=1)
 
     # plot X_curr
