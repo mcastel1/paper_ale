@@ -90,7 +90,7 @@ fig = pplt.figure(
 
 # pre-create subplots and axes
 fig.add_subplot(2, 2, 1)
-'''
+
 fig.add_subplot(2, 2, 2)
 fig.add_subplot(2, 2, 3)
 fig.add_subplot(2, 2, 4)
@@ -110,8 +110,6 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                     parameters['sigma_colorbar_position'][1],
                                     parameters['sigma_colorbar_size'][0],
                                     parameters['sigma_colorbar_size'][1]])
-
-'''
 
 
 def plot_snapshot(fig, n_file,
@@ -257,8 +255,6 @@ def plot_snapshot(fig, n_file,
                     minor_tick_length=parameters['minor_tick_length']
                     )
 
-
-'''
     # =============
     # v subplot
     # =============
@@ -267,7 +263,14 @@ def plot_snapshot(fig, n_file,
 
     ax.set_axis_off()
     ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    ax.grid(False)
+    # setting the axes limits here is necessary because some methods will be called before plot_2d_axes, and these methods will need the axes limits to be properly set to place, for example, text labels
+    gr.set_2d_axes_limits(ax,
+                          [X_min_max[0][0], X_min_max[1][0]],
+                          [X_min_max[0][1] - X_min_max[0][0],
+                              X_min_max[1][1] - X_min_max[1][0]],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     # plot X_curr
     gr.plot_curve_grid(ax, X_curr,
@@ -332,6 +335,13 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    # setting the axes limits here is necessary because some methods will be called before plot_2d_axes, and these methods will need the axes limits to be properly set to place, for example, text labels
+    gr.set_2d_axes_limits(ax,
+                          [X_min_max[0][0], X_min_max[1][0]],
+                          [X_min_max[0][1] - X_min_max[0][0],
+                              X_min_max[1][1] - X_min_max[1][0]],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w, parameters['w_colorbar_position'], parameters['w_colorbar_size'],
                                             min_max=w_min_max,
@@ -382,6 +392,13 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    # setting the axes limits here is necessary because some methods will be called before plot_2d_axes, and these methods will need the axes limits to be properly set to place, for example, text labels
+    gr.set_2d_axes_limits(ax,
+                          [X_min_max[0][0], X_min_max[1][0]],
+                          [X_min_max[0][1] - X_min_max[0][0],
+                              X_min_max[1][1] - X_min_max[1][0]],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma, parameters['sigma_colorbar_position'], parameters['sigma_colorbar_size'],
                                                 min_max=sigma_min_max,
@@ -421,7 +438,7 @@ def plot_snapshot(fig, n_file,
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-'''
+
 
 plot_snapshot(fig,
               snapshot_max_with_margin,
