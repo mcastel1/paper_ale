@@ -423,5 +423,3 @@ plot_snapshot(fig,
 plt.savefig(figure_path + '_large.pdf')
 os.system(
     f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf')
-
-# pplt.show()
