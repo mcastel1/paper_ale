@@ -90,6 +90,7 @@ fig = pplt.figure(
 
 # pre-create subplots and axes
 fig.add_subplot(2, 2, 1)
+'''
 fig.add_subplot(2, 2, 2)
 fig.add_subplot(2, 2, 3)
 fig.add_subplot(2, 2, 4)
@@ -109,6 +110,8 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                     parameters['sigma_colorbar_position'][1],
                                     parameters['sigma_colorbar_size'][0],
                                     parameters['sigma_colorbar_size'][1]])
+
+'''
 
 
 def plot_snapshot(fig, n_file,
