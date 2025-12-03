@@ -1,2 +1,2 @@
-rho_fluid,mu_fluid,v_l,sigma_r,T,num_steps,exponent,rho_el,K_elastic,mu_elastic,code,problem
-1.0,0.001,1.0,0,400.0,500000,3,1e3,1e1,1e1,/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/solve.py,square_ellipse_circle
+rho_fluid,mu_fluid,v_l,sigma_r,T,num_steps,exponent,rho_el,K_elastic,mu_elastic,print_out_stride,code,problem
+1.0,0.001,1.0,0,400.0,500000,3,1e3,1e1,1e1,1,/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/solve.py,square_ellipse_circle
