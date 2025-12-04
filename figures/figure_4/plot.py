@@ -42,7 +42,6 @@ pplt.rc['grid'] = False  # disables default gridlines
 plt.rcParams.update({
     "text.usetex": True,
     "text.latex.preamble": (
-        r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
@@ -218,11 +217,11 @@ def plot_snapshot(fig, n_file,
                             color=parameters['u_arrow_color'],
                             threshold_arrow_length=parameters['threshold_arrow_length'],
                             legend='$\\vec{U}$',
-                            legend_font_size=8,
-                            legend_arrow_length=0.15,
-                            legend_text_arrow_space=0.2,
+                            legend_font_size=parameters['legend_font_size'],
+                            legend_arrow_length=parameters['legend_arrow_length'],
+                            legend_text_arrow_space=parameters['legend_text_arrow_space'],
                             legend_head_over_shaft_length=parameters['legend_head_over_shaft_length'],
-                            legend_position=[-0.525, 0.71],
+                            legend_position=parameters['legend_position'],
                             z_order=1)
 
     # plot X_curr
@@ -282,14 +281,16 @@ def plot_snapshot(fig, n_file,
                           axis_origin=parameters['axis_origin']
                           )
 
+    #construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted  
+    data_nu_minus_1 = data_nu.copy()
+    data_nu_minus_1['f'] = data_nu['f'] - 1
 
-    
 
-    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu, 
+    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu_minus_1, 
                                              size=parameters['colorbar_size'],
-                                             min_max=nu_min_max,
+                                             min_max=np.subtract(nu_min_max, [1]*2),
                                              tick_label_angle=parameters['nu_colorbar_tick_label_angle'],
-                                             label=r'$\nu$',
+                                             label=r'$\nu-1$',
                                              font_size=parameters['color_map_font_size'],
                                              label_offset=parameters["colorbar_label_offset"],
                                              tick_label_offset=parameters['nu_colorbar_tick_label_offset'],
