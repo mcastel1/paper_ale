@@ -126,6 +126,7 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
 def plot_snapshot(fig, n_file,
                   snapshot_label='',
                   X_min_max=None,
+                  nu_min_max=None,
                   norm_v_min_max=None,
                   sigma_min_max=None,
                   w_min_max=None):
@@ -153,6 +154,9 @@ def plot_snapshot(fig, n_file,
             cal.min_max_file(os.path.join(
                 snapshot_path, 'X_n_12_' + str(n_file) + '.csv'), column_name='f:1')
         ]
+    if nu_min_max == None:
+        nu_min_max = cal.min_max_file(os.path.join(
+            snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
     if norm_v_min_max == None:
         norm_v_min_max = cal.norm_min_max_file(os.path.join(
             snapshot_path, 'v_n_' + str(n_file) + '.csv'))
@@ -262,6 +266,63 @@ def plot_snapshot(fig, n_file,
                     plot_label=parameters['u_plot_label'],
                     plot_label_offset=parameters['plot_label_offset'],
                     plot_label_font_size=parameters['plot_label_font_size'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length']
+                    )
+
+    # =============
+    # nu subplot
+    # =============
+
+    ax = fig.axes[1]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    # setting the axes limits here is necessary because some methods will be called before plot_2d_axes, and these methods will need the axes limits to be properly set to place, for example, text labels
+    gr.set_2d_axes_limits(ax,
+                          [X_min_max[0][0], X_min_max[1][0]],
+                          [X_min_max[0][1] - X_min_max[0][0],
+                              X_min_max[1][1] - X_min_max[1][0]],
+                          axis_origin=parameters['axis_origin']
+                          )
+
+    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu, parameters['nu_colorbar_position'], parameters['nu_colorbar_size'],
+                                             min_max=nu_min_max,
+                                             tick_label_angle=parameters['nu_colorbar_tick_label_angle'],
+                                             label=r'$w \, [\met/\sec]$',
+                                             font_size=parameters['color_map_font_size'],
+                                             label_offset=parameters["colorbar_label_offset"],
+                                             tick_label_offset=parameters['nu_colorbar_tick_label_offset'],
+                                             tick_label_format=parameters['nu_colorbar_tick_label_format'],
+                                             label_angle=parameters['nu_colorbar_label_angle'],
+                                             line_width=parameters['colorbar_tick_line_width'],
+                                             tick_length=parameters['nu_colorbar_tick_length'],
+                                             axis=nu_colorbar_axis)
+
+    # plot X_curr and w
+    gr.plot_curve_grid(ax, X_curr,
+                       color_map=color_map_nu,
+                       line_color='black',
+                       line_width=parameters['w_line_width']
+                       )
+
+    gr.plot_2d_axes(ax,
+                    [X_min_max[0][0], X_min_max[1][0]],
+                    [X_min_max[0][1] - X_min_max[0][0],
+                        X_min_max[1][1] - X_min_max[1][0]],
+                    axis_origin=parameters['axis_origin'],
+                    axis_label=parameters['axis_label'],
+                    axis_label_angle=parameters['axis_label_angle'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    tick_label_offset=parameters['tick_label_offset'],
+                    tick_label_format=parameters['tick_label_format'],
+                    font_size=parameters['font_size'],
+                    plot_label=parameters['w_plot_label'],
+                    plot_label_offset=parameters['plot_label_offset'],
+                    plot_label_font_size=parameters['plot_label_font_size'],
+                    line_width=parameters['axis_line_width'],
+                    tick_length=parameters['tick_length'],
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
