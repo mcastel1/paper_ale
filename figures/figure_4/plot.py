@@ -89,11 +89,22 @@ fig = pplt.figure(
 
 
 # pre-create subplots and axes
-fig.add_subplot(2, 2, 1)
+fig.add_subplot(3, 2, 1)
+fig.add_subplot(3, 2, 2)
+fig.add_subplot(3, 2, 3)
+fig.add_subplot(3, 2, 4)
+fig.add_subplot(3, 2, 5)
+fig.add_subplot(3, 2, 6)
 
-fig.add_subplot(2, 2, 2)
-fig.add_subplot(2, 2, 3)
-fig.add_subplot(2, 2, 4)
+nu_colorbar_axis = fig.add_axes([parameters['nu_colorbar_position'][0],
+                                parameters['nu_colorbar_position'][1],
+                                parameters['nu_colorbar_size'][0],
+                                parameters['nu_colorbar_size'][1]])
+
+psi_colorbar_axis = fig.add_axes([parameters['psi_colorbar_position'][0],
+                                  parameters['psi_colorbar_position'][1],
+                                  parameters['psi_colorbar_size'][0],
+                                  parameters['psi_colorbar_size'][1]])
 
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
@@ -259,7 +270,7 @@ def plot_snapshot(fig, n_file,
     # v subplot
     # =============
 
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[3]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -330,7 +341,7 @@ def plot_snapshot(fig, n_file,
     # w subplot
     # =============
 
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[4]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -387,7 +398,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============
 
-    ax = fig.axes[3]  # Use the existing axis
+    ax = fig.axes[5]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
