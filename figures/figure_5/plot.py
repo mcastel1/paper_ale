@@ -197,6 +197,8 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
 def plot_snapshot(fig, n_file,
                   snapshot_label='',
                   axis_min_max=None,
+                  nu_min_max=None,
+                  psi_min_max=None,
                   norm_v_fl_min_max=None,
                   sigma_fl_min_max=None,
                   norm_v_min_max=None,
@@ -256,6 +258,22 @@ def plot_snapshot(fig, n_file,
         axis_min_max = [lis.min_max(X), lis.min_max(Y)]
         #
 
+    if nu_min_max == None:
+        nu_min_max = cal.min_max_file(os.path.join(
+            snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
+    if psi_min_max == None:
+        psi_min_max = cal.min_max_file(os.path.join(
+            snapshot_path, 'psi_n_12_' + str(n_file) + '.csv'))
+    if norm_v_min_max == None:
+        norm_v_min_max = cal.norm_min_max_file(os.path.join(
+            snapshot_path, 'v_n_' + str(n_file) + '.csv'))
+    if sigma_min_max == None:
+        sigma_min_max = cal.min_max_file(os.path.join(
+            snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
+    if w_min_max == None:
+        w_min_max = cal.min_max_file(os.path.join(
+            snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+
     X_t, t = gr.interpolate_curve(
         data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
@@ -277,6 +295,10 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu,
                                              min_max=nu_min_max,
@@ -313,7 +335,7 @@ def plot_snapshot(fig, n_file,
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
-        plot_label=parameters["w_panel_label"],
+        plot_label=parameters["nu_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
         axis_bounds=axis_min_max,
@@ -333,6 +355,10 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi,
                                               min_max=psi_min_max,
@@ -369,7 +395,7 @@ def plot_snapshot(fig, n_file,
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
-        plot_label=parameters["w_panel_label"],
+        plot_label=parameters["psi_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
         axis_bounds=axis_min_max,
@@ -384,11 +410,15 @@ def plot_snapshot(fig, n_file,
     # v_fl subplot
     # =============
 
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[2]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
     X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
@@ -450,11 +480,15 @@ def plot_snapshot(fig, n_file,
     # sigma_fl subplot
     # =============
 
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[3]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -527,11 +561,15 @@ def plot_snapshot(fig, n_file,
     # v subplot
     # =============
 
-    ax = fig.axes[3]  # Use the existing axis
+    ax = fig.axes[4]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    ax.grid(False)
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -543,10 +581,6 @@ def plot_snapshot(fig, n_file,
     # plot v
     X_v, Y_v, V_x, V_y, grid_norm_v, _, _, _ = vp.interpolate_t_vector_field_2d_arc_length_gauge(
         data_X, data_omega, data_v, parameters['n_bins_v'])
-
-    if norm_v_min_max == None:
-        norm_v_min_max = cal.norm_min_max_file(os.path.join(
-            snapshot_path, 'v_n_' + str(n_file) + '.csv'))
 
     vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y],
                             shaft_length=parameters['shaft_length'],
@@ -594,11 +628,15 @@ def plot_snapshot(fig, n_file,
     # w subplot
     # =============
 
-    ax = fig.axes[4]  # Use the existing axis
+    ax = fig.axes[5]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    ax.grid(False)
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w,
                                             min_max=w_min_max,
@@ -650,11 +688,15 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============
 
-    ax = fig.axes[5]  # Use the existing axis
+    ax = fig.axes[6]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    ax.grid(False)
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
                                                 min_max=sigma_min_max,
