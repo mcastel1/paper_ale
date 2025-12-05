@@ -294,14 +294,19 @@ def plot_snapshot(fig, n_file,
 
     ax.set_axis_off()
     ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    ax.grid(False)
     gr.set_2d_axes_limits(ax,
                           [0, 0], [parameters['L'], parameters['h']],
                           axis_origin=parameters['axis_origin']
                           )
 
-    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu,
-                                             min_max=nu_min_max,
+    # construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted
+    data_nu_minus_1 = data_nu.copy()
+    data_nu_minus_1['f'] = data_nu['f'] - 1
+
+    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu_minus_1,
+                                             min_max=np.subtract(
+                                                 nu_min_max, [1]*2),
                                              tick_label_angle=parameters['nu_colorbar_tick_label_angle'],
                                              label=parameters['nu_colorbar_axis_label'],
                                              font_size=parameters['colorbar_font_size'],
@@ -354,7 +359,7 @@ def plot_snapshot(fig, n_file,
 
     ax.set_axis_off()
     ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    ax.grid(False)
     gr.set_2d_axes_limits(ax,
                           [0, 0], [parameters['L'], parameters['h']],
                           axis_origin=parameters['axis_origin']
@@ -414,7 +419,7 @@ def plot_snapshot(fig, n_file,
 
     ax.set_axis_off()
     ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    ax.grid(False)
     gr.set_2d_axes_limits(ax,
                           [0, 0], [parameters['L'], parameters['h']],
                           axis_origin=parameters['axis_origin']
@@ -484,7 +489,7 @@ def plot_snapshot(fig, n_file,
 
     ax.set_axis_off()
     ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+    ax.grid(False)
     gr.set_2d_axes_limits(ax,
                           [0, 0], [parameters['L'], parameters['h']],
                           axis_origin=parameters['axis_origin']
