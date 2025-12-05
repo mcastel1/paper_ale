@@ -11,6 +11,7 @@ import warnings
 
 import calculus.utils as cal
 import constants.utils as const
+import calculus.geometry as geo
 import graphics.color_bar as cb
 import list.column_labels as clab
 import graphics.utils as gr
@@ -245,15 +246,15 @@ def plot_snapshot(fig, n_file,
         data_u_msh = pd.read_csv(os.path.join(
             snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
 
-        X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
-                                                                                [0, 0],
-                                                                                [parameters['L'],
-                                                                                    parameters['h']],
-                                                                                parameters['n_bins_v_fl'])
+        X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
+                                                                                                [0, 0],
+                                                                                                [parameters['L'],
+                                                                                                    parameters['h']],
+                                                                                                parameters['n_bins_v_fl'])
 
         # X, Y are the positions of the mesh nodes in the current configuration
-        X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
-        Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
+        X = np.array(lis.add_lists_of_lists(X_msh_ref, u_msh_n_X))
+        Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
 
         # compute the min-max of the snapshot
         axis_min_max = [lis.min_max(X), lis.min_max(Y)]
@@ -278,14 +279,14 @@ def plot_snapshot(fig, n_file,
     X_curr, t = gr.interpolate_curve(
         data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
-    X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
-                                                                             [0, 0],
-                                                                             [parameters['L'],
-                                                                                 parameters['h']],
-                                                                             parameters['n_bins_v_fl'],
-                                                                             clab.label_x_column,
-                                                                             clab.label_y_column,
-                                                                             clab.label_v_column)
+    X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
+                                                                                             [0, 0],
+                                                                                             [parameters['L'],
+                                                                                                 parameters['h']],
+                                                                                             parameters['n_bins_v_fl'],
+                                                                                             clab.label_x_column,
+                                                                                             clab.label_y_column,
+                                                                                             clab.label_v_column)
 
     # =============
     # u subplot
@@ -300,6 +301,28 @@ def plot_snapshot(fig, n_file,
                           [0, 0], [parameters['L'], parameters['h']],
                           axis_origin=parameters['axis_origin']
                           )
+
+    # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
+    X_U, Y_U, U_x, U_y = geo.u_1d(data_X)
+
+    # coordinates of the curve in the reference configuration
+    X_ref = np.array(list(zip(X_U, Y_U)))
+
+    # plot the vector field U
+    vp.plot_1d_vector_field(ax, [X_U, Y_U], [U_x, U_y],
+                            shaft_length=None,
+                            head_length=parameters['u_arrow_head_length'],
+                            head_angle=parameters['head_angle'],
+                            line_width=parameters['u_arrow_line_width'],
+                            alpha=parameters['alpha'],
+                            color=parameters['u_arrow_color'],
+                            legend='$\\vec{U}$',
+                            legend_font_size=parameters['legend_font_size'],
+                            legend_arrow_length=parameters['legend_arrow_length'],
+                            legend_text_arrow_space=parameters['legend_text_arrow_space'],
+                            legend_head_over_shaft_length=parameters['legend_head_over_shaft_length'],
+                            legend_position=parameters['legend_position'],
+                            z_order=1)
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,

@@ -187,13 +187,13 @@ def plot_snapshot(fig, n_file,
                           axis_origin=parameters['axis_origin']
                           )
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
-    X_U, Y_u, U_x, U_y = geo.u_1d(data_X)
+    X_U, Y_U, U_x, U_y = geo.u_1d(data_X)
 
     # coordinates of the curve in the reference configuration
-    X_ref = np.array(list(zip(X_U, Y_u)))
+    X_ref = np.array(list(zip(X_U, Y_U)))
 
-    # plot the vector field u
-    vp.plot_1d_vector_field(ax, [X_U, Y_u], [U_x, U_y],
+    # plot the vector field U
+    vp.plot_1d_vector_field(ax, [X_U, Y_U], [U_x, U_y],
                             shaft_length=None,
                             head_length=parameters['u_arrow_head_length'],
                             head_angle=parameters['head_angle'],
