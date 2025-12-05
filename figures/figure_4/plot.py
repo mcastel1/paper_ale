@@ -14,6 +14,7 @@ import proplot as pplt
 import sys
 import warnings
 
+import calculus.geometry as geo
 import calculus.utils as cal
 import constants.utils as const
 import graphics.color_bar as cb
@@ -185,30 +186,14 @@ def plot_snapshot(fig, n_file,
                               X_min_max[1][1] - X_min_max[1][0]],
                           axis_origin=parameters['axis_origin']
                           )
-    # compute the vector field u and store it in U_x, U_y and its related coordinates X_u, Y_u in the current configuration
-    U_x = []
-    U_y = []
-    X_u = []
-    Y_u = []
-    for _, row in data_X.iterrows():
-
-        X_u.append(row[':0'])
-        Y_u.append(0)
-
-        U_x.append(row['f:0'] - row[':0'])
-        U_y.append(row['f:1'] - 0)
-
-    # Convert to numpy arrays
-    X_u = np.array(X_u)
-    Y_u = np.array(Y_u)
-    U_x = np.array(U_x)
-    U_y = np.array(U_y)
+    # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
+    X_U, Y_u, U_x, U_y = geo.u_1d(data_X)
 
     # coordinates of the curve in the reference configuration
-    X_ref = np.array(list(zip(X_u, Y_u)))
+    X_ref = np.array(list(zip(X_U, Y_u)))
 
     # plot the vector field u
-    vp.plot_1d_vector_field(ax, [X_u, Y_u], [U_x, U_y],
+    vp.plot_1d_vector_field(ax, [X_U, Y_u], [U_x, U_y],
                             shaft_length=None,
                             head_length=parameters['u_arrow_head_length'],
                             head_angle=parameters['head_angle'],

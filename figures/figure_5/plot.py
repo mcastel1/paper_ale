@@ -275,7 +275,7 @@ def plot_snapshot(fig, n_file,
         w_min_max = cal.min_max_file(os.path.join(
             snapshot_path, 'w_n_' + str(n_file) + '.csv'))
 
-    X_t, t = gr.interpolate_curve(
+    X_curr, t = gr.interpolate_curve(
         data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
     X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
@@ -359,7 +359,7 @@ def plot_snapshot(fig, n_file,
                                              axis=nu_colorbar_axis)
 
     # plot X and nu
-    gr.plot_curve_grid(ax, X_t,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_nu,
                        line_color='black',
                        line_width=parameters['nu_line_width'])
@@ -419,7 +419,7 @@ def plot_snapshot(fig, n_file,
                                               axis=psi_colorbar_axis)
 
     # plot X and psi
-    gr.plot_curve_grid(ax, X_t,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_psi,
                        line_color='black',
                        line_width=parameters['psi_line_width'])
@@ -697,7 +697,7 @@ def plot_snapshot(fig, n_file,
                                             axis=w_colorbar_axis)
 
     # plot X and w
-    gr.plot_curve_grid(ax, X_t,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_w,
                        line_color='black',
                        line_width=parameters['w_line_width'])
@@ -756,7 +756,7 @@ def plot_snapshot(fig, n_file,
                                                 axis=sigma_colorbar_axis)
 
     # plot X and sigma
-    gr.plot_curve_grid(ax, X_t,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_sigma,
                        line_color='black',
                        line_width=parameters['sigma_line_width'])
