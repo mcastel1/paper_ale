@@ -91,11 +91,19 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(2, 3, 1)
-fig.add_subplot(2, 3, 2)
-fig.add_subplot(2, 3, 4)
-fig.add_subplot(2, 3, 5)
-fig.add_subplot(2, 3, 6)
+fig.add_subplot(3, 3, 1)
+fig.add_subplot(3, 3, 2)
+fig.add_subplot(3, 3, 4)
+fig.add_subplot(3, 3, 5)
+fig.add_subplot(3, 3, 7)
+fig.add_subplot(3, 3, 8)
+fig.add_subplot(3, 3, 9)
+
+nu_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(nu_colorbar_axis, parameters['colorbar_size'])
+
+psi_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(psi_colorbar_axis, parameters['colorbar_size'])
 
 v_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(v_fl_colorbar_axis, parameters['colorbar_size'])
@@ -261,10 +269,122 @@ def plot_snapshot(fig, n_file,
                                                                              clab.label_v_column)
 
     # =============
-    # v_fl subplot
+    # nu subplot
     # =============
 
     ax = fig.axes[0]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+
+    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu,
+                                             min_max=nu_min_max,
+                                             tick_label_angle=parameters['nu_colorbar_tick_label_angle'],
+                                             label=parameters['nu_colorbar_axis_label'],
+                                             font_size=parameters['colorbar_font_size'],
+                                             tick_label_offset=parameters['nu_colorbar_tick_label_offset'],
+                                             label_angle=parameters['nu_colorbar_label_angle'],
+                                             tick_length=parameters['colorbar_tick_length'],
+                                             label_offset=parameters['colorbar_axis_label_offset'],
+                                             tick_label_format=parameters['nu_colorbar_tick_label_format'],
+                                             axis=nu_colorbar_axis)
+
+    # plot X and nu
+    gr.plot_curve_grid(ax, X_t,
+                       color_map=color_map_nu,
+                       line_color='black',
+                       line_width=parameters['nu_line_width'])
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices,
+                    line_width=parameters['plot_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
+
+    gr.plot_2d_axes(
+        ax, [0, 0], [parameters['L'], parameters['h']],
+        tick_length=parameters['tick_length'],
+        line_width=parameters['axis_line_width'],
+        axis_label=parameters['axis_label'],
+        axis_label_angle=parameters['axis_label_angle'],
+        axis_label_offset=parameters['axis_label_offset'],
+        tick_label_offset=parameters['tick_label_offset'],
+        tick_label_format=['f', 'f'],
+        font_size=parameters['axis_font_size'],
+        plot_label=parameters["w_panel_label"],
+        plot_label_offset=parameters['panel_label_offset'],
+        axis_origin=parameters['axis_origin'],
+        axis_bounds=axis_min_max,
+        margin=parameters['axis_margin'],
+        n_minor_ticks=parameters['n_minor_ticks'],
+        minor_tick_length=parameters['minor_tick_length'],
+        z_order=const.high_z_order,
+        colorbar_axis=nu_colorbar_axis,
+        colorbar_axis_offset=parameters['colorbar_offset'])
+
+    # =============
+    # psi subplot
+    # =============
+
+    ax = fig.axes[1]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+
+    color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi,
+                                              min_max=psi_min_max,
+                                              tick_label_angle=parameters['psi_colorbar_tick_label_angle'],
+                                              label=parameters['psi_colorbar_axis_label'],
+                                              font_size=parameters['colorbar_font_size'],
+                                              tick_label_offset=parameters['psi_colorbar_tick_label_offset'],
+                                              label_angle=parameters['psi_colorbar_label_angle'],
+                                              tick_length=parameters['colorbar_tick_length'],
+                                              label_offset=parameters['colorbar_axis_label_offset'],
+                                              tick_label_format=parameters['psi_colorbar_tick_label_format'],
+                                              axis=psi_colorbar_axis)
+
+    # plot X and psi
+    gr.plot_curve_grid(ax, X_t,
+                       color_map=color_map_psi,
+                       line_color='black',
+                       line_width=parameters['psi_line_width'])
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices,
+                    line_width=parameters['plot_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
+
+    gr.plot_2d_axes(
+        ax, [0, 0], [parameters['L'], parameters['h']],
+        tick_length=parameters['tick_length'],
+        line_width=parameters['axis_line_width'],
+        axis_label=parameters['axis_label'],
+        axis_label_angle=parameters['axis_label_angle'],
+        axis_label_offset=parameters['axis_label_offset'],
+        tick_label_offset=parameters['tick_label_offset'],
+        tick_label_format=['f', 'f'],
+        font_size=parameters['axis_font_size'],
+        plot_label=parameters["w_panel_label"],
+        plot_label_offset=parameters['panel_label_offset'],
+        axis_origin=parameters['axis_origin'],
+        axis_bounds=axis_min_max,
+        margin=parameters['axis_margin'],
+        n_minor_ticks=parameters['n_minor_ticks'],
+        minor_tick_length=parameters['minor_tick_length'],
+        z_order=const.high_z_order,
+        colorbar_axis=psi_colorbar_axis,
+        colorbar_axis_offset=parameters['colorbar_offset'])
+
+    # =============
+    # v_fl subplot
+    # =============
+
+    ax = fig.axes[1]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -330,7 +450,7 @@ def plot_snapshot(fig, n_file,
     # sigma_fl subplot
     # =============
 
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[2]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -407,7 +527,7 @@ def plot_snapshot(fig, n_file,
     # v subplot
     # =============
 
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[3]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -474,7 +594,7 @@ def plot_snapshot(fig, n_file,
     # w subplot
     # =============
 
-    ax = fig.axes[3]  # Use the existing axis
+    ax = fig.axes[4]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -530,7 +650,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============
 
-    ax = fig.axes[4]  # Use the existing axis
+    ax = fig.axes[5]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
