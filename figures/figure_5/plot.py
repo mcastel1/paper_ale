@@ -93,6 +93,7 @@ fig = pplt.figure(
 # pre-create subplots and axes
 fig.add_subplot(3, 3, 1)
 fig.add_subplot(3, 3, 2)
+fig.add_subplot(3, 3, 3)
 fig.add_subplot(3, 3, 4)
 fig.add_subplot(3, 3, 5)
 fig.add_subplot(3, 3, 7)
@@ -287,10 +288,50 @@ def plot_snapshot(fig, n_file,
                                                                              clab.label_v_column)
 
     # =============
+    # u subplot
+    # =============
+
+    ax = fig.axes[0]
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices,
+                    line_width=parameters['plot_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
+
+    gr.plot_2d_axes(
+        ax, [0, 0], [parameters['L'], parameters['h']],
+        tick_length=parameters['tick_length'],
+        line_width=parameters['axis_line_width'],
+        axis_label=parameters['axis_label'],
+        axis_label_angle=parameters['axis_label_angle'],
+        axis_label_offset=parameters['axis_label_offset'],
+        tick_label_offset=parameters['tick_label_offset'],
+        tick_label_format=['f', 'f'],
+        font_size=parameters['axis_font_size'],
+        plot_label=parameters["nu_panel_label"],
+        plot_label_offset=parameters['panel_label_offset'],
+        axis_origin=parameters['axis_origin'],
+        axis_bounds=axis_min_max,
+        margin=parameters['axis_margin'],
+        n_minor_ticks=parameters['n_minor_ticks'],
+        minor_tick_length=parameters['minor_tick_length'],
+        z_order=const.high_z_order)
+
+    # =============
     # nu subplot
     # =============
 
-    ax = fig.axes[0]  # Use the existing axis
+    ax = fig.axes[1]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -355,7 +396,7 @@ def plot_snapshot(fig, n_file,
     # psi subplot
     # =============
 
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[2]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -415,7 +456,7 @@ def plot_snapshot(fig, n_file,
     # v_fl subplot
     # =============
 
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[3]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -485,7 +526,7 @@ def plot_snapshot(fig, n_file,
     # sigma_fl subplot
     # =============
 
-    ax = fig.axes[3]  # Use the existing axis
+    ax = fig.axes[4]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -566,7 +607,7 @@ def plot_snapshot(fig, n_file,
     # v subplot
     # =============
 
-    ax = fig.axes[4]  # Use the existing axis
+    ax = fig.axes[5]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -633,7 +674,7 @@ def plot_snapshot(fig, n_file,
     # w subplot
     # =============
 
-    ax = fig.axes[5]  # Use the existing axis
+    ax = fig.axes[6]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -693,7 +734,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============
 
-    ax = fig.axes[6]  # Use the existing axis
+    ax = fig.axes[7]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
