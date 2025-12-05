@@ -281,14 +281,14 @@ def plot_snapshot(fig, n_file,
                           axis_origin=parameters['axis_origin']
                           )
 
-    #construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted  
+    # construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted
     data_nu_minus_1 = data_nu.copy()
     data_nu_minus_1['f'] = data_nu['f'] - 1
 
-
-    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu_minus_1, 
+    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu_minus_1,
                                              size=parameters['colorbar_size'],
-                                             min_max=np.subtract(nu_min_max, [1]*2),
+                                             min_max=np.subtract(
+                                                 nu_min_max, [1]*2),
                                              tick_label_angle=parameters['nu_colorbar_tick_label_angle'],
                                              label=r'$\nu-1$',
                                              font_size=parameters['color_map_font_size'],
@@ -328,7 +328,7 @@ def plot_snapshot(fig, n_file,
                     colorbar_axis=nu_colorbar_axis,
                     colorbar_axis_offset=parameters['colorbar_offset']
                     )
-    
+
     # =============
     # psi subplot
     # =============
@@ -346,11 +346,11 @@ def plot_snapshot(fig, n_file,
                           axis_origin=parameters['axis_origin']
                           )
 
-    color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi, 
+    color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi,
                                               size=parameters['colorbar_size'],
                                               min_max=psi_min_max,
                                               tick_label_angle=parameters['psi_colorbar_tick_label_angle'],
-                                              label=r'$\psi$',
+                                              label=r'$\psi \, [\rad]$',
                                               font_size=parameters['color_map_font_size'],
                                               label_offset=parameters["colorbar_label_offset"],
                                               tick_label_offset=parameters['psi_colorbar_tick_label_offset'],
@@ -478,7 +478,7 @@ def plot_snapshot(fig, n_file,
                           axis_origin=parameters['axis_origin']
                           )
 
-    color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w, 
+    color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w,
                                             size=parameters['colorbar_size'],
                                             min_max=w_min_max,
                                             tick_label_angle=parameters['w_colorbar_tick_label_angle'],
@@ -538,7 +538,7 @@ def plot_snapshot(fig, n_file,
                           axis_origin=parameters['axis_origin']
                           )
 
-    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma, 
+    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
                                                 size=parameters['colorbar_size'],
                                                 min_max=sigma_min_max,
                                                 tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
@@ -580,7 +580,6 @@ def plot_snapshot(fig, n_file,
                     colorbar_axis_offset=parameters['colorbar_offset']
                     )
 
-    
 
 plot_snapshot(fig,
               snapshot_max_with_margin,

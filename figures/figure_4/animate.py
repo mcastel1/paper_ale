@@ -23,6 +23,10 @@ X_min_max_abs = [
     cal.min_max_files('X_n_12_', plot.snapshot_path, snapshot_min_with_margin,
                       plot.snapshot_max, plot.parameters['frame_stride'], field_column_name='f:1')
 ]
+nu_min_max_abs = cal.min_max_files(
+    'nu_n_12_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
+psi_min_max_abs = cal.min_max_files(
+    'psi_n_12_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
 norm_v_min_max_abs = cal.norm_min_max_files(
     'v_n_', plot.snapshot_path, snapshot_min_with_margin, plot.snapshot_max, plot.parameters['frame_stride'])
 w_min_max_abs = cal.min_max_files(
@@ -63,6 +67,8 @@ def update_animation(n):
 
     plot.plot_snapshot(plot.fig, n,
                        X_min_max=X_min_max_abs,
+                       nu_min_max=nu_min_max_abs,
+                       psi_min_max=psi_min_max_abs,
                        norm_v_min_max=norm_v_min_max_abs,
                        w_min_max=w_min_max_abs,
                        # sigma_min_max=sigma_min_max_abs,
