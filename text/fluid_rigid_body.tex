@@ -1,0 +1,41 @@
+\section{Fluid and rigid body}\label{sec_fl_rigid}
+
+In this Section, we will discuss the interaction between a bulk \ac{fl} and the simplest structure---a rigid \ac{bod} which is only allowed to turn about one point.
+
+All quantities relative to the \acl{fl}, \acl{bod} and \acl{dom} will be denoted by the suffix \ac{fl}, \ac{bod} and \acl{dom}, respectively.
+
+
+The equations of motion are
+
+
+\begin{align}
+    \label{eq_fl_rigid_fl_1}
+    \rho_\fluid \left( \partial_t \vf^\alpha + \vf^\beta \partial^x_\beta \vf^\alpha \right) = & \partial^x_\alpha  \sigma_\fluid + \eta_\fluid \partial^x_\beta \partial^x_\beta \vf^\alpha, \\
+    \label{eq_fl_rigid_fl_2}
+    \partial^x_\alpha \vf^\alpha =                                                             & 0                               ,                                                            \\
+    \label{eq_fl_rigid_rigid}
+    I \frac{d^2 \theta}{d t^2} =                                                               & - \int_\pomellipseeq \dint{l}\, \epsilon_{3 \alpha \beta} \sigma_{\beta \gamma} n_\gamma.
+\end{align}
+
+Here,  \cref{eq_fl_rigid_fl_1,eq_fl_rigid_fl_2} are the equations of motion for the \ac{fl}, and \cref{eq_fl_rigid_rigid} is the equation of motion for the rigid body.
+
+First, \cref{eq_fl_rigid_fl_1} are the \ac{ns} and continuity equation in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}. There, $\rhof$ and $\etaf$, $\vf^\alpha$ and $\sigmaf$ are the two-dimensional density and viscosity,  velocity and surface tension  of the bulk \ac{fl}, respectively, and
+\be\label{eq_def_pder}
+\partial^x_\alpha \equiv \pder{}{x^\alpha}.
+\ee
+
+Here, greek indices $\alpha, \beta, \cdots$ will be used to denote vectors and tensors in  two-dimensional Euclidean space---their position as upper or lower indices is thus immaterial \cite{marchiafavaAppuntiDiGeometria2005}.
+
+Second, \cref{eq_fl_rigid_rigid} is the rigid-body equation of motion, which relates the angular acceleration in the \ac{lhs}, to the momentum of external forces exerted by the fluid on the body in the \ac{rhs} \cite{landauMechanics1960}. In there, $I$ is the moment of inertia of the body, and  the \ac{rhs} contains the integral along the surface of the rigid body in the current configuration, of the forces exerted by \ac{fl} on the \ac{bod}.
+
+
+%sign
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/figure_1/figure_1.pdf}
+    \caption{
+        \label{fig_fluid_rigid}
+        Interaction between a bulk fluid and a rigid body. \plab{A} Temporal snapshot of the mesh (black lines) and velocity field (arrows). The direction of the velocity field is indicated by the arrows, and its norm by their color. The rigid body (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $x$ direction is denoted by the red arc.   \plab{B} Color map of the surface tension. Both panels refer to the same instant of time, shown on top.
+    }
+\end{figure*}

@@ -321,9 +321,16 @@ def plot_snapshot(fig, n_file,
                             legend_arrow_length=parameters['legend_arrow_length'],
                             legend_text_arrow_space=parameters['legend_text_arrow_space'],
                             legend_head_over_shaft_length=parameters['legend_head_over_shaft_length'],
-                            legend_position=parameters['legend_position'],
+                            legend_position=parameters['u_legend_position'],
                             stride=parameters['u_stride'],
                             z_order=0)
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices,
+                    line_width=parameters['plot_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
 
     # plot X_curr
     gr.plot_curve_grid(ax, X_curr,
@@ -355,7 +362,7 @@ def plot_snapshot(fig, n_file,
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
-        plot_label=parameters["nu_panel_label"],
+        plot_label=parameters["u_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
         axis_bounds=axis_min_max,
@@ -364,7 +371,6 @@ def plot_snapshot(fig, n_file,
         minor_tick_length=parameters['minor_tick_length'],
         z_order=const.high_z_order)
 
-    '''
     # =============
     # nu subplot
     # =============
@@ -826,7 +832,6 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=sigma_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-    '''
 
 
 plot_snapshot(fig, snapshot_max,
