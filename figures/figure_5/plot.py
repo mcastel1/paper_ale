@@ -322,14 +322,27 @@ def plot_snapshot(fig, n_file,
                             legend_text_arrow_space=parameters['legend_text_arrow_space'],
                             legend_head_over_shaft_length=parameters['legend_head_over_shaft_length'],
                             legend_position=parameters['legend_position'],
-                            z_order=1)
+                            z_order=0)
 
-    # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_line_vertices,
-                    line_width=parameters['plot_line_width'],
-                    color='black',
-                    alpha=parameters['alpha_mesh'],
-                    zorder=parameters['mesh_zorder'])
+    # plot X_curr
+    gr.plot_curve_grid(ax, X_curr,
+                       line_color='green',
+                       legend='$\\text{Current}$',
+                       legend_position=[-0.55, 0.9],
+                       legend_inner_location='upper left',
+                       line_width=parameters['X_line_width'],
+                       z_order=1
+                       )
+
+    # plot X_ref
+    gr.plot_curve_grid(ax, X_ref,
+                       line_color='red',
+                       legend='$\\text{Reference}$',
+                       legend_position=[-0.55, 1],
+                       legend_inner_location='upper left',
+                       line_width=parameters['X_line_width'],
+                       z_order=1
+                       )
 
     gr.plot_2d_axes(
         ax, [0, 0], [parameters['L'], parameters['h']],
