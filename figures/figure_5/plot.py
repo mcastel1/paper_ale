@@ -23,7 +23,7 @@ import system.utils as sys_utils
 import graphics.vector_plot as vec
 
 '''
-you can copy the data from abacus with 
+you can copy the data from abacus with
 ./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/paper_ale/figures/figure_5 1 1000000 30000
 '''
 
@@ -124,14 +124,14 @@ cb.set_size(sigma_colorbar_axis, parameters['colorbar_size'])
 
 
 '''
-plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration   
-Input values: 
-    * Mandatory: 
+plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration
+Input values:
+    * Mandatory:
         - 'ax': the axis where the polygon will be drawn
         - 'axis_min_max': the bounds of the X values in the current configuration
         - 'data_u_msh': the data for the mesh displacement field
-    * Optional: 
-        - 'margin': a margin, measured as relative to axis_min_max[1][1] - axis_mim_max[1][0] which is used to expand the region on top 
+    * Optional:
+        - 'margin': a margin, measured as relative to axis_min_max[1][1] - axis_mim_max[1][0] which is used to expand the region on top
 '''
 
 
@@ -303,7 +303,7 @@ def plot_snapshot(fig, n_file,
                           )
 
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
-    X_U, Y_U, U_x, U_y = geo.u_1d(data_X)
+    X_U, Y_U, U_x, U_y = geo.u_1d(data_X, parameters['h'])
 
     # coordinates of the curve in the reference configuration
     X_ref = np.array(list(zip(X_U, Y_U)))
