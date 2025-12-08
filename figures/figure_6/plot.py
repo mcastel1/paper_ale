@@ -158,7 +158,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_l_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label=r'$\partial\Omega_l$',  #
+        label='$\pom$',
         zorder=const.high_z_order
     )
 
@@ -166,7 +166,8 @@ def plot_snapshot(fig, n_file,
         loc='upper left',           # Which corner of the legend to use as anchor
         # Where to place that corner (x, y in axes coords)
         bbox_to_anchor=(0.5, 0.95),
-        frameon=False
+        frameon=True,
+        handlelength=3
     )
 
     #
