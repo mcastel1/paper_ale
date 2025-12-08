@@ -22,7 +22,7 @@ import system.paths as paths
 import system.utils as sys_utils
 
 '''
-Parameter meaning: 
+Parameter meaning:
 - solution_stride: the stride with which data were saved as during the solution of the finite-element problem
 - animation_stride: the stride with which frames will be read by animate.py to generate the animation
 '''
@@ -151,11 +151,29 @@ def plot_snapshot(fig, n_file,
                color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
                zorder=2)
 
+    # plot \partial Omega _l
+    ax.plot(
+        [0, 0],
+        [0, parameters['h']],
+        color=parameters['partial_omega_l_color'],
+        linewidth=parameters['partial_omega_line_width'],
+        linestyle='-.',
+        label=r'$\partial\Omega_l$',  #
+        zorder=const.high_z_order
+    )
+
+    ax.legend(
+        loc='upper left',           # Which corner of the legend to use as anchor
+        # Where to place that corner (x, y in axes coords)
+        bbox_to_anchor=(0.5, 0.95),
+        frameon=False
+    )
+
     #
     # 1) plot fixed axis
     ax.plot(
         [focal_point_position[0], focal_point_position[0] +
-            parameters['ellipse_angle_axis_length']],
+         parameters['ellipse_angle_axis_length']],
         [focal_point_position[1]] * 2,
         color=parameters['ellipse_angle_axis_color'],
         linewidth=parameters['mesh_line_width_curr_plot'],
