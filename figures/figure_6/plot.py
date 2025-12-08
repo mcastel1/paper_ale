@@ -74,8 +74,6 @@ number_of_frames = snapshot_max - snapshot_min + 1
 columns_line_vertices = [clab.label_start_x_column, clab.label_start_y_column, clab.label_start_z_column,
                          clab.label_end_x_column,
                          clab.label_end_y_column, clab.label_end_z_column]
-columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + clab.label_x_column,
-             clab.label_v_column + clab.label_y_column]
 columns_theta_omega = ["theta", "omega"]
 
 data_theta_omega = pd.read_csv(
@@ -94,15 +92,8 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
 fig.add_subplot(2, 1, 1)
 fig.add_subplot(2, 1, 2)
 
-v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
-                                parameters['v_colorbar_position'][1],
-                                parameters['v_colorbar_size'][0],
-                                parameters['v_colorbar_size'][1]])
-
-sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
-                                    parameters['sigma_colorbar_position'][1],
-                                    parameters['sigma_colorbar_size'][0],
-                                    parameters['sigma_colorbar_size'][1]])
+data_line_vertices_ref = pd.read_csv(
+    os.path.join(mesh_path, 'line_vertices.csv'))
 
 
 def plot_snapshot(fig, n_file,
@@ -111,65 +102,10 @@ def plot_snapshot(fig, n_file,
                   sigma_min_max=None):
 
     n_snapshot = str(n_file)
-    data_line_vertices = pd.read_csv(
+    data_line_vertices_curr = pd.read_csv(
         solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
-    data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' +
-                         n_snapshot + '.csv', usecols=columns_v)
-    data_sigma = pd.read_csv(
-        solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
     data_u = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_n_' +
-                         n_snapshot + '.csv', usecols=columns_v)
-
-    # plot snapshot label
-    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
-             snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
-
-    # =============
-    # v subplot
-    # =============
-
-    ax = fig.axes[0]  # Use the existing axis
-
-    ax.set_axis_off()
-    ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
-
-    gr.plot_2d_mesh(ax, data_line_vertices,
-                    line_width=parameters['mesh_line_width_v_plot'],
-                    color='black',
-                    alpha=parameters['alpha_mesh'])
-
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
-                                                                                            [0, 0],
-                                                                                            [parameters['L'], parameters['h']],
-                                                                                            parameters['n_bins_v'],
-                                                                                            clab.label_x_column,
-                                                                                            clab.label_y_column,
-                                                                                            clab.label_v_column)
-
-    if norm_v_min_max == None:
-        norm_v_min_max = [norm_v_min, norm_v_max]
-
-    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
-                          parameters['b'], data_theta_omega.loc[int(n_file/parameters['solution_frame_stride']-1), 'theta'], V_x, np.nan)
-    gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
-                          parameters['b'], data_theta_omega.loc[int(n_file/parameters['solution_frame_stride']-1), 'theta'], V_y, np.nan)
-
-    vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0,
-                            clip_on=False)
-
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'],
-                        label=r'$v \, [\met/\sec]$',
-                        font_size=parameters['v_colorbar_font_size'],
-                        tick_length=parameters['v_colorbar_tick_length'],
-                        label_pad=parameters['v_colorbar_label_offset'],
-                        tick_label_offset=parameters['v_colorbar_tick_label_offset'],
-                        tick_label_angle=parameters['v_colorbar_tick_label_angle'],
-                        line_width=parameters['v_colorbar_line_width'],
-                        custom_ticks=parameters['v_colorbar_custom_ticks'],
-                        tick_label_format=parameters['v_colorbar_tick_label_format'],
-                        axis=v_colorbar_axis)
+                         n_snapshot + '.csv')
 
     # plot the ellipse focus
     focal_point_position = [
@@ -179,6 +115,87 @@ def plot_snapshot(fig, n_file,
     theta_2 = max(0, data_theta_omega.loc[int(
         n_file/parameters['solution_frame_stride']-1), 'theta'])
 
+    # plot snapshot label
+    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
+             snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
+
+    # =============
+    # reference configuration  subplot
+    # =============
+
+    ax = fig.axes[0]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)
+
+    gr.plot_2d_mesh(ax, data_line_vertices_ref,
+                    line_width=parameters['mesh_line_width_ref_plot'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'],
+                    zorder=1)
+
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
+    data_ref_boundary_vertices_ellipse = []
+    for _, row in data_boundary_vertices_ellipse.iterrows():
+        data_ref_boundary_vertices_ellipse.append(
+            [row[':0'], row[':1']]
+        )
+
+    # plot the boundary polygon in the current configuration
+    poly = Polygon(data_ref_boundary_vertices_ellipse, fill=True,
+                   linewidth=parameters['mesh_line_width_ref_plot'], edgecolor='red', facecolor='white', zorder=1)
+    ax.add_patch(poly)
+
+    # plot the focal point
+    ax.scatter(focal_point_position[0], focal_point_position[1],
+               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'], zorder=2)
+
+    #
+    # 1) plot fixed axis
+    ax.plot(
+        [focal_point_position[0], focal_point_position[0] +
+            parameters['ellipse_angle_axis_length']],
+        [focal_point_position[1]] * 2,
+        color=parameters['ellipse_angle_axis_color'],
+        linewidth=parameters['mesh_line_width_curr_plot'],
+        linestyle='--',
+        zorder=const.high_z_order
+    )
+
+    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+                    tick_length=parameters['tick_length'],
+                    line_width=parameters['axis_line_width'],
+                    axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
+                    tick_label_format=['f', 'f'],
+                    font_size=[parameters['font_size'],
+                               parameters['font_size']],
+                    tick_label_offset=parameters['tick_label_offset'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    axis_origin=parameters['axis_origin'],
+                    plot_label=parameters["ref_plot_panel_label"],
+                    plot_label_offset=parameters['curr_plot_panel_label_position'],
+                    plot_label_font_size=parameters['panel_label_font_size'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length'],
+                    tick_label_angle=parameters['tick_label_angle'])
+
+    # =============
+    # current configuration subplot
+    # =============
+
+    ax = fig.axes[1]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)
+
+    gr.plot_2d_mesh(ax, data_line_vertices_curr,
+                    line_width=parameters['mesh_line_width_curr_plot'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'])
+
+    # plot the focal point
     ax.scatter(focal_point_position[0], focal_point_position[1],
                color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'])
 
@@ -189,7 +206,7 @@ def plot_snapshot(fig, n_file,
             parameters['ellipse_angle_axis_length']],
         [focal_point_position[1]] * 2,
         color=parameters['ellipse_angle_axis_color'],
-        linewidth=parameters['mesh_line_width_v_plot'],
+        linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
         zorder=const.high_z_order
     )
@@ -204,7 +221,7 @@ def plot_snapshot(fig, n_file,
         [focal_point_position[0], focal_point_position[0] + delta[0]],
         [focal_point_position[1], focal_point_position[1] + delta[1]],
         color=parameters['ellipse_angle_axis_color'],
-        linewidth=parameters['mesh_line_width_v_plot'],
+        linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
         zorder=const.high_z_order
     )
@@ -230,108 +247,15 @@ def plot_snapshot(fig, n_file,
                     tick_label_offset=parameters['tick_label_offset'],
                     axis_label_offset=parameters['axis_label_offset'],
                     axis_origin=parameters['axis_origin'],
-                    plot_label=parameters["v_plot_panel_label"],
-                    plot_label_offset=parameters['v_plot_panel_label_position'],
-                    plot_label_font_size=parameters['panel_label_font_size'],
-                    n_minor_ticks=parameters['n_minor_ticks'],
-                    minor_tick_length=parameters['minor_tick_length'],
-                    tick_label_angle=parameters['tick_label_angle'])
-
-    # =============
-    # sigma subplot
-    # =============
-
-    ax = fig.axes[1]  # Use the existing axis
-
-    ax.set_axis_off()
-    ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
-
-    gr.plot_2d_mesh(ax, data_line_vertices,
-                    line_width=parameters['mesh_line_width_sigma_plot'],
-                    color='black',
-                    alpha=parameters['alpha_mesh'],
-                    zorder=1)
-
-    X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
-
-    if sigma_min_max == None:
-        sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
-        sigma_min_max = [sigma_min, sigma_max]
-
-    # plot the polygon of the boundary 'ellipse_loop_id'
-    #
-    # build two a vector field which interpolates the displacement field in data_u_msh
-    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u)
-
-    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_def_boundary_vertices_ellipse = []
-    for index, row in data_boundary_vertices_ellipse.iterrows():
-        data_def_boundary_vertices_ellipse.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x(row[':0'], row[':1']),
-                 U_interp_y(row[':0'], row[':1'])]
-            )
-        )
-
-    # plot the boundary polygon in the current configuration
-    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True,
-                   linewidth=parameters['mesh_line_width_sigma_plot'], edgecolor='red', facecolor='white', zorder=1)
-    ax.add_patch(poly)
-    #
-
-    contour_plot = ax.imshow(Z_sigma.T,
-                             origin='lower',
-                             cmap=gr.cb.color_map_type,
-                             aspect='equal',
-                             extent=[0, parameters['L'], 0, parameters['h']],
-                             vmin=sigma_min_max[0], vmax=sigma_min_max[1],
-                             interpolation='bilinear',
-                             zorder=0
-                             )
-
-    # Corrected make_colorbar call (remove 'location')
-    gr.cb.make_colorbar(
-        figure=fig,
-        grid_values=Z_sigma,
-        min_value=sigma_min_max[0],
-        max_value=sigma_min_max[1],
-        position=parameters['sigma_colorbar_position'],
-        size=parameters['sigma_colorbar_size'],
-        label_pad=parameters['sigma_colorbar_label_offset'],
-        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-        line_width=parameters['sigma_colorbar_tick_line_width'],
-        tick_length=parameters['sigma_colorbar_tick_length'],
-        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=r"$\sigma \, [\pas \, \met]$",
-        mappable=contour_plot,
-        axis=sigma_colorbar_axis
-    )
-
-    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
-                    tick_length=parameters['tick_length'],
-                    line_width=parameters['axis_line_width'],
-                    axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
-                    tick_label_format=['f', 'f'],
-                    font_size=[parameters['font_size'],
-                               parameters['font_size']],
-                    tick_label_offset=parameters['tick_label_offset'],
-                    axis_label_offset=parameters['axis_label_offset'],
-                    axis_origin=parameters['axis_origin'],
-                    plot_label=parameters["sigma_plot_panel_label"],
-                    plot_label_offset=parameters['v_plot_panel_label_position'],
+                    plot_label=parameters["curr_plot_panel_label"],
+                    plot_label_offset=parameters['curr_plot_panel_label_position'],
                     plot_label_font_size=parameters['panel_label_font_size'],
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length'],
                     tick_label_angle=parameters['tick_label_angle'])
 
 
-# plot_snapshot(fig, parameters['snapshot_to_plot'],
-#             snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
-plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+plot_snapshot(fig, snapshot_max)
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
