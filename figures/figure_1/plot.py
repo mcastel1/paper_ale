@@ -253,7 +253,7 @@ def plot_snapshot(fig, n_file,
                     alpha=parameters['alpha_mesh'],
                     zorder=1)
 
-    X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(
+    _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
         data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
 
     if sigma_min_max == None:
@@ -267,7 +267,7 @@ def plot_snapshot(fig, n_file,
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_def_boundary_vertices_ellipse = []
-    for index, row in data_boundary_vertices_ellipse.iterrows():
+    for _, row in data_boundary_vertices_ellipse.iterrows():
         data_def_boundary_vertices_ellipse.append(
             np.add(
                 [row[':0'], row[':1']],

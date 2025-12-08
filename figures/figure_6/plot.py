@@ -132,8 +132,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_mesh(ax, data_line_vertices_ref,
                     line_width=parameters['mesh_line_width_ref_plot'],
                     color='black',
-                    alpha=parameters['alpha_mesh'],
-                    zorder=1)
+                    alpha=parameters['alpha_mesh'])
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_ref_boundary_vertices_ellipse = []
@@ -144,12 +143,13 @@ def plot_snapshot(fig, n_file,
 
     # plot the boundary polygon in the current configuration
     poly = Polygon(data_ref_boundary_vertices_ellipse, fill=True,
-                   linewidth=parameters['mesh_line_width_ref_plot'], edgecolor='red', facecolor='white', zorder=1)
+                   linewidth=parameters['mesh_line_width_curr_plot'], edgecolor='red', facecolor='white', zorder=1)
     ax.add_patch(poly)
 
     # plot the focal point
     ax.scatter(focal_point_position[0], focal_point_position[1],
-               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'], zorder=2)
+               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
+               zorder=2)
 
     #
     # 1) plot fixed axis
@@ -166,7 +166,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
-                    axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
+                    axis_label=[r'$X^1 \, [\met]$', r'$X^2 \, [\met]$'],
                     tick_label_format=['f', 'f'],
                     font_size=[parameters['font_size'],
                                parameters['font_size']],
@@ -197,7 +197,30 @@ def plot_snapshot(fig, n_file,
 
     # plot the focal point
     ax.scatter(focal_point_position[0], focal_point_position[1],
-               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'])
+               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
+               zorder=2)
+
+    # plot the polygon of the boundary 'ellipse_loop_id'
+    #
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u)
+
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
+    data_def_boundary_vertices_ellipse = []
+    for _, row in data_boundary_vertices_ellipse.iterrows():
+        data_def_boundary_vertices_ellipse.append(
+            np.add(
+                [row[':0'], row[':1']],
+                [U_interp_x(row[':0'], row[':1']),
+                 U_interp_y(row[':0'], row[':1'])]
+            )
+        )
+
+    # plot the boundary polygon in the current configuration
+    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True,
+                   linewidth=parameters['mesh_line_width_curr_plot'], edgecolor='red', facecolor='white', zorder=1)
+    ax.add_patch(poly)
+    #
 
     # plot the axes that define the angle theta
     # 1) plot fixed axis
@@ -240,7 +263,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
-                    axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
+                    axis_label=[r'$X^1 \, [\met]$', r'$X^2 \, [\met]$'],
                     tick_label_format=['f', 'f'],
                     font_size=[parameters['font_size'],
                                parameters['font_size']],
@@ -255,7 +278,7 @@ def plot_snapshot(fig, n_file,
                     tick_label_angle=parameters['tick_label_angle'])
 
 
-plot_snapshot(fig, snapshot_max)
+plot_snapshot(fig, parameters['snapshot_to_plot'])
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
