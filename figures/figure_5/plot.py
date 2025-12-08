@@ -11,6 +11,7 @@ import warnings
 
 import calculus.utils as cal
 import constants.utils as const
+import calculus.geometry as geo
 import graphics.color_bar as cb
 import list.column_labels as clab
 import graphics.utils as gr
@@ -22,7 +23,7 @@ import system.utils as sys_utils
 import graphics.vector_plot as vec
 
 '''
-you can copy the data from abacus with 
+you can copy the data from abacus with
 ./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/paper_ale/figures/figure_5 1 1000000 30000
 '''
 
@@ -93,6 +94,7 @@ fig = pplt.figure(
 # pre-create subplots and axes
 fig.add_subplot(3, 3, 1)
 fig.add_subplot(3, 3, 2)
+fig.add_subplot(3, 3, 3)
 fig.add_subplot(3, 3, 4)
 fig.add_subplot(3, 3, 5)
 fig.add_subplot(3, 3, 7)
@@ -122,14 +124,14 @@ cb.set_size(sigma_colorbar_axis, parameters['colorbar_size'])
 
 
 '''
-plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration   
-Input values: 
-    * Mandatory: 
+plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration
+Input values:
+    * Mandatory:
         - 'ax': the axis where the polygon will be drawn
         - 'axis_min_max': the bounds of the X values in the current configuration
         - 'data_u_msh': the data for the mesh displacement field
-    * Optional: 
-        - 'margin': a margin, measured as relative to axis_min_max[1][1] - axis_mim_max[1][0] which is used to expand the region on top 
+    * Optional:
+        - 'margin': a margin, measured as relative to axis_min_max[1][1] - axis_mim_max[1][0] which is used to expand the region on top
 '''
 
 
@@ -244,15 +246,15 @@ def plot_snapshot(fig, n_file,
         data_u_msh = pd.read_csv(os.path.join(
             snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
 
-        X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
-                                                                                [0, 0],
-                                                                                [parameters['L'],
-                                                                                    parameters['h']],
-                                                                                parameters['n_bins_v_fl'])
+        X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
+                                                                                                [0, 0],
+                                                                                                [parameters['L'],
+                                                                                                    parameters['h']],
+                                                                                                parameters['n_bins_v_fl'])
 
         # X, Y are the positions of the mesh nodes in the current configuration
-        X = np.array(lis.add_lists_of_lists(X_ref, u_n_X))
-        Y = np.array(lis.add_lists_of_lists(Y_ref, u_n_Y))
+        X = np.array(lis.add_lists_of_lists(X_msh_ref, u_msh_n_X))
+        Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
 
         # compute the min-max of the snapshot
         axis_min_max = [lis.min_max(X), lis.min_max(Y)]
@@ -274,23 +276,106 @@ def plot_snapshot(fig, n_file,
         w_min_max = cal.min_max_file(os.path.join(
             snapshot_path, 'w_n_' + str(n_file) + '.csv'))
 
-    X_t, t = gr.interpolate_curve(
+    X_curr, t = gr.interpolate_curve(
         data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
-    X_ref, Y_ref, u_n_X, u_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
-                                                                             [0, 0],
-                                                                             [parameters['L'],
-                                                                                 parameters['h']],
-                                                                             parameters['n_bins_v_fl'],
-                                                                             clab.label_x_column,
-                                                                             clab.label_y_column,
-                                                                             clab.label_v_column)
+    X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
+                                                                                             [0, 0],
+                                                                                             [parameters['L'],
+                                                                                                 parameters['h']],
+                                                                                             parameters['n_bins_v_fl'],
+                                                                                             clab.label_x_column,
+                                                                                             clab.label_y_column,
+                                                                                             clab.label_v_column)
+
+    # =============
+    # u subplot
+    # =============
+
+    ax = fig.axes[0]
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)
+    gr.set_2d_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']],
+                          axis_origin=parameters['axis_origin']
+                          )
+
+    # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
+    X_U, Y_U, U_x, U_y = geo.u_1d(data_X, parameters['h'])
+
+    # coordinates of the curve in the reference configuration
+    X_ref = np.array(list(zip(X_U, Y_U)))
+
+    # plot the vector field U
+    vp.plot_1d_vector_field(ax, [X_U, Y_U], [U_x, U_y],
+                            shaft_length=None,
+                            head_length=parameters['u_arrow_head_length'],
+                            head_angle=parameters['head_angle'],
+                            line_width=parameters['u_arrow_line_width'],
+                            alpha=parameters['alpha'],
+                            color=parameters['u_arrow_color'],
+                            legend='$\\vec{U}$',
+                            legend_font_size=parameters['legend_font_size'],
+                            legend_arrow_length=parameters['legend_arrow_length'],
+                            legend_text_arrow_space=parameters['legend_text_arrow_space'],
+                            legend_head_over_shaft_length=parameters['legend_head_over_shaft_length'],
+                            legend_position=parameters['u_legend_position'],
+                            stride=parameters['u_stride'],
+                            z_order=0)
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices,
+                    line_width=parameters['plot_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
+
+    # plot X_curr
+    gr.plot_curve_grid(ax, X_curr,
+                       line_color='green',
+                       legend='$\\text{Current}$',
+                       legend_position=parameters['X_curr_legend_position'],
+                       legend_inner_location='upper left',
+                       line_width=parameters['X_line_width'],
+                       z_order=1
+                       )
+
+    # plot X_ref
+    gr.plot_curve_grid(ax, X_ref,
+                       line_color='red',
+                       legend='$\\text{Reference}$',
+                       legend_position=parameters['X_ref_legend_position'],
+                       legend_inner_location='upper left',
+                       line_width=parameters['X_line_width'],
+                       z_order=1
+                       )
+
+    gr.plot_2d_axes(
+        ax, [0, 0], [parameters['L'], parameters['h']],
+        tick_length=parameters['tick_length'],
+        line_width=parameters['axis_line_width'],
+        axis_label=parameters['axis_label'],
+        axis_label_angle=parameters['axis_label_angle'],
+        axis_label_offset=parameters['axis_label_offset'],
+        tick_label_offset=parameters['tick_label_offset'],
+        tick_label_format=['f', 'f'],
+        font_size=parameters['axis_font_size'],
+        plot_label=parameters["u_panel_label"],
+        plot_label_offset=parameters['panel_label_offset'],
+        axis_origin=parameters['axis_origin'],
+        axis_bounds=axis_min_max,
+        margin=parameters['axis_margin'],
+        n_minor_ticks=parameters['n_minor_ticks'],
+        minor_tick_length=parameters['minor_tick_length'],
+        z_order=const.high_z_order)
 
     # =============
     # nu subplot
     # =============
 
-    ax = fig.axes[0]  # Use the existing axis
+    ax = fig.axes[1]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -318,7 +403,7 @@ def plot_snapshot(fig, n_file,
                                              axis=nu_colorbar_axis)
 
     # plot X and nu
-    gr.plot_curve_grid(ax, X_t,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_nu,
                        line_color='black',
                        line_width=parameters['nu_line_width'])
@@ -355,7 +440,7 @@ def plot_snapshot(fig, n_file,
     # psi subplot
     # =============
 
-    ax = fig.axes[1]  # Use the existing axis
+    ax = fig.axes[2]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -378,7 +463,7 @@ def plot_snapshot(fig, n_file,
                                               axis=psi_colorbar_axis)
 
     # plot X and psi
-    gr.plot_curve_grid(ax, X_t,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_psi,
                        line_color='black',
                        line_width=parameters['psi_line_width'])
@@ -415,7 +500,7 @@ def plot_snapshot(fig, n_file,
     # v_fl subplot
     # =============
 
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[3]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -485,7 +570,7 @@ def plot_snapshot(fig, n_file,
     # sigma_fl subplot
     # =============
 
-    ax = fig.axes[3]  # Use the existing axis
+    ax = fig.axes[4]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -566,7 +651,7 @@ def plot_snapshot(fig, n_file,
     # v subplot
     # =============
 
-    ax = fig.axes[4]  # Use the existing axis
+    ax = fig.axes[5]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -633,7 +718,7 @@ def plot_snapshot(fig, n_file,
     # w subplot
     # =============
 
-    ax = fig.axes[5]  # Use the existing axis
+    ax = fig.axes[6]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -656,7 +741,7 @@ def plot_snapshot(fig, n_file,
                                             axis=w_colorbar_axis)
 
     # plot X and w
-    gr.plot_curve_grid(ax, X_t,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_w,
                        line_color='black',
                        line_width=parameters['w_line_width'])
@@ -693,7 +778,7 @@ def plot_snapshot(fig, n_file,
     # sigma subplot
     # =============
 
-    ax = fig.axes[6]  # Use the existing axis
+    ax = fig.axes[7]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -715,7 +800,7 @@ def plot_snapshot(fig, n_file,
                                                 axis=sigma_colorbar_axis)
 
     # plot X and sigma
-    gr.plot_curve_grid(ax, X_t,
+    gr.plot_curve_grid(ax, X_curr,
                        color_map=color_map_sigma,
                        line_color='black',
                        line_width=parameters['sigma_line_width'])
