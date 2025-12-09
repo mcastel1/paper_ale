@@ -276,7 +276,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pomineq^{\\text{R}}$',
+        label='$\pomineq^{\\text{C}}$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -288,7 +288,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle=':',
-        label='$\pomouteq^{\\text{R}}$',
+        label='$\pomouteq^{\\text{C}}$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -300,7 +300,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='--',
-        label='$\pomtopeq^{\\text{R}}$',
+        label='$\pomtopeq^{\\text{C}}$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -312,7 +312,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['partial_omega_line_width'],
         dashes=[5, 2, 2, 2, 2, 2],
-        label='$\pombottomeq^{\\text{R}}$',
+        label='$\pombottomeq^{\\text{C}}$',
         zorder=const.high_z_order,
         clip_on=False
     )
