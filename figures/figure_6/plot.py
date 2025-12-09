@@ -27,7 +27,7 @@ Parameter meaning:
 - animation_stride: the stride with which frames will be read by animate.py to generate the animation
 '''
 
-matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
+matplotlib.use('pgf')  # use a non-interactive backend to avoid the need of
 
 
 # add the path where to find the shared modules
@@ -43,15 +43,16 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 pplt.rc['grid'] = False  # disables default gridlines
 
 plt.rcParams.update({
-    "text.usetex": True,
-    "text.latex.preamble": (
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": (
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
+        r"\usepackage{tikz} "
+        r"\usetikzlibrary{math} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
     )
 })
-
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
@@ -151,17 +152,55 @@ def plot_snapshot(fig, n_file,
                color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
                zorder=2)
 
-    # plot \partial Omega _l
+    # plot \partial Omega_in
     ax.plot(
         [0, 0],
         [0, parameters['h']],
-        color=parameters['partial_omega_l_color'],
+        color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pom$',
-        zorder=const.high_z_order
+        label='$\pomineq^y$',
+        zorder=const.high_z_order,
+        clip_on=False
     )
 
+    # plot \partial Omega_out
+    ax.plot(
+        [parameters['L'], parameters['L']],
+        [0, parameters['h']],
+        color=parameters['partial_omega_out_color'],
+        linewidth=parameters['partial_omega_line_width'],
+        linestyle=':',
+        label=r'$\pomouteq^y$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_top
+    ax.plot(
+        [0, parameters['L']],
+        [parameters['h'], parameters['h']],
+        color=parameters['partial_omega_top_color'],
+        linewidth=parameters['partial_omega_line_width'],
+        linestyle='--',
+        label='$\pomineq^y$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_bottom
+    ax.plot(
+        [0, parameters['L']],
+        [0, 0],
+        color=parameters['partial_omega_bottom_color'],
+        linewidth=parameters['partial_omega_line_width'],
+        linestyle='dotted',
+        label='$\pombottomeq^y$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+# draw the legend
     ax.legend(
         loc='upper left',           # Which corner of the legend to use as anchor
         # Where to place that corner (x, y in axes coords)
