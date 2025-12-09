@@ -1,4 +1,5 @@
 import matplotlib
+from matplotlib.lines import Line2D
 from matplotlib.patches import Arc
 from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
@@ -144,7 +145,10 @@ def plot_snapshot(fig, n_file,
 
     # plot the boundary polygon in the current configuration
     poly = Polygon(data_ref_boundary_vertices_ellipse, fill=True,
-                   linewidth=parameters['mesh_line_width_curr_plot'], edgecolor='red', facecolor='white', zorder=1)
+                   linewidth=parameters['partial_omega_line_width'],
+                   edgecolor='red',
+                   facecolor='white',
+                   zorder=1)
     ax.add_patch(poly)
 
     # plot the focal point
@@ -159,7 +163,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pomineq^y$',
+        label='$\pomineq^{\\text{R}}$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -171,7 +175,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle=':',
-        label=r'$\pomouteq^y$',
+        label='$\pomouteq^{\\text{R}}$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -183,7 +187,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='--',
-        label='$\pomineq^y$',
+        label='$\pomtopeq^{\\text{R}}$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -194,19 +198,31 @@ def plot_snapshot(fig, n_file,
         [0, 0],
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['partial_omega_line_width'],
-        linestyle='dotted',
-        label='$\pombottomeq^y$',
+        dashes=[5, 2, 2, 2, 2, 2],
+        label='$\pombottomeq^{\\text{R}}$',
         zorder=const.high_z_order,
         clip_on=False
     )
 
-# draw the legend
+  # Create custom legend handles
+    handles, labels = ax.get_legend_handles_labels()
+
+    # Add a custom line handle for the polygon
+    polygon_line_handle = Line2D([0], [0],
+                                 color='red',
+                                 linewidth=parameters['partial_omega_line_width'],
+                                 linestyle='-')
+
+    handles.append(polygon_line_handle)
+    labels.append(r'$\pomellipseeq{\text{R}}$')
+
     ax.legend(
-        loc='upper left',           # Which corner of the legend to use as anchor
-        # Where to place that corner (x, y in axes coords)
-        bbox_to_anchor=(0.5, 0.95),
+        handles=handles,
+        labels=labels,
+        loc='upper right',
+        bbox_to_anchor=np.array(parameters['legend_position']),
         frameon=True,
-        handlelength=3
+        handlelength=parameters['legend_line_length']
     )
 
     #
@@ -224,7 +240,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
-                    axis_label=[r'$X^1 \, [\met]$', r'$X^2 \, [\met]$'],
+                    axis_label=parameters['axis_label_ref'],
                     tick_label_format=['f', 'f'],
                     font_size=[parameters['font_size'],
                                parameters['font_size']],
@@ -253,6 +269,62 @@ def plot_snapshot(fig, n_file,
                     color='black',
                     alpha=parameters['alpha_mesh'])
 
+    # plot \partial Omega_in
+    ax.plot(
+        [0, 0],
+        [0, parameters['h']],
+        color=parameters['partial_omega_in_color'],
+        linewidth=parameters['partial_omega_line_width'],
+        linestyle='-.',
+        label='$\pomineq^{\\text{R}}$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_out
+    ax.plot(
+        [parameters['L'], parameters['L']],
+        [0, parameters['h']],
+        color=parameters['partial_omega_out_color'],
+        linewidth=parameters['partial_omega_line_width'],
+        linestyle=':',
+        label='$\pomouteq^{\\text{R}}$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_top
+    ax.plot(
+        [0, parameters['L']],
+        [parameters['h'], parameters['h']],
+        color=parameters['partial_omega_top_color'],
+        linewidth=parameters['partial_omega_line_width'],
+        linestyle='--',
+        label='$\pomtopeq^{\\text{R}}$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_bottom
+    ax.plot(
+        [0, parameters['L']],
+        [0, 0],
+        color=parameters['partial_omega_bottom_color'],
+        linewidth=parameters['partial_omega_line_width'],
+        dashes=[5, 2, 2, 2, 2, 2],
+        label='$\pombottomeq^{\\text{R}}$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    ax.legend(
+        handles=handles,
+        labels=labels,
+        loc='upper right',
+        bbox_to_anchor=np.array(parameters['legend_position']),
+        frameon=True,
+        handlelength=parameters['legend_line_length']
+    )
     # plot the focal point
     ax.scatter(focal_point_position[0], focal_point_position[1],
                color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
@@ -275,8 +347,12 @@ def plot_snapshot(fig, n_file,
         )
 
     # plot the boundary polygon in the current configuration
-    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True,
-                   linewidth=parameters['mesh_line_width_curr_plot'], edgecolor='red', facecolor='white', zorder=1)
+    poly = Polygon(data_def_boundary_vertices_ellipse,
+                   fill=True,
+                   linewidth=parameters['partial_omega_line_width'],
+                   edgecolor='red',
+                   facecolor='white',
+                   zorder=1)
     ax.add_patch(poly)
     #
 
@@ -318,10 +394,31 @@ def plot_snapshot(fig, n_file,
 
     ax.add_patch(theta_arc)
 
+  # Create custom legend handles
+    handles, labels = ax.get_legend_handles_labels()
+
+    # Add a custom line handle for the polygon
+    polygon_line_handle = Line2D([0], [0],
+                                 color='red',
+                                 linewidth=parameters['partial_omega_line_width'],
+                                 linestyle='-')
+
+    handles.append(polygon_line_handle)
+    labels.append(r'$\pomellipseeq{\text{C}}$')
+
+    ax.legend(
+        handles=handles,
+        labels=labels,
+        loc='upper right',
+        bbox_to_anchor=np.array(parameters['legend_position']),
+        frameon=True,
+        handlelength=parameters['legend_line_length']
+    )
+
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
-                    axis_label=[r'$X^1 \, [\met]$', r'$X^2 \, [\met]$'],
+                    axis_label=parameters['axis_label_curr'],
                     tick_label_format=['f', 'f'],
                     font_size=[parameters['font_size'],
                                parameters['font_size']],
