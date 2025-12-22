@@ -2,10 +2,34 @@
 
 In this Section, we will discuss the interaction between a bulk \ac{fl} and the simplest structure---a rigid \ac{bod} which is only allowed to turn about one point.
 
+
+
+
+
+
 All quantities relative to the \acl{fl}, \acl{bod} and \acl{dom} will be denoted by the suffix \ac{fl}, \ac{bod} and \acl{dom}, respectively.
 
+In all the systems that we will consider, we will introduce the \ac{ref} and \ac{cur} configuration \cite{kamenskyLectureNotesMAE,landauTheoryElasticity1986,slaughterLinearizedTheoryElasticity2002}, see \cref{fig_ref_curr}.
+In the \ac{ref} configuration, the region occupied by the bulk fluid is described by coordinates $y^1,y^2$. The  axis of the ellipse, e..g, the rigid body, lies parallel to the $y^1$ axis.
+In the \ac{cur} configuration, the region occupied by the bulk fluid is described by coordinates $x^1, x^2$. The  axis of the ellipse, e..g, the rigid body, forms an angle  $\theta$ (red arc) with respect to the $x^1$ axis. All quantities relative to the \ac{ref} and \ac{cur} configuration will be denoted by the superscript \ac{ref} and \ac{cur}, respectively.
 
-The equations of motion are
+%sign
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/figure_6/figure_6.pdf}
+    \caption{
+        \acresetall
+        \label{fig_ref_curr}
+        Reference and current configuration for the interaction between a bulk fluid and a rigid body.
+        \plab{A} Reference configuration: Boundaries in the reference configuration are denoted by $\pomineqr$,$\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The mesh in the reference configuration (gray lines) is also shown.
+        \plab{B} Current configuration. Boundaries in the current configuration are denoted by $\pomineqc$,$\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The mesh in the current configuration (gray lines) is also shown.
+    }
+\end{figure*}
+
+
+
+The equations of motion, expressed for the current configuration, are
 
 
 \begin{align}
@@ -14,22 +38,45 @@ The equations of motion are
     \label{eq_fl_rigid_fl_2}
     \partial^x_\alpha \vf^\alpha =                                                             & 0                               ,                                                            \\
     \label{eq_fl_rigid_rigid}
-    I \frac{d^2 \theta}{d t^2} =                                                               & - \int_\pomellipseeq \, \epsilon_{3 \alpha \beta} \sigma_{\beta \gamma} n_\gamma \dint{l}.
+    I \frac{\dint{}^2 \theta}{\dint{} t^2} =                                                   & - \int_\pomellipseeqc \, \epsilon_{3 \alpha \beta} \sigma_{\beta \gamma} n_\gamma \dint{l}.
 \end{align}
 
-Here,  \cref{eq_fl_rigid_fl_1,eq_fl_rigid_fl_2} are the equations of motion for  \ac{fl}, and \cref{eq_fl_rigid_rigid} is the equation of motion for \ac{bod}.
+Here,  \cref{eq_fl_rigid_fl_1,eq_fl_rigid_fl_2} are the equations of motion for  \ac{fl}, and \cref{eq_fl_rigid_rigid} is the equation of motion for the \ac{bod}.
 
-First, \cref{eq_fl_rigid_fl_1} are the \ac{ns} and continuity equation in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}. There, $\rhof$ and $\etaf$, $\vf^\alpha$ and $\sigmaf$ are the two-dimensional density and viscosity,  velocity and surface tension  of the bulk \ac{fl}, respectively, and
+\Cref{eq_fl_rigid_fl_1,eq_fl_rigid_fl_2} are the \ac{ns} and continuity equation, respectively, in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}. There, $\rhof$ and $\etaf$, $\vf^\alpha$ and $\sigmaf$ are the two-dimensional density and viscosity,  velocity and surface tension  of  \ac{fl}, respectively, and
 \be\label{eq_def_pder}
 \partial^x_\alpha \equiv \pder{}{x^\alpha}.
 \ee
 
 Here, greek indices $\alpha, \beta, \cdots$ will be used to denote vectors and tensors in  two-dimensional Euclidean space---their position as upper or lower indices is thus immaterial \cite{marchiafavaAppuntiDiGeometria2005}.
 
-Second, \cref{eq_fl_rigid_rigid} is the rigid-body equation of motion, which relates the angular acceleration in the \ac{lhs}, to the momentum of external forces exerted by the fluid on the body in the \ac{rhs} \cite{landauMechanics1960}. In there, $I$ is the moment of inertia of the body, and  the \ac{rhs} contains the integral along the surface of the rigid body in the current configuration, of the forces exerted by \ac{fl} on the \ac{bod}.
+\Cref{eq_fl_rigid_rigid} is the rigid-body equation of motion \cite{landauMechanics1960}, which relates the angular acceleration in the \ac{lhs}, to the momentum of external forces exerted by the fluid on the body in the \ac{rhs} \cite{landauMechanics1960}. In there, $I$ is the moment of inertia of the body. The \ac{rhs} contains the integral along the surface of the rigid body, of the forces exerted by \ac{fl} on  \ac{bod} \cite{landauFluidMechanics1987}. These forces are expressed in terms of the fluid stress tensor
+\be
+\label{eq_strees_tensor_fluid}
+\sigma_{\alpha \beta } \equiv \sigma_\fluid \delta_{\alpha \beta}+ \eta_\fluid\left( \partial^x_\beta v_\fluid^\alpha + \partial^x_\alpha v_\fluid^\beta \right),
+\ee
+where $\epsilon_{\alpha \beta \gamma}$ is the three-dimensional Levi-Civita symbol. Finally, $\dint{l}$ is the line element of the boundary of  \ac{bod}, and $n_\alpha$ the boundary normal.
 
-
+We will now introduce the reference configuration, and relate it to the current one \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr}. At a time $t$, the point $\bx$ in the current configuration corresponds to a point $\by$ in the reference configuration through the deformation field
+\be\label{eq_def_u}
+u^{\alpha \, t}(\by) \equiv x^\alpha - y^\alpha.
+\ee
+and the deformation-gradient tensor
+\be
+\label{eq_def_F}
+F_{\alpha \beta} \equiv \delta_{\alpha \beta} +\partial^y_\beta u^{t \, \alpha}.
+\ee
 %sign
+
+The \acl{bc} for \cref{eq_fl_rigid_fl_1,eq_fl_rigid_fl_2,eq_fl_rigid_rigid} are
+\begin{align}
+    \vf^1                                     & =  v_\ast \; \text{ on } \pomineq\label{bc_fl_rigid_1},            \\
+    \vf^2                                     & =  0 \; \text{ on } \pomineq \label{bc_fl_rigid_2},                \\
+    {\bm \vf}                                 & = \bf{0} \; \text{ on } \pomweq,                                   \\
+    \vf^\alpha                                & = \der{R(\theta)_{\alpha \beta} }{t} [\psi^t_\beta(\bx) - c_\beta] \\
+    \hat{n}_\beta \partial^x_\beta \vf^\alpha & = 0  \; \text{ on } \pomouteq,                                     \\
+    \sigmaf                                   & = 0 \; \text{ on } \pomouteq
+\end{align}
 
 \begin{figure*}
     \centering

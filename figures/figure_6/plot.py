@@ -163,7 +163,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pomineq^{\\text{R}}$',
+        label='$\pomineqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -175,7 +175,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle=':',
-        label='$\pomouteq^{\\text{R}}$',
+        label='$\pomouteqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -187,7 +187,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='--',
-        label='$\pomtopeq^{\\text{R}}$',
+        label='$\pomtopeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -199,7 +199,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['partial_omega_line_width'],
         dashes=[5, 2, 2, 2, 2, 2],
-        label='$\pombottomeq^{\\text{R}}$',
+        label='$\pombottomeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -214,7 +214,7 @@ def plot_snapshot(fig, n_file,
                                  linestyle='-')
 
     handles.append(polygon_line_handle)
-    labels.append(r'$\pomellipseeq{\text{R}}$')
+    labels.append(r'$\pomellipseeqr$')
 
     ax.legend(
         handles=handles,
@@ -276,7 +276,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pomineq^{\\text{C}}$',
+        label='$\pomineqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -288,7 +288,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle=':',
-        label='$\pomouteq^{\\text{C}}$',
+        label='$\pomouteqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -300,7 +300,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='--',
-        label='$\pomtopeq^{\\text{C}}$',
+        label='$\pomtopeqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -312,7 +312,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['partial_omega_line_width'],
         dashes=[5, 2, 2, 2, 2, 2],
-        label='$\pombottomeq^{\\text{C}}$',
+        label='$\pombottomeqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -360,7 +360,7 @@ def plot_snapshot(fig, n_file,
     # 1) plot fixed axis
     ax.plot(
         [focal_point_position[0], focal_point_position[0] +
-            parameters['ellipse_angle_axis_length']],
+            parameters['angle_axis_length']],
         [focal_point_position[1]] * 2,
         color=parameters['ellipse_angle_axis_color'],
         linewidth=parameters['mesh_line_width_curr_plot'],
@@ -371,7 +371,7 @@ def plot_snapshot(fig, n_file,
     delta = np.dot(
         gr.R_2d(data_theta_omega.loc[int(
             n_file/parameters['solution_frame_stride']-1), 'theta']),
-        [parameters['ellipse_angle_axis_length'], 0]
+        [parameters['angle_axis_length'], 0]
     )
 
     ax.plot(
@@ -389,6 +389,8 @@ def plot_snapshot(fig, n_file,
                     width=parameters['ellipse_angle_axis_length'],
                     height=parameters['ellipse_angle_axis_length'],
                     color=parameters['ellipse_angle_axis_color'],
+                    linestyle=':',  # or '-.', ':', '-',
+                    linewidth=parameters['ellipse_angle_line_width'],
                     zorder=const.high_z_order
                     )
 
@@ -404,7 +406,16 @@ def plot_snapshot(fig, n_file,
                                  linestyle='-')
 
     handles.append(polygon_line_handle)
-    labels.append(r'$\pomellipseeq{\text{C}}$')
+    labels.append(r'$\pomellipseeqc$')
+
+    # Add a custom line handle for the arc
+    arc_line_handle = Line2D([0], [0],
+                             color=parameters['ellipse_angle_axis_color'],
+                             linewidth=parameters['ellipse_angle_line_width'],
+                             linestyle=':')
+
+    handles.append(arc_line_handle)
+    labels.append(r'$\theta$')  # or whatever label you want
 
     ax.legend(
         handles=handles,
