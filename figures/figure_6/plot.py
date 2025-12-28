@@ -237,6 +237,14 @@ def plot_snapshot(fig, n_file,
         zorder=const.high_z_order
     )
 
+    # plot the label for the region \Omega_reference
+    ax.text(0 + parameters['omega_label_position'][0] * parameters['L'],
+            0 + parameters['omega_label_position'][1] *
+            parameters['h'], rf'$\omr$',
+            fontsize=parameters['omega_label_font_size'],
+            ha='center',
+            va='center')
+
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
@@ -425,6 +433,14 @@ def plot_snapshot(fig, n_file,
         frameon=True,
         handlelength=parameters['legend_line_length']
     )
+
+    # plot the label for the regione \Omega_current
+    ax.text(0 + parameters['omega_label_position'][0] * parameters['L'],
+            0 + parameters['omega_label_position'][1] *
+            parameters['h'], rf'$\omc$',
+            fontsize=parameters['omega_label_font_size'],
+            ha='center',
+            va='center')
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     tick_length=parameters['tick_length'],

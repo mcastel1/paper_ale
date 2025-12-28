@@ -4,15 +4,24 @@
 \providecommand{\vf}{v}
 \providecommand{\vfc}{\vf_\current}
 \providecommand{\vfr}{\vf_\reference}
-\providecommand{\rhof}{\rho}
-\providecommand{\etaf}{\eta}
+\providecommand{\rhof}{\rho_\fluid}
+\providecommand{\etaf}{\eta_\fluid}
 \providecommand{\sigmac}{{\sigma_{\current}}}
 \providecommand{\sigmaf}{\sigma}
 \providecommand{\sigmafc}{{\sigmaf_\current}}
 \providecommand{\sigmafr}{{\sigmaf_\reference}}
 
+\providecommand{\bxi}[1]{{\bm \xi}(#1)}
 
 \providecommand{\xc}{{x}_\current}
 \providecommand{\xr}{{x}_\reference}
 \providecommand{\bxc}{{\bm{\xc}}}
 \providecommand{\bxr}{{\bm{\xr}}}
+
+\providecommand{\pderc}[2]{\pder{#1}{\xc^#2}}
+\providecommand{\pderr}[2]{\pder{#1}{\xr^#2}}
+
+
+\providecommand{\eqsfluidbodyref}{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference,eq_fl_rigid_rigid_reference,bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference}
+
+\definecolor{glossary-link-color}{RGB}{153,0,0}
