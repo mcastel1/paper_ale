@@ -21,7 +21,7 @@ u^{\alpha \, t}(\bxr) \equiv \xc^\alpha - \xr^\alpha.
 and the deformation-gradient tensor
 \be
 \label{eq_def_F}
-F_{\alpha \beta} \equiv \delta_{\alpha \beta} +\partial^\reference_\beta u^{t \, \alpha},
+F_{\alpha \beta} \equiv \delta_{\alpha \beta} + \pderr{u^{t \, \alpha}}{\beta},
 \ee
 where we set
 \begin{align}\label{eq_def_pder_ref}
@@ -45,12 +45,16 @@ Here, we will denote the mapping between $\bxc$ and $\bxr$ in \cref{eq_def_u} wi
                 \acresetall
                 \label{fig_ref_curr}
                 \Ac{ref} and \ac{cur} configuration for the interaction between a bulk fluid and a rigid body.
-                \plab{A} \Ac{ref} configuration: Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$,$\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The Cartesian coordinates $\bxr$ and the  mesh in the \ac{ref} configuration (gray lines) are also shown.
-                \plab{B} \Ac{cur} configuration. Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$,$\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The Cartesian coordinates and the mesh in the \ac{cur} configuration (gray lines) are also shown.
+                %
+                \plab{A} \Ac{ref} configuration. The region $\omr$ is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$,$\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The Cartesian coordinates $\bxr$  are also shown.
+                %
+                \plab{B} \Ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$,$\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The Cartesian coordinates are also shown.
         }
 \end{figure*}
 
-\subsection{Equations of motion in the current-configuration coordinates}\label{sec_bod_cur}
+\subsection{Equations of motion for the fluid}\label{sec_bod}
+
+\subsubsection{Equations of motion in the current-configuration coordinates}\label{sec_bod_cur}
 
 We denote the \ac{bflu} velocity and tension by $\vfc(\bxc)$ and $\sigmafc(\bxc)$, respectively, where the superscript \ac{cur} specifies that these fields depend on the coordinate $\bxc$ in the \ac{cur} configuration.
 
@@ -87,7 +91,7 @@ The \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current,eq_fl_r
         \label{bc_fl_rigid_2_current}
         \vfc^2  (\bxc)                & =  0 \; \text{ on } \pomineqc ,                                                                            \\
         \label{bc_fl_rigid_3_current}
-        {\bm \vfc}    (\bxc)          & = {\bm 0} \; \text{ on } \pomweqc ,                                                                        \\
+        {\bm \vfc}    (\bxc)          & = \bzero \; \text{ on } \pomweqc ,                                                                         \\
         \label{bc_fl_rigid_4_current}
         \vfc^\alpha (\bxc)            & = \der{[R(\theta)]_{\alpha \beta} }{t} [\psi^{t \, \beta}(\bxc) - c^\beta] \; \text{ on } \pomellipseeqc , \\
         \label{bc_fl_rigid_5_current}
@@ -112,7 +116,7 @@ R(\theta) \equiv
 \ee
 Finally, \cref{bc_fl_rigid_5_current,bc_fl_rigid_6_current} ensure, respectively, that on \pomoutc there is zero traction and tension; this corresponds to the hypothesis that there is free flow at \pomoutc \cite{loggAutomatedSolutionDifferential2012,landauFluidMechanics1987}.
 
-\subsection{Equations of motion in the reference-configuration coordinates}\label{sec_bod_ref}
+\subsubsection{Equations of motion in the reference-configuration coordinates}\label{sec_bod_ref}
 
 The solution of the \ac{bvp} \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current,eq_fl_rigid_rigid_current,bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_4_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current} is particularly involved because of the presence of the moving boundary \pomellipsec, cf. \cref{fig_ref_curr}. Following the \ac{ale} procedure, we  bridge between the Lagrangian and the Eulerian description used to describe, respectively,  \ac{bod} and \ac{bflu}  \cite{kamenskyLectureNotesMAE}.
 
@@ -168,14 +172,47 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
         \sigmafr (\bxr)                                       & = 0 \; \text{ on } \pomouteqr.
 \end{align}
 
-Overall, \cref{\eqsfluidbodyref} depend on the \ac{ref} fields and coordinate only, and constitute, at any time $t$, a well-posed \ac{bvp}.
+Overall, \cref{\eqsfluidbodyref} depend on the \ac{ref} fields and coordinate only, and constitute, at any time $t$, a  \ac{bvp} which determines $\bm \vfr$ and $\sigmafr$.
 
-\subsection{Equations for the fluid domain}
+\subsection{Equations for the displacement}
 \label{sec_eq_fluid_domain}
 
 The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\bm u$, which will be determined with an analogy with the theory of elasticity. We imagine, as \ac{bod} rotates about its focal point, that each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, as an elastic body.
 
-%sign 
+The \ac{bvp} which determines $\bm u$ is given by the following elastic model \cite{kamenskyLectureNotesMAE,marsdenMathematicalFoundationsElasticity1994}
+
+\be\label{eq_mesh_fluid_rigid}
+\pder{\varsigma_{\alpha \beta}}{\xr^\beta} = 0,
+\ee
+where the elastic stress tensor $\varsigma$ is given by
+\be
+\varsigma_{\alpha \beta} \equiv F_{\alpha \gamma} S_{\gamma \beta},
+\ee
+and
+\begin{align}
+        \label{eq_ela_1}
+        S_{\alpha \beta} & \equiv \kel(\bu) E_{\gamma \gamma} \delta_{\alpha \beta} +2 \muel(\bu) \left[E_{\alpha \beta} - \frac{1}{2} \delta_{\alpha \beta} E_{\gamma \gamma}\right], \\
+        \label{eq_ela_2}
+        E_{\alpha \beta} & \equiv \frac{1}{2}\left( F_{\gamma \alpha}F_{\gamma \beta} - \delta_{\alpha \beta}\right),                                                                  \\
+        \label{eq_ela_3}
+        \kel(\bu)        & \equiv \frac{1}{[\det(F(\bu))]^\zeta},                                                                                                                      \\
+        \label{eq_ela_4}
+        \muel(\bu)       & \equiv \frac{1}{[\det(F(\bu))]^\zeta}.
+\end{align}
+In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulus $\kel$ and the modulus of compression $\muel$ on the deformation-gradient tensor \crefs{eq_def_F}. In the absence of this dependence, the elastic model above would be unstable under local compression. In fact, the model's Lagrangian would not penalize configurations with  small $\det F$. The inclusion of the dependence \crefs{eq_ela_3,eq_ela_4} on $\det F$  allows for penalizing these configurations, and it makes the model stable under mesh compression, such as the one below the ellipse in \cref{fig_ref_curr}B.
+
+The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
+\begin{align}
+        \label{bc_ela_1}
+        \bu & =\bzero \text{ on } \pomsqeqr,                                                       \\
+        \label{bc_ela_2}
+        \bu & = {\bm c} - \bxr + {\bm R}(\theta)\cdot (\bxr - {\bm c}) \text{ on } \pomellipseeqr.
+\end{align}
+\Cref{bc_ela_1} enforces the fact that the mesh is not deformed at the boundary \pomsqr. Finally,  \cref{bc_ela_2} ensures that the mesh deformation at \pomellipser  matches the deformation induced by the rotation of \ac{bod}.
+
+Overall, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2} yield a \ac{bvp} which determines $\bu$.
+
+%sign
 \begin{figure*}
         \centering
         \includegraphics[width=\textwidth]{figures/figure_1/figure_1.pdf}
