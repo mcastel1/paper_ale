@@ -172,7 +172,12 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
         \sigmafr (\bxr)                                       & = 0 \; \text{ on } \pomouteqr.
 \end{align}
 
-Overall, \cref{\eqsfluidbodyref} depend on the \ac{ref} fields and coordinate only, and constitute, at any time $t$, a  \ac{bvp} which determines $\bm \vfr$ and $\sigmafr$.
+Overall, \cref{\eqsfluidbodyref} depend on the \ac{ref} fields and coordinate only, and they constitute, at any time $t$, a  \ac{bvp} which, combined with the temporal \acp{bc},
+\begin{align}
+        {\bm \vfr}(\bxr, t=0)     & = {\bm \vfr}_0(\bxr),     \\
+        {\bm \sigmafr}(\bxr, t=0) & = {\bm \sigmafr}_0(\bxr), \\
+\end{align}
+determines $\bm \vfr$ and $\sigmafr$ as functions of space and time.
 
 \subsection{Equations for the displacement}
 \label{sec_eq_fluid_domain}
@@ -213,6 +218,9 @@ The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
 Overall, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2} yield a \ac{bvp} which determines $\bu$.
 
 %sign
+
+
+To numerically solve for the dynamics of the system in a time span $0 \leq t \leq T$, we discretize time by setting $\Delta t \equiv T/N$, $t_n \equiv n\, \delta t$, with $n = 0, 1, \cdots, N$. At each step $n$, given the fields
 \begin{figure*}
         \centering
         \includegraphics[width=\textwidth]{figures/figure_1/figure_1.pdf}
