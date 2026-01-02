@@ -400,7 +400,7 @@ def plot_snapshot(fig, n_file,
                     width=parameters['ellipse_angle_axis_length'],
                     height=parameters['ellipse_angle_axis_length'],
                     color=parameters['ellipse_angle_axis_color'],
-                    linestyle=':',  # or '-.', ':', '-',
+                    linestyle=':',
                     linewidth=parameters['ellipse_angle_line_width'],
                     zorder=const.high_z_order
                     )

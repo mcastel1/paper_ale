@@ -186,10 +186,10 @@ def plot_snapshot(fig, n_file,
     # 1) plot fixed axis
     ax.plot(
         [focal_point_position[0], focal_point_position[0] +
-            parameters['ellipse_angle_axis_length']],
+            parameters['angle_axis_length']],
         [focal_point_position[1]] * 2,
         color=parameters['ellipse_angle_axis_color'],
-        linewidth=parameters['mesh_line_width_v_plot'],
+        linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
         zorder=const.high_z_order
     )
@@ -197,14 +197,14 @@ def plot_snapshot(fig, n_file,
     delta = np.dot(
         gr.R_2d(data_theta_omega.loc[int(
             n_file/parameters['solution_frame_stride']-1), 'theta']),
-        [parameters['ellipse_angle_axis_length'], 0]
+        [parameters['angle_axis_length'], 0]
     )
 
     ax.plot(
         [focal_point_position[0], focal_point_position[0] + delta[0]],
         [focal_point_position[1], focal_point_position[1] + delta[1]],
         color=parameters['ellipse_angle_axis_color'],
-        linewidth=parameters['mesh_line_width_v_plot'],
+        linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
         zorder=const.high_z_order
     )
@@ -215,6 +215,8 @@ def plot_snapshot(fig, n_file,
                     width=parameters['ellipse_angle_axis_length'],
                     height=parameters['ellipse_angle_axis_length'],
                     color=parameters['ellipse_angle_axis_color'],
+                    linestyle=':',
+                    linewidth=parameters['ellipse_angle_line_width'],
                     zorder=const.high_z_order
                     )
 

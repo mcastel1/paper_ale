@@ -42,11 +42,11 @@ The solution of the interaction dynamics between \ac{bflu} and \ac{bod} is  invo
         \includegraphics[width=\textwidth]{figures/figure_6/figure_6.pdf}
         \caption{
                 \label{fig_ref_curr}
-                \Ac{ref} and \ac{cur} configuration for the interaction between a bulk fluid and a rigid body.
+                \Acl{ref} and \acl{cur} configuration for the interaction between a bulk fluid and a rigid body.
                 %
-                \plab{A} \Ac{ref} configuration. The region $\omr$ is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$,$\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The Cartesian coordinates $\bxr$  are also shown.
+                \plab{A} \Acl{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr^1 \leq L$, $0 \leq \xr^2 \leq h$ with the elliptical hole, and is delimited by the mesh (gray lines).  Boundaries in the \acl{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
                 %
-                \plab{B} \Ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$,$\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The Cartesian coordinates are also shown.
+                \plab{B} \Acl{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \acl{cur} configuration are denoted by $\pomineqc$, $\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The Cartesian coordinates $\bxc$ are also shown.
         }
 \end{figure*}
 
@@ -440,8 +440,11 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
         }
 \end{enumerate}
 
-%sign
 
+
+A macroscopic example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6/h^2 \xc^2 (\xc^2 - h)$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. Finally,  \ac{bod} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxc = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.
+
+%sign
 
 
 \begin{figure*}
@@ -449,7 +452,7 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
         \includegraphics[width=\textwidth]{figures/figure_1/figure_1.pdf}
         \caption{
                 \label{fig_fluid_rigid}
-                Interaction between a  \acl{bflu} and a rigid \acl{bod}. \plab{A} Temporal snapshot of the mesh (black lines) and  velocity field (arrows) at the \ac{cur} time $t$, shown on top. The direction of the velocity field is indicated by the arrows, and its norm by their color. The  \acl{bod} (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $\xc^1$ direction is denoted by a red arc.   \plab{B} Color map of the surface tension at the \ac{cur} instant of time $t$.
+                Interaction between a  \acl{bflu} and a rigid \acl{bod}, whose material properties roughly correspond to a light gas and a body made of light wood, respectively. \plab{A} Temporal snapshot of the mesh (black lines) and  velocity field (arrows) at the \acl{cur} time $t$, shown on top. The direction of the velocity field is indicated by the arrows, and its norm by their color; the direction of arrows with velocity close to zero is not defined. The  \acl{bod} (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $\xc^1$ direction is denoted by a red arc.   \plab{B} Color map of the surface tension at the \acl{cur} instant of time $t$.
         }
 \end{figure*}
 
