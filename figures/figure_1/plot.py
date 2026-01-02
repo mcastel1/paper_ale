@@ -171,7 +171,7 @@ def plot_snapshot(fig, n_file,
                         tick_label_format=parameters['v_colorbar_tick_label_format'],
                         axis=v_colorbar_axis)
 
-    # plot the ellipse focus
+    # plot the ellipse focal point
     focal_point_position = [
         parameters['c'][0] - np.sqrt(parameters['a']**2-parameters['b']**2), parameters['c'][1]]
     theta_1 = min(0, data_theta_omega.loc[int(
