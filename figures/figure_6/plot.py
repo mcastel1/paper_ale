@@ -47,13 +47,17 @@ plt.rcParams.update({
     "pgf.texsystem": "pdflatex",
     "pgf.preamble": (
         r"\usepackage{newpxtext,newpxmath} "
+        r"\usepackage{bm} "
         r"\usepackage{xcolor} "
         r"\usepackage{tikz} "
         r"\usetikzlibrary{math} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
+        rf"\input{{/Users/michelecastellana/Documents/paper_ale/definitions.tex}}"
     )
 })
+
+
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
@@ -131,9 +135,6 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
 
-    # Create custom legend handles
-    handles, labels = ax.get_legend_handles_labels()
-
     gr.plot_2d_mesh(ax, data_line_vertices_ref,
                     line_width=parameters['mesh_line_width_ref_plot'],
                     color='black',
@@ -153,14 +154,6 @@ def plot_snapshot(fig, n_file,
                    facecolor='white',
                    zorder=1)
     ax.add_patch(poly)
-
-    # plot the focal point
-    focal_point_handle = ax.scatter(focal_point_position[0], focal_point_position[1],
-                                    color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
-                                    zorder=2)
-
-    handles.append(focal_point_handle)
-    labels.append(r'$\int$')
 
     # plot \partial Omega_in
     ax.plot(
@@ -210,6 +203,9 @@ def plot_snapshot(fig, n_file,
         clip_on=False
     )
 
+    # Create custom legend handles
+    handles, labels = ax.get_legend_handles_labels()
+
     # Add a custom line handle for the polygon
     polygon_line_handle = Line2D([0], [0],
                                  color='red',
@@ -218,6 +214,14 @@ def plot_snapshot(fig, n_file,
 
     handles.append(polygon_line_handle)
     labels.append(r'$\pomellipseeqr$')
+
+    # plot the focal point
+    focal_point_handle = ax.scatter(focal_point_position[0], focal_point_position[1],
+                                    color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
+                                    zorder=2)
+
+    handles.append(focal_point_handle)
+    labels.append(r'$\bfocalpoint$')
 
     ax.legend(
         handles=handles,
@@ -336,10 +340,6 @@ def plot_snapshot(fig, n_file,
         frameon=True,
         handlelength=parameters['legend_line_length']
     )
-    # plot the focal point
-    ax.scatter(focal_point_position[0], focal_point_position[1],
-               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
-               zorder=2)
 
     # plot the polygon of the boundary 'ellipse_loop_id'
     #
@@ -407,8 +407,13 @@ def plot_snapshot(fig, n_file,
 
     ax.add_patch(theta_arc)
 
-  # Create custom legend handles
+    # Create custom legend handles
     handles, labels = ax.get_legend_handles_labels()
+
+    # plot the focal point
+    ax.scatter(focal_point_position[0], focal_point_position[1],
+               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
+               zorder=2)
 
     # Add a custom line handle for the polygon
     polygon_line_handle = Line2D([0], [0],
