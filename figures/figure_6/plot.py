@@ -131,6 +131,9 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
 
+    # Create custom legend handles
+    handles, labels = ax.get_legend_handles_labels()
+
     gr.plot_2d_mesh(ax, data_line_vertices_ref,
                     line_width=parameters['mesh_line_width_ref_plot'],
                     color='black',
@@ -152,9 +155,12 @@ def plot_snapshot(fig, n_file,
     ax.add_patch(poly)
 
     # plot the focal point
-    ax.scatter(focal_point_position[0], focal_point_position[1],
-               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
-               zorder=2)
+    focal_point_handle = ax.scatter(focal_point_position[0], focal_point_position[1],
+                                    color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'],
+                                    zorder=2)
+
+    handles.append(focal_point_handle)
+    labels.append(r'$\int$')
 
     # plot \partial Omega_in
     ax.plot(
@@ -203,9 +209,6 @@ def plot_snapshot(fig, n_file,
         zorder=const.high_z_order,
         clip_on=False
     )
-
-  # Create custom legend handles
-    handles, labels = ax.get_legend_handles_labels()
 
     # Add a custom line handle for the polygon
     polygon_line_handle = Line2D([0], [0],
