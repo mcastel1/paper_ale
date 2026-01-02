@@ -156,11 +156,11 @@ def plot_snapshot(fig, n_file,
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
                           parameters['b'], data_theta_omega.loc[int(n_file/parameters['solution_frame_stride']-1), 'theta'], V_y, np.nan)
 
-    vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], 0.3, 30, 1, 1, 'color_from_map', 0,
+    vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'],
-                        label=r'$v \, [\met/\sec]$',
+                        label=parameters['v_colorbar_axis_label'],
                         font_size=parameters['v_colorbar_font_size'],
                         tick_length=parameters['v_colorbar_tick_length'],
                         label_pad=parameters['v_colorbar_label_offset'],
@@ -305,7 +305,7 @@ def plot_snapshot(fig, n_file,
         line_width=parameters['sigma_colorbar_tick_line_width'],
         tick_length=parameters['sigma_colorbar_tick_length'],
         tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=r"$\sigma \, [\pas \, \met]$",
+        label=parameters['sigma_colorbar_axis_label'],
         mappable=contour_plot,
         axis=sigma_colorbar_axis
     )
