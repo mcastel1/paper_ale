@@ -223,7 +223,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
-                    axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
+                    axis_label=parameters['axis_label'],
                     tick_label_format=['f', 'f'],
                     font_size=[parameters['font_size'],
                                parameters['font_size']],
@@ -253,7 +253,7 @@ def plot_snapshot(fig, n_file,
                     alpha=parameters['alpha_mesh'],
                     zorder=1)
 
-    X_sigma, Y_sigma, Z_sigma, _, _, _ = gr.interpolate_surface(
+    _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
         data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
 
     if sigma_min_max == None:
@@ -267,7 +267,7 @@ def plot_snapshot(fig, n_file,
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_def_boundary_vertices_ellipse = []
-    for index, row in data_boundary_vertices_ellipse.iterrows():
+    for _, row in data_boundary_vertices_ellipse.iterrows():
         data_def_boundary_vertices_ellipse.append(
             np.add(
                 [row[':0'], row[':1']],
@@ -313,7 +313,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
-                    axis_label=[r'$x \, [\met]$', r'$y \, [\met]$'],
+                    axis_label=parameters['axis_label'],
                     tick_label_format=['f', 'f'],
                     font_size=[parameters['font_size'],
                                parameters['font_size']],

@@ -1,41 +1,456 @@
-\section{Fluid and rigid body}\label{sec_fl_rigid}
+\section{Fluid and rotating rigid body}\label{sec_fl_rigid}
 
-In this Section, we will discuss the interaction between a bulk \ac{fl} and the simplest structure---a rigid \ac{bod} which is only allowed to turn about one point.
-
-All quantities relative to the \acl{fl}, \acl{bod} and \acl{dom} will be denoted by the suffix \ac{fl}, \ac{bod} and \acl{dom}, respectively.
+In this Section, we will discuss the interaction between a  \ac{bflu} and the simplest structure---a rigid \ac{bod} which is only allowed to turn about one point.
 
 
-The equations of motion are
+In all the systems that we will consider, we will introduce the \ac{ref} and \ac{cur} configuration \cite{kamenskyLectureNotesMAE,landauTheoryElasticity1986,slaughterLinearizedTheoryElasticity2002}, see \cref{fig_ref_curr}. All quantities relative to the \ac{ref} and \ac{cur} configuration will be denoted by the superscript \ac{ref} and \ac{cur}, respectively.
+In the \ac{ref} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxr$. The  axis of the ellipse, e..g, the rigid body, lies parallel to the $\xc^1$ axis.
+In the \ac{cur} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxc$. The  axis of the e`llipse, e..g, the rigid body, forms an angle  $\theta$ (red arc) with respect to the $\xc^1$ axis.
+
+
+The \ac{ref} configuration, is related to the \ac{cur} one as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the reference configuration through the deformation field \cite{landauFluidMechanics1987}
+\be\label{eq_def_u}
+u^{\alpha \, t}(\bxr) \equiv \xc^\alpha - \xr^\alpha.
+\ee
+and the deformation-gradient tensor
+\be
+\label{eq_def_F}
+F_{\alpha \beta} \equiv \delta_{\alpha \beta} + \pderr{u^{t \, \alpha}}{\beta},
+\ee
+where we set
+\begin{align}\label{eq_def_pder_ref}
+        \partial^\reference_\alpha & \equiv \pder{}{\xr^\alpha}, \\
+        \label{eq_def_pder_cur}
+        \partial^\current_\alpha   & \equiv \pder{}{\xc^\alpha}.
+\end{align}
+
+Here, we will denote the mapping between $\bxc$ and $\bxr$ in \cref{eq_def_u} with the fields
+\begin{align}\label{eq_def_phi}
+        \bxc & = \bm{\varphi}^t(\bxr), \\
+        \label{eq_def_psi}
+        \bxr & = \bm{\psi}^t(\bxc).
+\end{align}
+
+We denote the \ac{bflu} velocity and surface tension by $\vfc(\bxc)$ and $\sigmafc(\bxc)$, respectively, where the superscript \ac{cur} specifies that these fields depend on the coordinate $\bxc$ in the \ac{cur} configuration.
+
+
+The solution of the interaction dynamics between \ac{bflu} and \ac{bod} is  involved because of the presence of the moving boundary \pomellipsec, cf. \cref{fig_ref_curr}. Following the \ac{ale} procedure, we will  bridge between the Lagrangian and the Eulerian description used to describe, respectively,  \ac{bod} and \ac{bflu}  \cite{kamenskyLectureNotesMAE}. To achieve this, in what follows we will write the equations of motion for \ac{bod} and \ac{bflu}, which are naturally formulated the \ac{cur} configuration first, and then rewrite them in the \ac{ref} configuration.
+
+
+\begin{figure*}
+        \centering
+        \includegraphics[width=\textwidth]{figures/figure_6/figure_6.pdf}
+        \caption{
+                \label{fig_ref_curr}
+                \Ac{ref} and \ac{cur} configuration for the interaction between a bulk fluid and a rigid body.
+                %
+                \plab{A} \Ac{ref} configuration. The region $\omr$ is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$,$\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The Cartesian coordinates $\bxr$  are also shown.
+                %
+                \plab{B} \Ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$,$\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The Cartesian coordinates are also shown.
+        }
+\end{figure*}
+
+\subsection{Rigid-body motion}\label{sec_rigid_body_body}
+
+In this Section, we will work out the equations of motion for \ac{bod}.
+
+\subsubsection{Equation of motion in the \acl{cur}-configuration coordinates}\label{sec_rigid_body_body_current}
+
+The dynamics of  \ac{bod} is given by the equations of motion for a rigid body which, in \ac{cur} coordinates, read \cite{goldsteinClassicalMechanics2004}
+
+\begin{align}
+        \label{eq_fl_rigid_rigid_current_1}
+        I         \der{\omega}{t}
+               & =                                                                                             - \int_\pomellipseeqc \dint{l_\current} \, \epsilon_{3 \alpha \beta} \, \sigmastressc_{\beta \gamma} \hat{\bm n}^{\current\,\gamma} , \\
+        \label{eq_fl_rigid_rigid_current_2}
+        \omega & \equiv \der{\theta}{t}.
+\end{align}
+\Cref{eq_fl_rigid_rigid_current_1} relates the angular acceleration of \ac{bod} to the torque of external forces.
+In what follows, Greek indices $\alpha, \beta, \cdots$ will be used to denote vectors and tensors in  two-dimensional Euclidean space---their position as upper or lower indices is thus immaterial \cite{marchiafavaAppuntiDiGeometria2005,landauTheoryElasticity1986}.
+The moment of inertia of the \ac{bod} is denoted by $I$. The \ac{rhs} of \cref{eq_fl_rigid_rigid_current_1} contains the line integral along the boundary of \ac{bod}, of the torque of the local force exerted by  \ac{bflu} on  \ac{bod} with respect to the left focal point $\bfocalpoint$ of \ac{bod} \cite{landauFluidMechanics1987}. This force is expressed in terms of the \ac{bflu} stress tensor \cite{landauFluidMechanics1987}
+\be
+\label{eq_strees_tensor_fluid}
+\sigmastressc_{\alpha \beta } \equiv \sigmafc \delta_{\alpha \beta}+ \eta_\fluid\left( \pderc{ \vfc^\alpha}{\beta} +\pderc{ \vfc^\beta}{\alpha}\right),
+\ee
+where $\epsilon_{\alpha \beta \gamma}$ is the three-dimensional Levi-Civita symbol, and $\etaf$ the two-dimensional viscosity of \ac{bflu}. Finally,   $\dint{l_\current}$ is the line element of \pomellipsec in the \ac{cur} configuration, and $\bm \hat{n}^\current$ the unit boundary normal to \pomellipsec pointing outside $\omc$.
+
+
+
+\subsubsection{Equation of motion in the \acl{ref}-configuration coordinates}\label{sec_rigid_body_body_reference}
+
+\bw
+\begin{align}
+        \label{eq_fl_rigid_rigid_reference}
+        I \der{\omega}{t} & =                                               \newlinenn
+        \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \varphi^{\alpha, \, t}(\bxi{s}) - \focalpoint^\alpha \right] \sigmastressr_{\beta \gamma}(\bxi{s}) \epsilon_{\gamma \lambda} F^t_{\lambda \mu}(\bxi{s}) \der{\xi^\mu(s)}{s}
+\end{align}
+\ew
+
+In \cref{eq_fl_rigid_rigid_reference}, the integral in the \ac{rhs} is over the curvilinear boundary \pomellipser, which is parametrized as $\bxr = \bxi{s}$, where $s$ is the curvilinear coordinate. Also, $\epsilon_{\alpha \beta}$ is the two-dimensional Levi-Civita symbol \cite{marchiafavaAppuntiDiGeometria2005}, and $\sigmastressr$ denotes the stress tensor in the \ac{ref} configuration:
+\begin{align}
+        \label{eq_def_sigma_current}
+        \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc^t_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
+        =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G^t_{\gamma \beta}(\bxr) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
+                                                     & G^t_{\gamma \alpha}(\bxr) \pderr{\vfc^\beta}{\gamma}\Big].
+\end{align}
+
+
+\subsection{Fluid motion}\label{sec_rigid_body_fl}
+
+In this Section, we will work out the equations of motion for \ac{bflu}.
+
+\subsubsection{Equations of motion in the \acl{cur}-configuration coordinates}\label{sec_rigid_body_fl_cur}
+
+
+
+The equations of motion, expressed in terms of the \ac{cur} fields $\vfc$ and $\sigmafc$, are
 
 
 \begin{align}
-    \label{eq_fl_rigid_fl_1}
-    \rho_\fluid \left( \partial_t \vf^\alpha + \vf^\beta \partial^x_\beta \vf^\alpha \right) = & \partial^x_\alpha  \sigma_\fluid + \eta_\fluid \partial^x_\beta \partial^x_\beta \vf^\alpha, \\
-    \label{eq_fl_rigid_fl_2}
-    \partial^x_\alpha \vf^\alpha =                                                             & 0                               ,                                                            \\
-    \label{eq_fl_rigid_rigid}
-    I \frac{d^2 \theta}{d t^2} =                                                               & - \int_\pomellipseeq \dint{l}\, \epsilon_{3 \alpha \beta} \sigma_{\beta \gamma} n_\gamma.
+        \label{eq_fl_rigid_fl_1_current}
+        \rho_\fluid \left( \partial_t \vfc^\alpha + \vfc^\beta  \pderc{\vfc^\alpha}{\beta} \right) & =  \pderc{  \sigmafc}{\alpha} + \eta_\fluid \pder{}{\xc^\beta} \pder{\vfc^\alpha}{\xc^\beta} ,   \\
+        \label{eq_fl_rigid_fl_2_current}
+        \pderc{ \vfc^\alpha }{\alpha}                                                              & =                                                              0                               ,
+\end{align}
+and they hold for $\xc \in \omc$. \Cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} are the \ac{ns} and continuity equation, respectively, in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}---an example of the \ac{ns} equations on curved geometry will be presented in X. There, $\rhof$ is  the two-dimensional \ac{bflu} density.
+
+
+The \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current,eq_fl_rigid_rigid_current_1,eq_fl_rigid_rigid_current_2} are
+\begin{align}
+        \label{bc_fl_rigid_1_current}
+        \vfc^1(\bxc)                  & =  v_\ast \; \text{ on } \pomineqc,                                                                                  \\
+        \label{bc_fl_rigid_2_current}
+        \vfc^2  (\bxc)                & =  0 \; \text{ on } \pomineqc ,                                                                                      \\
+        \label{bc_fl_rigid_3_current}
+        {\bm \vfc}    (\bxc)          & = \bzero \; \text{ on } \pomweqc ,                                                                                   \\
+        \label{bc_fl_rigid_4_current}
+        \vfc^\alpha (\bxc)            & = \der{[R(\theta)]_{\alpha \beta} }{t} [\psi^{t \, \beta}(\bxc) - \focalpoint^\beta] \; \text{ on } \pomellipseeqc , \\
+        \label{bc_fl_rigid_5_current}
+        \etaf \pderc{ \vfc^\alpha}{1} & = 0  \; \text{ on } \pomouteqc ,                                                                                     \\
+        \label{bc_fl_rigid_6_current}
+        \sigmafc (\bxc)               & = 0 \; \text{ on } \pomouteqc.
+\end{align}
+\Cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current} ensure that \ac{bflu} is injected on the boundary \pominc{} in a direction parallel to the $\xc^1$ axis, and \cref{bc_fl_rigid_3_current} is a no-slip \ac{bc} \cite{landauFluidMechanics1987} along the channel walls \pomwc, see \cref{fig_ref_curr}.
+\Cref{bc_fl_rigid_4_current} ensures that, at the boundary \pomellipsec,  the \ac{bflu} velocity matches the rotational velocity of \ac{bod}. Given that \ac{bod} can only rotate about its left focal point $\bfocalpoint$, the \ac{bod} rotational velocity of a point $\bxc \in \pomellipseeqc$ is given by
+\be
+\der{[R(\theta)]_{\alpha \beta}}{t}[\psi^{t \, \beta}(\bxc) - c_\beta],
+\ee
+where $\bm R$ is the  rotation matrix corresponding to a counterclockwise rotation:
+\be
+{\bm R}(\theta) \equiv
+\left(
+\begin{matrix}
+                \cos \theta & - \sin \theta \\
+                \sin \theta & \cos \theta
+        \end{matrix}
+\right).
+\ee
+Finally, \cref{bc_fl_rigid_5_current,bc_fl_rigid_6_current} ensure, respectively, that on \pomoutc there is zero traction and tension; this corresponds to the hypothesis that there is free flow at \pomoutc \cite{loggAutomatedSolutionDifferential2012,landauFluidMechanics1987}.
+
+\subsubsection{Equations of motion in the \acl{ref}-configuration coordinates}\label{sec_rigid_body_fl_ref}
+
+
+
+For each field ${\bm \vfc}({\bxc}), \sigmaf(\bxc)$ which depends on the coordinate $\bxc$ in the \ac{cur} configuration, we introduce its counterpart in the \ac{ref} configuration:
+
+\begin{align}
+        \label{eq_vf_ref}
+        {\bm \vfc}(\bxr, t) & \equiv {\bm \vfr}( \bm{\varphi}^t(\bxr), t),     \\
+        \label{eq_sigmaf_ref}
+        \sigmafc(\bxr, t)   & \equiv {\bm \sigmafr}( \bm{\varphi}^t(\bxr), t).
 \end{align}
 
-Here,  \cref{eq_fl_rigid_fl_1,eq_fl_rigid_fl_2} are the equations of motion for  \ac{fl}, and \cref{eq_fl_rigid_rigid} is the equation of motion for \ac{bod}.
-
-First, \cref{eq_fl_rigid_fl_1} are the \ac{ns} and continuity equation in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}. There, $\rhof$ and $\etaf$, $\vf^\alpha$ and $\sigmaf$ are the two-dimensional density and viscosity,  velocity and surface tension  of the bulk \ac{fl}, respectively, and
-\be\label{eq_def_pder}
-\partial^x_\alpha \equiv \pder{}{x^\alpha}.
+We will now rewrite the equations of motion and the \acp{bc}   in terms of ${\bm \vfc}$, $\sigmafc$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} yield
+\bw
+\begin{align}
+        \label{eq_fl_rigid_fl_1_reference}
+        \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right] G^t_{\beta \gamma}(\bxr) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr^\beta} \right\}                                         & =              \newlinenn
+        G^t_{\beta \alpha}(\bxr)  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G^t_{\delta \beta}(\bxr)            \,         \pderr{}{\delta} \left[  G^t_{\gamma \beta}(\bxr) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
+        \label{eq_fl_rigid_fl_2_reference}
+        G^t_{\beta \alpha}(\bxr) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                 & = 0,
+\end{align}
+\ew
+which hold in $\omr$. In \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} the inverse of the deformation-gradient tensor is
+\be
+\label{eq_def_G}
+G^t_{\alpha \beta}(\bxr) \equiv [F^t(\bxr)]^{-1}_{\alpha \beta}.
 \ee
 
-Here, greek indices $\alpha, \beta, \cdots$ will be used to denote vectors and tensors in  two-dimensional Euclidean space---their position as upper or lower indices is thus immaterial \cite{marchiafavaAppuntiDiGeometria2005}.
+The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_4_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current} are rewritten as
 
-Second, \cref{eq_fl_rigid_rigid} is the rigid-body equation of motion, which relates the angular acceleration in the \ac{lhs}, to the momentum of external forces exerted by the fluid on the body in the \ac{rhs} \cite{landauMechanics1960}. In there, $I$ is the moment of inertia of the body, and  the \ac{rhs} contains the integral along the surface of the rigid body in the current configuration, of the forces exerted by \ac{fl} on the \ac{bod}.
+\begin{align}
+        \label{bc_fl_rigid_1_reference}
+        \vfr^1(\bxr)                                          & =  v_\ast \; \text{ on } \pomineqr,                                                                    \\
+        \label{bc_fl_rigid_2_reference}
+        \vfr^2      (\bxr)                                    & =  0 \; \text{ on } \pomineqr ,                                                                        \\
+        \label{bc_fl_rigid_3_reference}
+        {\bm \vfr} (\bxr)                                     & = {\bm 0} \; \text{ on } \pomweqr ,                                                                    \\
+        \label{bc_fl_rigid_4_reference}
+        \vfr^\alpha(\bxr)                                     & = \der{[R(\theta)]_{\alpha \beta} }{t} [\xr^\beta - \focalpoint^\beta] \; \text{ on } \pomellipseeqr , \\
+        \label{bc_fl_rigid_5_reference}
+        \etaf G^t_{\beta 1}(\bxr) \pderr{ \vfr^\alpha}{\beta} & = 0  \; \text{ on } \pomouteqr ,                                                                       \\
+        \label{bc_fl_rigid_6_reference}
+        \sigmafr (\bxr)                                       & = 0 \; \text{ on } \pomouteqr.
+\end{align}
+
+% Overall, \cref{\eqsfluidbodyref} depend on the \ac{ref} fields and coordinate only, and they constitute, at any time $t$, a  \ac{bvp} which, combined with the temporal \acp{bc},
+
+% determines $\bm \vfr$ and $\sigmafr$ as functions of space and time.
+
+
+\subsection{Motion of \acl{dom}}
+\label{sec_eq_fluid_domain}
+
+
+The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\bm u$, which describes how the region, or domain, where \ac{bflu} sits, is deformed in time, cf. \cref{fig_ref_curr}. We will denote this region as the  \ac{dom}.
+We observe that this field has, so far, been left arbitrary, and we have the freedom to choose it.
+
+Here, $\bu$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as \ac{bod} rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium.
+
+We will thus determine $\bu$ as the solution of a \ac{bvp} given by the following elastic model \cite{kamenskyLectureNotesMAE,marsdenMathematicalFoundationsElasticity1994}
+
+\be\label{eq_mesh_fluid_rigid}
+\pder{S_{\alpha \beta}(\bu)}{\xr^\beta} = 0 \text{ in } \omr,
+\ee
+where the elastic stress tensor $S$ is given by
+\be
+\label{eq_def_S}
+S_{\alpha \beta} \equiv F_{\alpha \gamma} T_{\gamma \beta},
+\ee
+and
+\begin{align}
+        \label{eq_ela_1}
+        T_{\alpha \beta} & \equiv \kel(\bu) E_{\gamma \gamma} \delta_{\alpha \beta} +2 \muel(\bu) \left[E_{\alpha \beta} - \frac{1}{2} \delta_{\alpha \beta} E_{\gamma \gamma}\right], \\
+        \label{eq_ela_2}
+        E_{\alpha \beta} & \equiv \frac{1}{2}\left( F_{\gamma \alpha}F_{\gamma \beta} - \delta_{\alpha \beta}\right),                                                                  \\
+        \label{eq_ela_3}
+        \kel(\bu)        & \equiv \frac{1}{[\det(F(\bu))]^\zeta},                                                                                                                      \\
+        \label{eq_ela_4}
+        \muel(\bu)       & \equiv \frac{1}{[\det(F(\bu))]^\zeta}.
+\end{align}
+In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulus $\kel$ and the modulus of compression $\muel$ on the deformation-gradient tensor \crefs{eq_def_F}. In the absence of this dependence, the elastic model above would be unstable under local compression. In fact, the model's Lagrangian would not penalize configurations with  small $\det F$. The inclusion of the dependence \crefs{eq_ela_3,eq_ela_4} on $\det F$  allows for penalizing these configurations---the larger the exponent $\zeta > 0$, the stronger the penalty. As a result, this dependence makes the model stable under mesh compression, such as the one shown below \ac{bod} in \cref{fig_ref_curr}B.
+
+The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
+\begin{align}
+        \label{bc_ela_1}
+        \bu & =\bzero \text{ on } \pomsqeqr,                                                                 \\
+        \label{bc_ela_2}
+        \bu & = \bfocalpoint - \bxr + {\bm R}(\theta)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr.
+\end{align}
+\Cref{bc_ela_1} enforces the fact that the mesh is not deformed at the boundary \pomsqr. Finally,  \cref{bc_ela_2} ensures that the mesh deformation at \pomellipser  matches the deformation induced by the rotation of \ac{bod}.
+
+\Cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2} constitute the \ac{bvp} which determines $\bu$. Along the lines of \acp{bvp} in the theory of elasticity, such \ac{bvp} is already, naturally formulated in the \ac{ref} configuration \cite{landauTheoryElasticity1986}.
+
+
+From  the \ac{bvp} above, we obtain a \ac{bvp} for $\dot{\bu}$, which will be needed in the following to describe the \ac{dom} motion. By deriving both sides of \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, we obtain, respectively,
+\begin{align}
+        \label{eq_mesh_fluid_rigid_dot}
+        \pder{}{\xr^\beta}\der{S_{\alpha \beta}(\bu)}{t} & = 0 \text{ in } \omr,                                                                  \\
+        \label{bc_ela_1_dot}
+        \budot                                           & =\bzero \text{ on } \pomsqeqr,                                                         \\
+        \label{bc_ela_2_dot}
+        \budot                                           & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+\end{align}
+where in \cref{bc_ela_1_dot,bc_ela_2_dot} we used the fact that $\bxr$ is independent of time, and in \cref{bc_ela_2_dot} we substituted \cref{eq_fl_rigid_rigid_current_2}. The \ac{lhs} of \cref{eq_mesh_fluid_rigid_dot} depends on the second partial derivatives of $\bu$ and $\budot$---see \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4}. As a result, given $\theta$, $\omega$, and $\bu$ from \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, the \ac{bvp} \crefs{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}  yields $\budot$.\vspace{0.5cm}\\
+
+Overall \cref{eq_fl_rigid_rigid_current_2,eq_fl_rigid_rigid_reference,eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference,eq_mesh_fluid_rigid,eq_mesh_fluid_rigid,bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference,bc_ela_1,bc_ela_2,eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}
+constitute a \ac{bvp} for $\theta, \omega, {\bm \vfr}, \sigmafr$, $\bu$ and $\budot$ which, combined with the temporal \acp{bc}
+\begin{align}
+        \theta(t=0)               & = \theta_0                \\
+        \omega(t=0)               & = \omega_0                \\
+        {\bm \vfr}(\bxr, t=0)     & = {\bm \vfr}_0(\bxr),     \\
+        {\bm \sigmafr}(\bxr, t=0) & = {\bm \sigmafr}_0(\bxr),
+\end{align}
+determine the dynamics of the system.
+
+
+\subsection{Temporal discretization}\label{sec_temp_discretization}
+
+
+To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discretize time by setting $\deltat \equiv T/N$, $t_n \equiv n\, \deltat$, with $n = 0, 1, \cdots, N$.
+
+We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for \ac{bod}, \ac{bflu} and \ac{dom}---see below.
+
+\subsubsection{Rigid \acl{bod}}
+
+Proceeding along the \ac{cn} scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  scheme \cite{loggAutomatedSolutionDifferential2012}. We set
+\begin{align}
+        \sigmafr^n(\bxr)       & \equiv \sigmafc(\bxr, t_n)                               \\
+        \sigmafr^{n-1/2}(\bxr) & \equiv \sigmafc\left(\bxr, \frac{t_n+t_{n-1}}{2}\right),
+\end{align}
+and similarly for other quantities.
+
+We discretize \cref{eq_fl_rigid_rigid_reference,eq_fl_rigid_rigid_current_2} and, neglecting $\odeltat$, we obtain
+\bw
+\begin{align}
+        \label{eq_def_omega_disc}
+        \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                                                                                                 \\
+        \label{eq_fl_rigid_rigid_reference_disc}
+        \frac{\omega^n - \omega^{n-1}}{\deltat}  =    &
+        I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right] \times                                                                            \newlinenn
+                                                      & \sigmastressr^{n-1}_{\beta \gamma}(\bxi{s}; {\bm \vfr^{n-1}, \sigmafr^{n-3/2}}) \epsilon_{\gamma \lambda} F^{n-1}_{\lambda \mu}(\bxi{s}) \der{\xi^\mu(s)} {s}  ,
+\end{align}
+\ew
+where in \cref{eq_fl_rigid_rigid_reference_disc} we used \cref{eq_def_u,eq_def_phi} and we  explicitly indicated the dependence of the stress tensor \crefs{eq_def_sigma_current} on $\bm \vfc$ and $\sigmafc$.
+
+
+
+
+\subsubsection{\Acl{bflu}}
+
+To discretize in time the \ac{bflu} problem, we will apply the \ac{cn} splitting scheme \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} to the \ac{ns} equations \crefs{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} in the \ac{ref} configurations. This splitting scheme is derived form the \acl{ipcs} \cite{godaMultistepTechniqueImplicit1979}, in which the solution of the \ac{ns} equations is split into three intermediate steps. In what follows, we will synonymously use the terms `pressure' and `surface tension'  for conciseness \cite{worthmullerIRENEFluIdLayeR2025}.
+
+The discrete form of the \acp{pde} \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} is
+\bw
+\begin{align}
+        \label{eq_fl_rigid_fl_1_reference_disc}
+        \rhof \left[  \frac{\vfr^{n, \, \alpha} - \vfr^{n-1,\, \alpha}}{\deltat} + \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \dot{u}^{n-1,\, \gamma}) \, G^{n-1}_{\beta \gamma} \frac{\partial  \vfr^{n-1, \, \alpha}}{\partial \xr^\beta} - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \, G^{n-2}_{\beta \gamma} \frac{\partial  \vfr^{n-2, \, \alpha}}{\partial \xr^\beta} \right] & =              \newlinenn
+        G^{n-1}_{\beta \alpha}  \,          \pderr{ \sigmafr^{n-1/2}   }{\beta }                + \etaf \,              G^{n-1}_{\delta \beta}            \,         \pderr{}{\delta} \left[  G^{n-1}_{\gamma \beta} \pderr{ }{\gamma}\left(\frac{\vfr^{n, \, \alpha} + \vfr^{n-1, \, \alpha}}{2}\right)   \right],                                                                                    &                           \\
+        \label{eq_fl_rigid_fl_2_reference_disc}
+        G^{n-1}_{\beta \alpha} \pderr{ \vfr^{n-1,\, \alpha}}{\beta}                                                                                                                                                                                                                                                                                                                                    & = 0,
+\end{align}
+\ew
+where we omitted the dependence on $\bxr$ for clarity. Also, in  the \ac{lhs} of \cref{eq_fl_rigid_fl_1_reference_disc} we rewrote the convective term  according to the Adams-Bashforth  discretization scheme \cite{SolvingOrdinaryDifferential1993,loggAutomatedSolutionDifferential2012}, and we used \cref{eq_def_u,eq_def_phi} to rewrite the time derivative of $\bm \varphi$ in terms of $\budot$.
+
+The discrete form of the \acp{bc} \crefs{bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference} reads
+\bw
+\begin{align}
+        \label{bc_fl_rigid_1_reference_disc}
+        \vfr^{n, \, 1}                                                                                                & = v_\ast \; \text{ on }\pomineqr,                                                                                                         \\
+        \label{bc_fl_rigid_2_reference_disc}
+        \vfr^{n, \, 2}                                                                                                & =  0 \; \text{ on } \pomineqr ,                                                                                                           \\
+        \label{bc_fl_rigid_3_reference_disc}
+        {\bm \vfr}^n                                                                                                  & = {\bm 0} \; \text{ on } \pomweqr ,                                                                                                       \\
+        \label{bc_fl_rigid_4_reference_disc}
+        {\bm \vfr}                                                                                                    & =
+        \omega^n  \left. \der{{\bm R}}{\theta} \right|_{\theta = \theta_n} \cdot (\bxr - \bfocalpoint)  \text{ on } \pomellipseeqr ,                                                                                                                              \\
+        \label{bc_fl_rigid_5_reference_disc}
+        \etaf \, G^{n-1}_{\beta 1} \pderr{}{\beta}\left( \frac{\vfr^{n, \, \alpha} + \vfr^{n-1, \, \alpha}}{2}\right) & = 0                                                                                                           \; \text{ on } \pomouteqr , \\
+        \label{bc_fl_rigid_6_reference_disc}
+        \sigmafr^{n-1/2}                                                                                              & = 0 \; \text{ on } \pomouteqr.
+\end{align}
+\ew
+
+We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDifferential2012,chorinNumericalSolutionNavierStokes1968}:
+\begin{enumerate}
+        \titleditem{Approximated velocity}{
+                \label{item_split_1}
+                We introduce the velocity $\bvbar$, which approximates the true velocity $\bm \vfr$, and which  satisfies the \ac{bvp}
+                \bw
+                \begin{align}
+                        \label{eq_fl_rigid_fl_1_reference_disc_aux}
+                        \rhof \left\{  \frac{\vbar^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \dot{u}^{n-1,\, \gamma}) \, G^{n-1}_{\beta \gamma}  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \, G^{n-2}_{\beta \gamma}  \right] \frac{\partial  V^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
+                        G^{n-1}_{\beta \alpha}  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G^{n-1}_{\delta \beta}            \,         \pderr{}{\delta} \left(  G^{n-1}_{\gamma \beta} \pderr{V^\alpha }{\gamma}    \right),
+                \end{align}
+                \begin{align}
+                        \label{bc_fl_rigid_1_reference_disc_aux}
+                        \vbar^1                                            & = v_\ast \; \text{ on }\pomineqr,                                                                                                        \\
+                        \label{bc_fl_rigid_2_reference_disc_aux}
+                        \vbar^2                                            & =  0 \; \text{ on } \pomineqr ,                                                                                                          \\
+                        \label{bc_fl_rigid_3_reference_disc_aux}
+                        \bvbar                                             & = {\bm 0} \; \text{ on } \pomweqr ,                                                                                                      \\
+                        \label{bc_fl_rigid_4_reference_disc_aux}
+                        \bvbar                                             & =
+                        \omega^n  \left. \der{{\bm R}}{\theta} \right|_{\theta = \theta_n} \cdot (\bxr - \bfocalpoint)  \text{ on } \pomellipseeqr ,                                                                  \\
+                        \label{bc_fl_rigid_5_reference_disc_aux}
+                        \etaf \, G^{n-1}_{\beta 1} \pderr{V^\alpha}{\beta} & = 0                                                                                                           \; \text{ on } \pomouteqr.
+                \end{align}
+                \ew
+                where
+                \begin{align}
+                        {\bm V}       & \equiv\frac{ \bvbar + {\bm \vfr}^{n-1}}{2}, \\
+                        \label{eq_def_sigmarast}
+                        \sigmafr^\ast & \equiv \sigmafr^{n-3/2}.
+                \end{align}
+        }
+        \titleditem{Pressure correction}{
+                \label{item_split_2}
+
+                Subtracting \cref{eq_fl_rigid_fl_1_reference_disc,eq_fl_rigid_fl_1_reference_disc_aux} and neglecting $\odeltat$, we obtain
+                \be
+                \label{eq_phi_1}
+                \rhof \frac{\vbar^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G^{n-1}_{\beta \alpha}  \,          \pderr{ \phi   }{\beta },
+                \ee
+                where
+                \be\label{eq_def_phi_pressure}
+                \phi \equiv \sigmafc^\ast - \sigmafc^{n-1/2}
+                \ee
+                is the surface-tension increment. \Cref{bc_fl_rigid_6_reference_disc,eq_def_sigmarast,eq_def_phi_pressure} imply the \ac{bc}
+                \be
+                \label{bc_phi_1}
+                \phi = 0, \, \text{ on } \pomouteqr.
+                \ee
+                Multiplying \cref{eq_phi_1} by $G^{n-1}_{\gamma \alpha} \hat{n}^{\reference\, \gamma}$, where $\hat{\bm n}^{\reference}$ is the boundary normal in the \ac{ref} configuration,  we obtain
+                \begin{align}
+                        \label{eq_phi_2}
+                        \frac{\rhof}{\deltat} G^{n-1}_{\gamma \alpha} \hat{n}^{\reference\, \gamma} (\vbar^\alpha - \vfr^{n, \, \alpha}) & = \newlinenn
+                        \hat{n}^{\reference\, \gamma} G^{n-1}_{\gamma \alpha}  G^{n-1}_{\beta \alpha}  \,          \pderr{ \phi   }{\beta }.
+                \end{align}
+                Combining \cref{eq_phi_2} with \cref{bc_fl_rigid_1_reference_disc,bc_fl_rigid_2_reference_disc,bc_fl_rigid_3_reference_disc,bc_fl_rigid_4_reference_disc,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux}, we obtain the second \ac{bc}
+                \begin{align}
+                        \label{bc_phi_2}
+                        \hat{n}^{\reference\, \gamma} G^{n-1}_{\gamma \alpha}  G^{n-1}_{\beta \alpha}  \,          \pderr{ \phi   }{\beta } & = \newlinenn 0
+                        \text{ on } \pomineqc \cup \pomweqc \cup \pomellipseeqc                                                             & .
+                \end{align}
+                The \ac{bvp} \crefs{eq_phi_2,bc_phi_1,bc_phi_2} determines $\phi$ and, through the definition \crefs{eq_def_phi_pressure}, the surface tension $\sigmac^{n-1/2}$.
+        }
+        \titleditem{Velocity correction}{
+                \label{item_split_3}
+                The velocity ${\bm \vfr}^n$ is determined from the approximate velocity $\bvbar$ from \cref{eq_phi_1}.
+
+        }
+\end{enumerate}
+
 
 
 %sign
 
+\subsubsection{\Acl{dom}}
+
+The discrete version of  the \ac{bvp} for $\bu$, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, reads
+\begin{align}
+        \label{eq_mesh_fluid_rigid_disc}
+        \pder{S_{\alpha \beta}(\bu^n)}{\xr^\beta} & = 0 \text{ in } \omr,                                                                            \\
+        \label{bc_ela_1_disc}
+        \bu^n                                     & =\bzero \text{ on } \pomsqeqr,                                                                   \\
+        \label{bc_ela_2_disc}
+        \bu^n                                     & = \bfocalpoint - \bxr + {\bm R}(\theta^n)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+\end{align}
+and that of the \ac{bvp} for $\budot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}, is
+\begin{align}
+        \label{eq_mesh_fluid_rigid_disc_dot}
+        \pder{}{\xr^\beta}\der{S_{\alpha \beta}(\budot^n)}{t} & = 0 \text{ in } \omr,                                                                  \\
+        \label{bc_ela_1_disc_dot}
+        \budot  ^n                                            & =\bzero \text{ on } \pomsqeqr,                                                         \\
+        \label{bc_ela_2_disc_dot}
+        \budot  ^n                                            & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+\end{align}\vspace{0.5cm}\\
+
+We can now iterate in time for the ensemble of fields as follows. At each step $n$, given $\theta^{n-1}, \omega^{n-1}, {\bm \vfr}^{n-1}, \sigmafr^{n-3/2}$ $\bu^{n-1}$ and $\budot^{n-1}$ from the preceding step, we
+\begin{enumerate}
+        \titleditem{Update \ac{bod}}{ \label{fl_rigid_step_1}
+                Solve the algebraic equations \cref{eq_def_omega_disc,eq_fl_rigid_rigid_reference_disc} for $\theta^n$ and $\omega^n$.
+        }
+        \titleditem{Update \ac{dom}}{ \label{fl_rigid_step_2}
+                Solve  the \acp{bvp} \crefs{eq_mesh_fluid_rigid_disc,bc_ela_1_disc,bc_ela_2_disc,eq_mesh_fluid_rigid_disc_dot,bc_ela_1_disc_dot,bc_ela_2_disc_dot} for $\bu^n$ and $\budot^n$.
+        }
+        \titleditem{Update \ac{bflu}}{
+                \label{fl_rigid_step_3}
+                Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbar$ and $\sigmafr^{n-1/2}$, and obtain $\bm \vfr^n$ from \cref{eq_phi_1}.
+        }
+\end{enumerate}
+
+%sign
+
+
+
 \begin{figure*}
-    \centering
-    \includegraphics[width=\textwidth]{figures/figure_1/figure_1.pdf}
-    \caption{
-        \label{fig_fluid_rigid}
-        Interaction between a bulk fluid and a rigid body. \plab{A} Temporal snapshot of the mesh (black lines) and velocity field (arrows). The direction of the velocity field is indicated by the arrows, and its norm by their color. The rigid body (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $x$ direction is denoted by the red arc.   \plab{B} Color map of the surface tension. Both panels refer to the same instant of time, shown on top.
-    }
+        \centering
+        \includegraphics[width=\textwidth]{figures/figure_1/figure_1.pdf}
+        \caption{
+                \label{fig_fluid_rigid}
+                \acresetall
+                Interaction between a  \ac{bflu} and a rigid \ac{bod}. \plab{A} Temporal snapshot of the mesh (black lines) and velocity field (arrows). The direction of the velocity field is indicated by the arrows, and its norm by their color. The rigid body (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $x$ direction is denoted by the red arc.   \plab{B} Color map of the surface tension. Both panels refer to the same instant of time, shown on top.
+        }
 \end{figure*}
+

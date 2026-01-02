@@ -2,7 +2,11 @@
     \item \cite{derenyiFormationInteractionMembrane2002} study the steady state with arc-length gauge
     \item In the dynamics, arc-length gauge does not work
     \item We show how to use a generalized arc-length gauge and how to correctly incorporate it into the dynamics to obtain a proper dynamics, \cref{fig_mem}.
-    \item In this dynamics we implement the Crank-Nicolson method and prove it to be numerically stable
+    \item In this dynamics
+          \begin{itemize}
+              \item we implement the Crank-Nicolson method to the equations written in the reference configuration, and prove it to be numerically stable
+              \item we show that the derivative of mesh motion $\dot{\bu}$ can be obtained exactly from an auxiliary PDE withotu recurring to error-prone time discretization.
+          \end{itemize}
     \item We couple the membrane dynamics to a bulk fluid. The membrane is a complex elastic body -> We proceed by steps:
           \begin{enumerate}
               \item Bulk fluid + rigid body \cref{fig_fluid_rigid}
@@ -10,7 +14,7 @@
               \item Bulk fluid + elastic body with stable elastic model, \cref{fig_fluid_ela}
               \item Bulk fluid + membrane, \cref{fig_fluid_mem}
                     \begin{itemize}
-                        \item Bulk fluid and membrane both described with Crank-Nicolson method -> we prove that the resulting dynamics is numerically stable
+                        \item Bulk fluid and membrane both described with Crank-Nicolson method -> we prove that the resulting dynamics is numerically stable. Say that you found a way to teplace $t \rightarrow t_n$ that is stable and that you could have used other ways which are also correct to within $\odeltat$.
                         \item It allows for overhangs
                         \item It is the first study that describes a bulk fluid coupled to a Helfrich membrane with ALE
                         \item It allows for turbulent behavior for both the bulk fluid and the membrane tangential flow
