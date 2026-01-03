@@ -330,10 +330,10 @@ def plot_snapshot(fig, n_file,
                     tick_label_angle=parameters['tick_label_angle'])
 
 
-# plot_snapshot(fig, parameters['snapshot_to_plot'],
-#             snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
-plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+# plot_snapshot(fig, snapshot_max,
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+plot_snapshot(fig, parameters['snapshot_to_plot'],
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
