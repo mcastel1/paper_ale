@@ -201,6 +201,7 @@ def plot_snapshot(fig, n_file):
     partial_omega_circle_in_ref = Polygon(data_def_boundary_vertices_circle, fill=False,
                                           linewidth=parameters['partial_omega_line_width'],
                                           edgecolor=parameters['partial_omega_circle_in_color'],
+                                          linestyle='-',
                                           zorder=const.high_z_order)
 
     # this is a dummy line used only to show the legend for partial_omega_circle_in_ref
@@ -215,13 +216,14 @@ def plot_snapshot(fig, n_file):
     partial_omega_circle_out_ref = Polygon(data_def_boundary_vertices_ellipse, fill=False,
                                            linewidth=parameters['partial_omega_line_width'],
                                            edgecolor=parameters['partial_omega_circle_out_color'],
+                                           linestyle='-.',
                                            zorder=const.high_z_order)
 
     # this is a dummy line used only to show the legend for partial_omega_circle_out_ref
     dummy_partial_omega_circle_out_ref_handle = Line2D([0], [0],
                                                        color=parameters['partial_omega_circle_out_color'],
                                                        linewidth=parameters['partial_omega_line_width'],
-                                                       linestyle='-')
+                                                       linestyle='-.')
 
     ax.add_patch(partial_omega_circle_out_ref)
 
@@ -283,7 +285,7 @@ def plot_snapshot(fig, n_file):
     data_msh_line_vertices = pd.read_csv(
         solution_path + 'snapshots/csv/line_mesh_msh_n_' + str(n_snapshot) + '.csv')
 
-    # plot the polygon of the boundary 'ellipse_loop_id'
+    # 1) plot the polygon of the boundary 'ellipse_loop_id'
     #
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
@@ -293,6 +295,23 @@ def plot_snapshot(fig, n_file):
     data_def_boundary_vertices_ellipse = []
     for _, row in data_boundary_vertices_ellipse.iterrows():
         data_def_boundary_vertices_ellipse.append(
+            np.add(
+                [row[':0'], row[':1']],
+                [U_interp_x(row[':0'], row[':1']),
+                 U_interp_y(row[':0'], row[':1'])]
+            )
+        )
+
+    # 2) plot the polygon of the boundary 'circle_loop_id'
+    #
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
+        data_u_msh_ref)
+
+    # run through points in data_boundary_vertices_circle (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
+    data_def_boundary_vertices_circle = []
+    for _, row in data_boundary_vertices_circle.iterrows():
+        data_def_boundary_vertices_circle.append(
             np.add(
                 [row[':0'], row[':1']],
                 [U_interp_x(row[':0'], row[':1']),
@@ -348,24 +367,45 @@ def plot_snapshot(fig, n_file):
         clip_on=False
     )
 
-    # plot the boundary polygon in the current configuration
+    # plot the boundary partial_omega_circle_in in the current configuration
+    partial_omega_circle_in_cur = Polygon(data_def_boundary_vertices_circle, fill=False,
+                                          linewidth=parameters['partial_omega_line_width'],
+                                          edgecolor=parameters['partial_omega_circle_in_color'],
+                                          linestyle='-',
+                                          zorder=const.high_z_order
+                                          )
+
+    # this is a dummy line used only to show the legend for partial_omega_circle_in_cur
+    dummy_partial_omega_circle_in_cur_handle = Line2D([0], [0],
+                                                      color=parameters['partial_omega_circle_in_color'],
+                                                      linewidth=parameters['partial_omega_line_width'],
+                                                      linestyle='-'
+                                                      )
+
+    ax.add_patch(partial_omega_circle_in_cur)
+
+    # plot the boundary partial_omega_circle_out in the current configuration
     partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse, fill=False,
                                            linewidth=parameters['partial_omega_line_width'],
                                            edgecolor=parameters['partial_omega_circle_out_color'],
+                                           linestyle='-.',
                                            zorder=const.high_z_order)
 
-    ax.add_patch(partial_omega_circle_out_cur)
+    # this is a dummy line used only to show the legend for partial_omega_circle_out_cur
+    dummy_partial_omega_circle_out_cur_handle = Line2D([0], [0],
+                                                       color=parameters['partial_omega_circle_out_color'],
+                                                       linewidth=parameters['partial_omega_line_width'],
+                                                       linestyle='-.')
 
-    # this is a dummy line used only to show the legend for polygon
-    dummy_line_handle = Line2D([0], [0],
-                               color=parameters['partial_omega_circle_out_color'],
-                               linewidth=parameters['partial_omega_line_width'],
-                               linestyle='-')
+    ax.add_patch(partial_omega_circle_out_cur)
 
     # Create custom legend handles
     handles, labels = ax.get_legend_handles_labels()
 
-    handles.append(dummy_line_handle)
+    handles.append(dummy_partial_omega_circle_in_cur_handle)
+    labels.append(r'$\pomcircineqc$')
+
+    handles.append(dummy_partial_omega_circle_out_cur_handle)
     labels.append(r'$\pomcircouteqc$')
 
     # plot mesh for elastic problem and for mesh oustide the elastic body

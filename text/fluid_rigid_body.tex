@@ -3,12 +3,12 @@
 In this Section, we will discuss the interaction between a  \ac{bflu} and the simplest structure---a  \ac{rig} which is only allowed to turn about one point.
 
 
-In all the systems that we will consider, we will introduce the \ac{ref} and \ac{cur} configuration \cite{kamenskyLectureNotesMAE,landauTheoryElasticity1986,slaughterLinearizedTheoryElasticity2002}, see \cref{fig_ref_curr}. All quantities relative to the \ac{ref} and \ac{cur} configuration will be denoted by the superscript \ac{ref} and \ac{cur}, respectively.
+In all the systems that we will consider, we will introduce the \ac{ref} and \ac{cur} configuration \cite{kamenskyLectureNotesMAE,landauTheoryElasticity1986,slaughterLinearizedTheoryElasticity2002}, see \cref{fig_ref_curr_rigid}. All quantities relative to the \ac{ref} and \ac{cur} configuration will be denoted by the superscript \ac{ref} and \ac{cur}, respectively.
 In the \ac{ref} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxr$. The  axis of the ellipse, e..g, the rigid body, lies parallel to the $\xc^1$ axis.
 In the \ac{cur} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxc$. The  axis of the e`llipse, e..g, the rigid body, forms an angle  $\theta$ (red arc) with respect to the $\xc^1$ axis.
 
 
-The \ac{ref} configuration, is related to the \ac{cur} one as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the reference configuration through the deformation field \cite{landauFluidMechanics1987}
+The \ac{ref} configuration, is related to the \ac{cur} one as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr_rigid}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the reference configuration through the deformation field \cite{landauFluidMechanics1987}
 \be\label{eq_def_u}
 u^{\alpha \, t}(\bxr) \equiv \xc^\alpha - \xr^\alpha.
 \ee
@@ -34,14 +34,14 @@ Here, we will denote the mapping between $\bxc$ and $\bxr$ in \cref{eq_def_u} wi
 We denote the \ac{bflu} velocity and surface tension by $\vfc(\bxc)$ and $\sigmafc(\bxc)$, respectively, where the superscript \ac{cur} specifies that these fields depend on the coordinate $\bxc$ in the \ac{cur} configuration.
 
 
-The solution of the interaction dynamics between \ac{bflu} and \ac{rig} is  involved because of the presence of the moving boundary \pomellipsec, cf. \cref{fig_ref_curr}. Following the \ac{ale} procedure, we will  bridge between the Lagrangian and the Eulerian description used to describe, respectively,  \ac{rig} and \ac{bflu}  \cite{kamenskyLectureNotesMAE}. To achieve this, in what follows we will write the equations of motion for \ac{rig} and \ac{bflu}, which are naturally formulated the \ac{cur} configuration first, and then rewrite them in the \ac{ref} configuration.
+The solution of the interaction dynamics between \ac{bflu} and \ac{rig} is  involved because of the presence of the moving boundary \pomellipsec, cf. \cref{fig_ref_curr_rigid}. Following the \ac{ale} procedure, we will  bridge between the Lagrangian and the Eulerian description used to describe, respectively,  \ac{rig} and \ac{bflu}  \cite{kamenskyLectureNotesMAE}. To achieve this, in what follows we will write the equations of motion for \ac{rig} and \ac{bflu}, which are naturally formulated the \ac{cur} configuration first, and then rewrite them in the \ac{ref} configuration.
 
 
 \begin{figure*}
         \centering
         \includegraphics[width=\textwidth]{figures/figure_6/figure_6.pdf}
         \caption{
-                \label{fig_ref_curr}
+                \label{fig_ref_curr_rigid}
                 \Acl{ref} and \acl{cur} configuration for the interaction between a bulk fluid and a rigid body.
                 %
                 \plab{A} \Acl{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr^1 \leq L$, $0 \leq \xr^2 \leq h$ with the elliptical hole, and is delimited by the mesh (gray lines).  Boundaries in the \acl{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
@@ -130,7 +130,7 @@ The \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current,eq_fl_r
         \label{bc_fl_rigid_6_current}
         \sigmafc (\bxc)               & = 0 \; \text{ on } \pomouteqc.
 \end{align}
-\Cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current} ensure that \ac{bflu} is injected on the boundary \pominc{} in a direction parallel to the $\xc^1$ axis, and \cref{bc_fl_rigid_3_current} is a no-slip \ac{bc} \cite{landauFluidMechanics1987} along the channel walls \pomwc, see \cref{fig_ref_curr}.
+\Cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current} ensure that \ac{bflu} is injected on the boundary \pominc{} in a direction parallel to the $\xc^1$ axis, and \cref{bc_fl_rigid_3_current} is a no-slip \ac{bc} \cite{landauFluidMechanics1987} along the channel walls \pomwc, see \cref{fig_ref_curr_rigid}.
 \Cref{bc_fl_rigid_4_current} ensures that, at the boundary \pomellipsec,  the \ac{bflu} velocity matches the rotational velocity of \ac{rig}. Given that \ac{rig} can only rotate about its left focal point $\bfocalpoint$, the \ac{rig} rotational velocity of a point $\bxc \in \pomellipseeqc$ is given by
 \be
 \der{[R(\theta)]_{\alpha \beta}}{t}[\psi^{t \, \beta}(\bxc) - c_\beta],
@@ -202,7 +202,7 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
 \label{sec_eq_fluid_domain}
 
 
-The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\bm u$, which describes how the region, or domain, where \ac{bflu} sits, is deformed in time, cf. \cref{fig_ref_curr}. We will denote this region as the  \ac{dom}.
+The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\bm u$, which describes how the region, or domain, where \ac{bflu} sits, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region as the  \ac{dom}.
 We observe that this field has, so far, been left arbitrary, and we have the freedom to choose it.
 
 Here, $\bu$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as \ac{rig} rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium.
@@ -210,12 +210,12 @@ Here, $\bu$ will be determined with an analogy with the theory of elasticity \ci
 We will thus determine $\bu$ as the solution of a \ac{bvp} given by the following elastic model \cite{kamenskyLectureNotesMAE,marsdenMathematicalFoundationsElasticity1994}
 
 \be\label{eq_mesh_fluid_rigid}
-\pder{S_{\alpha \beta}(\bu)}{\xr^\beta} = 0 \text{ in } \omr,
+\pder{\Sdom_{\alpha \beta}(\bu)}{\xr^\beta} = 0 \text{ in } \omr,
 \ee
 where the elastic stress tensor $S$ is given by
 \be
 \label{eq_def_S}
-S_{\alpha \beta} \equiv F_{\alpha \gamma} T_{\gamma \beta},
+\Sdom_{\alpha \beta} \equiv F_{\alpha \gamma} T_{\gamma \beta},
 \ee
 and
 \begin{align}
@@ -228,7 +228,7 @@ and
         \label{eq_ela_4}
         \muel(\bu)       & \equiv \frac{1}{[\det(F(\bu))]^\zeta}.
 \end{align}
-In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulus $\kel$ and the modulus of compression $\muel$ on the deformation-gradient tensor \crefs{eq_def_F}. In the absence of this dependence, the elastic model above would be unstable under local compression. In fact, the model's Lagrangian would not penalize configurations with  small $\det F$. The inclusion of the dependence \crefs{eq_ela_3,eq_ela_4} on $\det F$  allows for penalizing these configurations---the larger the exponent $\zeta > 0$, the stronger the penalty. As a result, this dependence makes the model stable under mesh compression, such as the one shown below \ac{rig} in \cref{fig_ref_curr}B.
+In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulus $\kel$ and the modulus of compression $\muel$ on the deformation-gradient tensor \crefs{eq_def_F}. In the absence of this dependence, the elastic model above would be unstable under local compression. In fact, the model's Lagrangian would not penalize configurations with  small $\det F$. The inclusion of the dependence \crefs{eq_ela_3,eq_ela_4} on $\det F$  allows for penalizing these configurations---the larger the exponent $\zeta > 0$, the stronger the penalty. As a result, this dependence makes the model stable under mesh compression, such as the one shown below \ac{rig} in \cref{fig_ref_curr_rigid}B.
 
 The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
 \begin{align}
@@ -245,11 +245,11 @@ The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
 From  the \ac{bvp} above, we obtain a \ac{bvp} for $\dot{\bu}$, which will be needed in the following to describe the \ac{dom} motion. By deriving both sides of \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, we obtain, respectively,
 \begin{align}
         \label{eq_mesh_fluid_rigid_dot}
-        \pder{}{\xr^\beta}\der{S_{\alpha \beta}(\bu)}{t} & = 0 \text{ in } \omr,                                                                  \\
+        \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\bu)}{t} & = 0 \text{ in } \omr,                                                                  \\
         \label{bc_ela_1_dot}
-        \budot                                           & =\bzero \text{ on } \pomsqeqr,                                                         \\
+        \budot                                               & =\bzero \text{ on } \pomsqeqr,                                                         \\
         \label{bc_ela_2_dot}
-        \budot                                           & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+        \budot                                               & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
 \end{align}
 where in \cref{bc_ela_1_dot,bc_ela_2_dot} we used the fact that $\bxr$ is independent of time, and in \cref{bc_ela_2_dot} we substituted \cref{eq_fl_rigid_rigid_current_2}. The \ac{lhs} of \cref{eq_mesh_fluid_rigid_dot} depends on the second partial derivatives of $\bu$ and $\budot$---see \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4}. As a result, given $\theta$, $\omega$, and $\bu$ from \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, the \ac{bvp} \crefs{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}  yields $\budot$.\vspace{0.5cm}\\
 
@@ -410,20 +410,20 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
 The discrete version of  the \ac{bvp} for $\bu$, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, reads
 \begin{align}
         \label{eq_mesh_fluid_rigid_disc}
-        \pder{S_{\alpha \beta}(\bu^n)}{\xr^\beta} & = 0 \text{ in } \omr,                                                                            \\
+        \pder{\Sdom_{\alpha \beta}(\bu^n)}{\xr^\beta} & = 0 \text{ in } \omr,                                                                            \\
         \label{bc_ela_1_disc}
-        \bu^n                                     & =\bzero \text{ on } \pomsqeqr,                                                                   \\
+        \bu^n                                         & =\bzero \text{ on } \pomsqeqr,                                                                   \\
         \label{bc_ela_2_disc}
-        \bu^n                                     & = \bfocalpoint - \bxr + {\bm R}(\theta^n)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+        \bu^n                                         & = \bfocalpoint - \bxr + {\bm R}(\theta^n)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
 \end{align}
 and that of the \ac{bvp} for $\budot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}, is
 \begin{align}
         \label{eq_mesh_fluid_rigid_disc_dot}
-        \pder{}{\xr^\beta}\der{S_{\alpha \beta}(\budot^n)}{t} & = 0 \text{ in } \omr,                                                                  \\
+        \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budot^n)}{t} & = 0 \text{ in } \omr,                                                                  \\
         \label{bc_ela_1_disc_dot}
-        \budot  ^n                                            & =\bzero \text{ on } \pomsqeqr,                                                         \\
+        \budot  ^n                                                & =\bzero \text{ on } \pomsqeqr,                                                         \\
         \label{bc_ela_2_disc_dot}
-        \budot  ^n                                            & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+        \budot  ^n                                                & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
 \end{align}\vspace{0.5cm}\\
 
 We can now iterate in time for the ensemble of fields as follows. At each step $n$, given $\theta^{n-1}, \omega^{n-1}, {\bm \vfr}^{n-1}, \sigmafr^{n-3/2}$ $\bu^{n-1}$ and $\budot^{n-1}$ from the preceding step, we
@@ -442,7 +442,7 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
 
 
 
-A macroscopic example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6/h^2 \xc^2 (\xc^2 - h)$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxc = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.
+A macroscopic example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr_rigid}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6/h^2 \xc^2 (\xc^2 - h)$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxc = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.
 
 
 
