@@ -53,7 +53,7 @@ plt.rcParams.update({
         r"\usetikzlibrary{math} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{/Users/michelecastellana/Documents/paper_ale/definitions.tex}}"
+        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
 })
 
@@ -150,7 +150,7 @@ def plot_snapshot(fig, n_file,
     # plot the boundary polygon in the current configuration
     poly = Polygon(data_ref_boundary_vertices_ellipse, fill=True,
                    linewidth=parameters['partial_omega_line_width'],
-                   edgecolor='red',
+                   edgecolor=parameters['partial_omega_ellipse_color'],
                    facecolor='white',
                    zorder=1)
     ax.add_patch(poly)
@@ -208,7 +208,7 @@ def plot_snapshot(fig, n_file,
 
     # Add a custom line handle for the polygon
     polygon_line_handle = Line2D([0], [0],
-                                 color='red',
+                                 color=parameters['partial_omega_ellipse_color'],
                                  linewidth=parameters['partial_omega_line_width'],
                                  linestyle='-')
 
@@ -361,7 +361,7 @@ def plot_snapshot(fig, n_file,
     poly = Polygon(data_def_boundary_vertices_ellipse,
                    fill=True,
                    linewidth=parameters['partial_omega_line_width'],
-                   edgecolor='red',
+                   edgecolor=parameters['partial_omega_ellipse_color'],
                    facecolor='white',
                    zorder=1)
     ax.add_patch(poly)
@@ -417,7 +417,7 @@ def plot_snapshot(fig, n_file,
 
     # Add a custom line handle for the polygon
     polygon_line_handle = Line2D([0], [0],
-                                 color='red',
+                                 color=parameters['partial_omega_ellipse_color'],
                                  linewidth=parameters['partial_omega_line_width'],
                                  linestyle='-')
 
