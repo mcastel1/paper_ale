@@ -53,7 +53,7 @@ plt.rcParams.update({
         r"\usetikzlibrary{math} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{/Users/michelecastellana/Documents/paper_ale/definitions.tex}}"
+        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
 })
 
