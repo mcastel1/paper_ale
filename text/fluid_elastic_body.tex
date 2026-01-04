@@ -18,9 +18,12 @@ The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. H
 
 The equations of motion are the following. First, we have the \ac{ns} and mass-conservation equations \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}, respectively. Second,  the motion of \ac{ela} is governed by the elasticity equations
 \be
-\rhoela \dern{\uela^\alpha(\bxr)}{t}{2} = \pderr{P_{\alpha \beta}(\buela)}{\beta},
+\rhoela \dern{\buela^\alpha(\bxr)}{t}{2} = \pderr{\Sela_{\alpha \beta}(\buela)}{\beta},
 \ee
-where $\buela$ and $\Sela$ and  $\rhoela$ are, respectively, the deformation field, stress tensor and density  of \ac{ela}; the latter is  assumed to be independent of space.
+where $\buela$ and  $\rhoela$ are, respectively, the deformation field and density  of \ac{ela}; the latter is  assumed to be independent of space. The \ac{ela} stress tensor is derived from a compressible neo-Hookean model \cite{bazilevsIsogeometricFluidstructureInteraction2008}, and it reads
+\be
+\Sela_{\alpha \beta} \equiv \frac{\mu}{\det(F)}\left(- \frac{1}{2} C_{\gamma \gamma} \right)
+\ee
 
 %sign
 
@@ -30,6 +33,6 @@ where $\buela$ and $\Sela$ and  $\rhoela$ are, respectively, the deformation fie
         \includegraphics[width=\textwidth]{figures/figure_3/figure_3.pdf}
         \caption{
                 \label{fig_fluid_ela}
-                Interaction between a bulk fluid and an elastic body. The notation is the same as in \cref{fig_fluid_rigid}, and the elastic body is depicted as a red mesh.
+                Interaction between a \acl{bflu} and an \acl{ela}. The notation is the same as in \cref{fig_fluid_rigid}, and the \acl{ela} is depicted as a red mesh.
         }
 \end{figure*}

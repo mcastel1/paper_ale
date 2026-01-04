@@ -15,8 +15,9 @@ u^{\alpha \, t}(\bxr) \equiv \xc^\alpha - \xr^\alpha.
 and the deformation-gradient tensor
 \be
 \label{eq_def_F}
-F_{\alpha \beta} \equiv \delta_{\alpha \beta} + \pderr{u^{t \, \alpha}}{\beta},
+F_{\alpha \beta}(\bu) \equiv \delta_{\alpha \beta} + \pderr{u^ \alpha}{\beta},
 \ee
+%sign_redefine_F
 where we set
 \begin{align}\label{eq_def_pder_ref}
         \partial^\reference_\alpha & \equiv \pder{}{\xr^\alpha}, \\
@@ -205,14 +206,14 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
 The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\bm u$, which describes how the region, or domain, where \ac{bflu} sits, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region as the  \ac{dom}.
 We observe that this field has, so far, been left arbitrary, and we have the freedom to choose it.
 
-Here, $\bu$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as \ac{rig} rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium.
+Here, $\budom$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as \ac{rig} rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium.
 
-We will thus determine $\bu$ as the solution of a \ac{bvp} given by the following elastic model \cite{kamenskyLectureNotesMAE,marsdenMathematicalFoundationsElasticity1994}
+We will thus determine $\budom$ as the solution of a \ac{bvp} given by the following elastic model \cite{kamenskyLectureNotesMAE,marsdenMathematicalFoundationsElasticity1994}
 
 \be\label{eq_mesh_fluid_rigid}
-\pder{\Sdom_{\alpha \beta}(\bu)}{\xr^\beta} = 0 \text{ in } \omr,
+\pder{\Sdom_{\alpha \beta}(\budom)}{\xr^\beta} = 0 \text{ in } \omr,
 \ee
-where the elastic stress tensor $S$ is given by
+where the elastic stress tensor $\Sdom$ is given by
 \be
 \label{eq_def_S}
 \Sdom_{\alpha \beta} \equiv F_{\alpha \gamma} T_{\gamma \beta},
@@ -220,11 +221,11 @@ where the elastic stress tensor $S$ is given by
 and
 \begin{align}
         \label{eq_ela_1}
-        T_{\alpha \beta} & \equiv \kel(\bu) E_{\gamma \gamma} \delta_{\alpha \beta} +2 \muel(\bu) \left[E_{\alpha \beta} - \frac{1}{2} \delta_{\alpha \beta} E_{\gamma \gamma}\right], \\
+        T_{\alpha \beta} & \equiv \kel(\budom) E_{\gamma \gamma} \delta_{\alpha \beta} +2 \muel(\budom) \left[E_{\alpha \beta} - \frac{1}{2} \delta_{\alpha \beta} E_{\gamma \gamma}\right], \\
         \label{eq_ela_2}
-        E_{\alpha \beta} & \equiv \frac{1}{2}\left( F_{\gamma \alpha}F_{\gamma \beta} - \delta_{\alpha \beta}\right),                                                                  \\
+        E_{\alpha \beta} & \equiv \frac{1}{2}\left( F_{\gamma \alpha}F_{\gamma \beta} - \delta_{\alpha \beta}\right),                                                                        \\
         \label{eq_ela_3}
-        \kel(\bu)        & \equiv \frac{1}{[\det(F(\bu))]^\zeta},                                                                                                                      \\
+        \kel(\bu)        & \equiv \frac{1}{[\det(F(\bu))]^\zeta},                                                                                                                            \\
         \label{eq_ela_4}
         \muel(\bu)       & \equiv \frac{1}{[\det(F(\bu))]^\zeta}.
 \end{align}
@@ -233,28 +234,28 @@ In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulu
 The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
 \begin{align}
         \label{bc_ela_1}
-        \bu & =\bzero \text{ on } \pomsqeqr,                                                                 \\
+        \budom & =\bzero \text{ on } \pomsqeqr,                                                                 \\
         \label{bc_ela_2}
-        \bu & = \bfocalpoint - \bxr + {\bm R}(\theta)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr.
+        \budom & = \bfocalpoint - \bxr + {\bm R}(\theta)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr.
 \end{align}
 \Cref{bc_ela_1} enforces the fact that the mesh is not deformed at the boundary \pomsqr. Finally,  \cref{bc_ela_2} ensures that the mesh deformation at \pomellipser  matches the deformation induced by the rotation of \ac{rig}.
 
-\Cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2} constitute the \ac{bvp} which determines $\bu$. Along the lines of \acp{bvp} in the theory of elasticity, such \ac{bvp} is already, naturally formulated in the \ac{ref} configuration \cite{landauTheoryElasticity1986}.
+\Cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2} constitute the \ac{bvp} which determines $\budom$. Along the lines of \acp{bvp} in the theory of elasticity, such \ac{bvp} is already, naturally formulated in the \ac{ref} configuration \cite{landauTheoryElasticity1986}.
 
 
-From  the \ac{bvp} above, we obtain a \ac{bvp} for $\dot{\bu}$, which will be needed in the following to describe the \ac{dom} motion. By deriving both sides of \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, we obtain, respectively,
+From  the \ac{bvp} above, we obtain a \ac{bvp} for $\dot{\budom}$, which will be needed in the following to describe the \ac{dom} motion. By deriving both sides of \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, we obtain, respectively,
 \begin{align}
         \label{eq_mesh_fluid_rigid_dot}
-        \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\bu)}{t} & = 0 \text{ in } \omr,                                                                  \\
+        \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budom)}{t} & = 0 \text{ in } \omr,                                                                  \\
         \label{bc_ela_1_dot}
-        \budot                                               & =\bzero \text{ on } \pomsqeqr,                                                         \\
+        \budomdot                                               & =\bzero \text{ on } \pomsqeqr,                                                         \\
         \label{bc_ela_2_dot}
-        \budot                                               & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+        \budomdot                                               & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
 \end{align}
-where in \cref{bc_ela_1_dot,bc_ela_2_dot} we used the fact that $\bxr$ is independent of time, and in \cref{bc_ela_2_dot} we substituted \cref{eq_fl_rigid_rigid_current_2}. The \ac{lhs} of \cref{eq_mesh_fluid_rigid_dot} depends on the second partial derivatives of $\bu$ and $\budot$---see \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4}. As a result, given $\theta$, $\omega$, and $\bu$ from \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, the \ac{bvp} \crefs{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}  yields $\budot$.\vspace{0.5cm}\\
+where in \cref{bc_ela_1_dot,bc_ela_2_dot} we used the fact that $\bxr$ is independent of time, and in \cref{bc_ela_2_dot} we substituted \cref{eq_fl_rigid_rigid_current_2}. The \ac{lhs} of \cref{eq_mesh_fluid_rigid_dot} depends on the second partial derivatives of $\budom$ and $\budomdot$---see \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4}. As a result, given $\theta$, $\omega$, and $\budom$ from \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, the \ac{bvp} \crefs{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}  yields $\budomdot$.\vspace{0.5cm}\\
 
 Overall \cref{eq_fl_rigid_rigid_current_2,eq_fl_rigid_rigid_reference,eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference,eq_mesh_fluid_rigid,eq_mesh_fluid_rigid,bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference,bc_ela_1,bc_ela_2,eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}
-constitute a \ac{bvp} for $\theta, \omega, {\bm \vfr}, \sigmafr$, $\bu$ and $\budot$ which, combined with the temporal \acp{bc}
+constitute a \ac{bvp} for $\theta, \omega, {\bm \vfr}, \sigmafr$, $\budom$ and $\budomdot$ which, combined with the temporal \acp{bc}
 \begin{align}
         \theta(t=0)               & = \theta_0                \\
         \omega(t=0)               & = \omega_0                \\
@@ -284,11 +285,11 @@ We discretize \cref{eq_fl_rigid_rigid_reference,eq_fl_rigid_rigid_current_2} and
 \bw
 \begin{align}
         \label{eq_def_omega_disc}
-        \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                                                                                                 \\
+        \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                 \\
         \label{eq_fl_rigid_rigid_reference_disc}
         \frac{\omega^n - \omega^{n-1}}{\deltat}  =    &
-        I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right] \times                                                                            \newlinenn
-                                                      & \sigmastressr^{n-1}_{\beta \gamma}(\bxi{s}; {\bm \vfr^{n-1}, \sigmafr^{n-3/2}}) \epsilon_{\gamma \lambda} F^{n-1}_{\lambda \mu}(\bxi{s}) \der{\xi^\mu(s)} {s}  ,
+        I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right]                                                                             \sigmastressr^{n-1}_{\beta \gamma}(\bxi{s}; {\bm \vfr^{n-1}, \sigmafr^{n-3/2}}) \times \newlinenn
+                                                      & \epsilon_{\gamma \lambda} F^{n-1}_{\lambda \mu}(\bxi{s}) \der{\xi^\mu(s)} {s}  ,
 \end{align}
 \ew
 where in \cref{eq_fl_rigid_rigid_reference_disc} we used \cref{eq_def_u,eq_def_phi} and we  explicitly indicated the dependence of the stress tensor \crefs{eq_def_sigma_current} on $\bm \vfc$ and $\sigmafc$.
@@ -310,7 +311,7 @@ The discrete form of the \acp{pde} \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_
         G^{n-1}_{\beta \alpha} \pderr{ \vfr^{n-1,\, \alpha}}{\beta}                                                                                                                                                                                                                                                                                                                                    & = 0,
 \end{align}
 \ew
-where we omitted the dependence on $\bxr$ for clarity. Also, in  the \ac{lhs} of \cref{eq_fl_rigid_fl_1_reference_disc} we rewrote the convective term  according to the Adams-Bashforth  discretization scheme \cite{SolvingOrdinaryDifferential1993,loggAutomatedSolutionDifferential2012}, and we used \cref{eq_def_u,eq_def_phi} to rewrite the time derivative of $\bm \varphi$ in terms of $\budot$.
+where we omitted the dependence on $\bxr$ for clarity. Also, in  the \ac{lhs} of \cref{eq_fl_rigid_fl_1_reference_disc} we rewrote the convective term  according to the Adams-Bashforth  discretization scheme \cite{SolvingOrdinaryDifferential1993,loggAutomatedSolutionDifferential2012}, and we used \cref{eq_def_u,eq_def_phi} to rewrite the time derivative of $\bm \varphi$ in terms of $\budomdot$.
 
 The discrete form of the \acp{bc} \crefs{bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference} reads
 \bw
@@ -407,32 +408,32 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
 
 \subsubsection{\Acl{dom}}
 
-The discrete version of  the \ac{bvp} for $\bu$, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, reads
+The discrete version of  the \ac{bvp} for $\budom$, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, reads
 \begin{align}
         \label{eq_mesh_fluid_rigid_disc}
-        \pder{\Sdom_{\alpha \beta}(\bu^n)}{\xr^\beta} & = 0 \text{ in } \omr,                                                                            \\
+        \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr^\beta} & = 0 \text{ in } \omr,                                                                            \\
         \label{bc_ela_1_disc}
-        \bu^n                                         & =\bzero \text{ on } \pomsqeqr,                                                                   \\
+        \budom^n                                         & =\bzero \text{ on } \pomsqeqr,                                                                   \\
         \label{bc_ela_2_disc}
-        \bu^n                                         & = \bfocalpoint - \bxr + {\bm R}(\theta^n)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+        \budom^n                                         & = \bfocalpoint - \bxr + {\bm R}(\theta^n)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
 \end{align}
-and that of the \ac{bvp} for $\budot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}, is
+and that of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}, is
 \begin{align}
         \label{eq_mesh_fluid_rigid_disc_dot}
-        \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budot^n)}{t} & = 0 \text{ in } \omr,                                                                  \\
+        \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budomdot^n)}{t} & = 0 \text{ in } \omr,                                                                  \\
         \label{bc_ela_1_disc_dot}
-        \budot  ^n                                                & =\bzero \text{ on } \pomsqeqr,                                                         \\
+        \budomdot  ^n                                                & =\bzero \text{ on } \pomsqeqr,                                                         \\
         \label{bc_ela_2_disc_dot}
-        \budot  ^n                                                & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+        \budomdot  ^n                                                & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
 \end{align}\vspace{0.5cm}\\
 
-We can now iterate in time for the ensemble of fields as follows. At each step $n$, given $\theta^{n-1}, \omega^{n-1}, {\bm \vfr}^{n-1}, \sigmafr^{n-3/2}$ $\bu^{n-1}$ and $\budot^{n-1}$ from the preceding step, we
+We can now iterate in time for the ensemble of fields as follows. At each step $n$, given $\theta^{n-1}, \omega^{n-1}, {\bm \vfr}^{n-1}, \sigmafr^{n-3/2}$ $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
 \begin{enumerate}
         \titleditem{Update \ac{rig}}{ \label{fl_rigid_step_1}
                 Solve the algebraic equations \cref{eq_def_omega_disc,eq_fl_rigid_rigid_reference_disc} for $\theta^n$ and $\omega^n$.
         }
         \titleditem{Update \ac{dom}}{ \label{fl_rigid_step_2}
-                Solve  the \acp{bvp} \crefs{eq_mesh_fluid_rigid_disc,bc_ela_1_disc,bc_ela_2_disc,eq_mesh_fluid_rigid_disc_dot,bc_ela_1_disc_dot,bc_ela_2_disc_dot} for $\bu^n$ and $\budot^n$.
+                Solve  the \acp{bvp} \crefs{eq_mesh_fluid_rigid_disc,bc_ela_1_disc,bc_ela_2_disc,eq_mesh_fluid_rigid_disc_dot,bc_ela_1_disc_dot,bc_ela_2_disc_dot} for $\budom^n$ and $\budomdot^n$.
         }
         \titleditem{Update \ac{bflu}}{
                 \label{fl_rigid_step_3}
