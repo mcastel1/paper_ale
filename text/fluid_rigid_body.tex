@@ -83,7 +83,7 @@ where $\epsilon_{\alpha \beta \gamma}$ is the three-dimensional Levi-Civita symb
 \begin{align}
         \label{eq_fl_rigid_rigid_reference}
         I \der{\omega}{t} & =                                               \newlinenn
-        \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \varphi^{\alpha, \, t}(\bxi{s}) - \focalpoint^\alpha \right] \sigmastressr_{\beta \gamma}(\bxi{s}) \epsilon_{\gamma \lambda} F^t_{\lambda \mu}(\bxi{s}) \der{\xi^\mu(s)}{s}
+        \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \varphi^{\alpha, \, t}(\bxi{s}) - \focalpoint^\alpha \right] \sigmastressr_{\beta \gamma}(\bxi{s}) \epsilon_{\gamma \lambda} F_{\lambda \mu}(\bu^t(\bxi{s})) \der{\xi^\mu(s)}{s}
 \end{align}
 \ew
 
@@ -92,9 +92,13 @@ In \cref{eq_fl_rigid_rigid_reference}, the integral in the \ac{rhs} is over the 
         \label{eq_def_sigma_current}
         \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc^t_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
         =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G^t_{\gamma \beta}(\bxr) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
-                                                     & G^t_{\gamma \alpha}(\bxr) \pderr{\vfc^\beta}{\gamma}\Big].
+                                                     & G^t_{\gamma \alpha}(\bxr) \pderr{\vfc^\beta}{\gamma}\Big],
 \end{align}
-
+where
+\be
+\label{eq_def_G}
+G^t_{\alpha \beta}(\bxr) \equiv [F(\bu^t(\bxr))]^{-1}_{\alpha \beta}.
+\ee
 
 \subsection{Fluid motion}\label{sec_rigid_body_fl}
 
@@ -171,11 +175,7 @@ We will now rewrite the equations of motion and the \acp{bc}   in terms of ${\bm
         G^t_{\beta \alpha}(\bxr) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                 & = 0,
 \end{align}
 \ew
-which hold in $\omr$. In \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} the inverse of the deformation-gradient tensor is
-\be
-\label{eq_def_G}
-G^t_{\alpha \beta}(\bxr) \equiv [F^t(\bxr)]^{-1}_{\alpha \beta}.
-\ee
+which hold in $\omr$.
 
 The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_4_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current} are rewritten as
 
@@ -285,11 +285,11 @@ We discretize \cref{eq_fl_rigid_rigid_reference,eq_fl_rigid_rigid_current_2} and
 \bw
 \begin{align}
         \label{eq_def_omega_disc}
-        \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                 \\
+        \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                      \\
         \label{eq_fl_rigid_rigid_reference_disc}
         \frac{\omega^n - \omega^{n-1}}{\deltat}  =    &
         I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right]                                                                             \sigmastressr^{n-1}_{\beta \gamma}(\bxi{s}; {\bm \vfr^{n-1}, \sigmafr^{n-3/2}}) \times \newlinenn
-                                                      & \epsilon_{\gamma \lambda} F^{n-1}_{\lambda \mu}(\bxi{s}) \der{\xi^\mu(s)} {s}  ,
+                                                      & \epsilon_{\gamma \lambda} F_{\lambda \mu}(\bu^{n-1}(\bxi{s})) \der{\xi^\mu(s)} {s}  ,
 \end{align}
 \ew
 where in \cref{eq_fl_rigid_rigid_reference_disc} we used \cref{eq_def_u,eq_def_phi} and we  explicitly indicated the dependence of the stress tensor \crefs{eq_def_sigma_current} on $\bm \vfc$ and $\sigmafc$.
