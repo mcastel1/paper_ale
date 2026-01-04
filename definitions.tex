@@ -5,6 +5,8 @@
 \providecommand{\dom}{\textrm{D}}
 \providecommand{\vf}{v}
 \providecommand{\vfc}{\vf_\current}
+\providecommand{\bvfc}{{\bm \vfc}}
+\providecommand{\bvfr}{{\bm \vfr}}
 \providecommand{\vfr}{\vf_\reference}
 \providecommand{\rhof}{\rho_\fluid}
 \providecommand{\rhoela}{\rho_\ela}
@@ -15,7 +17,14 @@
 \providecommand{\sigmaf}{\sigma}
 \providecommand{\sigmafc}{{\sigmaf_\current}}
 \providecommand{\sigmafr}{{\sigmaf_\reference}}
-
+\providecommand{\udom}{{u_\dom}}
+\providecommand{\bu}{{\bm u}}
+\providecommand{\budom}{\bu_\dom}
+\providecommand{\uela}{{u_\ela}}
+\providecommand{\buela}{\bu_\ela}
+\providecommand{\budomdot}{{\dot{\bu}_\dom}}
+\providecommand{\bueladot}{{\dot{\bu}_\ela}}
+\providecommand{\dt}{{\Delta t}}
 
 \providecommand{\bxi}[1]{{\bm \xi}(#1)}
 
@@ -23,14 +32,18 @@
 \providecommand{\xr}{{x}_\reference}
 \providecommand{\bxc}{{\bm{\xc}}}
 \providecommand{\bxr}{{\bm{\xr}}}
+\providecommand{\bnormalr}{\hat{\bm n}^\reference}
+\providecommand{\bnormalc}{\hat{\bm n}^\current}
+\providecommand{\normalr}[1]{\hat{n}^{\reference\, #1}}
+\providecommand{\normalc}[1]{\hat{n}^{\current\, #1}}
 
 \providecommand{\pderc}[2]{\pder{#1}{\xc^#2}}
 \providecommand{\pderr}[2]{\pder{#1}{\xr^#2}}
 
 
 %stress tensor
-\providecommand{\sigmastressr}{{\varsigma_\reference}}
-\providecommand{\sigmastressc}{{\varsigma_\current}}
+\providecommand{\sigmastressr}{{\varsigma^\reference}}
+\providecommand{\sigmastressc}{{\varsigma^\current}}
 
 
 \providecommand{\eqsfluidbodyref}{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference,eq_fl_rigid_rigid_reference,bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference}
@@ -43,11 +56,4 @@
 \providecommand{\kel}{K}
 \providecommand{\muel}{\mu}
 
-\providecommand{\udom}{{u_\dom}}
-\providecommand{\bu}{{\bm u}}
-\providecommand{\budom}{{\bm \udom}}
-\providecommand{\uela}{{u_\ela}}
-\providecommand{\buela}{{\bm \uela}}
-\providecommand{\budomdot}{\dot{\budom}}
-\providecommand{\dt}{{\Delta t}}
 
