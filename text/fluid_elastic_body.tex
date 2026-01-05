@@ -84,13 +84,21 @@ The system dynamics is obtained as follows: given $\bvfr^{n-1}$, $\sigmafr^{n-3/
                 \ew
                 In \cref{bc_fl_ela_2_current_disc}, we have used \cref{eq_def_phi,eq_def_F} to rewrite the derivative of ${\bm \phi}(\bxi{s})$.
 
-                %sign
 
 
         }
         \titleditem{Update \ac{dom}}{ \label{fl_ela_step_2}
-                Solve  the \acp{bvp} \crefs{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot} for $\budom^n$ and $\budomdot^n$, with \acp{bc} \crefs{bc_ela_1_disc,bc_ela_1_disc_dot}
+                Solve for $\budom^n$ and $\budomdot^n$ the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot}  with \acp{bc} \crefs{bc_ela_1_disc}, \crefs{bc_ela_1_disc_dot} and
+                \begin{align}
+                        \label{bc_ela_3_disc}
+                        \budom^n    & = \buela^n \text{ on } \pomcircouteqr,    \\
+                        \label{bc_ela_3_dot_disc}
+                        \budomdot^n & = \bueladot^n \text{ on } \pomcircouteqr.
+                \end{align}
         }
+        %sign
+
+
         \titleditem{Update \ac{bflu}}{
                 \label{fl_ela_step_3}
                 Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbar$ and $\sigmafr^{n-1/2}$, and obtain $\bm \vfr^n$ from \cref{eq_phi_1}.
