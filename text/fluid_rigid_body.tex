@@ -10,7 +10,7 @@ In the \ac{cur} configuration, the region occupied by the bulk fluid is describe
 
 The \ac{ref} configuration, is related to the \ac{cur} one as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr_rigid}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the reference configuration through the deformation field \cite{landauFluidMechanics1987}
 \be\label{eq_def_u}
-u^{\alpha \, t}(\bxr) \equiv \xc^\alpha - \xr^\alpha.
+\budom^t(\bxr) \equiv \bxc - \bxr.
 \ee
 and the deformation-gradient tensor
 \be
@@ -83,7 +83,7 @@ where $\epsilon_{\alpha \beta \gamma}$ is the three-dimensional Levi-Civita symb
 \begin{align}
         \label{eq_fl_rigid_rigid_reference}
         I \der{\omega}{t} & =                                               \newlinenn
-        \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \varphi^{\alpha, \, t}(\bxi{s}) - \focalpoint^\alpha \right] \sigmastressr_{\beta \gamma}(\bxi{s}) \epsilon_{\gamma \lambda} F_{\lambda \mu}(\bu^t(\bxi{s})) \der{\xi^\mu(s)}{s}
+        \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \varphi^{\alpha, \, t}(\bxi{s}) - \focalpoint^\alpha \right] \sigmastressr_{\beta \gamma}(\bxi{s}) \epsilon_{\gamma \lambda} F_{\lambda \mu}(\budom^t(\bxi{s})) \der{\xi^\mu(s)}{s}
 \end{align}
 \ew
 
@@ -91,8 +91,8 @@ In \cref{eq_fl_rigid_rigid_reference}, the integral in the \ac{rhs} is over the 
 \begin{align}
         \label{eq_def_sigma_current}
         \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
-        =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\bu^t(\bxr)) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
-                                                     & G_{\gamma \alpha}(\bu^t(\bxr)) \pderr{\vfc^\beta}{\gamma}\Big],
+        =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
+                                                     & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfc^\beta}{\gamma}\Big],
 \end{align}
 where
 \be
@@ -171,10 +171,10 @@ We will now rewrite the equations of motion and the \acp{bc}   in terms of $\bvf
 \bw
 \begin{align}
         \label{eq_fl_rigid_fl_1_reference}
-        \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\bu^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr^\beta} \right\}                                                 & =              \newlinenn
-        G_{\beta \alpha}(\bu^t(\bxr))  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G_{\delta \beta}(\bu^t(\bxr))           \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\bu^t(\bxr)) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
+        \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr^\beta} \right\}                                                       & =              \newlinenn
+        G_{\beta \alpha}(\budom^t(\bxr))  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^t(\bxr))           \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^t(\bxr)) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
         \label{eq_fl_rigid_fl_2_reference}
-        G_{\beta \alpha}(\bu^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                          & = 0,
+        G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                                & = 0,
 \end{align}
 \ew
 which hold in $\omr$.
@@ -183,17 +183,17 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
 
 \begin{align}
         \label{bc_fl_rigid_1_reference}
-        \vfr^1(\bxr)                                               & =  v_\ast \; \text{ on } \pomineqr,                                                                    \\
+        \vfr^1(\bxr)                                                  & =  v_\ast \; \text{ on } \pomineqr,                                                                    \\
         \label{bc_fl_rigid_2_reference}
-        \vfr^2      (\bxr)                                         & =  0 \; \text{ on } \pomineqr ,                                                                        \\
+        \vfr^2      (\bxr)                                            & =  0 \; \text{ on } \pomineqr ,                                                                        \\
         \label{bc_fl_rigid_3_reference}
-        {\bm \vfr} (\bxr)                                          & = {\bm 0} \; \text{ on } \pomweqr ,                                                                    \\
+        {\bm \vfr} (\bxr)                                             & = {\bm 0} \; \text{ on } \pomweqr ,                                                                    \\
         \label{bc_fl_rigid_4_reference}
-        \vfr^\alpha(\bxr)                                          & = \der{[R(\theta)]_{\alpha \beta} }{t} [\xr^\beta - \focalpoint^\beta] \; \text{ on } \pomellipseeqr , \\
+        \vfr^\alpha(\bxr)                                             & = \der{[R(\theta)]_{\alpha \beta} }{t} [\xr^\beta - \focalpoint^\beta] \; \text{ on } \pomellipseeqr , \\
         \label{bc_fl_rigid_5_reference}
-        \etaf G_{\beta 1}(\bu^t(\bxr)) \pderr{ \vfr^\alpha}{\beta} & = 0  \; \text{ on } \pomouteqr ,                                                                       \\
+        \etaf G_{\beta 1}(\budom^t(\bxr)) \pderr{ \vfr^\alpha}{\beta} & = 0  \; \text{ on } \pomouteqr ,                                                                       \\
         \label{bc_fl_rigid_6_reference}
-        \sigmafr (\bxr)                                            & = 0 \; \text{ on } \pomouteqr.
+        \sigmafr (\bxr)                                               & = 0 \; \text{ on } \pomouteqr.
 \end{align}
 
 % Overall, \cref{\eqsfluidbodyref} depend on the \ac{ref} fields and coordinate only, and they constitute, at any time $t$, a  \ac{bvp} which, combined with the temporal \acp{bc},
@@ -205,7 +205,7 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
 \label{sec_eq_fluid_domain}
 
 
-The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\bm u$, which describes how the region, or domain, where \ac{bflu} sits, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region as the  \ac{dom}.
+The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\budom$, which describes how the region---or domain---which contains \ac{bflu}, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region as the  \ac{dom}.
 We observe that this field has, so far, been left arbitrary, and we have the freedom to choose it.
 
 Here, $\budom$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as \ac{rig} rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium.
@@ -287,11 +287,11 @@ We discretize \cref{eq_fl_rigid_rigid_reference,eq_fl_rigid_rigid_current_2} and
 \bw
 \begin{align}
         \label{eq_def_omega_disc}
-        \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                      \\
+        \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                         \\
         \label{eq_fl_rigid_rigid_reference_disc}
         \frac{\omega^n - \omega^{n-1}}{\deltat}  =    &
         I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right]                                                                             \sigmastressr^{n-1}_{\beta \gamma}(\bxi{s}; {\bm \vfr^{n-1}, \sigmafr^{n-3/2}}) \times \newlinenn
-                                                      & \epsilon_{\gamma \lambda} F_{\lambda \mu}(\bu^{n-1}(\bxi{s})) \der{\xi^\mu(s)} {s}  ,
+                                                      & \epsilon_{\gamma \lambda} F_{\lambda \mu}(\budom^{n-1}(\bxi{s})) \der{\xi^\mu(s)} {s}  ,
 \end{align}
 \ew
 where in \cref{eq_fl_rigid_rigid_reference_disc} we used \cref{eq_def_u,eq_def_phi} and we  explicitly indicated the dependence of the stress tensor \crefs{eq_def_sigma_current} on $\bm \vfc$ and $\sigmafc$.
@@ -307,12 +307,12 @@ The discrete form of the \acp{pde} \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_
 \bw
 \begin{align}
         \label{eq_fl_rigid_fl_1_reference_disc}
-        \rhof \Bigg[  \frac{\vfr^{n, \, \alpha} - \vfr^{n-1,\, \alpha}}{\deltat} + \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \dot{u}^{n-1,\, \gamma}) \, G_{\beta \gamma}(\bu^{n-1}) \frac{\partial  \vfr^{n-1, \, \alpha}}{\partial \xr^\beta} -
-        \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \times                                                                                                                                                                                                                                                     & \newlinenn
-        G_{\beta \gamma}(\bu^{n-2}) \frac{\partial  \vfr^{n-2, \, \alpha}}{\partial \xr^\beta} \Bigg]                                                                                                                                                                                                                              & =              \newlinenn
-        G_{\beta \alpha}(\bu^{n-1})  \,          \pderr{ \sigmafr^{n-1/2}   }{\beta }                + \etaf \,              G_{\delta \beta}(\bu^{n-1})            \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\bu^{n-1}) \pderr{ }{\gamma}\left(\frac{\vfr^{n, \, \alpha} + \vfr^{n-1, \, \alpha}}{2}\right)   \right], &                           \\
+        \rhof \Bigg[  \frac{\vfr^{n, \, \alpha} - \vfr^{n-1,\, \alpha}}{\deltat} + \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \dot{u}^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1}) \frac{\partial  \vfr^{n-1, \, \alpha}}{\partial \xr^\beta} -
+        \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \times                                                                                                                                                                                                                                                              & \newlinenn
+        G_{\beta \gamma}(\budom^{n-2}) \frac{\partial  \vfr^{n-2, \, \alpha}}{\partial \xr^\beta} \Bigg]                                                                                                                                                                                                                                    & =              \newlinenn
+        G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^{n-1/2}   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^{n-1}) \pderr{ }{\gamma}\left(\frac{\vfr^{n, \, \alpha} + \vfr^{n-1, \, \alpha}}{2}\right)   \right], &                           \\
         \label{eq_fl_rigid_fl_2_reference_disc}
-        G_{\beta \alpha}(\bu^{n-1}) \pderr{ \vfr^{n-1,\, \alpha}}{\beta}                                                                                                                                                                                                                                                           & = 0,
+        G_{\beta \alpha}(\budom^{n-1}) \pderr{ \vfr^{n,\, \alpha}}{\beta}                                                                                                                                                                                                                                                                   & = 0,
 \end{align}
 \ew
 where we omitted the dependence on $\bxr$ for clarity. Also, in  the \ac{lhs} of \cref{eq_fl_rigid_fl_1_reference_disc} we rewrote the convective term  according to the Adams-Bashforth  discretization scheme \cite{SolvingOrdinaryDifferential1993,loggAutomatedSolutionDifferential2012}, and we used \cref{eq_def_u,eq_def_phi} to rewrite the time derivative of $\bm \varphi$ in terms of $\budomdot$.
@@ -321,18 +321,18 @@ The discrete form of the \acp{bc} \crefs{bc_fl_rigid_1_reference,bc_fl_rigid_2_r
 \bw
 \begin{align}
         \label{bc_fl_rigid_1_reference_disc}
-        \vfr^{n, \, 1}                                                                                                     & = v_\ast \; \text{ on }\pomineqr,                                                                                                         \\
+        \vfr^{n, \, 1}                                                                                                        & = v_\ast \; \text{ on }\pomineqr,                                                                                                         \\
         \label{bc_fl_rigid_2_reference_disc}
-        \vfr^{n, \, 2}                                                                                                     & =  0 \; \text{ on } \pomineqr ,                                                                                                           \\
+        \vfr^{n, \, 2}                                                                                                        & =  0 \; \text{ on } \pomineqr ,                                                                                                           \\
         \label{bc_fl_rigid_3_reference_disc}
-        {\bm \vfr}^n                                                                                                       & = {\bm 0} \; \text{ on } \pomweqr ,                                                                                                       \\
+        {\bm \vfr}^n                                                                                                          & = {\bm 0} \; \text{ on } \pomweqr ,                                                                                                       \\
         \label{bc_fl_rigid_4_reference_disc}
-        {\bm \vfr}                                                                                                         & =
-        \omega^n  \left. \der{{\bm R}}{\theta} \right|_{\theta = \theta_n} \cdot (\bxr - \bfocalpoint)  \text{ on } \pomellipseeqr ,                                                                                                                                   \\
+        {\bm \vfr}                                                                                                            & =
+        \omega^n  \left. \der{{\bm R}}{\theta} \right|_{\theta = \theta_n} \cdot (\bxr - \bfocalpoint)  \text{ on } \pomellipseeqr ,                                                                                                                                      \\
         \label{bc_fl_rigid_5_reference_disc}
-        \etaf \, G_{\beta 1}(\bu^{n-1}) \pderr{}{\beta}\left( \frac{\vfr^{n, \, \alpha} + \vfr^{n-1, \, \alpha}}{2}\right) & = 0                                                                                                           \; \text{ on } \pomouteqr , \\
+        \etaf \, G_{\beta 1}(\budom^{n-1}) \pderr{}{\beta}\left( \frac{\vfr^{n, \, \alpha} + \vfr^{n-1, \, \alpha}}{2}\right) & = 0                                                                                                           \; \text{ on } \pomouteqr , \\
         \label{bc_fl_rigid_6_reference_disc}
-        \sigmafr^{n-1/2}                                                                                                   & = 0 \; \text{ on } \pomouteqr.
+        \sigmafr^{n-1/2}                                                                                                      & = 0 \; \text{ on } \pomouteqr.
 \end{align}
 \ew
 
@@ -344,21 +344,21 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
                 \bw
                 \begin{align}
                         \label{eq_fl_rigid_fl_1_reference_disc_aux}
-                        \rhof \left\{  \frac{\vbar^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \dot{u}^{n-1,\, \gamma}) \, G_{\beta \gamma}(\bu^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \, G_{\beta \gamma}(\bu^{n-2})  \right] \frac{\partial  V^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
-                        G_{\beta \alpha}(\bu^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\bu^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\bu^{n-1}) \pderr{V^\alpha }{\gamma}    \right),
+                        \rhof \left\{  \frac{\vbar^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \dot{u}^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  V^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
+                        G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{V^\alpha }{\gamma}    \right),
                 \end{align}
                 \begin{align}
                         \label{bc_fl_rigid_1_reference_disc_aux}
-                        \vbar^1                                                 & = v_\ast \; \text{ on }\pomineqr,                                                                                                        \\
+                        \vbar^1                                                    & = v_\ast \; \text{ on }\pomineqr,                                                                                                        \\
                         \label{bc_fl_rigid_2_reference_disc_aux}
-                        \vbar^2                                                 & =  0 \; \text{ on } \pomineqr ,                                                                                                          \\
+                        \vbar^2                                                    & =  0 \; \text{ on } \pomineqr ,                                                                                                          \\
                         \label{bc_fl_rigid_3_reference_disc_aux}
-                        \bvbar                                                  & = {\bm 0} \; \text{ on } \pomweqr ,                                                                                                      \\
+                        \bvbar                                                     & = {\bm 0} \; \text{ on } \pomweqr ,                                                                                                      \\
                         \label{bc_fl_rigid_4_reference_disc_aux}
-                        \bvbar                                                  & =
-                        \omega^n  \left. \der{{\bm R}}{\theta} \right|_{\theta = \theta_n} \cdot (\bxr - \bfocalpoint)  \text{ on } \pomellipseeqr ,                                                                       \\
+                        \bvbar                                                     & =
+                        \omega^n  \left. \der{{\bm R}}{\theta} \right|_{\theta = \theta_n} \cdot (\bxr - \bfocalpoint)  \text{ on } \pomellipseeqr ,                                                                          \\
                         \label{bc_fl_rigid_5_reference_disc_aux}
-                        \etaf \, G_{\beta 1}(\bu^{n-1}) \pderr{V^\alpha}{\beta} & = 0                                                                                                           \; \text{ on } \pomouteqr.
+                        \etaf \, G_{\beta 1}(\budom^{n-1}) \pderr{V^\alpha}{\beta} & = 0                                                                                                           \; \text{ on } \pomouteqr.
                 \end{align}
                 \ew
                 where
@@ -374,30 +374,40 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
                 Subtracting \cref{eq_fl_rigid_fl_1_reference_disc,eq_fl_rigid_fl_1_reference_disc_aux} and neglecting $\odeltat$, we obtain
                 \be
                 \label{eq_phi_1}
-                \rhof \frac{\vbar^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\bu^{n-1})  \,          \pderr{ \phi   }{\beta },
+                \rhof \frac{\vbar^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phi   }{\beta } \text{ in } \omr,
                 \ee
                 where
                 \be\label{eq_def_phi_pressure}
                 \phi \equiv \sigmafc^\ast - \sigmafc^{n-1/2}
                 \ee
-                is the surface-tension increment. \Cref{bc_fl_rigid_6_reference_disc,eq_def_sigmarast,eq_def_phi_pressure} imply the \ac{bc}
+                is the surface-tension increment.                 By applying $G_{\gamma \alpha}(\budom^{n-1}) \partial / \partial \xr^\gamma$ to both sides of \cref{eq_phi_1} and using \cref{eq_fl_rigid_fl_2_reference_disc}, we obtain a second-order \ac{pde} for $\phi$:
+                \begin{align}
+                        \label{eq_poiss_like_phi}
+                        \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbar^\alpha }{\gamma}                                                 & = \newlinenn
+                        G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phi   }{\beta } \right) & .
+                \end{align}
+
+
+
+
+                We will now work out the \acp{bc} for \cref{eq_poiss_like_phi}. \Cref{bc_fl_rigid_6_reference_disc,eq_def_sigmarast,eq_def_phi_pressure} imply the \ac{bc}
                 \be
                 \label{bc_phi_1}
-                \phi = 0, \, \text{ on } \pomouteqr.
+                \phi = 0 \, \text{ on } \pomouteqr.
                 \ee
-                Multiplying \cref{eq_phi_1} by $G_{\gamma \alpha}(\bu^{n-1}) \normalr{\gamma}$, where $\bnormalr$ is the unit boundary normal in the \ac{ref} configuration,  we obtain
+                Multiplying \cref{eq_phi_1} by $G_{\gamma \alpha}(\budom^{n-1}) \normalr{\gamma}$, where $\bnormalr$ is the unit boundary normal in the \ac{ref} configuration,  we obtain
                 \begin{align}
                         \label{eq_phi_2}
-                        \frac{\rhof}{\deltat} G_{\gamma \alpha}(\bu^{n-1}) \normalr{\gamma} (\vbar^\alpha - \vfr^{n, \, \alpha}) & = \newlinenn
-                        \normalr{\gamma} G_{\gamma \alpha}(\bu^{n-1})  G_{\beta \alpha}(\bu^{n-1})  \,          \pderr{ \phi   }{\beta }.
+                        \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \normalr{\gamma} (\vbar^\alpha - \vfr^{n, \, \alpha}) & = \newlinenn
+                        \normalr{\gamma} G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phi   }{\beta }.
                 \end{align}
                 Combining \cref{eq_phi_2} with \cref{bc_fl_rigid_1_reference_disc,bc_fl_rigid_2_reference_disc,bc_fl_rigid_3_reference_disc,bc_fl_rigid_4_reference_disc,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux}, we obtain the second \ac{bc}
                 \begin{align}
                         \label{bc_phi_2}
-                        \normalr{\gamma}  G_{\gamma \alpha}(\bu^{n-1})  G_{\beta \alpha}(\bu^{n-1}) \,          \pderr{ \phi   }{\beta } & = \newlinenn 0
-                        \text{ on } \pomineqc \cup \pomweqc \cup \pomellipseeqc                                                          & .
+                        \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1}) \,          \pderr{ \phi   }{\beta } & = \newlinenn 0
+                        \text{ on } \pomineqr \cup \pomweqr \cup \pomellipseeqr                                                                & .
                 \end{align}
-                The \ac{bvp} \crefs{eq_phi_2,bc_phi_1,bc_phi_2} determines $\phi$ and, through the definition \crefs{eq_def_phi_pressure}, the surface tension $\sigmac^{n-1/2}$.
+                The \ac{bvp} \crefs{eq_poiss_like_phi,bc_phi_1,bc_phi_2} determines $\phi$ and, through the definition \crefs{eq_def_phi_pressure}, the surface tension $\sigmac^{n-1/2}$.
         }
         \titleditem{Velocity correction}{
                 \label{item_split_3}
@@ -406,9 +416,6 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
         }
 \end{enumerate}
 
-
-
-%sign
 
 \subsubsection{\Acl{dom}}
 
@@ -448,7 +455,7 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
 
 The fields ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.
 
-A macroscopic example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr_rigid}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6/h^2 \xc^2 (\xc^2 - h)$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxc = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.
+An example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr_rigid}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6/h^2 \xc^2 (\xc^2 - h)$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.
 
 
 

@@ -18,10 +18,10 @@ The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. H
 
 The equations of motion are the following.
 
-First, the dynamics of \ac{bflu} is governed by the  \ac{ns} and mass-conservation equations \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}, respectively. Their \acp{bc} are \cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current}, which stay unchanged. On the other hand, the \ac{bc} \crefs{bc_fl_rigid_4_current}, which ensures that the \ac{bflu} velocity matches the \ac{bod} velocity at the interface between \ac{bflu} and \ac{bod}, now reads
+First, the dynamics of \ac{bflu} is governed by the  \ac{ns} and mass-conservation equations \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}, respectively. Their \acp{bc} are \cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current}, which stay unchanged. On the other hand,  \ac{bc} \crefs{bc_fl_rigid_4_current}, which ensures that the \ac{bflu} velocity matches the \ac{bod} velocity at the interface between \ac{bflu} and \ac{bod}, now reads
 \be
 \label{bc_fl_ela_4_current}
-\bvfc(\bxc) = \left. \der{\buela(\bxr)}{t} \right|_{\bxr = \psi^t(\bxc)} \text{ on } . \pomcircouteqc
+\bvfc(\bxc) = \left. \der{\buela(\bxr)}{t} \right|_{\bxr = \psi^t(\bxc)} \text{ on }  \pomcircouteqc
 \ee
 
 
@@ -46,7 +46,7 @@ The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
         \label{bc_fl_ela_1_current}
         \buela(\bxr)                                                                                                              & =0               \text{ on }\pomcircineqr,   \\
         \label{bc_fl_ela_2_current}
-        \epsilon_{\beta \gamma} \,\left. \Sela_{\alpha \beta}(\buela^t)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\               & =    \newlinenn
+        \epsilon_{\beta \gamma} \left. \Sela_{\alpha \beta}(\buela^t)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\                 & =    \newlinenn
         \sigmastressc_{\alpha \beta}(\bm{\varphi}^t(\bxi{s})) \epsilon_{\beta \gamma} \der{{\varphi}^{t, \, \gamma} (\bxi{s})}{s} & \text{ on } \pomcircouteqr.                &
 \end{align}
 
@@ -96,13 +96,28 @@ The system dynamics is obtained as follows: given $\bvfr^{n-1}$, $\sigmafr^{n-3/
                         \budomdot^n & = \bueladot^n \text{ on } \pomcircouteqr.
                 \end{align}
         }
-        %sign
 
 
         \titleditem{Update \ac{bflu}}{
                 \label{fl_ela_step_3}
-                Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbar$ and $\sigmafr^{n-1/2}$, and obtain $\bm \vfr^n$ from \cref{eq_phi_1}.
+                Solve the \acp{bvp} given by  \crefs{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} and \acp{bc}
+                \crefs{bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux,bc_phi_1,bc_phi_2} and
+                \be
+                \label{bc_fl_ela_4_current_disc}
+                \bvfr = \bueladot  \text{ on }  \pomcircouteqr,
+                \ee
+                which replaces \cref{bc_fl_rigid_5_reference_disc_aux} for a rigid body, and solve \cref{eq_phi_1}.
+
+
         }\end{itemize}
+
+
+
+An example of the coupled dynamics of \ac{bflu} and \ac{ela} is shown in \cref{fig_fluid_ela}.
+Here, $\pomcircouteqr$ is an ellipse with semi-axes $a = 0.2\, \met$, $b = 0.1\, \met$ and center located at  $\bxr = (0.4 \, \met, 0.2\, \met)$, and $\pomcircineqr$ has radius $r = 0.0125 \, \met$ and center located at $\bxr$.
+The \ac{ela} density and elastic moduli are, respectively, $\rhoela = 10^3 \,\kg/\met^2$ and $\kel = \muel = 10\,  \kg/\sec^2$. The other parameters are the same as in \cref{fig_fluid_rigid}.
+% These parameters  correspond approximately to ...
+
 
 \begin{figure*}
         \centering
@@ -112,3 +127,5 @@ The system dynamics is obtained as follows: given $\bvfr^{n-1}$, $\sigmafr^{n-3/
                 Interaction between a \acl{bflu} and an \acl{ela}. The notation is the same as in \cref{fig_fluid_rigid}, and the \acl{ela} is depicted as a red mesh.
         }
 \end{figure*}
+
+%sign
