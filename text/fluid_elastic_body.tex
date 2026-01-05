@@ -27,7 +27,7 @@ First, the dynamics of \ac{bflu} is governed by the  \ac{ns} and mass-conservati
 
 Second,  the motion of \ac{ela} is governed by Newton's equations of motion for an elastic body \cite{landauTheoryElasticity1986}
 \be\label{eq_fl_elastic_ela_current}
-\rhoela \dern{\buela^\alpha(\bxr)}{t}{2} = \pderr{\Sela_{\alpha \beta}(\buela)}{\beta},
+\rhoela \dern{\uela^\alpha(\bxr)}{t}{2} = \pderr{\Sela_{\alpha \beta}(\buela)}{\beta},
 \ee
 where $\buela$ and  $\rhoela$ are, respectively, the deformation field and density  of \ac{ela}; the latter is  assumed to be independent of space. The \ac{ela} stress tensor is derived from a compressible neo-Hookean model \cite{bazilevsIsogeometricFluidstructureInteraction2008}, and it reads
 \begin{align}
@@ -46,7 +46,7 @@ The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
         \label{bc_fl_ela_1_current}
         \buela(\bxr)                                                                                                              & =0               \text{ on }\pomcircineqr,   \\
         \label{bc_fl_ela_2_current}
-        \epsilon_{\beta \gamma} \, \Sela_{\alpha \beta}(\buela^t(\bxi{s})) \der{\xi^\gamma}{s}\                                   & =    \newlinenn
+        \epsilon_{\beta \gamma} \,\left. \Sela_{\alpha \beta}(\buela^t)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\               & =    \newlinenn
         \sigmastressc_{\alpha \beta}(\bm{\varphi}^t(\bxi{s})) \epsilon_{\beta \gamma} \der{{\varphi}^{t, \, \gamma} (\bxi{s})}{s} & \text{ on } \pomcircouteqr.                &
 \end{align}
 
@@ -61,7 +61,40 @@ Finally, the equations of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_
 \Cref{bc_ela_3} and \cref{bc_ela_3_dot} ensure that the displacement and velocity of \ac{ela} and  \ac{dom} are conformal at the \ac{ela}-\ac{dom} interface, and they replace  \cref{bc_ela_2,bc_ela_2_dot}, respectively.
 
 
-%sign
+
+The system dynamics is obtained as follows: given $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, $\buela^{n-1}$, $\bueladot^{n-1}$, $\budomdot^{n-1}$ and $\budomdot^{n-1}$  from the preceding step, we
+\begin{itemize}
+        \titleditem{Update \ac{ela}}{ \label{fl_ela_step_1}
+                Solve for $\buela^n$ and $\bueladot^n$ the discrete version of \cref{eq_fl_elastic_ela_current}
+                \begin{align}
+                        \label{eq_fl_elastic_ela_current_disc_1}
+                        \rhoela \frac{\ueladot^{n, \, \alpha} -  \ueladot^{n-1, \, \alpha}}{\deltat} & = \pderr{\Sela_{\alpha \beta}(\buela^n)}{\beta}, \\
+                        \label{eq_fl_elastic_ela_current_disc_2}
+                        \frac{\buela^n -  \buela^{n-1}}{\deltat}                                     & = \bueladot,
+                \end{align}
+                with \acp{bc} obtained from \cref{bc_fl_ela_1_current,bc_fl_ela_2_current}:
+                \bw
+                \begin{align}
+                        \label{bc_fl_ela_1_current_disc}
+                        \buela^n                                                                                                          = & 0               \text{ on }\pomcircineqr, \\
+                        \label{bc_fl_ela_2_current_disc}
+                        \epsilon_{\beta \gamma} \, \left. \Sela_{\alpha \beta}(\buela^n)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\   =    &
+                        \sigmastressr_{\alpha \beta}(\bxi{s};\bvfr^{n-1}, \sigmafr^{n-3/2}, \bu^n) \epsilon_{\beta \gamma} \left. F_{\gamma \delta}(\bu_\ela^{n-1})\right|_{\bxr = \bxi{s}}\der{ \xi^\delta}{s} \text{ on } \pomcircouteqr.
+                \end{align}
+                \ew
+                In \cref{bc_fl_ela_2_current_disc}, we have used \cref{eq_def_phi,eq_def_F} to rewrite the derivative of ${\bm \phi}(\bxi{s})$.
+
+                %sign
+
+
+        }
+        \titleditem{Update \ac{dom}}{ \label{fl_ela_step_2}
+                Solve  the \acp{bvp} \crefs{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot} for $\budom^n$ and $\budomdot^n$, with \acp{bc} \crefs{bc_ela_1_disc,bc_ela_1_disc_dot}
+        }
+        \titleditem{Update \ac{bflu}}{
+                \label{fl_ela_step_3}
+                Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbar$ and $\sigmafr^{n-1/2}$, and obtain $\bm \vfr^n$ from \cref{eq_phi_1}.
+        }\end{itemize}
 
 \begin{figure*}
         \centering

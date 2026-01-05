@@ -40,8 +40,10 @@ plt.rcParams.update({
     "text.latex.preamble": (
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
+        r"\usepackage{bm} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
+        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
 })
 
@@ -196,7 +198,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
                         label_pad=parameters['v_colorbar_label_offset'],
-                        label=r'$v \, [\met/\sec]$',
+                        label=parameters['v_colorbar_axis_label'],
                         font_size=parameters['color_map_font_size'],
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
@@ -218,7 +220,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     tick_length=parameters['tick_length'],
                     plot_label=parameters["v_plot_panel_label"],
                     plot_label_offset=parameters['panel_label_position'],
-                    plot_label_font_size=parameters['panel_label_font_size']
+                    plot_label_font_size=parameters['panel_label_font_size'],                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length']
                     )
 
     # =============
@@ -297,7 +300,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
         line_width=parameters['sigma_colorbar_tick_line_width'],
         tick_length=parameters['sigma_colorbar_tick_length'],
         tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=r"$\sigma \, [\pas \, \met]$",
+        label=parameters['sigma_colorbar_axis_label'],
         mappable=contour_plot,
         axis=sigma_colorbar_axis
     )
@@ -315,12 +318,14 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     tick_length=parameters['tick_length'],
                     plot_label=parameters["sigma_plot_panel_label"],
                     plot_label_offset=parameters['panel_label_position'],
-                    plot_label_font_size=parameters['panel_label_font_size']
+                    plot_label_font_size=parameters['panel_label_font_size'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length']
                     )
 
 
 plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
-              parameters['T'] / number_of_frames, 's', parameters['n_decimals_snapshot_label']))
+              parameters['T'] / number_of_frames, 'min_s', parameters['n_decimals_snapshot_label']))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')

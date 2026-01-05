@@ -414,7 +414,7 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
 
 The discrete version of  the \ac{bvp} for $\budom$, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, reads
 \begin{align}
-        \label{eq_mesh_fluid_rigid_disc}
+        \label{eq_domain_fluid_rigid_disc}
         \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr^\beta} & = 0 \text{ in } \omr,                                                                            \\
         \label{bc_ela_1_disc}
         \budom^n                                         & =\bzero \text{ on } \pomsqeqr,                                                                   \\
@@ -423,7 +423,7 @@ The discrete version of  the \ac{bvp} for $\budom$, \cref{eq_mesh_fluid_rigid,bc
 \end{align}
 and that of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}, is
 \begin{align}
-        \label{eq_mesh_fluid_rigid_disc_dot}
+        \label{eq_domain_fluid_rigid_disc_dot}
         \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budomdot^n)}{t} & = 0 \text{ in } \omr,                                                                  \\
         \label{bc_ela_1_disc_dot}
         \budomdot  ^n                                                & =\bzero \text{ on } \pomsqeqr,                                                         \\
@@ -431,13 +431,13 @@ and that of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1
         \budomdot  ^n                                                & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
 \end{align}\vspace{0.5cm}\\
 
-We can now iterate in time for the ensemble of fields as follows. At each step $n$, given $\theta^{n-1}, \omega^{n-1}, {\bm \vfr}^{n-1}, \sigmafr^{n-3/2}$ $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
+We can now iterate in time for the ensemble of fields as follows. At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
 \begin{enumerate}
         \titleditem{Update \ac{rig}}{ \label{fl_rigid_step_1}
                 Solve the algebraic equations \cref{eq_def_omega_disc,eq_fl_rigid_rigid_reference_disc} for $\theta^n$ and $\omega^n$.
         }
         \titleditem{Update \ac{dom}}{ \label{fl_rigid_step_2}
-                Solve  the \acp{bvp} \crefs{eq_mesh_fluid_rigid_disc,bc_ela_1_disc,bc_ela_2_disc,eq_mesh_fluid_rigid_disc_dot,bc_ela_1_disc_dot,bc_ela_2_disc_dot} for $\budom^n$ and $\budomdot^n$.
+                Solve  the \acp{bvp} \crefs{eq_domain_fluid_rigid_disc,bc_ela_1_disc,bc_ela_2_disc,eq_domain_fluid_rigid_disc_dot,bc_ela_1_disc_dot,bc_ela_2_disc_dot} for $\budom^n$ and $\budomdot^n$.
         }
         \titleditem{Update \ac{bflu}}{
                 \label{fl_rigid_step_3}
@@ -446,6 +446,7 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
 \end{enumerate}
 
 
+The fields ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.
 
 A macroscopic example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr_rigid}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6/h^2 \xc^2 (\xc^2 - h)$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxc = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.
 
