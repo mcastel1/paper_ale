@@ -97,13 +97,12 @@ def plot(fig):
             label=r' '
             )
 
-    t_min = np.min(data_theta['t'])
     t_max = np.max(data_theta['t'])
 
     theta_min = np.min(data_theta['theta'])
     theta_max = np.max(data_theta['theta'])
 
-    gr.plot_2d_axes(ax, [t_min, theta_min], [t_max - t_min, theta_max-theta_min],
+    gr.plot_2d_axes(ax, [0, theta_min], [t_max - 0, theta_max-theta_min],
                     margin=parameters['axis_margin'],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
