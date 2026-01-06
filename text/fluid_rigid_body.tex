@@ -471,6 +471,13 @@ An example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has 
         \includegraphics[width=\columnwidth]{figures/figure_8/figure_8.pdf}
         \caption{
                 \label{fig_fluid_rigid_timescale}
-                Interaction between a  \acl{bflu} and a rigid \acl{bod}.
+                Timescales for the interaction between a  \acl{bflu} and a rigid \acl{bod}.
         }
 \end{figure}
+
+As shown in \cref{fig_fluid_rigid_timescale}, the dynamics of \cref{fig_fluid_rigid} involves two time scales: A short one, $\tshort$ related to the angular oscillations of \ac{bod}, and a long one $\tlong$, given by the damping of such oscillations at long times.
+
+The scale $\tshort$ can be estimated by considering the dynamical equation \crefs{eq_fl_rigid_rigid_current_1} for \ac{bod}, and approximating its \ac{lhs} as $I / \tshort^2$ and its \ac{rhs} as $ (\etaf v /a \, 2 \pi a) a$. Here,  $\etaf v /a$ is the viscous component of the force per unit length exerted by \ac{bflu} on \ac{bod}, cf. \cref{eq_strees_tensor_fluid}, $2 \pi a$ estimates the total length of the boundary of \ac{bod}, and $a$ approximates the lever arm of the force above. Putting everything together, we obtain
+\be
+\tshort \sim \sqrt{\frac{I}{2 \pi a \etaf v }}.
+\ee
