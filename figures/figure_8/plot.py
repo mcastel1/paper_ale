@@ -74,11 +74,6 @@ def fitting_function(x, a, b):
     return a + b * x
 
 
-'''
-err = A * h^B
-log err = log A + B log h
-'''
-
 data_time = pd.read_csv(os.path.join(solution_path, 'time.csv'))
 
 
@@ -104,27 +99,17 @@ def plot_panel(field_name, ax):
     fit = curve_fit(
         fitting_function, data_x_for_fit, data_y_for_fit)
 
-    fit_parameters = fit[0]
-    fit_covariance = fit[1]
-
-    print(
-        f'{field_name}: \n\tb = {fit_parameters[1]} +- {np.sqrt(fit_covariance[1][1])}')
-
-    if (x_min <= 0) or (x_max <= 0):
-        text.print_text_color('Error: x_min / max are not positive!', 'red')
-
     # plot the interpolated curve which goes through the data points
-    ax.plot(np.emath.logn(parameters['log_base'], np.array(data[':0'])),
-            fitting_function(np.emath.logn(parameters['log_base'], np.array(data[':0'])), *fit_parameters), '-', color=parameters['line_color'], linewidth=parameters['curve_line_width'], label='')
+    # ax.plot(np.emath.logn(parameters['log_base'], np.array(data[':0'])),
+    #         fitting_function(np.emath.logn(parameters['log_base'], np.array(data[':0'])), *fit_parameters), '-', color=parameters['line_color'], linewidth=parameters['curve_line_width'], label='')
 
     # plot the data points
-    ax.plot(np.emath.logn(parameters['log_base'], np.array(data[':0'])), np.emath.logn(parameters['log_base'], np.array(
-        data['f'])), 'x', color=parameters['dot_color'], linewidth=parameters['curve_line_width'], s=parameters['dot_size'])
+    ax.plot(np.array(data[':0']), np.array(
+        data['f']), 'x', color=parameters['dot_color'], linewidth=parameters['curve_line_width'], s=parameters['dot_size'])
 
     gr.plot_2d_axes(ax, [x_min, y_min], [x_max - x_min, y_max-y_min],
-                    scale=['log', 'log'],
-                    log_base=[parameters['log_base']] * 2,
                     axis_label=parameters['axis_label'],
+                    margin=parameters['axis_margin'],
                     axis_label_offset=parameters['axis_label_offset'],
                     tick_length=parameters['tick_length'],
                     minor_tick_length=parameters['minor_tick_length'],
@@ -135,13 +120,6 @@ def plot_panel(field_name, ax):
                     line_width=parameters['line_width'],
                     plot_label_offset=parameters['plot_label_offset']
                     )
-
-    # ATTENTION: THE VALUES OF THE AXES MARGINS MAY HIDE SOME PARTS OF THE FIGURE, ADJUST THEM !
-    gr.set_2d_axis_limits_margin(
-        ax, [[x_min, x_max], [y_min, y_max]],
-        margin=parameters['axis_margin'],
-        log_base=parameters['log_base']
-    )
 
 
 def plot(fig):
