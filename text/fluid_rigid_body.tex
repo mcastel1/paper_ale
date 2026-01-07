@@ -455,7 +455,7 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
 
 The fields ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.
 
-An example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr_rigid}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6/h^2 \xc^2 (\xc^2 - h)$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.
+An example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr_rigid}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6 v_0 \xc^2 (\xc^2 - h)/h^2 $, with $v_0 = 1 \, \met/\sec$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.\\
 
 \begin{figure*}
         \centering
@@ -471,6 +471,22 @@ An example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has 
         \includegraphics[width=\columnwidth]{figures/figure_8/figure_8.pdf}
         \caption{
                 \label{fig_fluid_rigid_timescale}
-                Interaction between a  \acl{bflu} and a rigid \acl{bod}.
+                Angle of the \acl{bod} as a function of time for the interaction between a  \acl{bflu} and a rigid \acl{bod} shown in \cref{fig_fluid_rigid}.
         }
 \end{figure}
+
+As shown in \cref{fig_fluid_rigid_timescale}, the dynamics of \cref{fig_fluid_rigid} involves two physical time scales: A short one, $\tshort$, related to fast angular oscillations of \ac{bod}, and a long one,  $\tlong$, given by the damping of such oscillations.
+
+First, the scale $\tshort$ can be estimated by considering the dynamical equation \crefs{eq_fl_rigid_rigid_current_1} for \ac{bod}, and approximating its \ac{lhs} as $I / \tshort^2$ and its \ac{rhs} as $ (\etaf v_0 /a \, 2 \pi a) a$. Here,  $\etaf v_0 /a$ is the viscous component of the force per unit length exerted by \ac{bflu} on \ac{bod}, cf. \cref{eq_strees_tensor_fluid}, $2 \pi a$ estimates the total length of the boundary of \ac{bod}, and $a$ approximates the lever arm of the force above. Putting everything together, we obtain
+\be
+\label{eq_expressions_tau_short}
+\tshort \sim \sqrt{\frac{I}{2 \pi a \etaf v_0 }}.
+\ee
+For the parameters of \cref{fig_fluid_rigid}, \cref{eq_expressions_tau_short} yields $\tshort \sim 13 \, \sec$, which is in agreement with the  period of the oscillations in \cref{fig_fluid_rigid_timescale}.
+
+Second, $\tlong$  can be estimated by building a combination of the material parameters $\rhof$, $\etaf$ and $I$ of the model. The only parameter combination that can yield a quantity with the dimensions of a time is
+\be
+\label{eq_def_tau_long}
+\tlong \sim \frac{\sqrt{\rhof I }}{\etaf}.
+\ee
+For the parameters of \cref{fig_fluid_rigid}, \cref{eq_def_tau_long} yields $\tlong \sim 316 \, \sec$, which is roughly the timescale at which the width of the oscillations in \cref{fig_fluid_rigid_timescale} is dampened out.
