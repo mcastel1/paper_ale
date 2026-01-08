@@ -1,5 +1,5 @@
 import matplotlib
-from matplotlib.patches import Polygon
+from matplotlib.font_manager import FontProperties
 import matplotlib.pyplot as plt
 import os
 
@@ -9,7 +9,6 @@ import proplot as pplt
 import sys
 import warnings
 
-import calculus.utils as cal
 import constants.utils as const
 import calculus.geometry as geo
 import graphics.color_bar as cb
@@ -23,10 +22,6 @@ import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
 
-'''
-you can copy the data from abacus with
-./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/paper_ale/figures/figure_5 1 1000000 30000
-'''
 
 matplotlib.use('pgf')  # use a non-interactive backend to avoid the need of
 
@@ -97,7 +92,8 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(1, 1, 1)
+fig.add_subplot(2, 1, 1)
+fig.add_subplot(2, 1, 2)
 
 
 def plot_snapshot(fig, n_file,
@@ -107,7 +103,7 @@ def plot_snapshot(fig, n_file,
 
     # load data
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv')
-    data_msh_line_vertices = pd.read_csv(os.path.join(
+    data_msh_curr_line_vertices = pd.read_csv(os.path.join(
         snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
     data_X = pd.read_csv(os.path.join(
         snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
@@ -133,7 +129,7 @@ def plot_snapshot(fig, n_file,
         axis_min_max = [lis.min_max(X), lis.min_max(Y)]
         #
 
-    X_curr, t = gr.interpolate_curve(
+    X_curr, _ = gr.interpolate_curve(
         data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
     X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
@@ -146,10 +142,141 @@ def plot_snapshot(fig, n_file,
                                                                                              clab.label_v_column)
 
     # =============
-    # u subplot
+    # reference subplot
     # =============
 
     ax = fig.axes[0]
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)
+    gr.set_axes_limits(ax,
+                       [0, 0], [parameters['L'], parameters['h']]
+                       )
+
+    # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
+    X_U, Y_U, _, _ = geo.u_1d(data_X, parameters['h'])
+    # coordinates of the curve in the reference configuration
+    X_ref = np.array(list(zip(X_U, Y_U)))
+
+    # store the interpolating field for the displacement into U_interp
+    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(
+        data_u_msh)
+    U_interp = np.array([U_interp_x, U_interp_y], dtype=object)
+
+    # construct data_msh_curr_ref_vertices from data_msh_curr_line_vertices
+    # data_msh_ref_line_vertices = pd.DataFrame(
+    #     columns=['start:0', 'start:1', 'start:2', 'end:0', 'end:1', 'end:2'])
+    data_msh_ref_line_vertices = []
+
+    for _, row in data_msh_curr_line_vertices.iterrows():
+
+        row_dict = {
+            'start:0': row['start:0'],
+            'start:1': row['start:1'],
+            'start:2': row['start:2'],
+            'end:0': row['end:0'],
+            'end:1': row['end:1'],
+            'end:2': row['end:2']
+        }
+        data_msh_ref_line_vertices.append(row_dict)
+
+    data_msh_ref_line_vertices = pd.DataFrame(data_msh_ref_line_vertices)
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_curr_line_vertices,
+                    line_width=parameters['mesh_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
+
+    # plot \partial Omega_in
+    start = [0, 0]
+    end = [0, parameters['h']]
+    ax.plot(
+        [start[0], end[0]],
+        [start[1], end[1]],
+        color=parameters['partial_omega_in_color'],
+        linewidth=parameters['X_line_width'],
+        linestyle=':',
+        label=r'$\pomineqc$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_out
+    start = [parameters['L'], 0]
+    end = [parameters['L'], parameters['h']]
+
+    ax.plot(
+        [start[0], end[0]],
+        [start[1], end[1]],
+        color=parameters['partial_omega_out_color'],
+        linewidth=parameters['X_line_width'],
+        linestyle='--',
+        label=r'$\pomouteqc$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_bottom
+    start = [0, 0]
+    end = [parameters['L'], 0]
+    ax.plot(
+        [start[0], end[0]],
+        [start[1], end[1]],
+        color=parameters['partial_omega_bottom_color'],
+        linewidth=parameters['X_line_width'],
+        linestyle='-.',
+        label='$\pombottomeqc$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot X_ref
+    gr.plot_curve_grid(ax, X_ref,
+                       line_color='red',
+                       line_width=parameters['X_line_width'],
+                       z_order=1
+                       )
+
+    # Create custom legend handles
+    handles, labels = ax.get_legend_handles_labels()
+
+    ax.legend(
+        handles=handles,
+        labels=labels,
+        loc='center',
+        bbox_to_anchor=np.array(parameters['legend_position']),
+        frameon=True,
+        handlelength=parameters['legend_line_length'],
+        prop=FontProperties(size=parameters['legend_font_size'])
+    )
+
+    gr.plot_2d_axes(
+        ax, [0, 0], [parameters['L'], parameters['h']],
+        tick_length=parameters['tick_length'],
+        line_width=parameters['axis_line_width'],
+        axis_label=parameters['axis_label'],
+        axis_label_angle=parameters['axis_label_angle'],
+        axis_label_offset=parameters['axis_label_offset'],
+        tick_label_offset=parameters['tick_label_offset'],
+        tick_label_format=['f', 'f'],
+        font_size=parameters['axis_font_size'],
+        plot_label=parameters['ref_panel_label'],
+        plot_label_offset=parameters['panel_label_offset'],
+        plot_label_font_size=parameters['panel_label_font_size'],
+        axis_origin=parameters['axis_origin'],
+        margin=parameters['axis_margin'],
+        n_minor_ticks=parameters['n_minor_ticks'],
+        minor_tick_length=parameters['minor_tick_length'],
+        z_order=const.high_z_order)
+
+    # =============
+    # current subplot
+    # =============
+
+    ax = fig.axes[1]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -170,8 +297,8 @@ def plot_snapshot(fig, n_file,
     # X_ref = np.array(list(zip(X_U, Y_U)))
 
     # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_line_vertices,
-                    line_width=parameters['plot_line_width'],
+    gr.plot_2d_mesh(ax, data_msh_curr_line_vertices,
+                    line_width=parameters['mesh_line_width'],
                     color='black',
                     alpha=parameters['alpha_mesh'],
                     zorder=parameters['mesh_zorder'])
@@ -179,7 +306,7 @@ def plot_snapshot(fig, n_file,
     # plot X_curr
     gr.plot_curve_grid(ax, X_curr,
                        line_color='green',
-                       legend='\int',
+                       legend='\pomtopeqc',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
@@ -194,7 +321,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['X_line_width'],
         linestyle=':',
-        label=r'$\pomineqr$',
+        label=r'$\pomineqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -210,7 +337,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['X_line_width'],
         linestyle='--',
-        label=r'$\pomouteqr$',
+        label=r'$\pomouteqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -225,19 +352,10 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['X_line_width'],
         linestyle='-.',
-        label='$\pombottomeqr$',
+        label='$\pombottomeqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
-
-    # # plot X_ref
-    # gr.plot_curve_grid(ax, X_ref,
-    #                    line_color='red',
-    #                    legend_position=parameters['X_ref_legend_position'],
-    #                    legend_inner_location='upper left',
-    #                    line_width=parameters['X_line_width'],
-    #                    z_order=1
-    #                    )
 
     # Create custom legend handles
     handles, labels = ax.get_legend_handles_labels()
@@ -248,7 +366,8 @@ def plot_snapshot(fig, n_file,
         loc='center',
         bbox_to_anchor=np.array(parameters['legend_position']),
         frameon=True,
-        handlelength=parameters['legend_line_length']
+        handlelength=parameters['legend_line_length'],
+        prop=FontProperties(size=parameters['legend_font_size'])
     )
 
     gr.plot_2d_axes(
@@ -261,8 +380,9 @@ def plot_snapshot(fig, n_file,
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
-        plot_label=parameters['u_panel_label'],
+        plot_label=parameters['curr_panel_label'],
         plot_label_offset=parameters['panel_label_offset'],
+        plot_label_font_size=parameters['panel_label_font_size'],
         axis_origin=parameters['axis_origin'],
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
