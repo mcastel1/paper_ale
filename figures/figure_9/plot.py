@@ -102,7 +102,8 @@ def plot_snapshot(fig, n_file,
     n_file_string = str(n_file)
 
     # load data
-    # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv')
+    data_msh_ref_line_vertices = pd.read_csv(os.path.join(
+        mesh_path, 'line_vertices.csv'))
     data_msh_curr_line_vertices = pd.read_csv(os.path.join(
         snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
     data_X = pd.read_csv(os.path.join(
@@ -159,37 +160,6 @@ def plot_snapshot(fig, n_file,
     # coordinates of the curve in the reference configuration
     X_ref = np.array(list(zip(X_U, Y_U)))
 
-    # store the interpolating field for the displacement into U_interp
-    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(
-        data_u_msh)
-    U_interp = np.array([U_interp_x, U_interp_y], dtype=object)
-
-    # construct data_msh_curr_ref_vertices from data_msh_curr_line_vertices
-    # data_msh_ref_line_vertices = pd.DataFrame(
-    #     columns=['start:0', 'start:1', 'start:2', 'end:0', 'end:1', 'end:2'])
-    data_msh_ref_line_vertices = []
-
-    for _, row in data_msh_curr_line_vertices.iterrows():
-
-        row_dict = {
-            'start:0': row['start:0'],
-            'start:1': row['start:1'],
-            'start:2': row['start:2'],
-            'end:0': row['end:0'],
-            'end:1': row['end:1'],
-            'end:2': row['end:2']
-        }
-        data_msh_ref_line_vertices.append(row_dict)
-
-    data_msh_ref_line_vertices = pd.DataFrame(data_msh_ref_line_vertices)
-
-    # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_curr_line_vertices,
-                    line_width=parameters['mesh_line_width'],
-                    color='black',
-                    alpha=parameters['alpha_mesh'],
-                    zorder=parameters['mesh_zorder'])
-
     # plot \partial Omega_in
     start = [0, 0]
     end = [0, parameters['h']]
@@ -199,7 +169,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['X_line_width'],
         linestyle=':',
-        label=r'$\pomineqc$',
+        label=r'$\pomineqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -214,7 +184,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['X_line_width'],
         linestyle='--',
-        label=r'$\pomouteqc$',
+        label=r'$\pomouteqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -228,14 +198,22 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['X_line_width'],
         linestyle='-.',
-        label='$\pombottomeqc$',
+        label='$\pombottomeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
 
+    # plot ref mesh
+    gr.plot_2d_mesh(ax, data_msh_ref_line_vertices,
+                    line_width=parameters['mesh_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh'],
+                    zorder=parameters['mesh_zorder'])
+
     # plot X_ref
     gr.plot_curve_grid(ax, X_ref,
-                       line_color='red',
+                       line_color='green',
+                       legend='\pomtopeqr',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
@@ -247,7 +225,7 @@ def plot_snapshot(fig, n_file,
         handles=handles,
         labels=labels,
         loc='center',
-        bbox_to_anchor=np.array(parameters['legend_position']),
+        bbox_to_anchor=np.array(parameters['legend_position_ref']),
         frameon=True,
         handlelength=parameters['legend_line_length'],
         prop=FontProperties(size=parameters['legend_font_size'])
@@ -257,14 +235,14 @@ def plot_snapshot(fig, n_file,
         ax, [0, 0], [parameters['L'], parameters['h']],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
-        axis_label=parameters['axis_label'],
+        axis_label=parameters['ref_axis_label'],
         axis_label_angle=parameters['axis_label_angle'],
         axis_label_offset=parameters['axis_label_offset'],
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
         plot_label=parameters['ref_panel_label'],
-        plot_label_offset=parameters['panel_label_offset'],
+        plot_label_offset=parameters['ref_panel_label_offset'],
         plot_label_font_size=parameters['panel_label_font_size'],
         axis_origin=parameters['axis_origin'],
         margin=parameters['axis_margin'],
@@ -296,7 +274,7 @@ def plot_snapshot(fig, n_file,
     # coordinates of the curve in the reference configuration
     # X_ref = np.array(list(zip(X_U, Y_U)))
 
-    # plot mesh under the membrane
+    # plot curr mesh
     gr.plot_2d_mesh(ax, data_msh_curr_line_vertices,
                     line_width=parameters['mesh_line_width'],
                     color='black',
@@ -306,7 +284,7 @@ def plot_snapshot(fig, n_file,
     # plot X_curr
     gr.plot_curve_grid(ax, X_curr,
                        line_color='green',
-                       legend='\pomtopeqc',
+                       legend='\pomtopeqr',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
@@ -364,7 +342,7 @@ def plot_snapshot(fig, n_file,
         handles=handles,
         labels=labels,
         loc='center',
-        bbox_to_anchor=np.array(parameters['legend_position']),
+        bbox_to_anchor=np.array(parameters['legend_position_cur']),
         frameon=True,
         handlelength=parameters['legend_line_length'],
         prop=FontProperties(size=parameters['legend_font_size'])
@@ -374,14 +352,14 @@ def plot_snapshot(fig, n_file,
         ax, [0, 0], [parameters['L'], parameters['h']],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
-        axis_label=parameters['axis_label'],
+        axis_label=parameters['cur_axis_label'],
         axis_label_angle=parameters['axis_label_angle'],
         axis_label_offset=parameters['axis_label_offset'],
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
         plot_label=parameters['curr_panel_label'],
-        plot_label_offset=parameters['panel_label_offset'],
+        plot_label_offset=parameters['cur_panel_label_offset'],
         plot_label_font_size=parameters['panel_label_font_size'],
         axis_origin=parameters['axis_origin'],
         margin=parameters['axis_margin'],
