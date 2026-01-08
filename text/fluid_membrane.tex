@@ -1,0 +1,50 @@
+\section{Fluid and Helfrich membrane}\label{sec_fl_mem}
+
+In this Section, we will build on the analysis of \cref{sec_fl_elastic}, and complexify the structure of the elastic body with which \ac{bflu} interacts by considering, instead of an elastic material, an \ac{mem} \cite{helfrichElasticPropertiesLipid1973,derenyiFormationInteractionMembrane2002}. Both the physical structure and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: its material elements can flow both tangentially and normally to it. Such fluid behavior requires an Eulerian description, which then needs to be connected to the Lagrangian description used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{derenyiFormationInteractionMembrane2002}, which is significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}.
+
+%sign
+
+The dynamical equations fo \ac{mem} are
+
+\bw
+\begin{align}
+    \label{eq-dyn-continuity}
+    \nab_i v^i - 2 H w                                                                                                                                                                                                                                    & =                                                                                                 0, \\ \nn
+    \label{eq-dyn-v}
+    \rho ( \partial_t v^i + v^j \nab_j v^i  - 2 v^j w b^i_j - w \nab^i w )                                                                                                                                                                                & =                                                                                                    \\
+    \nab^i \sigma + \eta \left[ - \nablb v^i - 2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j w + 2 K v^i   \right]   ,                                                                                                                               &                                                                                                      \\ \nn
+    \label{eq-dyn-w}
+    \rho \left[ \partial_t w + v^i \left( v^j b_{ji} + \nabla_i w  \right) \right]                                                                                                                                                                        & =                                                                                                    \\
+    2\kap \left[   \nablb H  - 2 H (H^2 - K)  \right] + 2 \sigma H    +                                                         2 \eta \left[ (\nab^i v^j)b_{ij} - 2 w (2 H^2 - K)                                                                \right] & ,
+\end{align}
+\ew
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/figure_4/figure_4.pdf}
+    \caption{
+        \label{fig_mem}
+        Helfrich fluid layer described with the generalized \acl{al} gauge. The layer is subjected to a gravitational field directed along the $X^2$ axis, in the direction of negative $X^2$.  \plab{A} Displacement field $\vec{U}$, which relates the reference and the current configuration, shown in red and green, respectively. \plab{B} Stretching $\nu$.  \plab{C} Tangent angle $\psi$. \plab{D} Tangential velocity. Arrows show the velocity direction, and the  color code the velocity norm. \plab{E} Normal velocity, whose value is shown with the color code. \plab{F} Surface tension. All panels refer to the same instant of time, shown on top.
+    }
+\end{figure*}
+
+
+
+
+
+
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/figure_5/figure_5.pdf}
+    \caption{
+        Interaction between a bulk fluid and a Helfrich membrane.
+        \plab{A} Membrane reference and current configuration (red and green curve, respectively), and displacement field (black arrows).
+        \plab{B} Membrane stretch field.
+        \plab{C} Membrane tangent angle.
+        \plab{D} and \plab{E}) Bulk-fluid velocity and tension; the notation is the same as in \cref{fig_fluid_rigid}.
+        \plab{F}, \plab{G} and \plab{H}: membrane tangential velocity, normal velocity and tension; the notation is the same as in \cref{fig_mem}B, C and D, respectively.  All panels refer to the same instant of time, shown on top, and display also the deformed mesh (gray lines).
+        \label{fig_fluid_mem}
+    }
+\end{figure*}
