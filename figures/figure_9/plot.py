@@ -177,14 +177,12 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     # plot X_curr
-    # gr.plot_curve_grid(ax, X_curr,
-    #                    line_color='green',
-    #                    legend='$\int$',
-    #                    legend_position=parameters['X_curr_legend_position'],
-    #                    legend_inner_location='upper left',
-    #                    line_width=parameters['X_line_width'],
-    #                    z_order=1
-    #                    )
+    gr.plot_curve_grid(ax, X_curr,
+                       line_color='green',
+                       legend='\int',
+                       line_width=parameters['X_line_width'],
+                       z_order=1
+                       )
 
     # plot \partial Omega_in
     start = msh.reference_to_current([0, 0], U_interp)
@@ -247,7 +245,7 @@ def plot_snapshot(fig, n_file,
     ax.legend(
         handles=handles,
         labels=labels,
-        loc='upper right',
+        loc='center',
         bbox_to_anchor=np.array(parameters['legend_position']),
         frameon=True,
         handlelength=parameters['legend_line_length']
