@@ -13,10 +13,11 @@ import calculus.utils as cal
 import constants.utils as const
 import calculus.geometry as geo
 import graphics.color_bar as cb
-import list.column_labels as clab
+import graphics.mesh.utils as msh
 import graphics.utils as gr
 import graphics.vector_plot as vp
 import input_output.utils as io
+import list.column_labels as clab
 import list.utils as lis
 import system.paths as paths
 import system.utils as sys_utils
@@ -27,7 +28,7 @@ you can copy the data from abacus with
 ./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/paper_ale/figures/figure_5 1 1000000 30000
 '''
 
-matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
+matplotlib.use('pgf')  # use a non-interactive backend to avoid the need of
 
 # Show all rows and columns when printing a Pandas array
 pd.set_option('display.max_rows', None)
@@ -50,11 +51,13 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 pplt.rc['grid'] = False  # disables default gridlines
 
 plt.rcParams.update({
-    "text.usetex": True,
-    "text.latex.preamble": (
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": (
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{bm} "
         r"\usepackage{xcolor} "
+        r"\usepackage{tikz} "
+        r"\usetikzlibrary{math} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
@@ -97,81 +100,7 @@ fig = pplt.figure(
 fig.add_subplot(1, 1, 1)
 
 
-'''
-plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration
-Input values:
-    * Mandatory:
-        - 'ax': the axis where the polygon will be drawn
-        - 'axis_min_max': the bounds of the X values in the current configuration
-        - 'data_u_msh': the data for the mesh displacement field
-    * Optional:
-        - 'margin': a margin, measured as relative to axis_min_max[1][1] - axis_mim_max[1][0] which is used to expand the region on top
-'''
-
-
-def draw_masking_area(ax, axis_min_max, data_u_msh,
-                      margin=[0]*2):
-
-    # 1)interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field
-
-    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(
-        data_u_msh)
-
-    data_def_boundary_vertices_sub_mesh_1 = []
-    for _, row in data_ref_boundary_vertices_sub_mesh_1.iterrows():
-        data_def_boundary_vertices_sub_mesh_1.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x(row[':0'], row[':1']),
-                 U_interp_y(row[':0'], row[':1'])]
-            )
-        )
-
-    # 2) add to the sequence of lines above the top-left and top-right and bottom-right extremal points of the region to cover
-    # two points at the bottom-right corner
-    data_def_boundary_vertices_sub_mesh_1.insert(0, (
-        parameters['L'] + U_interp_x(parameters['L'], parameters['h']),
-        parameters['h'] + U_interp_y(parameters['L'], parameters['h'])
-    )
-    )
-    data_def_boundary_vertices_sub_mesh_1.insert(0, (
-        parameters['L'] + U_interp_x(parameters['L'], parameters['h']) +
-        margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
-        parameters['h'] + U_interp_y(parameters['L'], parameters['h'])
-    )
-    )
-
-    # bottom-left point
-    data_def_boundary_vertices_sub_mesh_1.append(np.subtract(
-        data_def_boundary_vertices_sub_mesh_1[-1],
-        (margin[0] * (axis_min_max[0]
-                      [1] - axis_min_max[0][0]), 0)
-    )
-    )
-
-    # top-left point
-    data_def_boundary_vertices_sub_mesh_1.append((
-        -margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
-        axis_min_max[1][1] + margin[1] *
-        (axis_min_max[1][1] - axis_min_max[1][0])
-    ))
-    # top-right point
-    data_def_boundary_vertices_sub_mesh_1.append((
-        axis_min_max[0][1] + margin[0] *
-        (axis_min_max[0][1] - axis_min_max[0][0]),
-        axis_min_max[1][1] + margin[1] *
-        (axis_min_max[1][1] - axis_min_max[1][0])
-    ))
-
-    # 3) plot the  polygon in order to hide the arrows
-    poly = Polygon(data_def_boundary_vertices_sub_mesh_1, fill=True,
-                   linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
-    ax.add_patch(poly)
-    #
-
-
 def plot_snapshot(fig, n_file,
-                  snapshot_label='',
                   axis_min_max=None):
 
     n_file_string = str(n_file)
@@ -182,10 +111,6 @@ def plot_snapshot(fig, n_file,
         snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
     data_X = pd.read_csv(os.path.join(
         snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
-
-    # plot snapshot label
-    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
-             snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
     if axis_min_max == None:
 
@@ -198,7 +123,7 @@ def plot_snapshot(fig, n_file,
                                                                                                 [0, 0],
                                                                                                 [parameters['L'],
                                                                                                     parameters['h']],
-                                                                                                parameters['n_bins_v_fl'])
+                                                                                                parameters['n_bins_v'])
 
         # X, Y are the positions of the mesh nodes in the current configuration
         X = np.array(lis.add_lists_of_lists(X_msh_ref, u_msh_n_X))
@@ -215,7 +140,7 @@ def plot_snapshot(fig, n_file,
                                                                                              [0, 0],
                                                                                              [parameters['L'],
                                                                                                  parameters['h']],
-                                                                                             parameters['n_bins_v_fl'],
+                                                                                             parameters['n_bins_v'],
                                                                                              clab.label_x_column,
                                                                                              clab.label_y_column,
                                                                                              clab.label_v_column)
@@ -236,8 +161,13 @@ def plot_snapshot(fig, n_file,
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
     X_U, Y_U, _, _ = geo.u_1d(data_X, parameters['h'])
 
+    # store the interpolating field for the displacement into U_interp
+    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(
+        data_u_msh)
+    U_interp = np.array([U_interp_x, U_interp_y], dtype=object)
+
     # coordinates of the curve in the reference configuration
-    X_ref = np.array(list(zip(X_U, Y_U)))
+    # X_ref = np.array(list(zip(X_U, Y_U)))
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -247,22 +177,57 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     # plot X_curr
-    gr.plot_curve_grid(ax, X_curr,
-                       line_color='green',
-                       legend_position=parameters['X_curr_legend_position'],
-                       legend_inner_location='upper left',
-                       line_width=parameters['X_line_width'],
-                       z_order=1
-                       )
+    # gr.plot_curve_grid(ax, X_curr,
+    #                    line_color='green',
+    #                    legend='$\int$',
+    #                    legend_position=parameters['X_curr_legend_position'],
+    #                    legend_inner_location='upper left',
+    #                    line_width=parameters['X_line_width'],
+    #                    z_order=1
+    #                    )
 
-    # plot \partial Omega_out
+    # plot \partial Omega_in
+    start = msh.reference_to_current([0, 0], U_interp)
+    end = msh.reference_to_current(
+        [0, parameters['h']], U_interp)
     ax.plot(
-        [parameters['L'], parameters['L']],
-        [0, parameters['h']],
-        color=parameters['partial_omega_out_color'],
+        [start[0], end[0]],
+        [start[1], end[1]],
+        color=parameters['partial_omega_in_color'],
         linewidth=parameters['X_line_width'],
         linestyle=':',
-        label='$\pomouteqr$',
+        label=r'$\pomineqr$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_out
+    start = msh.reference_to_current([parameters['L'], 0], U_interp)
+    end = msh.reference_to_current(
+        [parameters['L'], parameters['h']], U_interp)
+
+    ax.plot(
+        [start[0], end[0]],
+        [start[1], end[1]],
+        color=parameters['partial_omega_out_color'],
+        linewidth=parameters['X_line_width'],
+        linestyle='--',
+        label=r'$\pomouteqr$',
+        zorder=const.high_z_order,
+        clip_on=False
+    )
+
+    # plot \partial Omega_bottom
+    start = msh.reference_to_current([0, 0], U_interp)
+    end = msh.reference_to_current(
+        [parameters['L'], 0], U_interp)
+    ax.plot(
+        [start[0], end[0]],
+        [start[1], end[1]],
+        color=parameters['partial_omega_bottom_color'],
+        linewidth=parameters['X_line_width'],
+        linestyle='-.',
+        label='$\pombottomeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -275,6 +240,18 @@ def plot_snapshot(fig, n_file,
     #                    line_width=parameters['X_line_width'],
     #                    z_order=1
     #                    )
+
+    # Create custom legend handles
+    handles, labels = ax.get_legend_handles_labels()
+
+    ax.legend(
+        handles=handles,
+        labels=labels,
+        loc='upper right',
+        bbox_to_anchor=np.array(parameters['legend_position']),
+        frameon=True,
+        handlelength=parameters['legend_line_length']
+    )
 
     gr.plot_2d_axes(
         ax, [0, 0], [parameters['L'], parameters['h']],
@@ -295,8 +272,7 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order)
 
 
-plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+plot_snapshot(fig, snapshot_max)
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
