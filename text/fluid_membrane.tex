@@ -1,23 +1,63 @@
 \section{Fluid and Helfrich membrane}\label{sec_fl_mem}
 
-In this Section, we will build on the analysis of \cref{sec_fl_elastic}, and complexify the structure of the elastic body with which \ac{bflu} interacts by considering, instead of an elastic material, an \ac{mem} \cite{helfrichElasticPropertiesLipid1973,derenyiFormationInteractionMembrane2002}. Both the physical structure and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: its material elements can flow both tangentially and normally to it. Such fluid behavior requires an Eulerian description, which then needs to be connected to the Lagrangian description used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{derenyiFormationInteractionMembrane2002}, which is significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}.
+In this Section, we will build on the analysis of \cref{sec_fl_elastic}, and complexify the structure of the elastic body with which \ac{bflu} interacts by considering, instead of an elastic material, an \ac{mem} \cite{helfrichElasticPropertiesLipid1973,derenyiFormationInteractionMembrane2002}.
+
+Both the physical nature and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: its material elements can flow both tangentially and normally to it.
+Such fluid behavior requires an Eulerian description, which then needs to be connected to the Lagrangian description used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}, which are significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}. Third, the geometrical description of \ac{mem} requires fixing an appropriate \textit{gauge}.
+In fact, a general parametrization of \ac{mem} is given by two functions $\bxmemc(\xcoord^1)$, both of which depend on the curvilinear coordinate $\xcoord^1$. However, a single \ac{pde}  determines the \ac{mem} shape \cite{zhong-canBendingEnergyVesicle1989}.
+This redundancy is due to the fact that parametrizations with different values of the stretching
+\be\label{eq_intro_nu}
+\pder{{\bxmemc}}{\xcoord^1} \cdot \pder{{\bxmemc}}{\xcoord^1} \equiv \nu^2,
+\ee
+yield the same shape. The redundancy above may be removed by a gauge fixing, i.e., by adding a constraint on $\bxmemc$, or its derivatives.
+Two common gauge choices are the Monge  \cite{hsiungFirstCourseDifferential1981,desernoFluidLipidMembranes2015}, or the arc-length parametrization \cite{derenyiFormationInteractionMembrane2002}, in which one sets
+\be
+\label{eq_arc_length_gauge}
+\nu = 1.
+\ee
+The arc-length gauge has been used to describe, for instance, the steady state for membrane tubules \cite{derenyiFormationInteractionMembrane2002}. However, while a static constraint such as \crefs{eq_arc_length_gauge} is suited to  static shapes, it cannot describe the  \ac{mem} dynamics, such as the one of \ac{mem} interacting with \ac{bflu}. In fact, as \ac{mem} is deformed, it will also stretch: as a result, \cref{eq_arc_length_gauge} must be replaced by a time-dependent  constraint---see below.
+
+We describe \ac{mem} with the Lagrangian approach, along the lines of the description of \ac{dom} in \cref{sec_fl_rigid} and \ac{ela}  in \cref{sec_fl_elastic}.  The \ac{mem} displacement field is
+\be
+\bumem(\xcoord^1) \equiv \bxmemc(\xcoord^1) - \bxmemr(\xcoord^1),
+\ee
+where we choose the \ac{ref} configuration as a straight line
+\be
+\bxmemr(\xcoord^1) \equiv (\xcoord^1, h), \, 0 \leq  \xcoord^1 \leq L,
+\ee
+which is shown in \cref{fig_ref_cur_mem}A.
+
+
+
+In order to work out the  dynamical equations for \ac{mem}, let us derive the force exerted by \ac{bflu} on \ac{mem}. The force per unit \ac{mem} length $\dint{l_\current}$ is $- \sigmastressc_{\alpha \beta} \normalc{\gamma}$, cf. \cref{eq_fl_rigid_rigid_current_1}.
 
 %sign
 
-The dynamical equations fo \ac{mem} are
+
+In what follows, latin indices $i, j, k, \cdots$ will be used to denote vectors and tensors related to the \ac{mem} manifold; their position as upper and lower indexes is thus important \cite{marchiafavaAppuntiDiGeometria2005}.
 
 \bw
 \begin{align}
     \label{eq-dyn-continuity}
-    \nab_i v^i - 2 H w                                                                                                                                                                                                                                    & =                                                                                                 0, \\ \nn
+    \nab_i v^i - 2 H w                                                                                                                                                                                                                                             & =                                                                                                 0, \\ \nn
     \label{eq-dyn-v}
-    \rho ( \partial_t v^i + v^j \nab_j v^i  - 2 v^j w b^i_j - w \nab^i w )                                                                                                                                                                                & =                                                                                                    \\
-    \nab^i \sigma + \eta \left[ - \nablb v^i - 2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j w + 2 K v^i   \right]   ,                                                                                                                               &                                                                                                      \\ \nn
+    \rho ( \partial_t v^i + v^j \nab_j v^i  - 2 v^j w b^i_j - w \nab^i w )                                                                                                                                                                                         & =                                                                                                    \\
+    \nab^i \sigma + \eta \left[ - \nablb v^i - 2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j w + 2 K v^i   \right]   ,                                                                                                                                        &                                                                                                      \\ \nn
     \label{eq-dyn-w}
-    \rho \left[ \partial_t w + v^i \left( v^j b_{ji} + \nabla_i w  \right) \right]                                                                                                                                                                        & =                                                                                                    \\
-    2\kap \left[   \nablb H  - 2 H (H^2 - K)  \right] + 2 \sigma H    +                                                         2 \eta \left[ (\nab^i v^j)b_{ij} - 2 w (2 H^2 - K)                                                                \right] & ,
+    \rho \left[ \partial_t w + v^i \left( v^j b_{ji} + \nabla_i w  \right) \right]                                                                                                                                                                                 & =                                                                                                    \\
+    - 2\kap \left[   \nab_i \nab^i H  + 2 H (H^2 - K)  \right] + 2 \sigma H    +                                                         2 \eta \left[ (\nab^i v^j)b_{ij} - 2 w (2 H^2 - K)                                                                \right] & ,
 \end{align}
 \ew
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figures/figure_9/figure_9.pdf}
+    \caption{
+        \label{fig_ref_cur_mem}
+        \Acl{ref} and \acl{cur} configuration for the interaction between a  \acf{bflu} and a \acf{mem}. The figure follows the same notation as \cref{fig_ref_curr_rigid}.
+        The top edge of the \ac{bflu} mesh, $\pomtopeqr$, coincides with the one-dimensional  manifold $\omlineeqr$ of \ac{mem}. In panels \textbf{A} and \textbf{B}, the domains $\omr$ and $\omc$ are the regions covered by the mesh, respectively.
+    }
+\end{figure}
 
 \begin{figure*}
     \centering
