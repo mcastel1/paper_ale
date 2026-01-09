@@ -5,6 +5,7 @@ copy data for this plot with
 
 '''
 import matplotlib
+from matplotlib.font_manager import FontProperties
 import matplotlib.pyplot as plt
 import os
 
@@ -214,8 +215,6 @@ def plot_snapshot(fig, n_file,
     gr.plot_curve_grid(ax, X_curr,
                        line_color='green',
                        legend='\\text{Current}',
-                       legend_position=parameters['current_legend_position'],
-                       legend_inner_location='upper left',
                        line_width=parameters['X_curr_line_width'],
                        z_order=0
                        )
@@ -224,11 +223,23 @@ def plot_snapshot(fig, n_file,
     gr.plot_curve_grid(ax, X_ref,
                        line_color='red',
                        legend='\\text{Reference}',
-                       legend_position=parameters['reference_legend_position'],
-                       legend_inner_location='upper left',
                        line_width=parameters['X_ref_line_width'],
                        z_order=0
                        )
+
+    # Create custom legend handles
+    handles, labels = ax.get_legend_handles_labels()
+
+    ax.legend(
+        handles=handles,
+        labels=labels,
+        loc='center',
+        bbox_to_anchor=np.array(parameters['legend_position']),
+        frameon=False,
+        ncol=1  # Two columns = horizontal layout
+        # handlelength=parameters['legend_line_length'],
+        # prop=FontProperties(size=parameters['legend_font_size'])
+    )
 
     gr.plot_2d_axes(ax,
                     [X_min_max[0][0], X_min_max[1][0]],
