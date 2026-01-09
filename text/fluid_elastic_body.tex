@@ -2,7 +2,7 @@
 
 In this Section, we will build on the analysis of \cref{sec_fl_rigid} and put \ac{bflu} into interaction with a more complex physical object: an \ac{ela}. Only the main results will be presented here; their derivation follows the lines of  \cref{sec_fl_rigid}.
 
-The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. Here, the \ac{ela} boundary $\pomcircouteq$ may deform, but the inner \ac{ela} boundary $\pomcircineq$ is pinned to the $x^1$, $x^2$ plane.
+The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. Here, the \ac{ela} boundary $\pomcircouteq$ may deform, but the inner \ac{ela} boundary $\pomcircineq$ is pinned to the $\xc^1$, $\xc^2$ plane.
 
 
 
@@ -11,7 +11,7 @@ The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. H
         \includegraphics[width=\textwidth]{figures/figure_7/figure_7.pdf}
         \caption{
                 \label{fig_ref_curr_ela}
-                \Acl{ref} and \acl{cur} configuration for the interaction between a  \acl{bflu} and an \acl{ela}. The figures follows the same notation as \cref{fig_ref_curr_rigid}.
+                \Acl{ref} and \acl{cur} configuration for the interaction between a  \acl{bflu} and an \acl{ela}. The figures follows the same notation as \cref{fig_ref_curr_rigid}. In panels \textbf{A} and \textbf{B}, the domains $\omr$ and $\omc$ are the regions covered by the mesh, respectively.
         }
 \end{figure*}
 
@@ -29,7 +29,9 @@ Second,  the motion of \ac{ela} is governed by Newton's equations of motion for 
 \be\label{eq_fl_elastic_ela_current}
 \rhoela \dern{\uela^\alpha(\bxr)}{t}{2} = \pderr{\Sela_{\alpha \beta}(\buela)}{\beta},
 \ee
-where $\buela$ and  $\rhoela$ are, respectively, the deformation field and density  of \ac{ela}; the latter is  assumed to be independent of space. The \ac{ela} stress tensor is derived from a compressible neo-Hookean model \cite{bazilevsIsogeometricFluidstructureInteraction2008}, and it reads
+where  $\rhoela$ is the density  of \ac{ela} which is assumed to be independent of space.
+Also, $\buela$ is the deformation field of \ac{ela}, which is defined along the lines of \cref{eq_def_u}.
+The \ac{ela} stress tensor is derived from a compressible neo-Hookean model \cite{bazilevsIsogeometricFluidstructureInteraction2008}, and it reads
 \begin{align}
         \label{eq_def_S_neo_hookean}
         \Sela_{\alpha \beta} \equiv \frac{\muel}{\det(F)}\left(- \frac{1}{2} C_{\gamma \gamma} G_{\alpha \beta} + F_{\beta \alpha}\right) + & \newlinenn
