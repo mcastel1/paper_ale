@@ -10,12 +10,13 @@ In the \ac{cur} configuration, the region occupied by the bulk fluid is describe
 
 The \ac{ref} configuration, is related to the \ac{cur} one as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr_rigid}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the reference configuration through the deformation field \cite{landauFluidMechanics1987}
 \be\label{eq_def_u}
-\budom^t(\bxr) \equiv \bxc - \bxr.
+\budom^t(\bxr) \equiv \bxdomc - \bxdomr.
 \ee
+%sign
 and the deformation-gradient tensor
 \be
 \label{eq_def_F}
-F_{\alpha \beta}(\bu) \equiv \delta_{\alpha \beta} + \pderr{u^ \alpha}{\beta},
+\Fdom_{\alpha \beta}(\bu) \equiv \delta_{\alpha \beta} + \pderr{u^ \alpha}{\beta},
 \ee
 %sign_redefine_F
 where we set
