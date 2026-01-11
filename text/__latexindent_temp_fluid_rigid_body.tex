@@ -339,7 +339,7 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
 \begin{enumerate}
     \titleditem{Approximated velocity}{
         \label{item_split_1}
-        We introduce the velocity $\bvbar$, which approximates the true velocity $\bm \vfr$, and which  satisfies the \ac{bvp}
+        We introduce the velocity $\bvbarf$, which approximates the true velocity $\bm \vfr$, and which  satisfies the \ac{bvp}
         \bw
         \begin{align}
             \label{eq_fl_rigid_fl_1_reference_disc_aux}
@@ -352,9 +352,9 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
             \label{bc_fl_rigid_2_reference_disc_aux}
             \vbarf^2                                                   & =  0 \; \text{ on } \pomineqr ,                                                                                                          \\
             \label{bc_fl_rigid_3_reference_disc_aux}
-            \bvbar                                                     & = {\bm 0} \; \text{ on } \pomweqr ,                                                                                                      \\
+            \bvbarf                                                     & = {\bm 0} \; \text{ on } \pomweqr ,                                                                                                      \\
             \label{bc_fl_rigid_4_reference_disc_aux}
-            \bvbar                                                     & =
+            \bvbarf                                                     & =
             \omega^n  \left. \der{{\bm R}}{\theta} \right|_{\theta = \theta_n} \cdot (\bxr - \bfocalpoint)  \text{ on } \pomellipseeqr ,                                                                          \\
             \label{bc_fl_rigid_5_reference_disc_aux}
             \etaf \, G_{\beta 1}(\budom^{n-1}) \pderr{V^\alpha}{\beta} & = 0                                                                                                           \; \text{ on } \pomouteqr.
@@ -362,7 +362,7 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
         \ew
         where
         \begin{align}
-            {\bm V}       & \equiv\frac{ \bvbar + {\bm \vfr}^{n-1}}{2}, \\
+            {\bm V}       & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\
             \label{eq_def_sigmarast}
             \sigmafr^\ast & \equiv \sigmafr^{n-3/2}.
         \end{align}
@@ -410,7 +410,7 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
     }
     \titleditem{Velocity correction}{
         \label{item_split_3}
-        The velocity ${\bm \vfr}^n$ is determined from the approximate velocity $\bvbar$ from \cref{eq_phi_1}.
+        The velocity ${\bm \vfr}^n$ is determined from the approximate velocity $\bvbarf$ from \cref{eq_phi_1}.
 
     }
 \end{enumerate}
@@ -447,7 +447,7 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
     }
     \titleditem{Update \ac{bflu}}{
         \label{fl_rigid_step_3}
-        Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbar$ and $\sigmafr^{n-1/2}$, and obtain $\bm \vfr^n$ from \cref{eq_phi_1}.
+        Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbarf$ and $\sigmafr^{n-1/2}$, and obtain $\bm \vfr^n$ from \cref{eq_phi_1}.
     }
 \end{enumerate}
 

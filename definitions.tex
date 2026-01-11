@@ -6,7 +6,12 @@
 \providecommand{\dom}{\textrm{D}}
 \providecommand{\vf}{{v_\fluid}}
 \providecommand{\vmem}{v_\mem}
-\providecommand{\vfc}{{\vf_\current}}
+\providecommand{\bvbarf}{\bvbar_\fluid}
+\providecommand{\vbarf}{\vbar_\fluid}
+\providecommand{\vbarmem}{\vbar_\mem}
+\providecommand{\Vmem}{V_\mem}
+\providecommand{\Wmem}{W_\mem}
+\providecommand{\vfc}{\vf_\current}
 \providecommand{\bvfc}{{\bm \vfc}}
 \providecommand{\bvfr}{{\bm \vfr}}
 \providecommand{\vfr}{\vf_\reference}
@@ -21,9 +26,12 @@
 \providecommand{\sigmac}{{\sigma_{\current}}}
 \providecommand{\sigmaf}{{\sigma_\fluid}}
 \providecommand{\sigmam}{{\sigma_\mem}}
+\providecommand{\sigmaml}{\sigmam_\text{L}}
 \providecommand{\sigmafc}{{\sigmaf_\current}}
+\providecommand{\sigmafbottomc}{{\sigma_\ast}}
 \providecommand{\sigmafr}{{\sigmaf_\reference}}
-\providecommand{\udom}{{u_\dom}}
+\providecommand{\udom}{u_\dom}
+\providecommand{\udomdot}{{\dot{u}_\dom}}
 \providecommand{\bu}{{\bm u}}
 \providecommand{\budom}{\bu_\dom}
 \providecommand{\uela}{u_\ela}
@@ -40,10 +48,13 @@
 \providecommand{\bxi}[1]{{\bm \xi}(#1)}
 
 \providecommand{\xcoord}{x}
-\providecommand{\xc}{{\mathsf{x}}_\current}
-\providecommand{\xr}{{\mathsf{x}}_\reference}
-\providecommand{\bxmemc}{{\bm{\xc^\mem}}}
-\providecommand{\bxmemr}{{\bm{\xr^\mem}}}
+\providecommand{\xcartesian}{{\mathsf{x}}}
+\providecommand{\xc}{\xcartesian_\current}
+\providecommand{\xr}{\xcartesian_\reference}
+\providecommand{\xmemc}{{\xc^\mem}}
+\providecommand{\xmemr}{{\xr^\mem}}
+\providecommand{\bxmemc}{{\bm{\xmemc}}}
+\providecommand{\bxmemr}{{\bm{\xmemr}}}
 \providecommand{\bxc}{{\bm{\xc}}}
 \providecommand{\bxr}{{\bm{\xr}}}
 \providecommand{\bnormalr}{\hat{\bm n}^\reference}

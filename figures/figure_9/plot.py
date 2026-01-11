@@ -240,6 +240,14 @@ def plot_snapshot(fig, n_file,
         clip_on=False
     )
 
+    # plot the label for the region \Omega_reference
+    ax.text(0 + parameters['omega_ref_label_position'][0] * parameters['L'],
+            0 + parameters['omega_ref_label_position'][1] *
+            parameters['h'], rf'$\omr$',
+            fontsize=parameters['omega_label_font_size'],
+            ha='center',
+            va='center')
+
     # plot ref mesh
     gr.plot_2d_mesh(ax, data_msh_ref_line_vertices,
                     line_width=parameters['mesh_line_width'],
@@ -389,6 +397,14 @@ def plot_snapshot(fig, n_file,
             zorder=const.high_z_order,
             clip_on=False
             )
+
+    # plot the label for the region \Omega_current
+    ax.text(0 + parameters['omega_cur_label_position'][0] * parameters['L'],
+            0 + parameters['omega_cur_label_position'][1] *
+            parameters['h'], rf'$\omc$',
+            fontsize=parameters['omega_label_font_size'],
+            ha='center',
+            va='center')
 
     # Create custom legend handles
     handles, labels = ax.get_legend_handles_labels()
