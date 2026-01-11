@@ -4,7 +4,7 @@ In this Section, we will build on the analysis of \cref{sec_fl_elastic}, and com
 
 Both the physical nature and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: its material elements can flow both tangentially and normally to it.
 Such fluid behavior requires an Eulerian description, which then needs to be connected to the Lagrangian description used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}, which are significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}. Third, the geometrical description of \ac{mem} requires fixing an appropriate \textit{gauge}.
-In fact, a general parametrization of \ac{mem} is given by two functions $\bxmemc(\xcoord^1)$, both of which depend on the curvilinear coordinate $\xcoord^1$. However, a single \ac{pde}  determines the \ac{mem} shape \cite{zhong-canBendingEnergyVesicle1989}.
+In fact, a general parametrization of \ac{mem} is given by two functions $\bxmemc(\xcoord^1)$, both of which depend on the curvilinear coordinate $\xcoord^1$ which is defined in the \ac{ref} domain $\pomlineeqr$ of \ac{mem}, see \cref{fig_ref_cur_mem}. However, a single \ac{pde}  determines the \ac{mem} shape \cite{zhong-canBendingEnergyVesicle1989}.
 This redundancy is due to the fact that parametrizations with different values of the stretching
 \begin{align}\label{eq_intro_nu}
     \nu ^ 2   & \equiv \bevec{1}   \cdot \bevec{1} , \\
@@ -32,12 +32,12 @@ which is shown in \cref{fig_ref_cur_mem}A.
 
 In order to work out the  dynamical equations for \ac{mem}, let us derive the force exerted by \ac{bflu} on \ac{mem}. The force exerted on the \ac{mem} line element $\dint{l_\current}$, located at  coordinate $\xcoord^1$,  is \cite{landauFluidMechanics1987}
 \be
-F_\alpha(\xcoord^1) = - \sigmastressc_{\alpha \beta}(\bxmemc(\xcoord^1)) \normalc{\gamma}(\xcoord^1),
+f_\alpha(\xcoord^1) = - \sigmastressc_{\alpha \beta}(\bxmemc(\xcoord^1)) \normalc{\gamma}(\xcoord^1),
 \ee
 where the \ac{bflu} stress tensor is evaluated at the \ac{cur} configuration corresponding to $\xcoord^1$. The components of this force tangential and normal to \ac{mem} are \cite{desernoFluidLipidMembranes2015}
 \begin{align}
-    F_t^i & = g^{ij} \evec{j}{\alpha} F_\alpha \\
-    F_n   & = \normalc{\alpha} F_\alpha,
+    f_t^i & = g^{ij} \evec{j}{\alpha} f_\alpha \\
+    f_n   & = \normalc{\alpha} f_\alpha,
 \end{align}
 where $g_{ij} \equiv \bevec{i} \cdot \bevec{j}$ is the metric tensor.
 In what follows, latin indices $i, j, k, \cdots$ will be used to denote vectors and tensors related to the \ac{mem} manifold; their position as upper and lower indexes is thus important \cite{marchiafavaAppuntiDiGeometria2005}. Here,
@@ -47,16 +47,16 @@ The equations of motion for \ac{mem} thus read \cite{worthmullerIRENEFluIdLayeR2
 \bw
 \begin{align}
     \label{eq-dyn-continuity}
-    \nab_i v^i - 2 H w                                                                                                                                                                                                                                                   & =                                                                                                 0, \\ \nn
+    \nab_i \vmem^i - 2 H w                                                                                                                                                                                                                                                & =                                                                                                 0, \\ \nn
     \label{eq-dyn-v}
-    \rho ( \partial_t v^i + v^j \nab_j v^i  - 2 v^j w b^i_j - w \nab^i w )                                                                                                                                                                                               & =                                                                                                    \\
-    \nab^i \sigma + \eta \left[ - \nablb v^i - 2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j w + 2 K v^i   \right] + F_t^i,                                                                                                                                         &                                                                                                      \\ \nn
+    \rhom ( \partial_t v^i + v^j \nab_j v^i  - 2 v^j w b^i_j - w \nab^i w )                                                                                                                                                                                               & =                                                                                                    \\
+    \nab^i \sigmam + \etam \left[ - \nablb v^i - 2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j w + 2 K v^i   \right] + f_t^i,                                                                                                                                        &                                                                                                      \\ \nn
     \label{eq-dyn-w}
-    \rho \left[ \partial_t w + v^i \left( v^j b_{ji} + \nabla_i w  \right) \right]                                                                                                                                                                                       & =                                                                                                    \\
-    - 2\kap \left[   \nab_i \nab^i H  + 2 H (H^2 - K)  \right] + 2 \sigma H    +                                                         2 \eta \left[ (\nab^i v^j)b_{ij} - 2 w (2 H^2 - K)                                                                 \right]+ F_n & ,
+    \rhom \left[ \partial_t w + v^i \left( v^j b_{ji} + \nabla_i w  \right) \right]                                                                                                                                                                                       & =                                                                                                    \\
+    - 2\kap \left[   \nab_i \nab^i H  + 2 H (H^2 - K)  \right] + 2 \sigmam H    +                                                         2 \eta \left[ (\nab^i v^j)b_{ij} - 2 w (2 H^2 - K)                                                                 \right]+ f_n & ,
 \end{align}
 \ew
-and they hold for $\xcoord^1 \in \pomlineeqr$. \Cref{eq-dyn-continuity} enforces mass conservation, and \cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively. Also, $\nab$ is the covariant derivative related to the Levi-Civita connection associated to $g$, $\nablb$ the Laplace-Beltrami operator, $b$ the second fundamental form, and $H$ and $K$  the mean and Gaussian curvature, respectively,
+and they hold for $\xcoord^1 \in \pomlineeqr$. \Cref{eq-dyn-continuity} enforces mass conservation, and \cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively. Also, $v^i$ and $w$ are the \ac{mem} tangential and normal velocity, respectively, $\nab$ is the covariant derivative related to the Levi-Civita connection associated to $g$, $\nablb$ the Laplace-Beltrami operator, $b$ the second fundamental form, and $H$ and $K$  the mean and Gaussian curvature, respectively. We refer to \cite{desernoFluidLipidMembranes2015,worthmullerIRENEFluIdLayeR2025,marchiafavaAppuntiDiGeometria2005} for details on the differential-geometry framework.
 
 \begin{figure}
     \centering
