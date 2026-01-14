@@ -10,9 +10,12 @@
 \providecommand{\bvbarf}{\bvbar_\fluid}
 \providecommand{\vbarf}{\vbar_\fluid}
 \providecommand{\vbarmem}{\vbar_\mem}
+\providecommand{\wbarmem}{\wbar_\mem}
 \providecommand{\Vmem}{V_\mem}
+\providecommand{\bVmem}{{\bm V_\mem}}
 \providecommand{\Wmem}{W_\mem}
 \providecommand{\wmem}{w_\mem}
+\providecommand{\phimem}{{\phi_\mem}}
 \providecommand{\Vf}{V_\fluid}
 \providecommand{\Wf}{W_\fluid}
 \providecommand{\vfc}{\vf_\current}
@@ -31,9 +34,9 @@
 \providecommand{\sigmaf}{{\sigma_\fluid}}
 \providecommand{\sigmam}{{\sigma_\mem}}
 \providecommand{\sigmamast}{{\sigmam^\ast}}
-\providecommand{\sigmaml}{\sigmam_\text{L}}
+\providecommand{\sigmaml}{\sigmam_\ast}
 \providecommand{\sigmafc}{{\sigmaf_\current}}
-\providecommand{\sigmafbottomc}{{\sigma_\ast}}
+\providecommand{\sigmafbottomc}{{\sigmaf_\ast}}
 \providecommand{\sigmafr}{{\sigmaf_\reference}}
 \providecommand{\udom}{u_\dom}
 \providecommand{\udomdot}{{\dot{u}_\dom}}
@@ -63,6 +66,7 @@
 \providecommand{\bxc}{{\bm{\xc}}}
 \providecommand{\bxr}{{\bm{\xr}}}
 \providecommand{\bnormalr}{\hat{\bm n}^\reference}
+\providecommand{\normalmem}{{n_\mem}}
 \providecommand{\bnormalc}{\hat{\bm n}^\current}
 \providecommand{\normalr}[1]{\hat{n}^{\reference\, #1}}
 \providecommand{\normalc}[1]{\hat{n}^{\current\, #1}}
@@ -72,8 +76,8 @@
 
 
 %stress tensor
-\providecommand{\sigmastressr}{{\varsigma^\reference}}
-\providecommand{\sigmastressc}{{\varsigma^\current}}
+\providecommand{\sigmastressr}{{\sigma_\fluid^\reference}}
+\providecommand{\sigmastressc}{{\sigma_\fluid^\current}}
 
 
 \providecommand{\eqsfluidbodyref}{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference,eq_fl_rigid_rigid_reference,bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference}

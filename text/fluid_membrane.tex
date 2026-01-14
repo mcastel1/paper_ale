@@ -13,18 +13,20 @@ Both the physical nature and mathematical description of \ac{mem} is significant
 Such fluid behavior requires an Eulerian description, which then needs to be connected to the Lagrangian description used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}, which are significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}. Third, the geometrical description of \ac{mem} requires fixing an appropriate \textit{gauge}.
 In fact, a general parametrization of \ac{mem} is given by two functions $\bxmemc(\xcoord^1)$. Both of these functions  depend on the curvilinear coordinate $\xcoord^1$ which is defined in the \ac{ref} domain of \ac{mem}, $\pomlineeqr$, see \cref{fig_ref_cur_mem}---note that here $\xcoord^i$ differs from the Cartesian coordinate $\xcartesian^\alpha$.
 Despite this pair of functions, a single \ac{pde}  determines the \ac{mem} shape \cite{zhong-canBendingEnergyVesicle1989}.
-This redundancy is due to the fact that parametrizations with different values of the stretching
+To understand this redundancy, consider the  stretching field $\nu>0$, defined by
 \begin{align}\label{eq_intro_nu}
-    \nu ^ 2   & \equiv \bevec{1}   \cdot \bevec{1} , \\
-    \bevec{i} & \equiv \pder{{\bxmemc}}{\xcoord^i},
+    \nu ^ 2   & \equiv \bevec{1}   \cdot \bevec{1}, \\
+    \label{eq_def_e}
+    \bevec{i} & \equiv \pder{{\bxmemc}}{\xcoord^i}.
 \end{align}
-yield the same shape. The redundancy above may be removed by a gauge fixing, i.e., by adding a constraint on $\bxmemc$, or its derivatives.
+It is then easy to realize that two  parametrizations with different $\nu$s
+may yield the same physical shape. Such  redundancy  may be removed by a gauge fixing, i.e., by adding a constraint on $\bxmemc$, or its derivatives.
 Two common gauge choices are the Monge  \cite{hsiungFirstCourseDifferential1981,desernoFluidLipidMembranes2015}, or the arc-length parametrization \cite{derenyiFormationInteractionMembrane2002}, in which one sets
 \be
 \label{eq_arc_length_gauge}
 \nu = 1.
 \ee
-The arc-length gauge has been used to describe, for instance, the steady state for membrane tubules \cite{derenyiFormationInteractionMembrane2002}. However, while a static constraint such as \crefs{eq_arc_length_gauge} is suited to  static shapes, it cannot describe the  \ac{mem} dynamics, such as the one of \ac{mem} interacting with \ac{bflu}. In fact, as \ac{mem} is deformed, it will also stretch: as a result, \cref{eq_arc_length_gauge} must be replaced by a time-dependent  constraint---see below.
+The arc-length gauge has been used to describe, for instance, the steady state for membrane tubules \cite{derenyiFormationInteractionMembrane2002}. However, while a static constraint such as \crefs{eq_arc_length_gauge} is suited to  static shapes, it cannot describe the  \ac{mem} dynamics, such as the one of \ac{mem} interacting with \ac{bflu}. In fact, as \ac{mem} is deformed, it will also stretch: as a result, \cref{eq_arc_length_gauge} must be replaced by a time-dependent  gauge---see below.
 
 We describe \ac{mem} with the Lagrangian approach, along the lines of the description of \ac{dom} in \cref{sec_fl_rigid} and \ac{ela}  in \cref{sec_fl_elastic}.  The \ac{mem} displacement field is
 \be\label{eq_u_mem}
@@ -32,59 +34,98 @@ We describe \ac{mem} with the Lagrangian approach, along the lines of the descri
 \ee
 where we choose the \ac{ref} configuration as a straight line
 \be
+\label{eq_def_x_ref}
 \bxmemr(\xcoord^1) \equiv (\xcoord^1, h), \, 0 \leq  \xcoord^1 \leq L,
 \ee
 which is shown in \cref{fig_ref_cur_mem}A.
-
-
-
-In order to work out the  dynamical equations for \ac{mem}, let us derive the force exerted by \ac{bflu} on \ac{mem}. The force exerted on the \ac{mem} line element $\dint{l_\current}$, located at  coordinate $\xcoord^1$,  is \cite{landauFluidMechanics1987}
-\be
-f_\alpha(\xcoord^1) = - \sigmastressc_{\alpha \beta}(\bxmemc(\xcoord^1)) \normalc{\gamma}(\xcoord^1),
-\ee
-where the \ac{bflu} stress tensor is evaluated at the \ac{cur} configuration corresponding to $\xcoord^1$. The components of this force tangential and normal to \ac{mem} are \cite{desernoFluidLipidMembranes2015}
+%
+In addition, we introduce the  angle $\psi$ formed by the tangent to \ac{mem} with the $\xcartesian^1$ axis \cite{derenyiFormationInteractionMembrane2002}, defined by
 \begin{align}
-    f_t^i & = g^{ij} \evec{j}{\alpha} f_\alpha \\
-    f_n   & = \normalc{\alpha} f_\alpha,
+    \label{def_nu_psi_1}
+    \evec{1}{1} & = \nu \cos \psi, \\
+    \label{def_nu_psi_2}
+    \evec{1}{2} & =-\nu \sin \psi.
 \end{align}
-where $g_{ij} \equiv \bevec{i} \cdot \bevec{j}$ is the metric tensor.
-In what follows, latin indices $i, j, k, \cdots$ will be used to denote vectors and tensors related to the \ac{mem} manifold; their position as upper and lower indexes is thus important \cite{marchiafavaAppuntiDiGeometria2005}.
+Finally, the \ac{mem} metric tensor is defined by  \cite{marchiafavaAppuntiDiGeometria2005}
+\be\label{eq_def_g}
+g_{ij} \equiv \bevec{i} \cdot \bevec{j}.
+\ee
+In what follows, latin indices $i, j, k, \cdots$ will be used to denote vectors and tensors related to the \ac{mem} manifold; their position as upper and lower indexes is thus important \cite{marchiafavaAppuntiDiGeometria2005}. Because the differential manifold of \ac{mem} is one dimensional, indexes $i, j, k, \cdots$ may take only one value, i.e., $i=j=k= \cdots=1$. However, in formal relations such as \cref{eq_def_g}, we will use the general notation $i, j, k, \cdots$  for the sake of  generality, and for potential extensions of such relations to two-dimensional manifolds \cite{desernoFluidLipidMembranes2015}.
+\vspace{0.5cm}\\
+
+
+In order to work out the  dynamical equations for \ac{mem}, let us derive the force exerted by \ac{bflu} on \ac{mem}. The force exerted on a line element $\dint{l_\current}$ of \ac{mem}  is \cite{landauFluidMechanics1987}
+\be
+\label{def_f_fluid_mem}
+f_{\fluid\, \alpha}(\sigmafc, \nu, \psi) = - \sigmastressc_{\alpha \beta} \normalc{\gamma}(\nu, \psi),
+\ee
+where the \ac{bflu} stress tensor is evaluated at the \ac{cur} coordinate $\bxmemc \in \pomtopeqc$ corresponding to $\xcoord^1$.
+%
+The components of the force \crefs{def_f_fluid_mem} tangential and normal to \ac{mem} are \cite{desernoFluidLipidMembranes2015}
+\begin{align}
+    \label{def_force_tan}
+    f_{\fluid\, t}^i(\sigmafc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\sigmafc, \nu, \psi) \\
+    \label{def_force_norm}
+    f_{\fluid\, n} (\sigmafc, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\sigmafc, \nu, \psi),
+\end{align}
+where in \cref{def_force_tan} we used the feature that the metric tensor depends on $\nu$ only, see \cref{eq_def_g,eq_intro_nu}.
 
 The equations of motion for \ac{mem}  are \cite{worthmullerIRENEFluIdLayeR2025,al-izziShearDrivenInstabilitiesMembrane2020,arroyoRelaxationDynamicsFluid2009i}
 
 \bw
 \begin{align}
     \label{eq-dyn-continuity}
-    \nab_i \vmem^i - 2 H w                                                                                                                                                                                                                                                     & =                                                                                                 0, \\ \nn
+    \nab_i \vmem^i - 2 H \wmem                                                                              =            & 0,                                                                                                                                                                                       \\
     \label{eq-dyn-v}
-    \rhom \left( \pder{\vmem^i}{t}+ \vmem^j \nab_j \vmem^i  - 2 \vmem^j w\, b^i_j - w \nab^i w \right)                                                                                                                                                                         & =                                                                                                    \\
-    \nab^i \sigmam + \etam \left[ - \nablb \vmem^i - 2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j w + 2 K \vmem^i   \right] + f_t^i,                                                                                                                                     &                                                                                                      \\ \nn
+    \rhom \left( \pder{\vmem^i}{t}+ \vmem^j \nab_j \vmem^i  - 2 \vmem^j \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \nab^i \sigmam + f_{\etam\, t}^i + f_{\fluid\, t}^i,                                                                                                                                     \\
     \label{eq-dyn-w}
-    \rhom \left[ \pder{w}{t} + \vmem^i ( \vmem^j b_{ji} + \nabla_i w  ) \right]                                                                                                                                                                                                & =                                                                                                    \\
-    - 2\kap \left[   \nab_i \nab^i H  + 2 H (H^2 - K)  \right] + 2 \sigmam H    +                                                         2 \etam \left[ (\nab^i \vmem^j)b_{ij} - 2 w (2 H^2 - K)                                                                 \right]+ f_n & ,                                                                                                    \\
+    \rhom \left[ \pder{\wmem}{t} + \vmem^i ( \vmem^j b_{ji} + \nabla_i \wmem  ) \right]                               =  & 2 \sigmam H    +  f_\kap +                                                         f_{\etam\, n}+ f_{\fluid\, n}                                                                       , \\
     \label{eq-dyn-dX}
-    \pder {\bumem}{t}                                                                                                                                                                                                                                                          & = w \normalc{},                                                                                      \\
+    \pder {\bumem}{t}                                                                                            =       & \wmem \normalc{},                                                                                                                                                                        \\
     \label{eq-dyn-dX1}
-    \pder {\umem^1}{x^1}                                                                                                                                                                                                                                                       & =-1 + \nu \cos \psi,                                                                                 \\
+    \pder {\umem^1}{x^1}                                                                                            =    & -1 + \nu \cos \psi,                                                                                                                                                                      \\
     \label{eq-dyn-dX2}
-    \pder {\umem^2}{x^1}                                                                                                                                                                                                                                                       & =-\nu \sin \psi,
+    \pder {\umem^2}{x^1}                                                                                               = & -\nu \sin \psi,
 \end{align}
 \ew
-and they hold for $\xcoord^1 \in \pomlineeqr$. \Cref{eq-dyn-continuity} enforces mass conservation, and \cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively.
-\Cref{eq-dyn-dX} is the time-evolution equation for the \ac{mem} shape, which evolves according to the normal $\normalc{}$, and it has been obtained by using \cref{eq_u_mem}. \Cref{eq-dyn-dX1,eq-dyn-dX2} are the definitions of the stretching $\nu$, cf. \cref{eq_intro_nu,eq_u_mem}, and of the angle $\psi$ between the tangent to \ac{mem} and the $\xc^1$ axis \cite{derenyiFormationInteractionMembrane2002}, see \cref{fig_ref_cur_mem}.
-Also, $\vmem^i$ and $w$ are the \ac{mem} tangential and normal velocity, respectively, $\nab$ is the covariant derivative related to the Levi-Civita connection associated to $g$, $\nablb$ the Laplace-Beltrami operator, $b$ the second fundamental form, and $H$ and $K$  the mean and Gaussian curvature, respectively. We refer to \cite{desernoFluidLipidMembranes2015,worthmullerIRENEFluIdLayeR2025,marchiafavaAppuntiDiGeometria2005} for details on the differential-geometry framework. Finally, $\rhom$, $\sigmam$ and $\kappa$ are, respectively, the density, line tension and bending rigidity of \ac{mem}.
+and they hold for $\xcoord^1 \in \pomlineeqr$.
+%
+Here, $\vmem^i$ and $w$ are the \ac{mem} tangential and normal velocity, respectively, $\nab$ is the covariant derivative related to the Levi-Civita connection associated to $g$, $\nablb$ the Laplace-Beltrami operator, $b$ the second fundamental form, and $H$ and $K$  the mean and Gaussian curvature, respectively.
+We refer to \cite{desernoFluidLipidMembranes2015,worthmullerIRENEFluIdLayeR2025,marchiafavaAppuntiDiGeometria2005,arroyoRelaxationDynamicsFluid2009i} for details on the differential-geometry framework, and we will now discuss each line in \cref{eq-dyn-continuity,eq-dyn-v,eq-dyn-w,eq-dyn-dX,eq-dyn-dX1,eq-dyn-dX2}.
+\Cref{eq-dyn-continuity} enforces mass conservation \cite{landauFluidMechanics1987}.
+\Cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively.
+The first term in the \ac{rhs} of \cref{eq-dyn-v} represnts the force on membrane elements induced by gradients of line tension, while the first term in the \ac{rhs} of \cref{eq-dyn-w} constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004}. The other terms read
+\begin{align}
+    \label{eq_def_f_kap}
+    f_\kap (\nu, \psi)                                                                                                       & \equiv                                                                                                  \newlinenn
+    -2\kap [ \nab_i \nab^i H + 2 H (H^2-K)],                                                                                 &                                                                                                                                 \\
+    \label{eq_def_f_eta_t}
+    f_{\etam\, t}^i(\vmem, \wmem,
+    \nu, \psi)                                                                                                               & \equiv                                                                                                             & \newlinenn
+    \etam [ - \nablb \vmem^i - \newlinenn
+    2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j \wmem + 2 K \vmem^i  ]                                                & ,                                                                                                                  &            \\
+    \label{eq_def_f_eta_n}
+    f_{\etam\, n}      (\vmem, \wmem, \nu, \psi)                                                                             & \equiv                                                                                                             & \newlinenn
+    2 \etam [ (\nab^i \vmem^j)b_{ij} - 2 \wmem (2 H^2 - K)                                                                 ] & .
+\end{align}
+In \cref{eq_def_f_kap}, $f_\kappa$ is represents the resistance of \ac{mem} to bending, and it is derived from Helfrich model \cite{helfrichElasticPropertiesLipid1973}, while $f_{\etam\, t}$ and $f_{\etam\, n}$ in \cref{eq_def_f_eta_t,eq_def_f_eta_n} are, respectively, the tangential and normal component of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i}.
+%
+\Cref{eq-dyn-dX} is the time-evolution equation for the \ac{mem} shape, which evolves according to the normal $\normalc{}$, and it has been obtained from  \cref{eq_u_mem,eq_def_x_ref}.
+\Cref{eq-dyn-dX1,eq-dyn-dX2} re-express the definitions of $\nu$ and $\psi$, and they result from \cref{def_nu_psi_1,def_nu_psi_2,eq_def_e,eq_u_mem,eq_def_x_ref}.
+Finally, $\rhom$, $\sigmam$ and $\kappa$ are, respectively, the density, line tension and bending rigidity of \ac{mem}.
 
 
-The \acp{bc} for \cref{eq-dyn-continuity,eq-dyn-v,eq-dyn-w,eq-dyn-dX,eq-dyn-dX1,eq-dyn-dX2} are
+
+We choose the following \acp{bc} for \cref{eq-dyn-continuity,eq-dyn-v,eq-dyn-w,eq-dyn-dX,eq-dyn-dX1,eq-dyn-dX2}:
 \begin{align}
     \label{bc_fl_mem_mem_1}
-    v^i                       & = 0 \text{ on } \pomlineineqr,        \\
+    \vmem^i                   & = 0 \text{ on } \pomlineineqr,        \\
     \label{bc_fl_mem_mem_2}
-    v^i                       & = 0 \text{ on } \pomlineouteqr,       \\
+    \vmem^i                   & = 0 \text{ on } \pomlineouteqr,       \\
     \label{bc_fl_mem_mem_3}
-    w                         & = 0 \text{ on } \pomlineineqr,        \\
+    \wmem                     & = 0 \text{ on } \pomlineineqr,        \\
     \label{bc_fl_mem_mem_4}
-    \nab_i w                  & = 0 \text{ on } \pomlineouteqr,       \\
+    \nab_i \wmem              & = 0 \text{ on } \pomlineouteqr,       \\
     \label{bc_fl_mem_mem_5}
     \sigmam                   & = \sigmaml \text{ on } \pomlineineqr, \\
     \label{bc_fl_mem_mem_6}
@@ -97,8 +138,11 @@ The \acp{bc} for \cref{eq-dyn-continuity,eq-dyn-v,eq-dyn-w,eq-dyn-dX,eq-dyn-dX1,
 
 \Cref{bc_fl_mem_mem_1,bc_fl_mem_mem_3,bc_fl_mem_mem_6} enforce the condition that the left extremity of \ac{mem}, \pomlinein, is clamped on the channel wall \pomin.
 %
-\Cref{bc_fl_mem_mem_4,bc_fl_mem_mem_7,bc_fl_mem_mem_8,bc_fl_mem_mem_2} enforce the mirror symmetry about \pomout. Namely, \cref{bc_fl_mem_mem_2} ensures that the $v$ vector field vanishes on \pomlineout, because a nonzero value of this field on \pomout{}  would break the axial symmetry. The condition \crefs{bc_fl_mem_mem_7} follows the same lines. In addition, the  symmetry requires that scalar fields and vertical components of vector fields in $\om$ have zero slope with respect to $\xcoord^1$ at \pomlineout{}, see \cref{bc_fl_mem_mem_4,bc_fl_mem_mem_8}.
+\Cref{bc_fl_mem_mem_4,bc_fl_mem_mem_7,bc_fl_mem_mem_8,bc_fl_mem_mem_2} enforce the mirror symmetry about \pomout.
+Namely, \cref{bc_fl_mem_mem_2} ensures that the $\vmem$ vector field vanishes on \pomlineout, because a nonzero value of this field on \pomout{}  would break the axial symmetry. The condition \crefs{bc_fl_mem_mem_7} follows the same lines. In addition, the  symmetry requires that scalar fields and vertical components of vector fields in $\om$ have zero slope with respect to $\xcoord^1$ at \pomlineout{}, see \cref{bc_fl_mem_mem_4,bc_fl_mem_mem_8}.
 Finally, \cref{bc_fl_mem_mem_5} fixes the \ac{mem} tension on \pomlinein.
+
+
 
 
 \subsection{\Acl{dom} motion}
@@ -125,8 +169,6 @@ The equation of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid
 \end{align}
 \Cref{bc_fl_mem_dom_1} ensures that \ac{dom} is not deformed on $\pomineqr \cup \pombottomeqr$, cf. \cref{bc_ela_1}. \Cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3} follow from axial symmetry, and \cref{bc_fl_mem_dom_4} from the requirement that \ac{dom} and \ac{mem} deformations stay conforming \cite{kamenskyLectureNotesMAE}. Finally, the  \acp{bc} for $\bumemdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
 
-%sign
-
 
 
 \begin{figure}
@@ -139,14 +181,14 @@ The equation of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid
     }
 \end{figure}
 
-\begin{figure*}
-    \centering
-    \includegraphics[width=\textwidth]{figures/figure_4/figure_4.pdf}
-    \caption{
-        \label{fig_mem}
-        Helfrich fluid layer described with the generalized \acl{al} gauge. The layer is subjected to a gravitational field directed along the $X^2$ axis, in the direction of negative $X^2$.  \plab{A} Displacement field $\vec{U}$, which relates the reference and the current configuration, shown in red and green, respectively. \plab{B} Stretching $\nu$.  \plab{C} Tangent angle $\psi$. \plab{D} Tangential velocity. Arrows show the velocity direction, and the  color code the velocity norm. \plab{E} Normal velocity, whose value is shown with the color code. \plab{F} Surface tension. All panels refer to the same instant of time, shown on top.
-    }
-\end{figure*}
+% \begin{figure*}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/figure_4/figure_4.pdf}
+%     \caption{
+%         \label{fig_mem}
+%         Helfrich fluid layer described with the generalized \acl{al} gauge. The layer is subjected to a gravitational field directed along the $X^2$ axis, in the direction of negative $X^2$.  \plab{A} Displacement field $\vec{U}$, which relates the reference and the current configuration, shown in red and green, respectively. \plab{B} Stretching $\nu$.  \plab{C} Tangent angle $\psi$. \plab{D} Tangential velocity. Arrows show the velocity direction, and the  color code the velocity norm. \plab{E} Normal velocity, whose value is shown with the color code. \plab{F} Surface tension. All panels refer to the same instant of time, shown on top.
+%     }
+% \end{figure*}
 
 
 
@@ -164,7 +206,7 @@ The equation of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid
         \plab{B} Membrane stretch field.
         \plab{C} Membrane tangent angle.
         \plab{D} and \plab{E}) Bulk-fluid velocity and tension; the notation is the same as in \cref{fig_fluid_rigid}.
-        \plab{F}, \plab{G} and \plab{H}: membrane tangential velocity, normal velocity and tension; the notation is the same as in \cref{fig_mem}B, C and D, respectively.  All panels refer to the same instant of time, shown on top, and display also the deformed mesh (gray lines).
+        \plab{F}, \plab{G} and \plab{H}: membrane tangential velocity, normal velocity and tension; the notation is the same as in ? B, C and D, respectively.  All panels refer to the same instant of time, shown on top, and display also the deformed mesh (gray lines).
         \label{fig_fluid_mem}
     }
 \end{figure*}
@@ -188,23 +230,77 @@ The \ac{bflu} equations of motion are \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid
     \sigmafc          & = \sigmafbottomc \text{ on } \pombottomeqc.
 \end{align}
 
-%sign
+According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bottom edge of $\omc$, while \cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left wall \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} result from symmetry.   \Cref{bc_fl_membrane_5_current} results from the conforming motion \cite{kamenskyLectureNotesMAE} of \ac{bflu} and \ac{mem}. Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension  matches the reservoir's.\vspace{0.5cm}\\
 
-According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bottom edge of $\omc$, while \cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left wall \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} result from symmetry.   \Cref{bc_fl_membrane_5_current} results from the conforming motion of \ac{bflu} and \ac{mem}. Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension must match the reservoir's.
 
-Proceeding along the lines of \cref{sec_fl_rigid}, the  dynamics of the system is obtained as follows.  Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^n$, $\budom^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step as follows.
-%sign
+
+The  dynamics of the system is obtained as follows; the derivation is obtained along the lines of \cref{sec_fl_elastic,sec_fl_rigid}, and details can be obtained by referring to those Sections.
+
+Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^n$, $\budom^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step as follows:
+
 
 \begin{itemize}
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
+        Solve the \ac{bvp}
 
         \bw
         \begin{align}
-            \label{eq_fl_mem_mem_1_aux}
-            \rhom \left[  \frac{\vbarmem^i - \vmem^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem^{n-1,\, j} - \frac{1}{2} \vmem^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} - \Wmem \nab^{\nmhalf, \, i} \Wmem \right] & =              \newlinenn
-            \nab^{\nmhalf, \, i} \sigmamast     +         f_\etam^i\left( \Vmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf\right) +  f_t^i(\nu^\nmhalf, \psi^\nmhalf) ,
+            \label{eq_fl_mem_mem_disc_1}
+            \rhom \Big[  \frac{\vbarmem^i - \vmem^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem^{n-1,\, j} - \frac{1}{2} \vmem^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
+            \Wmem \nab^{\nmhalf, \, i} \Wmem \Big]                                                                                                                                                                           & =              \newlinenn
+            \nab^{\nmhalf, \, i} \sigmamast     +         f_\etam^i\left( \bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
+            f_{\fluid\, t}^i({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                       &                           \\
+            \label{eq_fl_mem_mem_disc_2}
+            \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j \fnij{b}{\nmhalf}{j}{i} + \left( \frac{3}{2} \vmem^{n-1, \, i} - \frac{1}{2}\vmem^{n-3/2,\,i}\right) \nab^\nmhalf_i \Wmem \right]          & =\newlinenn
+            f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f_{\etam\, n}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
+            f_{\fluid\, n} ({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                         &                           \\
         \end{align}
         \ew
+        \begin{align}
+            \label{eq_fl_mem_mem_disc_3}
+            \nab^\nmhalf_i   \nab^{\nmhalf, \, i}    \phimem                            =
+                                                                                          & \frac{\rhom}{\deltat}(\nab^\nmhalf_i \vbarmem^i - \newlinenn
+                                                                                          & 2 H^\nmhalf \wbarmem)     ,                                  \\
+            \label{eq_fl_mem_mem_disc_4}
+            \rhom \frac{\vbarmem^i - \vmem^{n, \, i}}{\deltat}                         =  & - \nab^{\nmhalf, \, i}\phimem,                               \\
+            \label{eq_fl_mem_mem_disc_5}
+            \wmem^n                                                                     = & \wbarmem,                                                    \\
+            \frac{\umem^{\nmhalf,\, \alpha} - \umem^{\nmthreehalf,\, \alpha}}{\deltat}  = &
+            \wmem^{n-1} \normalc{\nmhalf, \, \alpha},                                                                                                    \\
+            \label{eq_fl_mem_mem_disc_6}
+            \label{eq-dyn-dX1-disc}
+            \pder {\umem^{\nmhalf,\,1}}{x^1}                                            = &
+            -1 + \nu^\nmhalf \cos \psi^\nmhalf,                                                                                                          \\
+            \label{eq_fl_mem_mem_disc_7}
+            \label{eq-dyn-dX2-disc}
+            \pder {\umem^{\nmhalf, \, 2}}{x^1}                                          = &
+            -\nu^\nmhalf \sin \psi^\nmhalf,
+        \end{align}
+        with \acp{bc}
+        \begin{align}
+            \label{bc_fl_mem_mem_1_disc}
+            \vbarmem^i                                         & = 0 \text{ on } \pomlineineqr,  \\
+            \label{bc_fl_mem_mem_2_disc}
+            \vbarmem^i                                         & = 0 \text{ on } \pomlineouteqr, \\
+            \label{bc_fl_mem_mem_3_disc}
+            \wbarmem                                           & = 0 \text{ on } \pomlineineqr,  \\
+            \label{bc_fl_mem_mem_4_disc}
+            \nab^\nmhalf_i \wbarmem                            & = 0 \text{ on } \pomlineouteqr, \\
+            \label{bc_fl_mem_mem_5_disc}
+            \phimem                                            & = 0 \text{ on } \pomlineineqr,  \\
+            \label{bc_fl_mem_mem_6_disc}
+            %sign
+            \normalmem^\nmhalf_i  \nab^{\nmhalf, \, i} \phimem & = 0 \text{ on } \pomlineeqr,    \\
+            \bumem^{\nmhalf}                                   & = 0 \text{ on } \pomlineineqr,  \\
+            \umem^{\nmhalf,\, 1}                               & = 0 \text{ on } \pomlineouteqr, \\
+            \pder{\umem^{\nmhalf, \, 2}}{x^1}                  & = 0 \text{ on } \pomlineouteqr.
+        \end{align}
+
+
+
+        In \cref{bc_fl_rigid_6_reference_disc}, $\normalmem$ is the unit normal to \pomline{}: It lies in the tangent bundle of $\omlineeq$, is directed  outside $\omlineeq$, and is normalized according to $\normalmem^i \normalmem_i = 1$ \cite{reallGeneralRelativity,marchiafavaAppuntiDiGeometria2005,worthmullerIRENEFluIdLayeR2025}.
+
+
     }
     \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
     }
