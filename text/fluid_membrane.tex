@@ -192,7 +192,7 @@ The \ac{bflu} equations of motion are \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid
 
 According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bottom edge of $\omc$, while \cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left wall \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} result from symmetry.   \Cref{bc_fl_membrane_5_current} results from the conforming motion of \ac{bflu} and \ac{mem}. Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension must match the reservoir's.
 
-Proceeding along the lines of \cref{sec_fl_rigid}, the  dynamics of the system is obtained as follows.  Given the \ac{mem} fields $v^{n-1, i}$, $w^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^n$, $\budom^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step as follows.
+Proceeding along the lines of \cref{sec_fl_rigid}, the  dynamics of the system is obtained as follows.  Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^n$, $\budom^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step as follows.
 %sign
 
 \begin{itemize}
@@ -201,8 +201,8 @@ Proceeding along the lines of \cref{sec_fl_rigid}, the  dynamics of the system i
         \bw
         \begin{align}
             \label{eq_fl_mem_mem_1_aux}
-            \rhom \left[  \frac{\vbarmem^i - v^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}v^{n-1,\, j} - \frac{1}{2} v^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} - \Wmem \nab^{\nmhalf, \, i} \Wmem \right] & =              \newlinenn
-            \nab^{\nmhalf, \, i} \sigmamast     + \etam           \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vmem^i }{\gamma}    \right),
+            \rhom \left[  \frac{\vbarmem^i - \vmem^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem^{n-1,\, j} - \frac{1}{2} \vmem^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} - \Wmem \nab^{\nmhalf, \, i} \Wmem \right] & =              \newlinenn
+            \nab^{\nmhalf, \, i} \sigmamast     +         f_\etam^i\left( \Vmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf\right) +  f_t^i(\nu^\nmhalf, \psi^\nmhalf) ,
         \end{align}
         \ew
     }
