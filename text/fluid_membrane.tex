@@ -201,7 +201,7 @@ The equation of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid
     \centering
     \includegraphics[width=\textwidth]{figures/figure_5/figure_5.pdf}
     \caption{
-        Interaction between a bulk fluid and a Helfrich membrane.
+        Interaction between a \acf{bflu}  and a \acf{mem}.
         \plab{A} Membrane reference and current configuration (red and green curve, respectively), and displacement field (black arrows).
         \plab{B} Membrane stretch field.
         \plab{C} Membrane tangent angle.
@@ -236,7 +236,7 @@ According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bot
 
 The  dynamics of the system is obtained as follows; the derivation is obtained along the lines of \cref{sec_fl_elastic,sec_fl_rigid}, and details can be obtained by referring to those Sections.
 
-Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^n$, $\budom^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step as follows:
+Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step as follows:
 
 
 \begin{itemize}
@@ -295,10 +295,12 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
         \end{align}
 
         Here, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the \acp{pde} for the approximate velocities, \cref{eq_fl_mem_mem_disc_3} for pressure correction, and \cref{eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5} for the velocity correction. \Cref{eq_fl_mem_mem_disc_6} is the time-evolution equation for the displacement field, and \cref{eq_fl_mem_mem_disc_7,eq_fl_mem_mem_disc_8} the discrete versions of \cref{eq-dyn-dX1,eq-dyn-dX2}, respectively.
-        In \cref{bc_fl_rigid_6_reference_disc}, $\normalmem$ is the unit normal to \pomline{}: It lies in the tangent bundle of $\omlineeq$, is directed  outside $\omlineeq$, and is normalized according to $\normalmem^i \normalmem_i = 1$ \cite{reallGeneralRelativity,marchiafavaAppuntiDiGeometria2005,worthmullerIRENEFluIdLayeR2025}.
+        In \cref{bc_fl_rigid_6_reference_disc}, $\normalmem$ is the unit normal to \pomline{}: It lies in the tangent bundle of $\omlineeq$, is directed  outside $\omlineeq$, and is normalized according to $\normalmem^i \normalmem_i = 1$ \cite{reallGeneralRelativity,marchiafavaAppuntiDiGeometria2005,worthmullerIRENEFluIdLayeR2025}.\\
+
+        This step determines the \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$.
     }
     \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
-        We determine the \ac{dom} displacement field $\budom, \budomdot$ from the \ac{bvp} \crefs{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot}, with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
+        We determine the \ac{dom} displacement field and its timer derivative, $\budom^n$ and $\budomdot^n$, from the \ac{bvp} \crefs{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot}, with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
         \begin{align}
             \label{bc_fl_mem_dom_1_disc}
             \budom^n                         & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
@@ -319,26 +321,37 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
         \end{align}
     }
     \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
-        We determine the \ac{bflu} fields by solving the \ac{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} with \acp{bc}
+        We determine the \ac{bflu} fields $\vfr^n$ and $\sigmafr^\nmhalf$ by solving the \ac{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} with \acp{bc}
 
         \begin{align}
             \label{bc_fl_membrane_1_current_disc}
-            \bvbarf                                         & =  {\bm v}_\ast  \text{ on } \pombottomeqr,      \\
+            \bvbarf                                         & =  {\bm v}_\ast  \text{ on } \pombottomeqr, \\
             \label{bc_fl_membrane_2_current_disc}
-            \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,                \\
+            \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,           \\
             \label{bc_fl_membrane_3_current_disc}
-            \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,                 \\
+            \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,            \\
             \label{bc_fl_membrane_4_current_disc}
-            G(\budom^{n-1})_{\alpha 1}\pderr{\Vf^2}{\alpha} & =  0 \; \text{ on } \pomouteqr ,                 \\
-            \label{bc_fl_membrane_5_current_disc}
-            \bvbarf(x^1, h)                                 & = \umemdot^\nmhalf(x^1)  \text{ on } \pomtopeqr, \\
-            %sign
-            \label{bc_fl_membrane_6_current_disc}
-            \sigmafc                                        & = \sigmafbottomc \text{ on } \pombottomeqr.
+            G(\budom^{n-1})_{\alpha 1}\pderr{\Vf^2}{\alpha} & =  0 \; \text{ on } \pomouteqr ,
         \end{align}
-
-        and by \cref{eq_phi_1}.
+        \begin{align}
+            \label{bc_fl_membrane_5_current_disc}
+            \bvbarf(x^1, h)                                  & = \newlinenn
+            \umemdot^\nmhalf(x^1)  \text{ on } \pomtopeqr,   &                                \\
+            \label{bc_fl_membrane_6_current_disc}
+            \phif                                            & = 0 \text{ on } \pombottomeqr, \\
+            \label{bc_fl_membrane_7_current_disc}
+            \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1})
+            \pderr{ \phif   }{\beta }                        & = \newlinenn
+            0
+            \text{ on } \pomineqr \cup \pomtopeqr ,          &                                \\
+            G(\budom^{n-1})_{\alpha 1} \pderr{\phif}{\alpha} & = 0 \text{ on } \pomouteqr,
+        \end{align}
+        and by solving  \cref{eq_phi_1}.
     }
-
-
 \end{itemize}
+
+
+
+An example of this dynamics is shown in \cref{fig_fluid_mem}.
+%sign
+The \ac{ela} density and elastic moduli are, respectively, $\rhoela = 10^3 \,\kg/\met^2$ and $\kel = \muel = 10\,  \kg/\sec^2$. The other parameters are the same as in \cref{fig_fluid_rigid}.

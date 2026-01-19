@@ -188,7 +188,7 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
     \label{bc_fl_rigid_3_reference}
     {\bm \vfr} (\bxr)                                             & = {\bm 0} \; \text{ on } \pomweqr ,                                                                    \\
     \label{bc_fl_rigid_4_reference}
-    \vfr^\alpha(\bxr)                                             & = \der{[R(\theta)]_{\alpha \beta} }{t} [\xr^\beta - \focalpoint^\beta] \; \text{ on } \pomellipseeqr , \\
+    \vfr^\alpha(\bxr)                                             & = \der{[R(\theta)]_{\alpha \beta} }{t} (\xr^\beta - \focalpoint^\beta) \; \text{ on } \pomellipseeqr , \\
     \label{bc_fl_rigid_5_reference}
     \etaf G_{\beta 1}(\budom^t(\bxr)) \pderr{ \vfr^\alpha}{\beta} & = 0  \; \text{ on } \pomouteqr ,                                                                       \\
     \label{bc_fl_rigid_6_reference}
@@ -222,13 +222,14 @@ where the elastic stress tensor $\Sdom$ is given by
 and
 \begin{align}
     \label{eq_ela_1}
-    T_{\alpha \beta} & \equiv \kel(\budom) E_{\gamma \gamma} \delta_{\alpha \beta} +2 \muel(\budom) \left[E_{\alpha \beta} - \frac{1}{2} \delta_{\alpha \beta} E_{\gamma \gamma}\right], \\
+    T_{\alpha \beta}  \equiv & \kel(\budom) E_{\gamma \gamma} \delta_{\alpha \beta} +\newlinenn
+                             & 2 \muel(\budom) \left(E_{\alpha \beta} - \frac{1}{2} \delta_{\alpha \beta} E_{\gamma \gamma}\right), \\
     \label{eq_ela_2}
-    E_{\alpha \beta} & \equiv \frac{1}{2}\left( F_{\gamma \alpha}F_{\gamma \beta} - \delta_{\alpha \beta}\right),                                                                        \\
+    E_{\alpha \beta}  \equiv & \frac{1}{2}\left( F_{\gamma \alpha}F_{\gamma \beta} - \delta_{\alpha \beta}\right),                  \\
     \label{eq_ela_3}
-    \kel(\bu)        & \equiv \frac{1}{[\det(F(\bu))]^\zeta},                                                                                                                            \\
+    \kel(\bu)         \equiv & \frac{1}{[\det(F(\bu))]^\zeta},                                                                      \\
     \label{eq_ela_4}
-    \muel(\bu)       & \equiv \frac{1}{[\det(F(\bu))]^\zeta}.
+    \muel(\bu)        \equiv & \frac{1}{[\det(F(\bu))]^\zeta}.
 \end{align}
 In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulus $\kel$ and the modulus of compression $\muel$ on the deformation-gradient tensor \crefs{eq_def_F}. In the absence of this dependence, the elastic model above would be unstable under local compression. In fact, the model's Lagrangian would not penalize configurations with  small $\det F$. The inclusion of the dependence \crefs{eq_ela_3,eq_ela_4} on $\det F$  allows for penalizing these configurations---the larger the exponent $\zeta > 0$, the stronger the penalty. As a result, this dependence makes the model stable under mesh compression, such as the one shown below \ac{rig} in \cref{fig_ref_curr_rigid}B.
 
@@ -373,17 +374,17 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
         Subtracting \cref{eq_fl_rigid_fl_1_reference_disc,eq_fl_rigid_fl_1_reference_disc_aux} and neglecting $\odeltat$, we obtain
         \be
         \label{eq_phi_1}
-        \rhof \frac{\vbarf^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phi   }{\beta } \text{ in } \omr,
+        \rhof \frac{\vbarf^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phif   }{\beta } \text{ in } \omr,
         \ee
         where
         \be\label{eq_def_phi_pressure}
-        \phi \equiv \sigmafc^\ast - \sigmafc^{n-1/2}
+        \phif \equiv \sigmafc^\ast - \sigmafc^{n-1/2}
         \ee
-        is the surface-tension increment.                 By applying $G_{\gamma \alpha}(\budom^{n-1}) \partial / \partial \xr^\gamma$ to both sides of \cref{eq_phi_1} and using \cref{eq_fl_rigid_fl_2_reference_disc}, we obtain a second-order \ac{pde} for $\phi$:
+        is the surface-tension increment.                 By applying $G_{\gamma \alpha}(\budom^{n-1}) \partial / \partial \xr^\gamma$ to both sides of \cref{eq_phi_1} and using \cref{eq_fl_rigid_fl_2_reference_disc}, we obtain a second-order \ac{pde} for $\phif$:
         \begin{align}
             \label{eq_poiss_like_phi}
-            \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                & = \newlinenn
-            G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phi   }{\beta } \right) & .
+            \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                 & = \newlinenn
+            G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right) & .
         \end{align}
 
 
@@ -392,21 +393,21 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
         We will now work out the \acp{bc} for \cref{eq_poiss_like_phi}. \Cref{bc_fl_rigid_6_reference_disc,eq_def_sigmarast,eq_def_phi_pressure} imply the \ac{bc}
         \be
         \label{bc_phi_1}
-        \phi = 0 \, \text{ on } \pomouteqr.
+        \phif = 0 \, \text{ on } \pomouteqr.
         \ee
         Multiplying \cref{eq_phi_1} by $G_{\gamma \alpha}(\budom^{n-1}) \normalr{\gamma}$, where $\bnormalr$ is the unit boundary normal in the \ac{ref} configuration,  we obtain
         \begin{align}
             \label{eq_phi_2}
             \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \normalr{\gamma} (\vbarf^\alpha - \vfr^{n, \, \alpha}) & = \newlinenn
-            \normalr{\gamma} G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phi   }{\beta }.
+            \normalr{\gamma} G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta }.
         \end{align}
         Combining \cref{eq_phi_2} with \cref{bc_fl_rigid_1_reference_disc,bc_fl_rigid_2_reference_disc,bc_fl_rigid_3_reference_disc,bc_fl_rigid_4_reference_disc,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux}, we obtain the second \ac{bc}
         \begin{align}
             \label{bc_phi_2}
-            \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1}) \,          \pderr{ \phi   }{\beta } & = \newlinenn 0
-            \text{ on } \pomineqr \cup \pomweqr \cup \pomellipseeqr                                                                & .
+            \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1}) \,          \pderr{ \phif   }{\beta } & = \newlinenn 0
+            \text{ on } \pomineqr \cup \pomweqr \cup \pomellipseeqr                                                                 & .
         \end{align}
-        The \ac{bvp} \crefs{eq_poiss_like_phi,bc_phi_1,bc_phi_2} determines $\phi$ and, through the definition \crefs{eq_def_phi_pressure}, the surface tension $\sigmac^{n-1/2}$.
+        The \ac{bvp} \crefs{eq_poiss_like_phi,bc_phi_1,bc_phi_2} determines $\phif$ and, through the definition \crefs{eq_def_phi_pressure}, the surface tension $\sigmac^{n-1/2}$.
     }
     \titleditem{Velocity correction}{
         \label{item_split_3}
