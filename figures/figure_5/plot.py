@@ -297,9 +297,8 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_2d_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']],
-                          axis_origin=parameters['axis_origin']
+    gr.set_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']]
                           )
 
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
@@ -336,8 +335,6 @@ def plot_snapshot(fig, n_file,
     gr.plot_curve_grid(ax, X_curr,
                        line_color='green',
                        legend='$\\text{Current}$',
-                       legend_position=parameters['X_curr_legend_position'],
-                       legend_inner_location='upper left',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
@@ -346,8 +343,6 @@ def plot_snapshot(fig, n_file,
     gr.plot_curve_grid(ax, X_ref,
                        line_color='red',
                        legend='$\\text{Reference}$',
-                       legend_position=parameters['X_ref_legend_position'],
-                       legend_inner_location='upper left',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
@@ -380,10 +375,8 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_2d_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']],
-                          axis_origin=parameters['axis_origin']
-                          )
+    gr.set_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']])
 
     # construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted
     data_nu_minus_1 = data_nu.copy()
@@ -445,10 +438,8 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_2d_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']],
-                          axis_origin=parameters['axis_origin']
-                          )
+    gr.set_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']])
 
     color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi,
                                               min_max=psi_min_max,
@@ -505,10 +496,8 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_2d_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']],
-                          axis_origin=parameters['axis_origin']
-                          )
+    gr.set_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']])
 
     # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
     X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
@@ -575,10 +564,8 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_2d_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']],
-                          axis_origin=parameters['axis_origin']
-                          )
+    gr.set_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']])
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -656,10 +643,8 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_2d_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']],
-                          axis_origin=parameters['axis_origin']
-                          )
+    gr.set_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']])
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -723,10 +708,8 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_2d_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']],
-                          axis_origin=parameters['axis_origin']
-                          )
+    gr.set_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']])
 
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w,
                                             min_max=w_min_max,
@@ -783,10 +766,8 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_2d_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']],
-                          axis_origin=parameters['axis_origin']
-                          )
+    gr.set_axes_limits(ax,
+                          [0, 0], [parameters['L'], parameters['h']])
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
                                                 min_max=sigma_min_max,
