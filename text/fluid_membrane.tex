@@ -221,9 +221,9 @@ The \ac{bflu} equations of motion are \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid
     \label{bc_fl_membrane_2_current}
     \bvfc             & =  \bzero  \text{ on } \pomineqc,                                                                        \\
     \label{bc_fl_membrane_3_current}
-    \vfc^1            & =  0 \; \text{ on } \pomineqc ,                                                                          \\
+    \vfc^1            & =  0 \; \text{ on } \pomouteqc ,                                                                         \\
     \label{bc_fl_membrane_4_current}
-    \pderc{\vfc^2}{2} & =  0 \; \text{ on } \pomineqc ,                                                                          \\
+    \pderc{\vfc^2}{2} & =  0 \; \text{ on } \pomouteqc ,                                                                         \\
     \label{bc_fl_membrane_5_current}
     \bvfc(\bxc)       & = \left. \der{\bumem(\xcoord^1)}{t} \right|_{\xcoord^1 = [{\bm \psi}^t(\bxc)]^1} \text{ on } \pomtopeqc, \\
     \label{bc_fl_membrane_6_current}
@@ -253,7 +253,7 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
             \label{eq_fl_mem_mem_disc_2}
             \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j \fnij{b}{\nmhalf}{j}{i} + \left( \frac{3}{2} \vmem^{n-1, \, i} - \frac{1}{2}\vmem^{n-3/2,\,i}\right) \nab^\nmhalf_i \Wmem \right]          & =\newlinenn
             f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f_{\etam\, n}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
-            f_{\fluid\, n} ({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                         &                           \\
+            f_{\fluid\, n} ({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                         &
         \end{align}
         \ew
         \begin{align}
@@ -265,14 +265,13 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
             \rhom \frac{\vbarmem^i - \vmem^{n, \, i}}{\deltat}                         =  & - \nab^{\nmhalf, \, i}\phimem,                               \\
             \label{eq_fl_mem_mem_disc_5}
             \wmem^n                                                                     = & \wbarmem,                                                    \\
+            \label{eq_fl_mem_mem_disc_6}
             \frac{\umem^{\nmhalf,\, \alpha} - \umem^{\nmthreehalf,\, \alpha}}{\deltat}  = &
             \wmem^{n-1} \normalc{\nmhalf, \, \alpha},                                                                                                    \\
-            \label{eq_fl_mem_mem_disc_6}
-            \label{eq-dyn-dX1-disc}
+            \label{eq_fl_mem_mem_disc_7}
             \pder {\umem^{\nmhalf,\,1}}{x^1}                                            = &
             -1 + \nu^\nmhalf \cos \psi^\nmhalf,                                                                                                          \\
-            \label{eq_fl_mem_mem_disc_7}
-            \label{eq-dyn-dX2-disc}
+            \label{eq_fl_mem_mem_disc_8}
             \pder {\umem^{\nmhalf, \, 2}}{x^1}                                          = &
             -\nu^\nmhalf \sin \psi^\nmhalf,
         \end{align}
@@ -289,22 +288,56 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
             \label{bc_fl_mem_mem_5_disc}
             \phimem                                            & = 0 \text{ on } \pomlineineqr,  \\
             \label{bc_fl_mem_mem_6_disc}
-            %sign
             \normalmem^\nmhalf_i  \nab^{\nmhalf, \, i} \phimem & = 0 \text{ on } \pomlineeqr,    \\
             \bumem^{\nmhalf}                                   & = 0 \text{ on } \pomlineineqr,  \\
             \umem^{\nmhalf,\, 1}                               & = 0 \text{ on } \pomlineouteqr, \\
             \pder{\umem^{\nmhalf, \, 2}}{x^1}                  & = 0 \text{ on } \pomlineouteqr.
         \end{align}
 
-
-
+        Here, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the \acp{pde} for the approximate velocities, \cref{eq_fl_mem_mem_disc_3} for pressure correction, and \cref{eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5} for the velocity correction. \Cref{eq_fl_mem_mem_disc_6} is the time-evolution equation for the displacement field, and \cref{eq_fl_mem_mem_disc_7,eq_fl_mem_mem_disc_8} the discrete versions of \cref{eq-dyn-dX1,eq-dyn-dX2}, respectively.
         In \cref{bc_fl_rigid_6_reference_disc}, $\normalmem$ is the unit normal to \pomline{}: It lies in the tangent bundle of $\omlineeq$, is directed  outside $\omlineeq$, and is normalized according to $\normalmem^i \normalmem_i = 1$ \cite{reallGeneralRelativity,marchiafavaAppuntiDiGeometria2005,worthmullerIRENEFluIdLayeR2025}.
-
-
     }
     \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
+        We determine the \ac{dom} displacement field $\budom, \budomdot$ from the \ac{bvp} \crefs{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot}, with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
+        \begin{align}
+            \label{bc_fl_mem_dom_1_disc}
+            \budom^n                         & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
+            \label{bc_fl_mem_dom_2_disc}
+            \udom^{n, \, 1}                  & = 0 \text{ on } \pomouteqr,                        \\
+            \label{bc_fl_mem_dom_3_disc}
+            \pder{\udom^{n, \, 2}}{\xr^1}    & = 0 \text{ on } \pomouteqr,                        \\
+            \label{bc_fl_mem_dom_4_disc}
+            \budom^n                         & = \bumem^{\nmhalf} \text{ on } \pomtopeqr,         \\
+            \label{bc_fl_mem_dom_5_disc}
+            \budomdot^n                      & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
+            \label{bc_fl_mem_dom_6_disc}
+            \udomdot^{n, \, 1}               & = 0 \text{ on } \pomouteqr,                        \\
+            \label{bc_fl_mem_dom_7_disc}
+            \pder{\udomdot^{n, \, 2}}{\xr^1} & = 0 \text{ on } \pomouteqr,                        \\
+            \label{bc_fl_mem_dom_8_disc}
+            \budomdot^n                      & = \bumem^{\nmhalf} \text{ on } \pomtopeqr.
+        \end{align}
     }
     \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
+        We determine the \ac{bflu} fields by solving the \ac{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} with \acp{bc}
+
+        \begin{align}
+            \label{bc_fl_membrane_1_current_disc}
+            \bvbarf                                         & =  {\bm v}_\ast  \text{ on } \pombottomeqr,      \\
+            \label{bc_fl_membrane_2_current_disc}
+            \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,                \\
+            \label{bc_fl_membrane_3_current_disc}
+            \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,                 \\
+            \label{bc_fl_membrane_4_current_disc}
+            G(\budom^{n-1})_{\alpha 1}\pderr{\Vf^2}{\alpha} & =  0 \; \text{ on } \pomouteqr ,                 \\
+            \label{bc_fl_membrane_5_current_disc}
+            \bvbarf(x^1, h)                                 & = \umemdot^\nmhalf(x^1)  \text{ on } \pomtopeqr, \\
+            %sign
+            \label{bc_fl_membrane_6_current_disc}
+            \sigmafc                                        & = \sigmafbottomc \text{ on } \pombottomeqr.
+        \end{align}
+
+        and by \cref{eq_phi_1}.
     }
 
 
