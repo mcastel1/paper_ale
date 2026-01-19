@@ -1,4 +1,5 @@
 import matplotlib
+from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
 import os
@@ -52,10 +53,12 @@ pplt.rc['grid'] = False  # disables default gridlines
 plt.rcParams.update({
     "text.usetex": True,
     "text.latex.preamble": (
+        r"\usepackage{bm} "
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
+        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
 })
 
@@ -298,8 +301,8 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']]
-                          )
+                       [0, 0], [parameters['L'], parameters['h']]
+                       )
 
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
     X_U, Y_U, U_x, U_y = geo.u_1d(data_X, parameters['h'])
@@ -334,7 +337,7 @@ def plot_snapshot(fig, n_file,
     # plot X_curr
     gr.plot_curve_grid(ax, X_curr,
                        line_color='green',
-                       legend='$\\text{Current}$',
+                       legend='\\text{Current}',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
@@ -342,10 +345,23 @@ def plot_snapshot(fig, n_file,
     # plot X_ref
     gr.plot_curve_grid(ax, X_ref,
                        line_color='red',
-                       legend='$\\text{Reference}$',
+                       legend='\\text{Reference}',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
+
+    # Create custom legend handles
+    handles, labels = ax.get_legend_handles_labels()
+
+    ax.legend(
+        handles=handles,
+        labels=labels,
+        loc='center',
+        bbox_to_anchor=np.array(parameters['ref_cur_legend_position']),
+        frameon=False,
+        handlelength=parameters['legend_line_length'],
+        prop=FontProperties(size=parameters['legend_font_size'])
+    )
 
     gr.plot_2d_axes(
         ax, [0, 0], [parameters['L'], parameters['h']],
@@ -360,7 +376,6 @@ def plot_snapshot(fig, n_file,
         plot_label=parameters["u_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
-        axis_bounds=axis_min_max,
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
@@ -376,7 +391,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']])
+                       [0, 0], [parameters['L'], parameters['h']])
 
     # construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted
     data_nu_minus_1 = data_nu.copy()
@@ -421,7 +436,6 @@ def plot_snapshot(fig, n_file,
         plot_label=parameters["nu_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
-        axis_bounds=axis_min_max,
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
@@ -439,7 +453,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']])
+                       [0, 0], [parameters['L'], parameters['h']])
 
     color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi,
                                               min_max=psi_min_max,
@@ -479,7 +493,6 @@ def plot_snapshot(fig, n_file,
         plot_label=parameters["psi_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
-        axis_bounds=axis_min_max,
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
@@ -497,7 +510,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']])
+                       [0, 0], [parameters['L'], parameters['h']])
 
     # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
     X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
@@ -547,7 +560,6 @@ def plot_snapshot(fig, n_file,
         plot_label=parameters["v_fl_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
-        axis_bounds=axis_min_max,
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
@@ -565,7 +577,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']])
+                       [0, 0], [parameters['L'], parameters['h']])
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -625,7 +637,6 @@ def plot_snapshot(fig, n_file,
         plot_label=parameters["sigma_fl_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
-        axis_bounds=axis_min_max,
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
@@ -644,7 +655,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']])
+                       [0, 0], [parameters['L'], parameters['h']])
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -691,7 +702,6 @@ def plot_snapshot(fig, n_file,
         plot_label=parameters["v_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
-        axis_bounds=axis_min_max,
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
@@ -709,7 +719,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']])
+                       [0, 0], [parameters['L'], parameters['h']])
 
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w,
                                             min_max=w_min_max,
@@ -749,7 +759,6 @@ def plot_snapshot(fig, n_file,
         plot_label=parameters["w_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
-        axis_bounds=axis_min_max,
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
@@ -767,7 +776,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                          [0, 0], [parameters['L'], parameters['h']])
+                       [0, 0], [parameters['L'], parameters['h']])
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
                                                 min_max=sigma_min_max,
@@ -806,7 +815,6 @@ def plot_snapshot(fig, n_file,
         plot_label=parameters["sigma_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
-        axis_bounds=axis_min_max,
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
