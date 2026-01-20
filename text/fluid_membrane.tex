@@ -202,11 +202,12 @@ The equation of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid
     \includegraphics[width=\textwidth]{figures/figure_5/figure_5.pdf}
     \caption{
         Interaction between a \Acf{bflu}  and a \acf{mem}.
-        \plab{A}  \acf{ref} and \acf{cur} configuration of \ac{mem} (red and green curve, respectively), and \ac{mem} displacement field $\bumem$ (black arrows).
+        \plab{A}  \Acf{ref} and \acf{cur} configuration of \ac{mem} (red and green curve, respectively), and \ac{mem} displacement field $\bumem$ (black arrows).
         \plab{B} Stretch field of \ac{mem}.
         \plab{C} Tangent angle of \ac{mem}.
-        \plab{D} and \plab{E}: \ac{bflu} velocity and tension; the notation is the same as in \cref{fig_fluid_rigid}.
-        \plab{F}, \plab{G} and \plab{H}: membrane tangential velocity, normal velocity and tension; the notation is the same as in ? B, C and D, respectively.  All panels refer to the same instant of time, shown on top, and display also the deformed mesh (gray lines).
+        \plab{D} and \plab{E}: \ac{bflu} velocity and tension, respectively; the notation is the same as in \cref{fig_fluid_rigid}.
+        \plab{F}, \plab{G} and \plab{H}: Tangential velocity, normal velocity and tension of \ac{mem}, respectively.
+        All panels refer to the same instant of time, shown on top, and they display also the deformed mesh (gray lines).
         \label{fig_fluid_mem}
     }
 \end{figure*}
@@ -217,7 +218,7 @@ The equation of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid
 The \ac{bflu} equations of motion are \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}, with \acp{bc}
 \begin{align}
     \label{bc_fl_membrane_1_current}
-    \bvfc             & =  {\bm v}_\ast  \text{ on } \pombottomeqc,                                                              \\
+    \bvfc             & =  \vfbottom  \text{ on } \pombottomeqc,                                                                 \\
     \label{bc_fl_membrane_2_current}
     \bvfc             & =  \bzero  \text{ on } \pomineqc,                                                                        \\
     \label{bc_fl_membrane_3_current}
@@ -325,11 +326,11 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
 
         \begin{align}
             \label{bc_fl_membrane_1_current_disc}
-            \bvbarf                                         & =  {\bm v}_\ast  \text{ on } \pombottomeqr, \\
+            \bvbarf                                         & =  \vfbottom  \text{ on } \pombottomeqr, \\
             \label{bc_fl_membrane_2_current_disc}
-            \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,           \\
+            \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,        \\
             \label{bc_fl_membrane_3_current_disc}
-            \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,            \\
+            \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,         \\
             \label{bc_fl_membrane_4_current_disc}
             G(\budom^{n-1})_{\alpha 1}\pderr{\Vf^2}{\alpha} & =  0 \; \text{ on } \pomouteqr ,
         \end{align}
@@ -352,6 +353,7 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
 
 
 
-An example of this dynamics is shown in \cref{fig_fluid_mem}.
+An example of this dynamics is shown in \cref{fig_fluid_mem}, for a macroscopic channel with dimensions $L = 1 \, \met$, $h = 0.2 \, \met$. The \ac{mem} parameters are $\kap = 10^{-3} \, \kg \, \met^2/\sec^2$, $\rhom = 1 \, \kg/\met$,  $\etam = 1 \, \kg/\sec $, and $\sigmaml = 1 \, \newt / \met$.
+The \ac{bflu} parameters are $\rhof = 1 \, \kg/\met^3$, $\etaf = 10^{-3} \, \kg/(\met \, \sec)$,  $\sigmafbottomc = - 1 \, \newt / \met^2$, and $\vfbottom^1 =0$, $\vfbottom^2 =  \frac{3}{2}  \xcoord^1 (2 L -\xcoord^1) v_0$, where $v_0 = 10^{-1}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$.
+
 %sign
-The \ac{ela} density and elastic moduli are, respectively, $\rhoela = 10^3 \,\kg/\met^2$ and $\kel = \muel = 10\,  \kg/\sec^2$. The other parameters are the same as in \cref{fig_fluid_rigid}.
