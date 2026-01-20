@@ -123,7 +123,7 @@ and they hold for $\xc \in \omc$. \Cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_
 The \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current,eq_fl_rigid_rigid_current_1,eq_fl_rigid_rigid_current_2} are
 \begin{align}
     \label{bc_fl_rigid_1_current}
-    \vfc^1(\bxc)                  & =  v_\ast \; \text{ on } \pomineqc,                                                                                  \\
+    \vfc^1(\bxc)                  & =  \vfin \; \text{ on } \pomineqc,                                                                                   \\
     \label{bc_fl_rigid_2_current}
     \vfc^2  (\bxc)                & =  0 \; \text{ on } \pomineqc ,                                                                                      \\
     \label{bc_fl_rigid_3_current}
@@ -182,7 +182,7 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
 
 \begin{align}
     \label{bc_fl_rigid_1_reference}
-    \vfr^1(\bxr)                                                  & =  v_\ast \; \text{ on } \pomineqr,                                                                    \\
+    \vfr^1(\bxr)                                                  & =  \vfin \; \text{ on } \pomineqr,                                                                     \\
     \label{bc_fl_rigid_2_reference}
     \vfr^2      (\bxr)                                            & =  0 \; \text{ on } \pomineqr ,                                                                        \\
     \label{bc_fl_rigid_3_reference}
@@ -321,7 +321,7 @@ The discrete form of the \acp{bc} \crefs{bc_fl_rigid_1_reference,bc_fl_rigid_2_r
 \bw
 \begin{align}
     \label{bc_fl_rigid_1_reference_disc}
-    \vfr^{n, \, 1}                                                                                                        & = v_\ast \; \text{ on }\pomineqr,                                                                                                         \\
+    \vfr^{n, \, 1}                                                                                                        & = \vfin \; \text{ on }\pomineqr,                                                                                                          \\
     \label{bc_fl_rigid_2_reference_disc}
     \vfr^{n, \, 2}                                                                                                        & =  0 \; \text{ on } \pomineqr ,                                                                                                           \\
     \label{bc_fl_rigid_3_reference_disc}
@@ -349,7 +349,7 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
         \end{align}
         \begin{align}
             \label{bc_fl_rigid_1_reference_disc_aux}
-            \vbarf^1                                                     & = v_\ast \; \text{ on }\pomineqr,                                                                                                        \\
+            \vbarf^1                                                     & = \vfin \; \text{ on }\pomineqr,                                                                                                         \\
             \label{bc_fl_rigid_2_reference_disc_aux}
             \vbarf^2                                                     & =  0 \; \text{ on } \pomineqr ,                                                                                                          \\
             \label{bc_fl_rigid_3_reference_disc_aux}
@@ -455,7 +455,7 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
 
 The fields ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.
 
-An example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr_rigid}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $v_\ast(\bxc) = 6 v_0 \xc^2 (\xc^2 - h)/h^2 $, with $v_0 = 1 \, \met/\sec$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.\\
+An example of such dynamics is shown in \cref{fig_fluid_rigid}. The channel has dimensions $L = 2.2 \, \met$, $h =  0.41 \, \met$, cf. \cref{fig_ref_curr_rigid}, $\rhof = 1 \, \kg / \met^2, \etaf = 10^{-3} \, \pas\, \met \, \sec$, and the  inflow velocity profile is a Poiseuille flow  $\vfin(\bxc) = 6 v_0 \xc^2 (\xc^2 - h)/h^2 $, with $v_0 = 1 \, \met/\sec$. These parameters have been taken from the FEAT2D DFG 2D-3 benchmark for a flow around a cylinder \cite{blumFEAT2DFiniteElement1995}. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-1} \,  \kg \, \met^2$. These parameters  correspond approximately to a light gas interacting with a solid body made of light wood.\\
 
 \begin{figure*}
     \centering
