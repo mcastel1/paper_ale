@@ -381,7 +381,6 @@ def plot_snapshot(fig, n_file,
         minor_tick_length=parameters['minor_tick_length'],
         z_order=const.high_z_order)
 
-    '''
     # =============
     # nu subplot
     # =============
@@ -822,8 +821,6 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=sigma_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-
-    '''
 
 
 plot_snapshot(fig, snapshot_max,
