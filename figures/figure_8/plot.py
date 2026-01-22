@@ -58,7 +58,8 @@ data_theta = pd.read_csv(os.path.join(solution_path, "theta_omega.csv"))
 
 # add step number column
 data_theta['t'] = (data_theta.index + 1) * \
-    solution_parameters['print_out_stride']/solution_parameters['T']
+    solution_parameters['print_out_stride'] * \
+    solution_parameters['T'] / solution_parameters['num_steps']
 
 
 fig = pplt.figure(figsize=np.array(parameters['figure_size']),
