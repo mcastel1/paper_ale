@@ -6,7 +6,7 @@
 #   ./copy_from_abacus.sh [remote_dir] [pattern1] [pattern2] ... [local_dir] [min] [max] [stride]
 # Example:
 #   ./copy_from_abacus.sh elastic_obstacle_2/solution/snapshots/csv/nodal_values 'u_msh_n_*' 'def_v_n*' ~/Desktop 1 40000 100
-#   ./copy_from_abacus.sh elastic_obstacle_2/solution/snapshots/csv 'line_mesh_el_n_*' 'line_mesh_msh_n*' ~/Desktop 1 40000 100
+#   ./copy_from_abacus.sh rigid_obstacle_1/solution/snapshots/csv 'def_v_n_*' 'u_n_*' 'line_mesh_n_*' 'def_sigma_n_12_*' ~/Desktop 0 10000 10
 
 set -e
 

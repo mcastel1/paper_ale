@@ -22,6 +22,10 @@ import system.paths as paths
 import system.utils as sys_utils
 
 '''
+to copy data for this figure from abacus, do: 
+*  rsync -avr mcastel1@abacus:rigid_obstacle_1/solution/theta_omega.csv ~/Documents/paper_ale/figures/figure_2/solution
+* ./copy_from_abacus.sh rigid_obstacle_1/solution/snapshots/csv 'def_v_n_*' 'u_n_*' 'line_mesh_n_*' 'def_sigma_n_12_*' ~/Desktop 0 10000 10
+
 Parameter meaning: 
 - solution_stride: the stride with which data were saved as during the solution of the finite-element problem
 - animation_stride: the stride with which frames will be read by animate.py to generate the animation
