@@ -114,16 +114,20 @@ The system dynamics is obtained as follows: given $\bvfr^{n-1}$, $\sigmafr^{n-3/
         }\end{itemize}
 
 
-
-An example of the coupled dynamics of \ac{bflu} and \ac{ela} is shown in \cref{fig_fluid_ela}.
+% revise - start
+An example of the coupled dynamics of \ac{bflu} and \ac{ela} is shown in \cref{fig_fluid_ela}, where we show the interaction of a \ac{bflu} with a hydrogel (\ac{ela}).
 Here, $\pomcircouteqr$ is an ellipse with semi-axes $a = 0.2\, \met$, $b = 0.1\, \met$ and center located at  $\bxr = (0.4 \, \met, 0.2\, \met)$, and $\pomcircineqr$ has radius $r = 0.0125 \, \met$ and center located at $\bxr$.
-The \ac{ela} density and elastic moduli are, respectively, $\rhoela = 10^3 \,\kg/\met^2$ and $\kel = \muel = 10\,  \kg/\sec^2$. The other parameters are the same as in \cref{fig_fluid_rigid}.
+The channel dimensions and \ac{bflu} parameters have been taken from the FEAT2D DFG 2D-3 benchmark example for a fluid flow around a cylinder \cite{blumFEAT2DFiniteElement1995}.
+The \ac{ela} density and modulus of compression are, respectively, $\rhoela = 10^3 \,\kg/\met^2$ \cite{xuConcurrentStiffeningSoftening2023} and a storage modulus of $\sim 10 \, \pas$ \cite{lichtSynthetic3DPEGAnisogel2019}.
+Given a \ac{ela} Poisson ratio \cite{landauTheoryElasticity1986} of $\nu \sim 0.5$ \cite{chippadaSimultaneousDeterminationYoungs2010}.
+% revise - end
+% and $\kel = \muel = 10\,  \kg/\sec^2$. The other parameters are the same as in \cref{fig_fluid_rigid}.
 % These parameters  correspond approximately to ...
 
 
 \begin{figure*}
         \centering
-        \includegraphics[width=\textwidth]{figures/figure_3/figure_3.pdf}
+        \includegraphics[width=\textwidth]{figures/figure_10/figure_10.pdf}
         \caption{
                 \label{fig_fluid_ela}
                 Interaction between a \acl{bflu} and an \acl{ela}. The notation is the same as in \cref{fig_fluid_rigid}, and the \acl{ela} is depicted as a red mesh.

@@ -23,7 +23,7 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
- ./copy_from_abacus.sh elastic_obstacle_2/solution/snapshots/csv 'line_mesh_el_n_*' 'line_mesh_msh_n_*' 'def_v_n_*' 'u_msh_n_*' 'def_sigma_n_12_*'  ~/Desktop 0 40000 1000
+ ./copy_from_abacus.sh elastic_obstacle_1/solution/snapshots/csv 'line_mesh_el_n_*' 'line_mesh_msh_n_*' 'def_v_n_*' 'u_msh_n_*' 'def_sigma_n_12_*'  ~/Desktop 0 10000 100
 
 '''
 
@@ -32,6 +32,8 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
 
 
 # Suppress the specific warning
@@ -332,7 +334,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
-              parameters['T'] / number_of_frames, 'min_s', parameters['n_decimals_snapshot_label']))
+              solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
