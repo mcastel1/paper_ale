@@ -24,7 +24,7 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
- ./copy_from_abacus.sh elastic_obstacle_1/solution/snapshots/csv 'line_mesh_el_n_*' 'line_mesh_msh_n_*' 'def_v_n_*' 'u_msh_n_*' 'def_sigma_n_12_*'  ~/Desktop 0 10000 100
+ ./copy_from_abacus.sh elastic_obstacle_1/solution/snapshots/csv 'line_mesh_el_n_*' 'line_mesh_msh_n_*' 'def_v_n_*' 'u_msh_n_*' 'def_sigma_n_12_*'  ~/Desktop 0 100000 1
 
 '''
 
