@@ -181,9 +181,11 @@ def plot_snapshot(fig, n_file, snapshot_label):
         )
 
     # plot the boundary partial_omega_circle_out in the current configuration
-    partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse, fill=False,
+    partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse,
+                                           fill=True,
                                            linewidth=parameters['partial_omega_line_width'],
                                            edgecolor='cyan',
+                                           facecolor='cyan',
                                            linestyle='-.',
                                            zorder=const.high_z_order)
 
