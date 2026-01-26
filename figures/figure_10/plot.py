@@ -180,20 +180,21 @@ def plot_snapshot(fig, n_file, snapshot_label):
             )
         )
 
-    # plot the boundary partial_omega_circle_out in the current configuration
+    # plot the boundary partial_omega_circle_out in the current configuration to make a white region: this will effectively delete arrows from the vector field of v within the polygon
     partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse,
                                            fill=True,
                                            linewidth=parameters['partial_omega_line_width'],
-                                           edgecolor='cyan',
-                                           facecolor='cyan',
+                                           edgecolor=parameters['partial_omega_circle_fill_color'],
+                                           facecolor=parameters['partial_omega_circle_fill_color'],
                                            linestyle='-.',
-                                           zorder=const.high_z_order)
+                                           zorder=1)
 
     ax.add_patch(partial_omega_circle_out_cur)
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_el_line_vertices,
-                    parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
+                    parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'],
+                    zorder=2)
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
 
@@ -232,8 +233,14 @@ def plot_snapshot(fig, n_file, snapshot_label):
     '''
 
     # plot velocity of fluid
-    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['shaft_length'], parameters['head_over_shaft_length'],
-                             parameters['arrow_head_angle'], parameters['arrow_line_width'], 1, 'color_from_map', 0)
+    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y],
+                             parameters['shaft_length'],
+                             parameters['head_over_shaft_length'],
+                             parameters['arrow_head_angle'],
+                             parameters['arrow_line_width'],
+                             1,
+                             'color_from_map',
+                             0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
