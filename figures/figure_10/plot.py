@@ -141,7 +141,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
         solution_path + 'snapshots/csv/line_mesh_msh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' +
                          n_snapshot + '.csv', usecols=columns_v)
-    data_u_msh = pd.read_csv(
+    data_u_msh_cur = pd.read_csv(
         solution_path + 'snapshots/csv/nodal_values/u_msh_n_' + n_snapshot + '.csv', usecols=columns_v)
     data_sigma = pd.read_csv(
         solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
@@ -181,7 +181,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     norm_v_min_max= [norm_v_min, norm_v_max]     
     '''
 
-    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
+    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh_cur,
                                                                          [0, 0],
                                                                          [parameters['L'],
                                                                              parameters['h']],
@@ -266,7 +266,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     #
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
-        data_u_msh)
+        data_u_msh_cur)
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_def_boundary_vertices_ellipse = []
