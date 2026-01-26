@@ -84,7 +84,7 @@ columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + cla
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-#
+'''
 norm_v_min_max = cal.min_max_vector_field(snapshot_min,
                                           snapshot_max, parameters['frame_stride'],
                                           os.path.join(
@@ -92,13 +92,13 @@ norm_v_min_max = cal.min_max_vector_field(snapshot_min,
                                           parameters['n_bins_v'],
                                           [[0, 0], [parameters['L'], parameters['h']]]
                                           )
-#
+'''
 '''
 # I compute sigma_min_max from snapshots between snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of sigma and an odd colorbars
 sigma_min_max = cal.min_max_files(
                 'def_sigma_n_12_',
                 os.path.join(solution_path + 'snapshots/csv/nodal_values'),
-                snapshot_min + \
+                snapshot_min +
                     parameters['colorbar_sigma_snapshot_min_offset'],
                 snapshot_max,
                 parameters['frame_stride']
@@ -189,7 +189,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                            linestyle='-.',
                                            zorder=1)
 
-    ax.add_patch(partial_omega_circle_out_cur)
+    # ax.add_patch(partial_omega_circle_out_cur)
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_el_line_vertices,
@@ -198,7 +198,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
 
-    X, Y, V_x, V_y, grid_norm_v, _, _, _ = vec.interpolate_2d_vector_field(
+    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
         data_v,
         [0, 0],
         [parameters['L'], parameters['h']],
@@ -207,9 +207,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    '''
-    norm_v_min_max= [norm_v_min, norm_v_max]
-    '''
+
+    norm_v_min_max = [norm_v_min, norm_v_max]
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh_cur,
                                                                          [0, 0],
@@ -219,18 +218,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                                                          clab.label_x_column,
                                                                          clab.label_y_column,
                                                                          clab.label_v_column)
-
-    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
-    X_ref = np.array(lis.substract_lists_of_lists(X, U_msh_x))
-    Y_ref = np.array(lis.substract_lists_of_lists(Y, U_msh_y))
-    # 2. once the coordinates in the reference configuration are known, assess whether they fall within the elastic body by checking whether they fall wihin the ellipse
-    '''
-    gr.set_inside_ellipse(
-        X_ref, Y_ref, parameters['c'], parameters['a'], parameters['b'], 0, V_x, np.nan)
-    gr.set_inside_ellipse(
-        X_ref, Y_ref, parameters['c'], parameters['a'], parameters['b'], 0, V_y, np.nan)
-    '''
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y],
