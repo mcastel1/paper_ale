@@ -1,5 +1,6 @@
 import matplotlib
 from matplotlib.patches import Polygon
+from matplotlib.path import Path
 import matplotlib.pyplot as plt
 import os
 
@@ -169,6 +170,13 @@ def plot_snapshot(fig, n_file, snapshot_label):
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
         data_u_msh_cur)
 
+    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
+        data_v,
+        [0, 0],
+        [parameters['L'], parameters['h']],
+        parameters['n_bins_v']
+    )
+
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_def_boundary_vertices_ellipse = []
     for _, row in data_boundary_vertices_ellipse.iterrows():
@@ -180,16 +188,22 @@ def plot_snapshot(fig, n_file, snapshot_label):
             )
         )
 
-    # plot the boundary partial_omega_circle_out in the current configuration to make a white region: this will effectively delete arrows from the vector field of v within the polygon
-    partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse,
-                                           fill=True,
-                                           linewidth=parameters['partial_omega_line_width'],
-                                           edgecolor=parameters['partial_omega_circle_fill_color'],
-                                           facecolor=parameters['partial_omega_circle_fill_color'],
-                                           linestyle='-.',
-                                           zorder=1)
+    # Create a Path object from the polygon vertices
+    polygon_path = Path(data_def_boundary_vertices_ellipse)
 
-    # ax.add_patch(partial_omega_circle_out_cur)
+    # Create a 2D array of all (x, y) points from your grid
+    # Flatten X and Y to 1D arrays, then stack them
+    points = np.column_stack((X.flatten(), Y.flatten()))
+
+    # Check which points are inside the polygon
+    inside_mask = polygon_path.contains_points(points)
+
+    # Reshape the mask back to the grid shape
+    inside_mask = inside_mask.reshape(X.shape)
+
+    # Set V_x and V_y to NaN where points are inside the polygon
+    V_x[inside_mask] = np.nan
+    V_y[inside_mask] = np.nan
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_el_line_vertices,
@@ -198,17 +212,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
 
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
-        data_v,
-        [0, 0],
-        [parameters['L'], parameters['h']],
-        parameters['n_bins_v']
-    )
-
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-
-    norm_v_min_max = [norm_v_min, norm_v_max]
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh_cur,
                                                                          [0, 0],
@@ -218,6 +223,18 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                                                          clab.label_x_column,
                                                                          clab.label_y_column,
                                                                          clab.label_v_column)
+
+    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
+    # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
+    X_ref = np.array(lis.substract_lists_of_lists(X, U_msh_x))
+    Y_ref = np.array(lis.substract_lists_of_lists(Y, U_msh_y))
+    # 2. once the coordinates in the reference configuration are known, assess whether they fall within the elastic body by checking whether they fall wihin the ellipse
+    gr.set_inside_ellipse(
+        X_ref, Y_ref, parameters['c'], parameters['a'], parameters['b'], 0, V_x, np.nan)
+    gr.set_inside_ellipse(
+        X_ref, Y_ref, parameters['c'], parameters['a'], parameters['b'], 0, V_y, np.nan)
+
+    norm_v_min_max = [norm_v_min, norm_v_max]
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y],
@@ -257,7 +274,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     plot_label_font_size=parameters['panel_label_font_size'],                    n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-    '''
+
     # =============
     # sigma subplot
     # =============
@@ -356,8 +373,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-
-    '''
 
 
 plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *

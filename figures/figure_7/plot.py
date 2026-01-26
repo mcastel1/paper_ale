@@ -95,7 +95,7 @@ def plot_snapshot(fig, n_file):
     n_snapshot = str(n_file)
 
     data_u_msh_ref = pd.read_csv(
-        solution_path + 'snapshots/csv/nodal_values/u_msh_n_' + str(1) + '.csv')
+        solution_path + 'snapshots/csv/nodal_values/u_msh_n_' + str(100) + '.csv')
     data_u_msh_cur = pd.read_csv(
         solution_path + 'snapshots/csv/nodal_values/u_msh_n_' + n_snapshot + '.csv')
 
@@ -111,9 +111,9 @@ def plot_snapshot(fig, n_file):
 
     # load data for the first snapshot (reference configuration)
     data_el_line_vertices = pd.read_csv(
-        solution_path + 'snapshots/csv/line_mesh_el_n_' + str(1) + '.csv')
+        solution_path + 'snapshots/csv/line_mesh_el_n_' + str(100) + '.csv')
     data_msh_line_vertices = pd.read_csv(
-        solution_path + 'snapshots/csv/line_mesh_msh_n_' + str(1) + '.csv')
+        solution_path + 'snapshots/csv/line_mesh_msh_n_' + str(100) + '.csv')
 
     # 1) plot the polygon of the boundary 'ellipse_loop_id'
     #
