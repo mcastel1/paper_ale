@@ -37,6 +37,8 @@ pd.set_option('display.max_columns', None)
 
 parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
 
 
 # add the path where to find the shared modules
@@ -296,7 +298,7 @@ def plot_snapshot(fig, n_file,
                                                                                              clab.label_x_column,
                                                                                              clab.label_y_column,
                                                                                              clab.label_v_column)
-    '''
+    
     # =============
     # u subplot
     # =============
@@ -506,7 +508,7 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=psi_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-    '''
+    
     # =============
     # v_fl subplot
     # =============
@@ -523,14 +525,14 @@ def plot_snapshot(fig, n_file,
     # here I use interpolate_2d_vector_field_layer because the values of the vector field vary very suddenly close to the bottom and right edge of the mesh, so I treat them with one-dimensional interpolation
     X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field_layer(
         data_v_fl,
-        [data_v_fl[':0'].min(), data_v_fl[':1'].min()],  # Data bounds, not axis_min_max
-        [data_v_fl[':0'].max(), data_v_fl[':1'].max()],
+        [axis_min_max[0][0], axis_min_max[1][0]],
+        [axis_min_max[0][1], axis_min_max[1][1]],
         parameters['n_bins_v_fl'],
         right_edge_x=parameters['L'])
     
-    print(f'X: {X}')
-    print(f'Y: {Y}')
-    print(f'interpolated V_x: {V_x}')
+    # print(f'X: {X}')
+    # print(f'Y: {Y}')
+    # print(f'interpolated V_x: {V_x}')
 
     if norm_v_fl_min_max == None:
         norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
@@ -590,7 +592,7 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=v_fl_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-    '''
+    
     # =============
     # sigma_fl subplot
     # =============
@@ -847,13 +849,13 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=sigma_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-    '''    
+     
 
 
 # plot_snapshot(fig, snapshot_max,
-#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / number_of_frames, 's', 1))
 plot_snapshot(fig, parameters['snapshot_to_plot'],
-              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / number_of_frames, 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
