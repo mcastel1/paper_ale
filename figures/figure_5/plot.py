@@ -290,7 +290,7 @@ def plot_snapshot(fig, n_file,
                                                                                              clab.label_x_column,
                                                                                              clab.label_y_column,
                                                                                              clab.label_v_column)
-
+    '''
     # =============
     # u subplot
     # =============
@@ -500,7 +500,7 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=psi_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-
+    '''
     # =============
     # v_fl subplot
     # =============
@@ -567,7 +567,7 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=v_fl_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-
+    '''
     # =============
     # sigma_fl subplot
     # =============
@@ -645,6 +645,7 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=sigma_fl_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset']
     )
+    
 
     # =============
     # v subplot
@@ -710,6 +711,7 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=v_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
+    
     # =============
     # w subplot
     # =============
@@ -822,7 +824,7 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=sigma_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-    
+    '''    
 
 
 plot_snapshot(fig, snapshot_max,
