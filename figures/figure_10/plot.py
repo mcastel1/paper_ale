@@ -11,9 +11,8 @@ import sys
 import warnings
 
 import calculus.utils as cal
-import calculus.geometry as geo
-import constants.utils as const
 import graphics.utils as gr
+import graphics.vector_plot as vp
 import list.column_labels as clab
 import input_output.utils as io
 import list.utils as lis
@@ -188,22 +187,12 @@ def plot_snapshot(fig, n_file, snapshot_label):
             )
         )
 
-    # Create a Path object from the polygon vertices
-    polygon_path = Path(data_def_boundary_vertices_ellipse)
 
-    # Create a 2D array of all (x, y) points from your grid
-    # Flatten X and Y to 1D arrays, then stack them
-    points = np.column_stack((X.flatten(), Y.flatten()))
-
-    # Check which points are inside the polygon
-    inside_mask = polygon_path.contains_points(points)
-
-    # Reshape the mask back to the grid shape
-    inside_mask = inside_mask.reshape(X.shape)
-
-    # Set V_x and V_y to NaN where points are inside the polygon
-    V_x[inside_mask] = np.nan
-    V_y[inside_mask] = np.nan
+    # set to nan the values of V_x and V_y which lie inside the polygon defined by data_def_boundary_vertices_ellipse
+    vp.set_in_polygon(data_def_boundary_vertices_ellipse,
+                      [X, Y],
+                      [V_x, V_y])
+    
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_el_line_vertices,

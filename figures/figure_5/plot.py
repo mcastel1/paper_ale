@@ -1,6 +1,7 @@
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Polygon
+from matplotlib.path import Path
 import matplotlib.pyplot as plt
 import os
 
@@ -196,6 +197,8 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
     poly = Polygon(data_def_boundary_vertices_sub_mesh_1, fill=True,
                    linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
     ax.add_patch(poly)
+
+    return data_def_boundary_vertices_sub_mesh_1
     #
 
 
@@ -220,6 +223,9 @@ def plot_snapshot(fig, n_file,
         snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
     data_v_fl = pd.read_csv(os.path.join(
         snapshot_nodal_values_path, 'def_v_fl_n_' + n_file_string + '.csv'))
+    
+
+
     data_sigma_fl = pd.read_csv(
         solution_path + 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv')
     data_w = pd.read_csv(os.path.join(
@@ -514,10 +520,17 @@ def plot_snapshot(fig, n_file,
                        [0, 0], [parameters['L'], parameters['h']])
 
     # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
-    X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field(data_v_fl,
-                                                                                                   [axis_min_max[0][0], axis_min_max[1][0]],
-                                                                                                   [axis_min_max[0][1], axis_min_max[1][1]],
-                                                                                                   parameters['n_bins_v_fl'])
+    # here I use interpolate_2d_vector_field_layer because the values of the vector field vary very suddenly close to the bottom and right edge of the mesh, so I treat them with one-dimensional interpolation
+    X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field_layer(
+        data_v_fl,
+        [data_v_fl[':0'].min(), data_v_fl[':1'].min()],  # Data bounds, not axis_min_max
+        [data_v_fl[':0'].max(), data_v_fl[':1'].max()],
+        parameters['n_bins_v_fl'],
+        right_edge_x=parameters['L'])
+    
+    print(f'X: {X}')
+    print(f'Y: {Y}')
+    print(f'interpolated V_x: {V_x}')
 
     if norm_v_fl_min_max == None:
         norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
@@ -530,8 +543,18 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     # plot the area that masks arrows which lie outside the mesh in the current configuration
-    draw_masking_area(ax, axis_min_max, data_u_msh,
-                      parameters['masking_area_margin'])
+    data_def_boundary_vertices_sub_mesh_1 = draw_masking_area(ax, 
+                      axis_min_max, 
+                      data_u_msh,
+                      parameters['masking_area_margin']
+                      )
+    
+
+    # set to nan the values of V_x and V_y which lie inside the masking region 
+    vp.set_in_polygon(data_def_boundary_vertices_sub_mesh_1,
+                      [X, Y],
+                      [V_x, V_y])
+
 
     # plot velocity of F
     vec.plot_2d_vector_field(ax, [X, Y], [
@@ -827,8 +850,10 @@ def plot_snapshot(fig, n_file,
     '''    
 
 
-plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+# plot_snapshot(fig, snapshot_max,
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * parameters['T'] / number_of_frames, 's', 1))
+plot_snapshot(fig, parameters['snapshot_to_plot'],
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * parameters['T'] / number_of_frames, 's', 1))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
