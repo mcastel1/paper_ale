@@ -1,6 +1,6 @@
 \section{Fluid and elastic body}\label{sec_fl_elastic}
 
-In this Section, we will build on the analysis of \cref{sec_fl_rigid} and put \ac{bflu} into interaction with a more complex physical object: an \ac{ela}. Only the main results will be presented here; their derivation follows the lines of  \cref{sec_fl_rigid}.
+In this Section, we will build on the analysis of \cref{sec_fl_rigid} and put \ac{bflu} into interaction with a more complex physical object---an \ac{ela}. Only the main results will be presented here; their derivation follows the lines of  \cref{sec_fl_rigid}.
 
 The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. Here, the \ac{ela} boundary $\pomcircouteq$ may deform, but the inner \ac{ela} boundary $\pomcircineq$ is pinned to the $\xc^1$, $\xc^2$ plane.
 
@@ -114,18 +114,20 @@ The system dynamics is obtained as follows: given $\bvfr^{n-1}$, $\sigmafr^{n-3/
         }\end{itemize}
 
 
-
-An example of the coupled dynamics of \ac{bflu} and \ac{ela} is shown in \cref{fig_fluid_ela}.
+% revise - start
+An example of the coupled dynamics of \ac{bflu} and \ac{ela} is shown in \cref{fig_fluid_ela}, where we show the interaction of a \ac{bflu} with a hydrogel (\ac{ela}).
 Here, $\pomcircouteqr$ is an ellipse with semi-axes $a = 0.2\, \met$, $b = 0.1\, \met$ and center located at  $\bxr = (0.4 \, \met, 0.2\, \met)$, and $\pomcircineqr$ has radius $r = 0.0125 \, \met$ and center located at $\bxr$.
-The \ac{ela} density and elastic moduli are, respectively, $\rhoela = 10^3 \,\kg/\met^2$ and $\kel = \muel = 10\,  \kg/\sec^2$. The other parameters are the same as in \cref{fig_fluid_rigid}.
-% These parameters  correspond approximately to ...
+The channel dimensions and \ac{bflu} parameters have been taken from the \ac{feat2d} DFG 2D-3 benchmark example for a fluid flow around a cylinder \cite{blumFEAT2DFiniteElement1995,schaferBenchmarkComputationsLaminar1996}.
+The \ac{ela} density is $\rhoela = 10^3 \,\kg/\met^2$   \cite{xuConcurrentStiffeningSoftening2023}. The storage modulus, which approximates the shear modulus $\mu$ \cite{rehageELASTICPROPERTIESCROSSLINKED} is $ \sim  10 \, \kg/\sec^2$ \cite{lichtSynthetic3DPEGAnisogel2019}.
+Given a \ac{ela} Poisson ratio \cite{landauTheoryElasticity1986} of $\nu \sim 0.49$ \cite{chippadaSimultaneousDeterminationYoungs2010}, we obtain $K \sim 5 \times 10^2 \, \kg/\sec^2$ from the relation $K = 2 \mu(1+\nu)/[3(2\nu-1)]$ \cite{landauTheoryElasticity1986}.
+The \ac{bflu} inflow velocity profile is  a Poiseuille flow, \cref{eq_inflow_profile}, with $ v_0 = 1\, \met / \sec$. Finally, the \ac{dom} mesh stiffness exponent has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
 
 
 \begin{figure*}
         \centering
-        \includegraphics[width=\textwidth]{figures/figure_3/figure_3.pdf}
+        \includegraphics[width=\textwidth]{figures/figure_10/figure_10.pdf}
         \caption{
                 \label{fig_fluid_ela}
-                Interaction between a \acl{bflu} and an \acl{ela}. The notation is the same as in \cref{fig_fluid_rigid}, and the \acl{ela} is depicted as a red mesh.
+                Interaction between a \acl{bflu} and an \acl{ela} (a hydrogel). The notation is the same as in \cref{fig_fluid_rigid}, and the \acl{ela} is depicted as a red mesh. Here, the Reynolds number is $R \sim 2 \times 10^2$.
         }
 \end{figure*}

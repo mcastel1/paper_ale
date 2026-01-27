@@ -1,5 +1,6 @@
 import matplotlib
 from matplotlib.patches import Polygon
+from matplotlib.path import Path
 import matplotlib.pyplot as plt
 import os
 
@@ -10,9 +11,8 @@ import sys
 import warnings
 
 import calculus.utils as cal
-import calculus.geometry as geo
-import constants.utils as const
 import graphics.utils as gr
+import graphics.vector_plot as vp
 import list.column_labels as clab
 import input_output.utils as io
 import list.utils as lis
@@ -20,11 +20,20 @@ import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
 
+'''
+to copy files for this figure from abacus do :
+
+ ./copy_from_abacus.sh elastic_obstacle_1/solution/snapshots/csv 'line_mesh_el_n_*' 'line_mesh_msh_n_*' 'def_v_n_*' 'u_msh_n_*' 'def_sigma_n_12_*'  ~/Desktop 0 100000 1
+
+'''
+
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 
 parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
 
 
 # Suppress the specific warning
@@ -75,7 +84,7 @@ columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + cla
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-#
+'''
 norm_v_min_max = cal.min_max_vector_field(snapshot_min,
                                           snapshot_max, parameters['frame_stride'],
                                           os.path.join(
@@ -83,14 +92,15 @@ norm_v_min_max = cal.min_max_vector_field(snapshot_min,
                                           parameters['n_bins_v'],
                                           [[0, 0], [parameters['L'], parameters['h']]]
                                           )
-#
+'''
 '''
 # I compute sigma_min_max from snapshots between snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of sigma and an odd colorbars
 sigma_min_max = cal.min_max_files(
-                'def_sigma_n_12_', 
+                'def_sigma_n_12_',
                 os.path.join(solution_path + 'snapshots/csv/nodal_values'),
-                snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'], 
-                snapshot_max, 
+                snapshot_min +
+                    parameters['colorbar_sigma_snapshot_min_offset'],
+                snapshot_max,
                 parameters['frame_stride']
                  )
 '''
@@ -132,8 +142,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
         solution_path + 'snapshots/csv/line_mesh_msh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' +
                          n_snapshot + '.csv', usecols=columns_v)
-    data_u_msh = pd.read_csv(
+
+    data_u_msh_cur = pd.read_csv(
         solution_path + 'snapshots/csv/nodal_values/u_msh_n_' + n_snapshot + '.csv', usecols=columns_v)
+
     data_sigma = pd.read_csv(
         solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
 
@@ -151,13 +163,11 @@ def plot_snapshot(fig, n_file, snapshot_label):
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
              [1], snapshot_label, fontsize=8, ha='center', va='center')
 
-    # gr.set_2d_axes_limits(ax, [0, 0], [parameters['L'], parameters['h']], [0, 0])
-
-    # plot mesh for elastic problem and for mesh oustide the elastic body
-    gr.plot_2d_mesh(ax, data_el_line_vertices,
-                    parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'])
-    gr.plot_2d_mesh(ax, data_msh_line_vertices,
-                    parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
+    # 1) plot the polygon of the boundary 'ellipse_loop_id'
+    #
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
+        data_u_msh_cur)
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
         data_v,
@@ -166,13 +176,35 @@ def plot_snapshot(fig, n_file, snapshot_label):
         parameters['n_bins_v']
     )
 
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
+    data_def_boundary_vertices_ellipse = []
+    for _, row in data_boundary_vertices_ellipse.iterrows():
+        data_def_boundary_vertices_ellipse.append(
+            np.add(
+                [row[':0'], row[':1']],
+                [U_interp_x(row[':0'], row[':1']),
+                 U_interp_y(row[':0'], row[':1'])]
+            )
+        )
+
+
+    # set to nan the values of V_x and V_y which lie inside the polygon defined by data_def_boundary_vertices_ellipse
+    vp.set_in_polygon(data_def_boundary_vertices_ellipse,
+                      [X, Y],
+                      [V_x, V_y])
+    
+
+    # plot mesh for elastic problem and for mesh oustide the elastic body
+    gr.plot_2d_mesh(ax, data_el_line_vertices,
+                    parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'],
+                    zorder=2)
+    gr.plot_2d_mesh(ax, data_msh_line_vertices,
+                    parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
+
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
-    '''
-    norm_v_min_max= [norm_v_min, norm_v_max]     
-    '''
 
-    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
+    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh_cur,
                                                                          [0, 0],
                                                                          [parameters['L'],
                                                                              parameters['h']],
@@ -191,9 +223,17 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.set_inside_ellipse(
         X_ref, Y_ref, parameters['c'], parameters['a'], parameters['b'], 0, V_y, np.nan)
 
+    norm_v_min_max = [norm_v_min, norm_v_max]
+
     # plot velocity of fluid
-    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['shaft_length'], parameters['head_over_shaft_length'],
-                             parameters['arrow_head_angle'], parameters['arrow_line_width'], 1, 'color_from_map', 0)
+    vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y],
+                             parameters['shaft_length'],
+                             parameters['head_over_shaft_length'],
+                             parameters['arrow_head_angle'],
+                             parameters['arrow_line_width'],
+                             1,
+                             'color_from_map',
+                             0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
@@ -257,7 +297,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     #
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
-        data_u_msh)
+        data_u_msh_cur)
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_def_boundary_vertices_ellipse = []
@@ -325,7 +365,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
-              parameters['T'] / number_of_frames, 'min_s', parameters['n_decimals_snapshot_label']))
+              solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')

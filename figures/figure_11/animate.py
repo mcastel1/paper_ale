@@ -58,6 +58,12 @@ axis_min_max_abs = cal.X_curr_min_max_abs(
                                             plot.parameters['n_bins_v_fl']
                                         )
 
+'''
+0 =
+[-2.220446049250313e-15, 1.0000000000000044]
+1 =
+[-4.263256414560601e-14, 0.6938291116765043]
+'''
 
 norm_v_fl_min_max_abs = cal.norm_min_max_files('def_v_fl_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
 w_min_max_abs = cal.min_max_files('w_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])

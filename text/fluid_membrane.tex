@@ -201,7 +201,7 @@ The equation of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid
     \centering
     \includegraphics[width=\textwidth]{figures/figure_5/figure_5.pdf}
     \caption{
-        Interaction between a \Acf{bflu}  and a \acf{mem}.
+        Interaction between a \acf{bflu}  and a \acf{mem}. Here, \ac{bflu} is air, and \ac{mem} an elastomer, and the \ac{bflu} Reynolds number is $R \sim 200$.
         \plab{A}  \Acf{ref} and \acf{cur} configuration of \ac{mem} (red and green curve, respectively), and \ac{mem} displacement field $\bumem$ (black arrows).
         \plab{B} Stretch field of \ac{mem}.
         \plab{C} Tangent angle of \ac{mem}.
@@ -352,11 +352,13 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
 \end{itemize}
 
 
+An example of this dynamics is shown in \cref{fig_fluid_mem}, where we show the interaction between air (\ac{bflu}) and an elastomer (\ac{mem}).
+
+The  channel has dimensions $L = 1 \, \met$, $h = 0.2 \, \met$.
+The \ac{mem} parameters are as follows: The bending rigidity has been estimated from the relation $\kap = E \delta^3/[12(1-\nu^2)]$, which expresses the bending rigidity $\kap$ as a function of the Young modulus $E$, the Poisson ratio $\nu$, and the thickness $\delta$ of  \ac{mem} \cite{landauTheoryElasticity1986}. Typical values for an elastomer   are $E \sim 10^7 \, \pas$ \cite{fengPreparationCharacterizationSilicone2017} and $\nu \sim 0.5$ \cite{mullerQuickAccurateMethod2019}, where we chose $\delta \sim 10^{-3}\, \met$, yielding $\kap = 10^{-3} \, \kg \, \met^3/\sec^2$.
+We chose $\rhom = 1 \, \kg /  \met$ and $\etam = 1 \, \kg\, \met /\sec $ as the density and viscosity of an elastomer, respectively \cite{caiSoftPolydimethylsiloxaneElastomers2015,pochivalovDevelopmentVibrationDamping2021},  and we take $\sigmaml = 1 \, \newt$.
+The \ac{bflu} parameters have been estimated from the air parameters:  $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-5} \, \kg / \sec$ \cite{hilsenrath1955tables}.
+Also, we take $\sigmafbottomc = - 1 \, \newt / \met^2$,
 %sign
-An example of this dynamics is shown in \cref{fig_fluid_mem}, where we show the interaction between a light gas (\ac{bflu}) and an elastomer (\ac{mem}).  The  channel has dimensions $L = 1 \, \met$, $h = 0.2 \, \met$.  The bending rigidity has been estimated from the relation $\kap = E \delta^3/[12(1-\nu^2)]$, which relates the bending rigidity $\kap$ to the Young modulus $E$, the Poisson ratio $\nu$, and the thickness $\delta$ of  \ac{mem} \cite{landauTheoryElasticity1986}. Typical values for an elastomer   are $E \sim 10^7 \, \pas$ and $\nu \sim 0.5$, where we chose $\delta \sim 10^{-3}\, \met$, yielding $\kap = 10^{-3} \, \kg \, \met^3/\sec^2$.
-
-$\rhom = 1 \, \kg/\met$.
-
-$\etam = 1 \, \kg\, \met /\sec $, and $\sigmaml = 1 \, \newt$.
-The \ac{bflu} parameters are $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-3} \, \kg / \sec$,  $\sigmafbottomc = - 1 \, \newt / \met^2$, and $\vfbottom^1 =0$, $\vfbottom^2(\bxc) =  \frac{3}{2}  \xc^1 (2 L -\xc^1) v_0$, where $v_0 = 10^{-1}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
+and $\vfbottom^1 =0$, $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc^1 (2 L -\xc^1) v_0$, where $v_0 = 10^{-2}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
 
