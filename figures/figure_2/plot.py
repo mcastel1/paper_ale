@@ -22,11 +22,11 @@ import system.paths as paths
 import system.utils as sys_utils
 
 '''
-to copy data for this figure from abacus, do: 
+to copy data for this figure from abacus, do:
  ./copy_from_abacus.sh rigid_obstacle_1/solution/snapshots/csv 'def_v_n_*' 'u_n_*' 'line_mesh_n_*' 'def_sigma_n_12_*' ~/Desktop 0 10000 10
  rsync -avr mcastel1@abacus:rigid_obstacle_1/solution/theta_omega.csv ~/Documents/paper_ale/figures/figure_2/solution
 
-Parameter meaning: 
+Parameter meaning:
 - solution_stride: the stride with which data were saved as during the solution of the finite-element problem
 - animation_stride: the stride with which frames will be read by animate.py to generate the animation
 '''
@@ -62,6 +62,8 @@ print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
 parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
 
 solution_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), "solution/")
@@ -157,9 +159,9 @@ def plot_snapshot(fig, n_file,
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
-                          parameters['b'], data_theta_omega.loc[int(n_file/parameters['solution_frame_stride']-1), 'theta'], V_x, np.nan)
+                          parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_x, np.nan)
     gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
-                          parameters['b'], data_theta_omega.loc[int(n_file/parameters['solution_frame_stride']-1), 'theta'], V_y, np.nan)
+                          parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
 
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
@@ -172,7 +174,6 @@ def plot_snapshot(fig, n_file,
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
                         line_width=parameters['v_colorbar_line_width'],
-                        custom_ticks=parameters['v_colorbar_custom_ticks'],
                         tick_label_format=parameters['v_colorbar_tick_label_format'],
                         axis=v_colorbar_axis)
 
@@ -180,9 +181,9 @@ def plot_snapshot(fig, n_file,
     focal_point_position = [
         parameters['c'][0] - np.sqrt(parameters['a']**2-parameters['b']**2), parameters['c'][1]]
     theta_1 = min(0, data_theta_omega.loc[int(
-        n_file/parameters['solution_frame_stride']-1), 'theta'])
+        n_file/solution_parameters['print_out_stride']-1), 'theta'])
     theta_2 = max(0, data_theta_omega.loc[int(
-        n_file/parameters['solution_frame_stride']-1), 'theta'])
+        n_file/solution_parameters['print_out_stride']-1), 'theta'])
 
     ax.scatter(focal_point_position[0], focal_point_position[1],
                color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'])
@@ -201,7 +202,7 @@ def plot_snapshot(fig, n_file,
     # 2) plot moving axis
     delta = np.dot(
         gr.R_2d(data_theta_omega.loc[int(
-            n_file/parameters['solution_frame_stride']-1), 'theta']),
+            n_file/solution_parameters['print_out_stride']-1), 'theta']),
         [parameters['angle_axis_length'], 0]
     )
 
@@ -238,11 +239,13 @@ def plot_snapshot(fig, n_file,
                     axis_label_offset=parameters['axis_label_offset'],
                     axis_origin=parameters['axis_origin'],
                     plot_label=parameters["v_plot_panel_label"],
-                    plot_label_offset=parameters['v_plot_panel_label_position'],
+                    plot_label_offset=parameters['panel_label_position'],
                     plot_label_font_size=parameters['panel_label_font_size'],
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length'],
-                    tick_label_angle=parameters['tick_label_angle'])
+                    tick_label_angle=parameters['tick_label_angle'],
+                    colorbar_axis=v_colorbar_axis,
+                    colorbar_axis_offset=parameters['colorbar_axis_offset'])
 
     # =============
     # sigma subplot
@@ -313,6 +316,7 @@ def plot_snapshot(fig, n_file,
         tick_length=parameters['sigma_colorbar_tick_length'],
         tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
         label=parameters['sigma_colorbar_axis_label'],
+        tick_label_format=parameters['sigma_colorbar_tick_label_format'],
         mappable=contour_plot,
         axis=sigma_colorbar_axis
     )
@@ -328,15 +332,17 @@ def plot_snapshot(fig, n_file,
                     axis_label_offset=parameters['axis_label_offset'],
                     axis_origin=parameters['axis_origin'],
                     plot_label=parameters["sigma_plot_panel_label"],
-                    plot_label_offset=parameters['v_plot_panel_label_position'],
+                    plot_label_offset=parameters['panel_label_position'],
                     plot_label_font_size=parameters['panel_label_font_size'],
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length'],
-                    tick_label_angle=parameters['tick_label_angle'])
+                    tick_label_angle=parameters['tick_label_angle'],
+                    colorbar_axis=sigma_colorbar_axis,
+                    colorbar_axis_offset=parameters['colorbar_axis_offset'])
 
 
 plot_snapshot(fig, parameters['snapshot_to_plot'],
-              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * parameters['T'] / parameters['num_steps'], 'min_s', 0))
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
