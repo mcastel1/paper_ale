@@ -227,6 +227,14 @@ def plot_snapshot(fig, n_file):
 
     ax.add_patch(partial_omega_circle_out_ref)
 
+    # plot the label for the region \Omega_reference
+    ax.text(0 + parameters['omega_label_position'][0] * parameters['L'],
+            0 + parameters['omega_label_position'][1] *
+            parameters['h'], rf'$\omr$',
+            fontsize=parameters['omega_label_font_size'],
+            ha='center',
+            va='center')
+
     # Create custom legend handles
     handles, labels = ax.get_legend_handles_labels()
 
@@ -398,6 +406,14 @@ def plot_snapshot(fig, n_file):
                                                        linestyle='-.')
 
     ax.add_patch(partial_omega_circle_out_cur)
+
+    # plot the label for the region \Omega_current
+    ax.text(0 + parameters['omega_label_position'][0] * parameters['L'],
+            0 + parameters['omega_label_position'][1] *
+            parameters['h'], rf'$\omc',
+            fontsize=parameters['omega_label_font_size'],
+            ha='center',
+            va='center')
 
     # Create custom legend handles
     handles, labels = ax.get_legend_handles_labels()

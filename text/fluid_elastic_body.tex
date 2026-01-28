@@ -11,7 +11,7 @@ The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. H
         \includegraphics[width=\textwidth]{figures/figure_7/figure_7.pdf}
         \caption{
                 \label{fig_ref_curr_ela}
-                \Acl{ref} and \acl{cur} configuration for the interaction between a  \acl{bflu} and an \acl{ela}. The figures follows the same notation as \cref{fig_ref_curr_rigid}. In panels \textbf{A} and \textbf{B}, the domains $\omr$ and $\omc$ are the regions covered by the mesh, respectively.
+                \Acl{ref} and \acl{cur} configuration for the interaction between a  \acl{bflu} and an \acl{ela}. The figures follows the same notation as \cref{fig_ref_curr_rigid}.
         }
 \end{figure*}
 
@@ -48,9 +48,10 @@ The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
         \label{bc_fl_ela_1_current}
         \buela(\bxr)                                                                                                              & =0               \text{ on }\pomcircineqr,   \\
         \label{bc_fl_ela_2_current}
-        \epsilon_{\beta \gamma} \left. \Sela_{\alpha \beta}(\buela^t)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\                 & =    \newlinenn
+        \left. \Sela_{\alpha \beta}(\buela^t)\right|_{\bxr = \bxi{s}} \epsilon_{\beta \gamma} \der{\xi^\gamma}{s}\                & =    \newlinenn
         \sigmastressc_{\alpha \beta}(\bm{\varphi}^t(\bxi{s})) \epsilon_{\beta \gamma} \der{{\varphi}^{t, \, \gamma} (\bxi{s})}{s} & \text{ on } \pomcircouteqr.                &
 \end{align}
+In the \ac{lhs} of \cref{bc_fl_ela_2_current}, the quantity $\epsilon_{\beta \gamma} \der{\xi^\gamma}{s}$ represents the unit normal to $\pomcircouteqr$, and similarly for the \ac{rhs}.
 
 
 Finally, the equations of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot}, with \acp{bc} \crefs{bc_ela_1,bc_ela_1_dot} and
@@ -128,6 +129,6 @@ The \ac{bflu} inflow velocity profile is  a Poiseuille flow, \cref{eq_inflow_pro
         \includegraphics[width=\textwidth]{figures/figure_10/figure_10.pdf}
         \caption{
                 \label{fig_fluid_ela}
-                Interaction between a \acl{bflu} and an \acl{ela} (a hydrogel). The notation is the same as in \cref{fig_fluid_rigid}, and the \acl{ela} is depicted as a red mesh. Here, the Reynolds number is $R \sim 2 \times 10^2$.
+                Interaction between a \acl{bflu} and an \acf{ela} (a hydrogel). The notation is the same as in \cref{fig_fluid_rigid}, and the \acl{ela} is depicted as a red mesh. Here, the Reynolds number is $R \sim 2 \times 10^2$.
         }
 \end{figure*}
