@@ -83,7 +83,12 @@ def update_animation(n):
     start_time = time.time()
 
     # clear only the major axes of the plot. The colorbar axes need not be cleaned because make_colorbar already clears them
-    for ax in plot.fig.axes[:5]:
+    # Clear ProPlot's internal legend registry first
+    for ax in plot.fig.axes:
+        if hasattr(ax, '_legend_dict'):
+            ax._legend_dict.clear()
+        if hasattr(ax, '_colorbar_dict'):
+            ax._colorbar_dict.clear()
         ax.clear()
         
     # Clear text objects (the snapshot label accumulates)
@@ -94,7 +99,7 @@ def update_animation(n):
     text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour", "\met"])
 
     plot.plot_snapshot(plot.fig, n, 
-                    snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 's', plot.parameters['n_decimals_snapshot_label']),
+                    snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 'min_s', plot.parameters['n_decimals_snapshot_label']),
                     axis_min_max=axis_min_max_abs,
                     norm_v_min_max=norm_v_min_max_abs,
                     norm_v_fl_min_max=norm_v_fl_min_max_abs,
