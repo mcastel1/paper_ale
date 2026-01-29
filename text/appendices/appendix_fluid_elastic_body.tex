@@ -1,3 +1,5 @@
+
+
 \section{Fluid and elastic body}\label{sec_fl_elastic}
 
 \subsection{Equations of motion}
@@ -21,7 +23,7 @@ Also, $\buela$ is the deformation field of \ac{ela}, which is defined along the 
 The \ac{ela} stress tensor is derived from a compressible neo-Hookean model \cite{bazilevsIsogeometricFluidstructureInteraction2008}, and it reads
 \begin{align}
     \label{eq_def_S_neo_hookean}
-    \Sela_{\alpha \beta} \equiv \frac{\muel}{\det(F)}\left(- \frac{1}{2} C_{\gamma \gamma} G_{\alpha \beta} + F_{\beta \alpha}\right) + & \newlinenn
+    \Sela_{\alpha \beta} \equiv \frac{\muel}{\det F }\left(- \frac{1}{2} C_{\gamma \gamma} G_{\alpha \beta} + F_{\beta \alpha}\right) + & \newlinenn
     \kel [(\det(F))^2-1] G_{\alpha \beta},
 \end{align}
 where
@@ -29,7 +31,7 @@ where
 \label{eq_def_C}
 C_{\alpha \beta } \equiv \delta_{\alpha \beta} + 2 E_{\alpha \beta}.
 \ee
-We have chosen this model because it is stable under compression, i.e., its potential energy diverges as $\det(F) \rightarrow 0$ \cite{bazilevsIsogeometricFluidstructureInteraction2008}. As opposed to linear models \cite{landauTheoryElasticity1986} and to the elastic model of  \cref{sec_eq_fluid_domain}, this model  proves to yield a stable dynamics for \ac{ela} as it is compressed  by  \ac{bflu}, see below and \cref{fig_fluid_ela}.
+We have chosen this model because it is stable under compression, i.e., its potential energy diverges as $\det F \rightarrow 0$ \cite{bazilevsIsogeometricFluidstructureInteraction2008}. As opposed to linear models \cite{landauTheoryElasticity1986} and to the elastic model of  \cref{sec_eq_fluid_domain}, this model  proves to yield a stable dynamics for \ac{ela} as it is compressed  by  \ac{bflu}, see below and \cref{fig_fluid_ela}.
 The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
 \begin{align}
     \label{bc_fl_ela_1_current}
@@ -103,3 +105,5 @@ The system dynamics is obtained as follows: given $\bvfr^{n-1}$, $\sigmafr^{n-3/
 
 
     }\end{itemize}
+
+%sign
