@@ -16,58 +16,8 @@ The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. H
 \end{figure*}
 
 %M revise to embed in text
-The equations of motion are reported in \cref{app_sec_fl_elastic_equations_of_motion}.
+The equations of motion are reported in \cref{app_sec_fl_elastic_equations_of_motion}, and the system dinamics is discussed in \cref{app_sec_fl_elastic_dynamics}.
 
-
-
-The system dynamics is obtained as follows: given $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, $\buela^{n-1}$, $\bueladot^{n-1}$, $\budomdot^{n-1}$ and $\budomdot^{n-1}$  from the preceding step, we
-\begin{itemize}
-        \titleditem{Update \ac{ela}}{ \label{fl_ela_step_1}
-                Solve for $\buela^n$ and $\bueladot^n$ the discrete version of \cref{eq_fl_elastic_ela_current}
-                \begin{align}
-                        \label{eq_fl_elastic_ela_current_disc_1}
-                        \rhoela \frac{\ueladot^{n, \, \alpha} -  \ueladot^{n-1, \, \alpha}}{\deltat} & = \pderr{\Sela_{\alpha \beta}(\buela^n)}{\beta}, \\
-                        \label{eq_fl_elastic_ela_current_disc_2}
-                        \frac{\buela^n -  \buela^{n-1}}{\deltat}                                     & = \bueladot,
-                \end{align}
-                with \acp{bc} obtained from \cref{bc_fl_ela_1_current,bc_fl_ela_2_current}:
-                \bw
-                \begin{align}
-                        \label{bc_fl_ela_1_current_disc}
-                        \buela^n                                                                                                                                                                                                               & =  0          \text{ on }\pomcircineqr, \\
-                        \label{bc_fl_ela_2_current_disc}
-                        \epsilon_{\beta \gamma} \, \left. \Sela_{\alpha \beta}(\buela^n)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\                                                                                                           & =  \newlinenn
-                        \sigmastressr_{\alpha \beta}(\bxi{s};\bvfr^{n-1}, \sigmafr^{n-3/2}, \buela^n) \epsilon_{\beta \gamma} \left. F_{\gamma \delta}(\bu_\ela^{n-1})\right|_{\bxr = \bxi{s}}\der{ \xi^\delta}{s}  \text{ on } \pomcircouteqr & .
-                \end{align}
-                \ew
-                In \cref{bc_fl_ela_2_current_disc}, we have used \cref{eq_def_phi,eq_def_F} to rewrite the derivative of ${\bm \phi}(\bxi{s})$.
-
-
-
-        }
-        \titleditem{Update \ac{dom}}{ \label{fl_ela_step_2}
-                Solve for $\budom^n$ and $\budomdot^n$ the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot}  with \acp{bc} \crefs{bc_ela_1_disc}, \crefs{bc_ela_1_disc_dot} and
-                \begin{align}
-                        \label{bc_ela_3_disc}
-                        \budom^n    & = \buela^n \text{ on } \pomcircouteqr,    \\
-                        \label{bc_ela_3_dot_disc}
-                        \budomdot^n & = \bueladot^n \text{ on } \pomcircouteqr.
-                \end{align}
-        }
-
-
-        \titleditem{Update \ac{bflu}}{
-                \label{fl_ela_step_3}
-                Solve the \acp{bvp} given by  \crefs{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} and \acp{bc}
-                \crefs{bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux,bc_phi_1,bc_phi_2} and
-                \be
-                \label{bc_fl_ela_4_current_disc}
-                \bvbarf = \bueladot^n  \text{ on }  \pomcircouteqr,
-                \ee
-                which replaces \cref{bc_fl_rigid_5_reference_disc_aux} for a rigid body, and solve \cref{eq_phi_1}.
-
-
-        }\end{itemize}
 
 
 An example of the coupled dynamics of \ac{bflu} and \ac{ela} is shown in \cref{fig_fluid_ela}, where we show the interaction of a \ac{bflu} with a hydrogel (\ac{ela}).
