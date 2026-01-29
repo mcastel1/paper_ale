@@ -7,7 +7,6 @@ import os
 import numpy as np
 import pandas as pd
 import proplot as pplt
-import sys
 import warnings
 
 import calculus.utils as cal
@@ -187,12 +186,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
             )
         )
 
-
     # set to nan the values of V_x and V_y which lie inside the polygon defined by data_def_boundary_vertices_ellipse
     vp.set_in_polygon(data_def_boundary_vertices_ellipse,
                       [X, Y],
                       [V_x, V_y])
-    
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_el_line_vertices,
@@ -263,7 +260,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     plot_label_font_size=parameters['panel_label_font_size'],                    n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-
+    '''
     # =============
     # sigma subplot
     # =============
@@ -362,6 +359,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
+    '''
 
 
 plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
