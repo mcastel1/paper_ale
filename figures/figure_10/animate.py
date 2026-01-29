@@ -1,6 +1,5 @@
 import matplotlib.animation as ani
 import os
-import system.utils as sys_utils
 import time
 
 import input_output.utils as io
