@@ -51,10 +51,7 @@ The solution of the interaction dynamics between \ac{bflu} and \ac{rig} is  invo
 \end{figure*}
 
 %M revise to embed in text
-Details on the motion of \ac{rig} can be found in \cref{sec_rigid_body_body}.
-Details on the motion of \ac{bflu} can be found in \cref{sec_rigid_body_fl}.
-Details on the motion of \ac{dom} can be found in \cref{sec_eq_fluid_domain}.
-Details on the temporal discretization can be found in \cref{sec_temp_discretization}.
+Details on the motion of \ac{rig}, \ac{bflu} and \ac{dom} can be found in \cref{sec_rigid_body_body,sec_rigid_body_fl,sec_eq_fluid_domain}, respectively, and the temporal discretization is discussed in \cref{sec_temp_discretization}.
 
 
 
@@ -71,11 +68,6 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
                 Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbarf$ and $\sigmafr^{n-1/2}$, and obtain $\bm \vfr^n$ from \cref{eq_phi_1}.
         }
 \end{enumerate}
-
-
-
-
-
 
 The fields ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.
 
