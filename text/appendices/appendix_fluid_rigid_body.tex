@@ -391,3 +391,14 @@ and that of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1
     \label{bc_ela_2_disc_dot}
     \budomdot  ^n                                                & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
 \end{align}
+
+\subsection{Characteristic time scale}
+\label{sec_fluid_rigid_timescale}
+
+As shown in \cref{fig_fluid_rigid_timescale}, the dynamics of \cref{fig_fluid_rigid} involves a characteristic time scales $\tbody$, i.e., the period of the angular oscillations of \ac{bod}. This time scale can be estimated by considering the dynamical equation \crefs{eq_fl_rigid_rigid_current_1} for \ac{bod}, and approximating its \ac{lhs} as $I / \tbody^2$ and its \ac{rhs} as $ (\etaf v_0 /a \, 2 \pi a) a$. Here,  $\etaf v_0 /a$ is the viscous component of the force per unit length exerted by \ac{bflu} on \ac{bod}, cf. \cref{eq_strees_tensor_fluid}, $2 \pi a$ estimates the total length of the boundary of \ac{bod}, and $a$ approximates the lever arm of the force above. Putting everything together, we obtain
+\be
+\label{eq_expressions_tau_short}
+\tbody \sim \sqrt{\frac{I}{2 \pi a \etaf v_0 }}.
+\ee
+For the parameters of \cref{fig_fluid_rigid}, \cref{eq_expressions_tau_short} yields $\tbody \sim 130 \, \sec$, which is in agreement with the  period of the oscillations in \cref{fig_fluid_rigid_timescale}.
+

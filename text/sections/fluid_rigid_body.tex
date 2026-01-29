@@ -5,7 +5,7 @@ In this Section, we will discuss the interaction between a  \ac{bflu} and the si
 
 In all the systems that we will consider, we will introduce the \ac{ref} and \ac{cur} configuration \cite{kamenskyLectureNotesMAE,landauTheoryElasticity1986,slaughterLinearizedTheoryElasticity2002}, see \cref{fig_ref_curr_rigid}. All quantities relative to the \ac{ref} and \ac{cur} configuration will be denoted by the superscript \ac{ref} and \ac{cur}, respectively.
 In the \ac{ref} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxr$. The  axis of the ellipse, e..g, the rigid body, lies parallel to the $\xc^1$ axis.
-In the \ac{cur} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxc$. The  axis of the e`llipse, e..g, the rigid body, forms an angle  $\theta$ (red arc) with respect to the $\xc^1$ axis.
+In the \ac{cur} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxc$. The  axis of the ellipse, e..g, the rigid body, forms an angle  $\theta$ (red arc) with respect to the $\xc^1$ axis.
 
 
 The \ac{ref} configuration, is related to the \ac{cur} one as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr_rigid}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the reference configuration through the deformation field \cite{landauFluidMechanics1987}
@@ -73,24 +73,22 @@ We can now iterate in time for the ensemble of fields as follows. At each step $
 \end{enumerate}
 
 
+
+
+
+
 The fields ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.
+
+
+
 
 An example of such dynamics is shown in \cref{fig_fluid_rigid}, where we study the interaction between air (\ac{bflu}) and an aerogel (\ac{rig})---an ultra light solid material involving a large porous structure \cite{kistlerCoherentExpandedAerogels1931}. The channel  dimension are $L = 2.2 \, \met$, $h =  0.41 \, \met$, which have been taken from the \ac{feat2d} DFG 2D-3 benchmark example for a fuid flow around a cylinder \cite{blumFEAT2DFiniteElement1995,schaferBenchmarkComputationsLaminar1996}, see  \cref{fig_ref_curr_rigid}. Given that the materials, such as \ac{bflu} and \ac{bod}, are two dimensional, in what follows we will estimate their parameter values by considering their three-dimensional counterparts, and assume a unit thickness in the out-of-plane direction.
 The parameters for \ac{bod} have been estimated from the  properties of air: $\rhof = 1 \, \kg / \met^2$, $\etaf = 10^{-5} \, \pas\, \met \, \sec$ \cite{hilsenrath1955tables}. The  inflow velocity profile is chosen as a Poiseuille flow
 \be\label{eq_inflow_profile}
 \vfin(\bxc) = \frac{6 v_0}{h^2} \xc^2 (\xc^2 - h),
 \ee
-with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-3} \,  \kg \, \met^2$, which corresponds to an aerogel density of $\sim 6 \, \kg/\met^3$ \cite{niculescuUpdatedOverviewSilica2024}. \\
+with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-3} \,  \kg \, \met^2$, which corresponds to an aerogel density of $\sim 6 \, \kg/\met^3$ \cite{niculescuUpdatedOverviewSilica2024}. As shown in \cref{fig_fluid_rigid_timescale},  \ac{rig}  has an oscillatory dynamics, whose period can be understood with scaling arguments---see \cref{sec_fluid_rigid_timescale}.
 
-\begin{figure*}
-        \centering
-        \includegraphics[width=\textwidth]{figures/figure_2/figure_2.pdf}
-        \caption{
-                \label{fig_fluid_rigid}
-                Interaction between a  \acf{bflu} and a rigid \acf{rig}, whose material properties roughly correspond to air (\ac{bflu}) and an aerogel (\ac{rig}).  \plab{A} Temporal snapshot of the mesh (black lines) and  velocity field (arrows) at the \acl{cur} time $t$, shown on top. The direction of the velocity field is indicated by the arrows, and its norm by their color; the direction of arrows with velocity close to zero is not defined. Here,  \ac{rig} (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $\xc^1$ direction is denoted by a red arc.  Here, the Reynolds number is $R \sim 2 \times 10^2$.
-                \plab{B} Color map of the surface tension at the \acl{cur} instant of time $t$.
-        }
-\end{figure*}
 
 \begin{figure}
         \centering
@@ -101,16 +99,14 @@ with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chos
         }
 \end{figure}
 
-As shown in \cref{fig_fluid_rigid_timescale}, the dynamics of \cref{fig_fluid_rigid} involves a characteristic time scales $\tbody$, i.e., the period of the angular oscillations of \ac{bod}. This time scale can be estimated by considering the dynamical equation \crefs{eq_fl_rigid_rigid_current_1} for \ac{bod}, and approximating its \ac{lhs} as $I / \tbody^2$ and its \ac{rhs} as $ (\etaf v_0 /a \, 2 \pi a) a$. Here,  $\etaf v_0 /a$ is the viscous component of the force per unit length exerted by \ac{bflu} on \ac{bod}, cf. \cref{eq_strees_tensor_fluid}, $2 \pi a$ estimates the total length of the boundary of \ac{bod}, and $a$ approximates the lever arm of the force above. Putting everything together, we obtain
-\be
-\label{eq_expressions_tau_short}
-\tbody \sim \sqrt{\frac{I}{2 \pi a \etaf v_0 }}.
-\ee
-For the parameters of \cref{fig_fluid_rigid}, \cref{eq_expressions_tau_short} yields $\tbody \sim 130 \, \sec$, which is in agreement with the  period of the oscillations in \cref{fig_fluid_rigid_timescale}.
 
-% Second, $\tlong$  can be estimated by building a combination of the material parameters $\rhof$, $\etaf$ and $I$ of the model. The only parameter combination that can yield a quantity with the dimensions of a time is
-% \be
-% \label{eq_def_tau_long}
-% \tlong \sim \frac{\sqrt{\rhof I }}{\etaf}.
-% \ee
-% For the parameters of \cref{fig_fluid_rigid}, \cref{eq_def_tau_long} yields $\tlong \sim 316 \, \sec$, which is roughly the timescale at which the width of the oscillations in \cref{fig_fluid_rigid_timescale} is dampened out.
+
+\begin{figure*}
+        \centering
+        \includegraphics[width=\textwidth]{figures/figure_2/figure_2.pdf}
+        \caption{
+                \label{fig_fluid_rigid}
+                Interaction between a  \acf{bflu} and a rigid \acf{rig}, whose material properties roughly correspond to air (\ac{bflu}) and an aerogel (\ac{rig}).  \plab{A} Temporal snapshot of the mesh (black lines) and  velocity field (arrows) at the \acl{cur} time $t$, shown on top. The direction of the velocity field is indicated by the arrows, and its norm by their color; the direction of arrows with velocity close to zero is not defined. Here,  \ac{rig} (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $\xc^1$ direction is denoted by a red arc.  Here, the Reynolds number is $R \sim 2 \times 10^2$.
+                \plab{B} Color map of the surface tension at the \acl{cur} instant of time $t$.
+        }
+\end{figure*}
