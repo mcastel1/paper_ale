@@ -50,55 +50,8 @@ The solution of the interaction dynamics between \ac{bflu} and \ac{rig} is  invo
         }
 \end{figure*}
 
-\subsection{\Acl{rig} motion}\label{sec_rigid_body_body}
-
-In this Section, we will work out the equations of motion for \ac{rig}.
-
-\subsubsection{Equation of motion in the \acl{cur}-configuration coordinates}\label{sec_rigid_body_body_current}
-
-The dynamics of  \ac{rig} is given by the equations of motion for a rigid body which, in \ac{cur} coordinates, read \cite{goldsteinClassicalMechanics2004}
-
-\begin{align}
-        \label{eq_fl_rigid_rigid_current_1}
-        I         \der{\omega}{t}
-               & =                                                                                             - \int_\pomellipseeqc \dint{l_\current} \, \epsilon_{3 \alpha \beta} \, \sigmastressc_{\beta \gamma} \normalc{\gamma} , \\
-        \label{eq_fl_rigid_rigid_current_2}
-        \omega & \equiv \der{\theta}{t}.
-\end{align}
-\Cref{eq_fl_rigid_rigid_current_1} relates the angular acceleration of \ac{rig} to the torque of external forces.
-In what follows, greek indices $\alpha, \beta, \cdots$ will be used to denote vectors and tensors in  two-dimensional Euclidean space---their position as upper or lower indices is thus immaterial \cite{marchiafavaAppuntiDiGeometria2005,landauTheoryElasticity1986}.
-The moment of inertia of \ac{rig} is denoted by $I$. The \ac{rhs} of \cref{eq_fl_rigid_rigid_current_1} contains the line integral along the boundary of \ac{rig}, of the torque of the local force exerted by  \ac{bflu} on  \ac{rig} with respect to the left focal point $\bfocalpoint$ of \ac{rig} \cite{landauFluidMechanics1987}. This force is expressed in terms of the \ac{bflu} stress tensor \cite{landauFluidMechanics1987}
-\be
-\label{eq_strees_tensor_fluid}
-\sigmastressc_{\alpha \beta } \equiv \sigmafc \delta_{\alpha \beta}+ \eta_\fluid\left( \pderc{ \vfc^\alpha}{\beta} +\pderc{ \vfc^\beta}{\alpha}\right),
-\ee
-where $\epsilon_{\alpha \beta \gamma}$ is the three-dimensional Levi-Civita symbol, and $\etaf$ the two-dimensional viscosity of \ac{bflu}. Finally,   $\dint{l_\current}$ is the line element of \pomellipsec in the \ac{cur} configuration, and $\bnormalc$ the unit boundary normal to \pomellipsec pointing outside $\omc$.
-
-
-
-\subsubsection{Equation of motion in the \acl{ref}-configuration coordinates}\label{sec_rigid_body_body_reference}
-
-\bw
-\begin{align}
-        \label{eq_fl_rigid_rigid_reference}
-        I \der{\omega}{t} & =                                               \newlinenn
-        \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \varphi^{\alpha, \, t}(\bxi{s}) - \focalpoint^\alpha \right] \sigmastressr_{\beta \gamma}(\bxi{s}) \epsilon_{\gamma \lambda} F_{\lambda \mu}(\budom^t(\bxi{s})) \der{\xi^\mu(s)}{s}
-\end{align}
-\ew
-
-In \cref{eq_fl_rigid_rigid_reference}, the integral in the \ac{rhs} is over the curvilinear boundary \pomellipser, which is parametrized as $\bxr = \bxi{s}$, where $s$ is the curvilinear coordinate. Also, $\epsilon_{\alpha \beta}$ is the two-dimensional Levi-Civita symbol \cite{marchiafavaAppuntiDiGeometria2005}, and $\sigmastressr$ denotes the stress tensor in the \ac{ref} configuration:
-\begin{align}
-        \label{eq_def_sigma_current}
-        \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
-        =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
-                                                     & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfc^\beta}{\gamma}\Big],
-\end{align}
-where
-\be
-\label{eq_def_G}
-% G^t_{\alpha \beta}(\bxr) \equiv [F(\bu^t(\bxr))]^{-1}_{\alpha \beta}.
-G_{\alpha \beta}(\bu) \equiv [F(\bu)]^{-1}_{\alpha \beta}.
-\ee
+%M revise to embed in text
+Details on the motion of \ac{rig} can be found in \cref{sec_rigid_body_body}.
 
 \subsection{Fluid motion}\label{sec_rigid_body_fl}
 
