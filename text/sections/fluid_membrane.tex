@@ -336,7 +336,14 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
         This step determines the \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$.
     }
     \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
-        We determine the \ac{dom} displacement field and its timer derivative, $\budom^n$ and $\budomdot^n$, from the \ac{bvp} \crefs{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot}, with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
+        We determine the \ac{dom} displacement field and its time derivative, $\budom^n$ and $\budomdot^n$, from the \acp{bvp}
+        \begin{align}
+            \label{eq_domain_fluid_rigid_disc}
+            \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr^\beta}             & = 0 \text{ in } \omr, \\
+            \label{eq_domain_fluid_rigid_disc_dot}
+            \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budomdot^n)}{t} & = 0 \text{ in } \omr,
+        \end{align}
+        with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
         \begin{align}
             \label{bc_fl_mem_dom_1_disc}
             \budom^n                         & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\

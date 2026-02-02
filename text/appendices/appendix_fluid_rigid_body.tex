@@ -326,27 +326,21 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
 
 \subsubsection{\Acl{dom}}
 
-The discrete version of  the \ac{bvp} for $\budom$, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, reads
+
+The discrete version of  the \ac{bvp} for $\budom$, \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, is given by \cref{eq_domain_fluid_rigid_disc} and
 \begin{align}
-    \label{eq_domain_fluid_rigid_disc}
-    \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr^\beta} & = 0 \text{ in } \omr,                                                                            \\
     \label{bc_ela_1_disc}
-    \budom^n                                         & =\bzero \text{ on } \pomsqeqr,                                                                   \\
+    \budom^n & =\bzero \text{ on } \pomsqeqr,                                                                   \\
     \label{bc_ela_2_disc}
-    \budom^n                                         & = \bfocalpoint - \bxr + {\bm R}(\theta^n)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+    \budom^n & = \bfocalpoint - \bxr + {\bm R}(\theta^n)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr.
 \end{align}
-and that of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}, is
+The discrete version of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}, is given by \cref{eq_domain_fluid_rigid_disc_dot} and
 \begin{align}
-    \label{eq_domain_fluid_rigid_disc_dot}
-    \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budomdot^n)}{t} & = 0 \text{ in } \omr,                                                                  \\
     \label{bc_ela_1_disc_dot}
-    \budomdot  ^n                                                & =\bzero \text{ on } \pomsqeqr,                                                         \\
+    \budomdot  ^n & =\bzero \text{ on } \pomsqeqr,                                                         \\
     \label{bc_ela_2_disc_dot}
-    \budomdot  ^n                                                & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr,
+    \budomdot  ^n & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr.
 \end{align}\\
-
-
-
 
 We can now iterate in time for the ensemble of fields  of the \ac{bflu}-\ac{rig} system as follows.
 At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
