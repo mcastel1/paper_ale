@@ -235,7 +235,20 @@ Proceeding along the lines of \cref{sec_fl_mem_dom}, we observe that \cref{eq_de
 \subsection{\Acl{bflu} motion}
 \label{sec_fl_mem_flu}
 
-The \ac{bflu} equations of motion are \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}, with \acp{bc}
+The \ac{bflu} equations of motion are
+% 
+\begin{align}
+    \label{eq_fl_rigid_fl_1_current}
+    \rho_\fluid \left( \partial_t \vfc^\alpha + \vfc^\beta  \pderc{\vfc^\alpha}{\beta} \right) & =  \pderc{  \sigmastressc_{\alpha \beta }}{\beta} ,                                              \\
+    \label{eq_fl_rigid_fl_2_current}
+    \pderc{ \vfc^\alpha }{\alpha}                                                              & =                                                              0                               ,
+\end{align}
+and they hold for $\bxc \in \omc$.
+\Cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} are the \ac{ns} and continuity equations, respectively, in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}---an example of the corresponding  \ac{ns} equations on curved geometry is given by \cref{eq-dyn-v}.
+% 
+
+
+We enforce the following \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}:
 \begin{align}
     \label{bc_fl_membrane_1_current}
     \bvfc             & =  \vfbottom  \text{ on } \pombottomeqc,                                                                 \\
