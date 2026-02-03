@@ -74,7 +74,7 @@ def update_animation(n):
         plot.fig,
         n,
         snapshot_label=rf'$t = \,$' + io.time_to_string(
-            n * plot.solution_parameters['T'] / plot.number_of_frames, 's', plot.parameters['n_decimals_snapshot_label']),
+            n * plot.solution_parameters['T'] / plot.number_of_frames, 'hr_min_s', plot.parameters['n_decimals_snapshot_label']),
         norm_v_min_max=norm_v_min_max_abs
         # sigma_min_max=sigma_min_max_abs
     )

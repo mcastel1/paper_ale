@@ -205,8 +205,6 @@ We impose the following \acp{bc} for  \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_ri
 
 Proceeding along the lines of \cref{sec_fl_mem_dom}, we observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} contains up to second derivatives of $\budom$ and $\budomdot$. As a result, the \acp{bc} \crefs{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8} uniquely determine the solution of the \ac{bvp} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} \cite{evansPartialDifferentialEquations2010}.
 
-%sign
-
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/figure_9/figure_9.pdf}
@@ -235,8 +233,14 @@ Proceeding along the lines of \cref{sec_fl_mem_dom}, we observe that \cref{eq_de
 \subsection{\Acl{bflu} motion}
 \label{sec_fl_mem_flu}
 
-The \ac{bflu} equations of motion are
-% 
+We will now discuss the \ac{bflu} equations of motion, and present them first in \ac{cur} configuration coordinates, and then transform them in \ac{ref} coordinates.
+
+
+\subsubsection{Equations of motion in  \acl{cur} configuration coordinates}
+\label{sec_fl_mem_flu_cur}
+
+In \ac{cur} coordinates, the \ac{bflu} equations of motion are the \ac{ns} and continuity equations \cite{landauFluidMechanics1987}:
+
 \begin{align}
     \label{eq_fl_rigid_fl_1_current}
     \rho_\fluid \left( \partial_t \vfc^\alpha + \vfc^\beta  \pderc{\vfc^\alpha}{\beta} \right) & =  \pderc{  \sigmastressc_{\alpha \beta }}{\beta} ,                                              \\
@@ -244,8 +248,9 @@ The \ac{bflu} equations of motion are
     \pderc{ \vfc^\alpha }{\alpha}                                                              & =                                                              0                               ,
 \end{align}
 and they hold for $\bxc \in \omc$.
-\Cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} are the \ac{ns} and continuity equations, respectively, in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}---an example of the corresponding  \ac{ns} equations on curved geometry is given by \cref{eq-dyn-v}.
-% 
+\Cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} describe the \ac{bflu} motion in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}---an example of the corresponding  \ac{ns} equations on a curved geometry is given by \cref{eq-dyn-v}.
+
+
 
 
 We enforce the following \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}:
@@ -266,11 +271,57 @@ We enforce the following \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid
 
 According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bottom edge of $\omc$, \pombottomc, while \cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left wall \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} result from symmetry.
 \Cref{bc_fl_membrane_5_current} ensures that the motion of \ac{bflu} is conforming to that of \ac{mem}   \cite{kamenskyLectureNotesMAE}: According to  \cref{eq-dyn-dX}, \ac{mem}  only moves normally to its profile; \cref{bc_fl_membrane_5_current} thus ensures that \ac{bflu} stays in contact with \ac{mem} throughout its motion. On the other hand, \cref{bc_fl_membrane_5_current} implies a tangential slip between \ac{mem} and \ac{bflu}, allowing for the tangential part of the \ac{bflu} and \ac{mem} velocities to differ.
-Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension  matches the reservoir's.\vspace{0.5cm}\\
+Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension  matches the reservoir's.
 
 
+\subsubsection{Equations of motion in  \acl{ref} configuration coordinates}
+\label{sec_fl_mem_flu_ref}
 
-The  dynamics of the system is obtained as follows; the derivation is obtained along the lines of \cref{sec_fl_elastic,sec_fl_rigid}, and details can be obtained by referring to those Sections.
+We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem_flu_cur}   in terms of $\bvfr$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} yield, respectively,
+\bw
+\begin{align}
+    \label{eq_fl_rigid_fl_1_reference}
+    \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr^\beta} \right\}                                                       & =              \newlinenn
+    G_{\beta \alpha}(\budom^t(\bxr))  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^t(\bxr))           \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^t(\bxr)) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
+    \label{eq_fl_rigid_fl_2_reference}
+    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                                & = 0,
+\end{align}
+\ew
+which hold in $\omr$. In \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} the tensor $G$ is given by the inverse of $F$ \cite{kamenskyLectureNotesMAE}:
+\be
+\label{eq_def_G}
+G_{\alpha \beta}(\bu) \equiv [F(\bu)]^{-1}_{\alpha \beta}.
+\ee\vspace{5mm}\\
+
+%sign
+
+
+\subsection{Temporal discretization}\label{sec_temp_discretization_mem}
+
+To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discretize time by setting $\deltat \equiv T/N$, $t_n \equiv n\, \deltat$, with $n = 0, 1, \cdots, N$.
+
+We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for \ac{mem}, \ac{dom} and \ac{bflu}.
+The  dynamics of the system is obtained as follows.\\ \vspace{5mm}
+
+
+Following the \ac{cn} temporal-discretization scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  \cite{loggAutomatedSolutionDifferential2012}: For example, we set
+%
+\begin{align}
+    \label{eq_time_step_1}
+    \bvfr^n(\bxr)          & \equiv \bvfr(\bxr, t_n)  ,                               \\
+    \label{eq_time_step_2}
+    \sigmafr^{n-1/2}(\bxr) & \equiv \sigmafr\left(\bxr, \frac{t_n+t_{n-1}}{2}\right),
+\end{align}
+% 
+and similarly for other \ac{bflu} and \ac{mem} fields.
+
+%C add details in these sections - start 
+\subsubsection{\Acl{mem}}\label{sec_temp_discretization_mem_mem}
+\subsubsection{\Acl{dom}}\label{sec_temp_discretization_mem_dom}
+\subsubsection{\Acl{bflu}}\label{sec_temp_discretization_mem_bflu}
+%C add details in these sections - end
+
+
 
 Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step as follows:
 

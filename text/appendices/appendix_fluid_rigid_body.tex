@@ -5,7 +5,7 @@
 
 In this Section, we will work out the equations of motion for \ac{rig}.
 
-\subsubsection{Equation of motion in the \acl{cur}-configuration coordinates}\label{sec_rigid_body_body_current}
+\subsubsection{Equation of motion in  \acl{cur}-configuration coordinates}\label{sec_rigid_body_body_current}
 
 The dynamics of  \ac{rig} is given by the equations of motion for a rigid body which, in \ac{cur} coordinates, read \cite{goldsteinClassicalMechanics2004}
 
@@ -44,11 +44,7 @@ In \cref{eq_fl_rigid_rigid_reference}, the integral in the \ac{rhs} is over the 
     =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
                                                  & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfc^\beta}{\gamma}\Big],
 \end{align}
-where
-\be
-\label{eq_def_G}
-G_{\alpha \beta}(\bu) \equiv [F(\bu)]^{-1}_{\alpha \beta}.
-\ee
+where $G$ is given by \cref{eq_def_G}.
 
 
 
@@ -100,19 +96,8 @@ Finally, \cref{bc_fl_rigid_5_current,bc_fl_rigid_6_current} ensure, respectively
 \subsubsection{Equations of motion in the \acl{ref}-configuration coordinates}\label{sec_rigid_body_fl_ref}
 
 
-We will now rewrite the equations of motion and the \acp{bc}   in terms of $\bvfc$, $\sigmafc$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} yield
-\bw
-\begin{align}
-    \label{eq_fl_rigid_fl_1_reference}
-    \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr^\beta} \right\}                                                       & =              \newlinenn
-    G_{\beta \alpha}(\budom^t(\bxr))  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^t(\bxr))           \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^t(\bxr)) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
-    \label{eq_fl_rigid_fl_2_reference}
-    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                                & = 0,
-\end{align}
-\ew
-which hold in $\omr$.
-
-The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_4_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current} are rewritten as
+We will now rewrite the equations of motion and the \acp{bc}   in terms of $\bvfr$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} yield, respectively, \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference}, see \cref{sec_fl_mem_flu_ref}.
+The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_4_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current} yield as
 
 \begin{align}
     \label{bc_fl_rigid_1_reference}
@@ -174,7 +159,7 @@ determine the dynamics of the system.
 
 
 
-\subsection{Temporal discretization}\label{sec_temp_discretization}
+\subsection{Temporal discretization}\label{sec_temp_discretization_rig}
 
 
 To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discretize time by setting $\deltat \equiv T/N$, $t_n \equiv n\, \deltat$, with $n = 0, 1, \cdots, N$.
@@ -183,13 +168,8 @@ We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAut
 
 \subsubsection{Rigid \acl{bod}}
 
-Proceeding along the \ac{cn} scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  scheme \cite{loggAutomatedSolutionDifferential2012}. We set
-\begin{align}
-    \sigmafr^n(\bxr)       & \equiv \sigmafc(\bxr, t_n)                               \\
-    \sigmafr^{n-1/2}(\bxr) & \equiv \sigmafc\left(\bxr, \frac{t_n+t_{n-1}}{2}\right),
-\end{align}
-and similarly for other quantities.
 
+Proceeding along the lines of the \ac{cn} scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  \cite{loggAutomatedSolutionDifferential2012}---see for example \cref{eq_time_step_1,eq_time_step_2} for $\bvfr$ and $\sigmafr$---and similarly for other quantities.
 We discretize \cref{eq_fl_rigid_rigid_reference,eq_fl_rigid_rigid_current_2} and, neglecting $\odeltat$, we obtain
 \bw
 \begin{align}

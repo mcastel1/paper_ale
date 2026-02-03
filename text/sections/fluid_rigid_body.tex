@@ -15,14 +15,8 @@ The \ac{ref} configuration, is related to the \ac{cur} one as follows \cite{kame
 and the deformation-gradient tensor
 \be
 \label{eq_def_F}
-F_{\alpha \beta}(\bu) \equiv \delta_{\alpha \beta} + \pderr{u^ \alpha}{\beta},
+F_{\alpha \beta}(\bu) \equiv \delta_{\alpha \beta} + \pderr{u^ \alpha}{\beta}.
 \ee
-where we set
-\begin{align}\label{eq_def_pder_ref}
-        \partial^\reference_\alpha & \equiv \pder{}{\xr^\alpha}, \\
-        \label{eq_def_pder_cur}
-        \partial^\current_\alpha   & \equiv \pder{}{\xc^\alpha}.
-\end{align}
 In what follows, greek indices $\alpha, \beta, \cdots$ will be used to denote vectors and tensors in  two-dimensional Euclidean space---their position as upper or lower indices is thus immaterial \cite{marchiafavaAppuntiDiGeometria2005,landauTheoryElasticity1986}.
 
 Here, we will denote the mapping between $\bxc$ and $\bxr$ in \cref{eq_def_u} with the fields
@@ -60,7 +54,7 @@ The solution of the interaction dynamics between \ac{bflu} and \ac{rig} is  invo
 \end{figure*}
 
 %M revise to embed in text
-Details on the motion of \ac{rig}, \ac{bflu} and \ac{dom} can be found in \cref{sec_rigid_body_body,sec_rigid_body_fl,sec_eq_fluid_domain}, respectively, and the temporal discretization is discussed in \cref{sec_temp_discretization}.
+Details on the motion of \ac{rig}, \ac{bflu} and \ac{dom} can be found in \cref{sec_rigid_body_body,sec_rigid_body_fl,sec_eq_fluid_domain}, respectively, and the temporal discretization is discussed in \cref{sec_temp_discretization_rig}.
 
 
 
