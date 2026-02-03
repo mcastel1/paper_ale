@@ -223,17 +223,13 @@ The discrete form of the \acp{bc} \crefs{bc_fl_rigid_1_reference,bc_fl_rigid_2_r
 \end{align}
 \ew
 
+
 We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDifferential2012,chorinNumericalSolutionNavierStokes1968}:
 \begin{enumerate}
     \titleditem{Approximated velocity}{
         \label{item_split_1}
-        We introduce the velocity $\bvbarf$, which approximates the true velocity $\bm \vfr$, and which  satisfies the \ac{bvp}
+        We introduce the velocity $\bvbarf$, which approximates the true velocity $\bm \vfr$, and which  satisfies the \ac{bvp} given by \cref{eq_fl_rigid_fl_1_reference_disc_aux} and \acp{bc}
         \bw
-        \begin{align}
-            \label{eq_fl_rigid_fl_1_reference_disc_aux}
-            \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
-            G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),
-        \end{align}
         \begin{align}
             \label{bc_fl_rigid_1_reference_disc_aux}
             \vbarf^1                                                     & = \vfin \; \text{ on }\pomineqr,                                                                                                         \\

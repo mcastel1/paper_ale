@@ -293,7 +293,6 @@ which hold in $\omr$. In \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_refer
 G_{\alpha \beta}(\bu) \equiv [F(\bu)]^{-1}_{\alpha \beta}.
 \ee\vspace{5mm}\\
 
-%sign
 
 
 \subsection{Temporal discretization}\label{sec_temp_discretization_mem}
@@ -305,15 +304,16 @@ The  dynamics of the system is obtained as follows.\\ \vspace{5mm}
 
 
 Following the \ac{cn} temporal-discretization scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  \cite{loggAutomatedSolutionDifferential2012}: For example, we set
-%
 \begin{align}
     \label{eq_time_step_1}
     \bvfr^n(\bxr)          & \equiv \bvfr(\bxr, t_n)  ,                               \\
     \label{eq_time_step_2}
     \sigmafr^{n-1/2}(\bxr) & \equiv \sigmafr\left(\bxr, \frac{t_n+t_{n-1}}{2}\right),
 \end{align}
-% 
 and similarly for other \ac{bflu} and \ac{mem} fields.
+
+%sign
+
 
 %C add details in these sections - start 
 \subsubsection{\Acl{mem}}\label{sec_temp_discretization_mem_mem}
@@ -328,8 +328,19 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
 
 \begin{itemize}
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
-        Solve the \ac{bvp}
+        We introduce the auxiliary quantities \cite{worthmullerIRENEFluIdLayeR2025}
+        \begin{align}
+            \label{eq_def_Vmem}
+            \Vmem^i    & \equiv \frac{\vbarmem^i + \vmem^{n-1,\,i}}{2}, \\
+            \label{eq_def_Wmem}
+            \Wmem      & \equiv \frac{\wbarmem + \wmem^{n-1}}{2},       \\
+            \label{eq_def_sigmamasst}
+            \sigmamast & \equiv \sigmam^{n-3/2},                        \\
+            \label{eq_def_phimem}
+            \phimem    & \equiv \sigmamast - \sigmam^\nmhalf.
+        \end{align}
 
+        We then  solve the \ac{bvp}
         \bw
         \begin{align}
             \label{eq_fl_mem_mem_disc_1}
@@ -390,9 +401,9 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
         We determine the \ac{dom} displacement field and its time derivative, $\budom^n$ and $\budomdot^n$, from the \acp{bvp}
         \begin{align}
             \label{eq_domain_fluid_rigid_disc}
-            \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr^\beta}             & = 0 \text{ in } \omr, \\
+            \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr^\beta}          & = 0 \text{ in } \omr, \\
             \label{eq_domain_fluid_rigid_disc_dot}
-            \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budomdot^n)}{t} & = 0 \text{ in } \omr,
+            \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budom^n)}{t} & = 0 \text{ in } \omr,
         \end{align}
         with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
         \begin{align}
@@ -415,7 +426,19 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
         \end{align}
     }
     \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
-        We determine the \ac{bflu} fields $\vfr^n$ and $\sigmafr^\nmhalf$ by solving the \ac{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} with \acp{bc}
+        We determine the \ac{bflu} fields $\vfr^n$ and $\sigmafr^\nmhalf$ by solving the \ac{bvp}
+        % 
+        \bw
+        \begin{align}
+            \label{eq_fl_rigid_fl_1_reference_disc_aux}
+            \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
+            G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),
+        \end{align}
+        \ew
+        % 
+
+        and
+        \crefs{eq_poiss_like_phi} with \acp{bc}
 
         \begin{align}
             \label{bc_fl_membrane_1_current_disc}
