@@ -121,8 +121,8 @@ def plot_snapshot(fig, n_file,
         snapshot_path, 'mu_n_12_' + n_file_string + '.csv'))
 
     # plot snapshot label
-    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
-             snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
+    # fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
+    #          snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
     if axis_min_max == None:
 
