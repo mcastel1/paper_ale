@@ -426,7 +426,7 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
         \end{align}
     }
     \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
-        We determine the \ac{bflu} fields $\vfr^n$ and $\sigmafr^\nmhalf$ by solving the \ac{bvp}
+        We determine the \ac{bflu} fields $\vfr^n$ and $\sigmafr^\nmhalf$ by solving the \ac{bvp} given by
         % 
         \bw
         \begin{align}
@@ -435,10 +435,9 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
             G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),
         \end{align}
         \ew
-        % 
-
+        %
         and
-        \crefs{eq_poiss_like_phi} with \acp{bc}
+        \crefs{eq_poiss_like_phi}, with \acp{bc}
 
         \begin{align}
             \label{bc_fl_membrane_1_current_disc}
