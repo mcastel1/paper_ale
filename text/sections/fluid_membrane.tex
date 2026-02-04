@@ -69,9 +69,9 @@ is the \ac{bflu} stress tensor \cite{landauFluidMechanics1987} and $\normalc{}$ 
 The components of the force \crefs{def_f_fluid_mem} tangential and normal to \ac{mem} are \cite{desernoFluidLipidMembranes2015}
 \begin{align}
     \label{def_force_tan}
-    f_{\fluid\, t}^i(\sigmastressc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\sigmastressc, \nu, \psi) \\
+    f_{\fluid\, \text{t}}^i(\sigmastressc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\sigmastressc, \nu, \psi) \\
     \label{def_force_norm}
-    f_{\fluid\, n} (\sigmastressc, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\sigmastressc, \nu, \psi),
+    f_{\fluid\, n} (\sigmastressc, \nu, \psi)         & = \normalc{\alpha}(\nu, \psi) f_\alpha(\sigmastressc, \nu, \psi),
 \end{align}
 where in \cref{def_force_tan} we used the feature that the metric tensor depends on $\nu$ only, see \cref{eq_def_g,eq_intro_nu}.
 
@@ -82,7 +82,7 @@ The equations of motion for \ac{mem}  are \cite{worthmullerIRENEFluIdLayeR2025,a
     \label{eq-dyn-continuity}
     \nab_i \vmem^i - 2 H \wmem                                                                              =            & 0,                                                                                                                                                                                       \\
     \label{eq-dyn-v}
-    \rhom \left( \pder{\vmem^i}{t}+ \vmem^j \nab_j \vmem^i  - 2 \vmem^j \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \nab^i \sigmam + f_{\etam\, t}^i + f_{\fluid\, t}^i,                                                                                                                                     \\
+    \rhom \left( \pder{\vmem^i}{t}+ \vmem^j \nab_j \vmem^i  - 2 \vmem^j \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \nab^i \sigmam + f_{\etam\, t}^i + f_{\fluid\, \text{t}}^i,                                                                                                                              \\
     \label{eq-dyn-w}
     \rhom \left[ \pder{\wmem}{t} + \vmem^i ( \vmem^j b_{ji} + \nabla_i \wmem  ) \right]                               =  & 2 \sigmam H    +  f_\kap +                                                         f_{\etam\, n}+ f_{\fluid\, n}                                                                       , \\
     \label{eq-dyn-dX}
@@ -347,7 +347,7 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
             \rhom \Big[  \frac{\vbarmem^i - \vmem^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem^{n-1,\, j} - \frac{1}{2} \vmem^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
             \Wmem \nab^{\nmhalf, \, i} \Wmem \Big]                                                                                                                                                                           & =              \newlinenn
             \nab^{\nmhalf, \, i} \sigmamast     +         f_\etam^i\left( \bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
-            f_{\fluid\, t}^i({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                       &                           \\
+            f_{\fluid\, \text{t}}^i({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                &                           \\
             \label{eq_fl_mem_mem_disc_2}
             \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j \fnij{b}{\nmhalf}{j}{i} + \left( \frac{3}{2} \vmem^{n-1, \, i} - \frac{1}{2}\vmem^{n-3/2,\,i}\right) \nab^\nmhalf_i \Wmem \right]          & =\newlinenn
             f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f_{\etam\, n}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
@@ -491,3 +491,14 @@ The \ac{bflu} parameters have been estimated from the air parameters:  $\rhof = 
 Also, we take $\sigmafbottomc = - 1 \, \newt / \met^2$,
 and $\vfbottom^1 =0$, $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc^1 (2 L -\xc^1) v_0$, where $v_0 = 10^{-2}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
 
+
+
+\begin{figure}
+    \centering
+    \hspace{-0.5cm}
+    \includegraphics[width=1.05\columnwidth]{figures/figure_1/figure_1.pdf}
+    \caption{
+        \label{fig_no_circle}
+        Curvature of the \Acl{mem}  interacting  with a \acl{bflu} shown in \cref{fig_fluid_mem}. The Figure follows the same notation and it corresponds to the same instant of time as \cref{fig_fluid_mem}.
+    }
+\end{figure}

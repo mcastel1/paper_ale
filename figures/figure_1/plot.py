@@ -26,7 +26,7 @@ import graphics.vector_plot as vec
 
 '''
 you can copy the data from abacus with
-./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'mu_n_12_*' 'nu_n_12_*' 'psi_n_12_*'  ~/Documents/paper_ale/figures/figure_5 1 1000000 30000
+./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'mu_n_12_*' 'nu_n_12_*' 'psi_n_12_*'  ~/Documents/paper_ale/figures/figure_1 1 100000 10
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -217,10 +217,10 @@ def plot_snapshot(fig, n_file,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
 
-plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / number_of_frames, 'min_s', 0))
-# plot_snapshot(fig, parameters['snapshot_to_plot'],
-#               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / number_of_frames, 'min_s', 0))
+# plot_snapshot(fig, snapshot_max,
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / number_of_frames, 'min_s', 0))
+plot_snapshot(fig, parameters['snapshot_to_plot'],
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / number_of_frames, 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
