@@ -1,14 +1,13 @@
 #!/bin/sh
 #SBATCH --job-name=ani-FIGURE_TO_PLOT
-#SBATCH --time=01-00:0:00
+#SBATCH --time=02-00:0:00
 #SBATCH --clusters=mesopsl2
-#SBATCH --qos=mesopsl2_hi_normal
-#SBATCH --account=castellana_hi
-#SBATCH --partition=hi
+#SBATCH --qos=mesopsl2_def_long
+#SBATCH --account=castellana
+#SBATCH --partition=def
 #SBATCH --ntasks-per-node=1
-#SBATCH--mem=50G
+#SBATCH --mem=50G
 #SBATCH --nodes=1
-
 
 echo "Entering the virtual environment .. "
 source ~/miniconda3/bin/activate myenv

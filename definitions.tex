@@ -34,14 +34,16 @@
 \providecommand{\Sdom}{{S_\dom}}
 \providecommand{\etaf}{\eta_\fluid}
 \providecommand{\etam}{{\eta_\mem}}
-\providecommand{\sigmac}{{\sigma_{\current}}}
-\providecommand{\sigmaf}{{\sigma_\fluid}}
-\providecommand{\sigmam}{{\sigma_\mem}}
-\providecommand{\sigmamast}{{\sigmam^\ast}}
+% symbol to defined surface and line tension
+\providecommand{\surfacetensionsymbol}{\varsigma}
+\providecommand{\sigmac}{{\surfacetensionsymbol_{\current}}}
+\providecommand{\sigmaf}{{\surfacetensionsymbol_\fluid}}
+\providecommand{\sigmam}{{\surfacetensionsymbol_\mem}}
+\providecommand{\sigmamast}{{\surfacetensionsymbol_\mem^\ast}}
 \providecommand{\sigmaml}{\sigmam_\mlineineqcap}
-\providecommand{\sigmafc}{{\sigmaf_\current}}
+\providecommand{\sigmafc}{{\surfacetensionsymbol_\fluid^\current}}
 \providecommand{\sigmafbottomc}{{\sigmaf_\mbottomeqcap}}
-\providecommand{\sigmafr}{{\sigmaf_\reference}}
+\providecommand{\sigmafr}{{\surfacetensionsymbol_\fluid^\reference}}
 \providecommand{\udom}{u_\dom}
 \providecommand{\udomdot}{{\dot{u}_\dom}}
 \providecommand{\bu}{{\bm u}}

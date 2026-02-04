@@ -15,7 +15,7 @@ animation_path = os.path.join(os.path.dirname(
 this is used to compute the absolute mins and maxs not on the entire range [snapshot_min, snapshot_max] but on part of it, because on the first few frames some fields may be large and thus give unreasonable absolute mins and max
 '''
 snapshot_min_with_margin = plot.snapshot_min + \
-    plot.parameters['snapshot_min_margin']
+    plot.parameters['snapshot_min_with_margin']
 
 
 '''
@@ -74,7 +74,7 @@ def update_animation(n):
         plot.fig,
         n,
         snapshot_label=rf'$t = \,$' + io.time_to_string(
-            n * plot.solution_parameters['T'] / plot.number_of_frames, 's', plot.parameters['n_decimals_snapshot_label']),
+            n * plot.solution_parameters['T'] / plot.number_of_frames, 'hr_min_s', plot.parameters['n_decimals_snapshot_label']),
         norm_v_min_max=norm_v_min_max_abs
         # sigma_min_max=sigma_min_max_abs
     )
