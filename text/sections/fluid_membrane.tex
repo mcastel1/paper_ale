@@ -177,7 +177,7 @@ and
 \end{align}
 In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulus $\kel$ and the shear modulus $\muel$ on the deformation-gradient tensor \crefs{eq_def_F}. In the absence of this dependence, the elastic model above would be unstable under local compression \cite{kamenskyLectureNotesMAE}. In fact, the model's Lagrangian would not penalize configurations with  small $\det F$. The inclusion of the dependence \crefs{eq_ela_3,eq_ela_4} on $\det F$  allows for penalizing these configurations---the larger the exponent $\zeta > 0$, the stronger the penalty. As a result, this dependence makes the model stable under mesh compression, such as the one shown below \ac{rig} in \cref{fig_ref_curr_rigid}B.
 
-The equation of motion for $\budomdot$ are obtained by deriving \cref{eq_mesh_fluid_rigid} with respect to time, and using the fact that \ac{ref} coordinates are time independent:
+The equation of motion for $\budomdot$ is obtained by deriving \cref{eq_mesh_fluid_rigid} with respect to time, and using the fact that \ac{ref} coordinates are time independent:
 \be
 \label{eq_mesh_fluid_rigid_dot}
 \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budom)}{t}  = 0 \text{ in } \omr.
@@ -203,7 +203,7 @@ We impose the following \acp{bc} for  \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_ri
 \end{align}
 \Cref{bc_fl_mem_dom_1} ensures that \ac{dom} is not deformed on $\pomineqr \cup \pombottomeqr$, cf. \cref{bc_ela_1}. \Cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3} follow from axial symmetry, and \cref{bc_fl_mem_dom_4} from the requirement that \ac{dom} and \ac{mem} deformations stay conforming \cite{kamenskyLectureNotesMAE}. Finally, the  \acp{bc} for $\bumemdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
 
-Proceeding along the lines of \cref{sec_fl_mem_dom}, we observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} contains up to second derivatives of $\budom$ and $\budomdot$. As a result, the \acp{bc} \crefs{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8} uniquely determine the solution of the \ac{bvp} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} \cite{evansPartialDifferentialEquations2010}.
+We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} contains up to second derivatives of $\budom$ and $\budomdot$. As a result, the \acp{bc} \crefs{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8} uniquely determine the solution of the \ac{bvp} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} \cite{evansPartialDifferentialEquations2010}.
 
 \begin{figure}
     \centering
@@ -270,7 +270,7 @@ We enforce the following \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid
 \end{align}
 
 According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bottom edge of $\omc$, \pombottomc, while \cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left wall \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} result from symmetry.
-\Cref{bc_fl_membrane_5_current} ensures that the motion of \ac{bflu} is conforming to that of \ac{mem}   \cite{kamenskyLectureNotesMAE}: According to  \cref{eq-dyn-dX}, \ac{mem}  only moves normally to its profile; \cref{bc_fl_membrane_5_current} thus ensures that \ac{bflu} stays in contact with \ac{mem} throughout its motion. On the other hand, \cref{bc_fl_membrane_5_current} implies a tangential slip between \ac{mem} and \ac{bflu}, allowing for the tangential part of the \ac{bflu} and \ac{mem} velocities to differ.
+\Cref{bc_fl_membrane_5_current} ensures that the motion of \ac{bflu} is conforming to that of \ac{mem}   \cite{kamenskyLectureNotesMAE}: In fact,   \cref{eq-dyn-dX} ensures that \ac{mem}  only moves normally to its profile, and \cref{bc_fl_membrane_5_current} thus ensures that \ac{bflu} stays in contact with \ac{mem} throughout its motion. On the other hand, \cref{bc_fl_membrane_5_current} implies a tangential slip between \ac{mem} and \ac{bflu}, allowing for the tangential part of the \ac{bflu} and \ac{mem} velocities to differ.
 Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension  matches the reservoir's.
 
 
@@ -323,7 +323,7 @@ and similarly for other \ac{bflu} and \ac{mem} fields.
 
 
 
-Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step as follows:
+Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
 
 
 \begin{itemize}
@@ -426,19 +426,28 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
         \end{align}
     }
     \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
-        We determine the \ac{bflu} fields $\vfr^n$ and $\sigmafr^\nmhalf$ by solving the \ac{bvp} given by
+        We determine the \ac{bflu} fields $\bvbarf $ and $\sigmafr^\nmhalf$ by solving the \acp{pde}
         % 
         \bw
         \begin{align}
             \label{eq_fl_rigid_fl_1_reference_disc_aux}
             \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
-            G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),
+            G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                          \\
+            \label{eq_poiss_like_phi}
+            \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                   & = \newlinenn
+            G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                   & ,
         \end{align}
         \ew
-        %
-        and
-        \crefs{eq_poiss_like_phi}, with \acp{bc}
-
+        where
+        \begin{align}
+            \label{eq_def_Vf}
+            \bVf          & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\
+            \label{eq_def_sigmarast}
+            \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                     \\
+            \label{eq_def_phi_pressure}
+            \phif         & \equiv \sigmafr^\ast - \sigmafr^{n-1/2}.
+        \end{align}
+        The \acp{bc} for \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} are
         \begin{align}
             \label{bc_fl_membrane_1_current_disc}
             \bvbarf                                         & =  \vfbottom  \text{ on } \pombottomeqr, \\
@@ -460,9 +469,15 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
             \pderr{ \phif   }{\beta }                        & = \newlinenn
             0
             \text{ on } \pomineqr \cup \pomtopeqr ,          &                                \\
-            G(\budom^{n-1})_{\alpha 1} \pderr{\phif}{\alpha} & = 0 \text{ on } \pomouteqr,
+            G(\budom^{n-1})_{\alpha 1} \pderr{\phif}{\alpha} & = 0 \text{ on } \pomouteqr.
         \end{align}
-        and by solving  \cref{eq_phi_1}.
+        Finally, $\bvfr^n$ is determined from $\bvbarf $ and $\sigmafr^\nmhalf$ by means of the relation
+        % 
+        \be
+        \label{eq_phi_1}
+        \rhof \frac{\vbarf^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phif   }{\beta } \text{ in } \omr.
+        \ee
+        % 
     }
 \end{itemize}
 

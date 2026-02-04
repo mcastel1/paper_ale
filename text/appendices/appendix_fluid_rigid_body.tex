@@ -244,32 +244,14 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
             \etaf \, G_{\beta 1}(\budom^{n-1}) \pderr{\Vf^\alpha}{\beta} & = 0                                                                                                           \; \text{ on } \pomouteqr.
         \end{align}
         \ew
-        where
-        \begin{align}
-            \bVf          & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\
-            \label{eq_def_sigmarast}
-            \sigmafr^\ast & \equiv \sigmafr^{n-3/2}.
-        \end{align}
+        where $\bVf$ and $\sigmafr^\ast$ are given by  \cref{eq_def_Vf,eq_def_sigmarast}.
+
     }
     \titleditem{Pressure correction}{
         \label{item_split_2}
 
-        Subtracting \cref{eq_fl_rigid_fl_1_reference_disc,eq_fl_rigid_fl_1_reference_disc_aux} and neglecting $\odeltat$, we obtain
-        \be
-        \label{eq_phi_1}
-        \rhof \frac{\vbarf^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phif   }{\beta } \text{ in } \omr,
-        \ee
-        where
-        \be\label{eq_def_phi_pressure}
-        \phif \equiv \sigmafc^\ast - \sigmafc^{n-1/2}
-        \ee
-        is the surface-tension increment.                 By applying $G_{\gamma \alpha}(\budom^{n-1}) \partial / \partial \xr^\gamma$ to both sides of \cref{eq_phi_1} and using \cref{eq_fl_rigid_fl_2_reference_disc}, we obtain a second-order \ac{pde} for $\phif$:
-        \begin{align}
-            \label{eq_poiss_like_phi}
-            \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                 & = \newlinenn
-            G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right) & .
-        \end{align}
-
+        Subtracting \cref{eq_fl_rigid_fl_1_reference_disc,eq_fl_rigid_fl_1_reference_disc_aux} and neglecting $\odeltat$, we obtain \cref{eq_phi_1},        where the surface-tension increment $\phif$ is defined by \cref{eq_def_phi_pressure}.
+        By applying $G_{\gamma \alpha}(\budom^{n-1}) \partial / \partial \xr^\gamma$ to both sides of \cref{eq_phi_1} and using \cref{eq_fl_rigid_fl_2_reference_disc}, we obtain the second-order \ac{pde} \crefs{eq_poiss_like_phi} for $\phif$.
 
 
 
