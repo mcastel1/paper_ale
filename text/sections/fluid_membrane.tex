@@ -69,9 +69,9 @@ is the \ac{bflu} stress tensor \cite{landauFluidMechanics1987} and $\normalc{}$ 
 The components of the force \crefs{def_f_fluid_mem} tangential and normal to \ac{mem} are \cite{desernoFluidLipidMembranes2015}
 \begin{align}
     \label{def_force_tan}
-    f_{\fluid\, t}^i(\sigmastressc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\sigmastressc, \nu, \psi) \\
+    f_{\fluid\, \text{t}}^i(\sigmastressc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\sigmastressc, \nu, \psi) \\
     \label{def_force_norm}
-    f_{\fluid\, n} (\sigmastressc, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\sigmastressc, \nu, \psi),
+    f_{\fluid\, \text{n}} (\sigmastressc, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\sigmastressc, \nu, \psi),
 \end{align}
 where in \cref{def_force_tan} we used the feature that the metric tensor depends on $\nu$ only, see \cref{eq_def_g,eq_intro_nu}.
 
@@ -80,15 +80,15 @@ The equations of motion for \ac{mem}  are \cite{worthmullerIRENEFluIdLayeR2025,a
 \bw
 \begin{align}
     \label{eq-dyn-continuity}
-    \nab_i \vmem^i - 2 H \wmem                                                                              =            & 0,                                                                                                                                                                                       \\
+    \nab_i \vmem^i - 2 H \wmem                                                                              =            & 0,                                                                                                                                                                                                     \\
     \label{eq-dyn-v}
-    \rhom \left( \pder{\vmem^i}{t}+ \vmem^j \nab_j \vmem^i  - 2 \vmem^j \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \nab^i \sigmam + f_{\etam\, t}^i + f_{\fluid\, t}^i,                                                                                                                                     \\
+    \rhom \left( \pder{\vmem^i}{t}+ \vmem^j \nab_j \vmem^i  - 2 \vmem^j \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \nab^i \sigmam + f_{\etam\, \text{t}}^i + f_{\fluid\, \text{t}}^i,                                                                                                                                     \\
     \label{eq-dyn-w}
-    \rhom \left[ \pder{\wmem}{t} + \vmem^i ( \vmem^j b_{ji} + \nabla_i \wmem  ) \right]                               =  & 2 \sigmam H    +  f_\kap +                                                         f_{\etam\, n}+ f_{\fluid\, n}                                                                       , \\
+    \rhom \left[ \pder{\wmem}{t} + \vmem^i ( \vmem^j b_{ji} + \nabla_i \wmem  ) \right]                               =  & 2 \sigmam H    +  f_\kap +                                                         f_{\etam\, \text{n}}+ f_{\fluid\, \text{n}}                                                                       , \\
     \label{eq-dyn-dX}
-    \pder {\bumem}{t}                                                                                            =       & \wmem \normalc{},                                                                                                                                                                        \\
+    \pder {\bumem}{t}                                                                                            =       & \wmem \normalc{},                                                                                                                                                                                      \\
     \label{eq-dyn-dX1}
-    \pder {\umem^1}{x^1}                                                                                            =    & -1 + \nu \cos \psi,                                                                                                                                                                      \\
+    \pder {\umem^1}{x^1}                                                                                            =    & -1 + \nu \cos \psi,                                                                                                                                                                                    \\
     \label{eq-dyn-dX2}
     \pder {\umem^2}{x^1}                                                                                               = & -\nu \sin \psi,
 \end{align}
@@ -105,15 +105,15 @@ The first term in the \ac{rhs} of \cref{eq-dyn-v} represnts the force on membran
     f_\kap (\nu, \psi)                                                                                                       & \equiv                                                                                                  \newlinenn
     -2\kap [ \nab_i \nab^i H + 2 H (H^2-K)],                                                                                 &                                                                                                                                 \\
     \label{eq_def_f_eta_t}
-    f_{\etam\, t}^i(\vmem, \wmem,
+    f_{\etam\, \text{t}}^i(\vmem, \wmem,
     \nu, \psi)                                                                                                               & \equiv                                                                                                             & \newlinenn
     \etam [ - \nablb \vmem^i - \newlinenn
     2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j \wmem + 2 K \vmem^i  ]                                                & ,                                                                                                                  &            \\
     \label{eq_def_f_eta_n}
-    f_{\etam\, n}      (\vmem, \wmem, \nu, \psi)                                                                             & \equiv                                                                                                             & \newlinenn
+    f_{\etam\, \text{n}}      (\vmem, \wmem, \nu, \psi)                                                                      & \equiv                                                                                                             & \newlinenn
     2 \etam [ (\nab^i \vmem^j)b_{ij} - 2 \wmem (2 H^2 - K)                                                                 ] & .
 \end{align}
-In \cref{eq_def_f_kap}, $f_\kappa$ is represents the resistance of \ac{mem} to bending, and it is derived from Helfrich model \cite{helfrichElasticPropertiesLipid1973}, while $f_{\etam\, t}$ and $f_{\etam\, n}$ in \cref{eq_def_f_eta_t,eq_def_f_eta_n} are, respectively, the tangential and normal component of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i}.
+In \cref{eq_def_f_kap}, $f_\kappa$ is represents the resistance of \ac{mem} to bending, and it is derived from Helfrich model \cite{helfrichElasticPropertiesLipid1973}, while $f_{\etam\, t}$ and $f_{\etam\, \text{n}}$ in \cref{eq_def_f_eta_t,eq_def_f_eta_n} are, respectively, the tangential and normal component of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i}.
 %
 \Cref{eq-dyn-dX} is the time-evolution equation for the \ac{mem} shape, which evolves according to the normal $\normalc{}$, and it has been obtained from  \cref{eq_u_mem,eq_def_x_ref}.
 \Cref{eq-dyn-dX1,eq-dyn-dX2} re-express the definitions of $\nu$ and $\psi$, and they result from \cref{def_nu_psi_1,def_nu_psi_2,eq_def_e,eq_u_mem,eq_def_x_ref}.
@@ -312,11 +312,80 @@ Following the \ac{cn} temporal-discretization scheme \cite{crankPracticalMethodN
 \end{align}
 and similarly for other \ac{bflu} and \ac{mem} fields.
 
-%sign
+
 
 
 %C add details in these sections - start 
 \subsubsection{\Acl{mem}}\label{sec_temp_discretization_mem_mem}
+
+
+We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-dyn-dX2} as follows
+\bw
+\begin{align}
+    \label{eq_mem_flu_disc_3}
+    \nab^\nmhalf_i \vmem^i - 2 H^\nmhalf \wmem^n                                                                              =                                                                                                                                     & 0,                        \\
+    \label{eq_mem_flu_disc_1}
+    \rhom \Big(  \frac{\vmem^{n,\, i} - \vmem^{n-1,\, i}}{\deltat} +   \frac{3}{2}\vmem^{n-1,\, j}  \nab^{\nmhalf}_j \vmem^{n-1,\, i} -   \frac{1}{2}\vmem^{n-2,\, j}  \nab^{\nmhalf}_j \vmem^{n-2,\, i} - 2 \vmem^{n-1,\, j} \wmem^{n-1} \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
+    \wmem^{n-1} \nab^{\nmhalf, \, i} \wmem^{n-1} \Big)                                                                                                                                                                                                              & =              \newlinenn
+    \nab^{\nmhalf, \, i} \sigmam^\nmhalf     +         f_{\etam\, \text{t}}^i\left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
+    f_{\fluid\, \text{t}}^i({\bm \sigmastressr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                          &
+    \\
+    \label{eq_mem_flu_disc_2}
+    \rhom \left( \frac{\wmem^n - \wmem^{n-1}}{\deltat} + \vmem^{n-1,\, i} \vmem^{n-1,\, j} b^\nmhalf_{ji} + \frac{3}{2} \vmem^{n-1, \, i}  \nab^\nmhalf_i \wmem^{n-1}  - \frac{1}{2} \vmem^{n-2, \, i}  \nab^\nmhalf_i \wmem^{n-2} \right)                          & =\newlinenn
+    f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmam^\nmhalf H^\nmhalf + f_{\etam\, \text{n}}     \left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
+    f_{\fluid\, \text{n}} ({\bm \sigmastressr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                            &\end{align}
+\ew
+\begin{align}
+    \label{eq_mem_flu_disc_4}
+    \frac {\bumem^\nmhalf-\bumem^\nmthreehalf}{\deltat}                                                                                 = & \wmem^{n-1} \normalc{\nmhalf}, \\
+    \label{eq_mem_flu_disc_5}
+    \pder {\umem^{\nmhalf, \, 1}}{x^1}                                                                                            =       &
+    -1 + \nu^\nmhalf \cos \psi^\nmhalf,                                                                                                                                    \\
+    \label{eq_mem_flu_disc_6}
+    \pder {\umem^{\nmhalf, \, 2}}{x^1}                                                                                               =    &
+    -\nu^\nmhalf \sin \psi^\nmhalf.
+\end{align}
+In \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, $\sigmastressr$ denotes the \ac{bflu} stress tensor in the \ac{ref} configuration:
+\begin{align}
+    \label{eq_def_sigma_current}
+    \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
+    =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
+                                                 & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfc^\beta}{\gamma}\Big].
+\end{align}
+%sign
+
+Proceeding along the same lines, the discrete form of the \acp{bc} \crefs{bc_fl_mem_mem_1,bc_fl_mem_mem_2,bc_fl_mem_mem_3,bc_fl_mem_mem_4,bc_fl_mem_mem_5,bc_fl_mem_mem_6,bc_fl_mem_mem_7,bc_fl_mem_mem_8} reads, respectively,
+\begin{align}
+    \label{bc_fl_mem_mem_1_disc_bis}
+    \vmem^{n, \,i}                          & = 0 \text{ on } \pomlineineqr,        \\
+    \label{bc_fl_mem_mem_2_disc_bis}
+    \vmem^{n, \, i}                         & = 0 \text{ on } \pomlineouteqr,       \\
+    \label{bc_fl_mem_mem_3_disc_bis}
+    \wmem^n                                 & = 0 \text{ on } \pomlineineqr,        \\
+    \label{bc_fl_mem_mem_4_disc_bis}
+    \nab^\nmhalf_i \wmem^n                  & = 0 \text{ on } \pomlineouteqr,       \\
+    \label{bc_fl_mem_mem_5_disc_bis}
+    \sigmam^\nmhalf                         & = \sigmaml \text{ on } \pomlineineqr, \\
+    \label{bc_fl_mem_mem_6_disc_bis}
+    \bumem^\nmhalf                          & = 0 \text{ on } \pomlineineqr,        \\
+    \label{bc_fl_mem_mem_7_disc_bis}
+    \umem^{\nmhalf, \, 1}                   & = 0 \text{ on } \pomlineouteqr,       \\
+    \label{bc_fl_mem_mem_8_disc_bis}
+    \pder{\umem^{\nmhalf, \, 2}}{\xcoord^1} & = 0 \text{ on } \pomlineouteqr.
+\end{align}
+
+We introduce the auxiliary quantities \cite{worthmullerIRENEFluIdLayeR2025}
+\begin{align}
+    \label{eq_def_Vmem}
+    \Vmem^i    & \equiv \frac{\vbarmem^i + \vmem^{n-1,\,i}}{2}, \\
+    \label{eq_def_Wmem}
+    \Wmem      & \equiv \frac{\wbarmem + \wmem^{n-1}}{2},       \\
+    \label{eq_def_sigmamasst}
+    \sigmamast & \equiv \sigmam^{n-3/2},                        \\
+    \label{eq_def_phimem}
+    \phimem    & \equiv \sigmamast - \sigmam^\nmhalf.
+\end{align}
+
 \subsubsection{\Acl{dom}}\label{sec_temp_discretization_mem_dom}
 \subsubsection{\Acl{bflu}}\label{sec_temp_discretization_mem_bflu}
 %C add details in these sections - end
@@ -328,30 +397,20 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
 
 \begin{itemize}
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
-        We introduce the auxiliary quantities \cite{worthmullerIRENEFluIdLayeR2025}
-        \begin{align}
-            \label{eq_def_Vmem}
-            \Vmem^i    & \equiv \frac{\vbarmem^i + \vmem^{n-1,\,i}}{2}, \\
-            \label{eq_def_Wmem}
-            \Wmem      & \equiv \frac{\wbarmem + \wmem^{n-1}}{2},       \\
-            \label{eq_def_sigmamasst}
-            \sigmamast & \equiv \sigmam^{n-3/2},                        \\
-            \label{eq_def_phimem}
-            \phimem    & \equiv \sigmamast - \sigmam^\nmhalf.
-        \end{align}
 
-        We then  solve the \ac{bvp}
+
+        We   solve the \ac{bvp}
         \bw
         \begin{align}
             \label{eq_fl_mem_mem_disc_1}
             \rhom \Big[  \frac{\vbarmem^i - \vmem^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem^{n-1,\, j} - \frac{1}{2} \vmem^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
             \Wmem \nab^{\nmhalf, \, i} \Wmem \Big]                                                                                                                                                                           & =              \newlinenn
-            \nab^{\nmhalf, \, i} \sigmamast     +         f_\etam^i\left( \bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
-            f_{\fluid\, t}^i({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                       &                           \\
+            \nab^{\nmhalf, \, i} \sigmamast     +         f_{\etam, \text{t}}^i\left( \bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
+            f_{\fluid\, \text{t}}^i({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                &                           \\
             \label{eq_fl_mem_mem_disc_2}
-            \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j \fnij{b}{\nmhalf}{j}{i} + \left( \frac{3}{2} \vmem^{n-1, \, i} - \frac{1}{2}\vmem^{n-3/2,\,i}\right) \nab^\nmhalf_i \Wmem \right]          & =\newlinenn
-            f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f_{\etam\, n}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
-            f_{\fluid\, n} ({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                         &
+            \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j b^\nmhalf_{ji} + \left( \frac{3}{2} \vmem^{n-1, \, i} - \frac{1}{2}\vmem^{n-3/2,\,i}\right) \nab^\nmhalf_i \Wmem \right]                   & =\newlinenn
+            f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f_{\etam\, \text{n}}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
+            f_{\fluid\, \text{n}} ({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                  &
         \end{align}
         \ew
         \begin{align}
@@ -491,3 +550,14 @@ The \ac{bflu} parameters have been estimated from the air parameters:  $\rhof = 
 Also, we take $\sigmafbottomc = - 1 \, \newt / \met^2$,
 and $\vfbottom^1 =0$, $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc^1 (2 L -\xc^1) v_0$, where $v_0 = 10^{-2}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
 
+
+
+\begin{figure}
+    \centering
+    \hspace{-0.5cm}
+    \includegraphics[width=1.05\columnwidth]{figures/figure_1/figure_1.pdf}
+    \caption{
+        \label{fig_no_circle}
+        Curvature of the \Acl{mem}  interacting  with a \acl{bflu} shown in \cref{fig_fluid_mem}. The Figure follows the same notation and it corresponds to the same instant of time as \cref{fig_fluid_mem}.
+    }
+\end{figure}
