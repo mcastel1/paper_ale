@@ -403,7 +403,6 @@ In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomated
     }
     \titleditem{Pressure correction}{
         \label{item_mem_split_2}
-        %sign
         Subtracting \cref{eq_mem_flu_disc_1,eq_fl_mem_mem_disc_1} and neglecting $\odeltat$ \cite{worthmullerIRENEFluIdLayeR2025}, we obtain
         \be
         \label{eq_fl_mem_mem_disc_4}
@@ -419,6 +418,7 @@ In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomated
         \label{eq_fl_mem_mem_disc_5}
         \wmem^n                                                                     =  \wbarmem.
         \ee
+        %sign
 
     }
     \titleditem{Velocity correction}{
@@ -442,21 +442,12 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
 
 
-        We   solve the \ac{bvp} given by \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5}, and
+        We   solve the \ac{bvp} given by \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6}, and
         \begin{align}
             \label{eq_fl_mem_mem_disc_3}
             \nab^\nmhalf_i   \nab^{\nmhalf, \, i}    \phimem                            =
-                                                                                          & \frac{\rhom}{\deltat}(\nab^\nmhalf_i \vbarmem^i - \newlinenn
-                                                                                          & 2 H^\nmhalf \wbarmem)     ,                                  \\
-            \label{eq_fl_mem_mem_disc_6}
-            \frac{\umem^{\nmhalf,\, \alpha} - \umem^{\nmthreehalf,\, \alpha}}{\deltat}  = &
-            \wmem^{n-1} \normalc{\nmhalf, \, \alpha},                                                                                                    \\
-            \label{eq_fl_mem_mem_disc_7}
-            \pder {\umem^{\nmhalf,\,1}}{x^1}                                            = &
-            -1 + \nu^\nmhalf \cos \psi^\nmhalf,                                                                                                          \\
-            \label{eq_fl_mem_mem_disc_8}
-            \pder {\umem^{\nmhalf, \, 2}}{x^1}                                          = &
-            -\nu^\nmhalf \sin \psi^\nmhalf,
+             & \frac{\rhom}{\deltat}(\nab^\nmhalf_i \vbarmem^i - \newlinenn
+             & 2 H^\nmhalf \wbarmem)     ,
         \end{align}
         with \acp{bc}
         \begin{align}
@@ -477,7 +468,7 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
             \pder{\umem^{\nmhalf, \, 2}}{x^1}                  & = 0 \text{ on } \pomlineouteqr.
         \end{align}
 
-        Here, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the \acp{pde} for the approximate velocities, \cref{eq_fl_mem_mem_disc_3} for pressure correction, and \cref{eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5} for the velocity correction. \Cref{eq_fl_mem_mem_disc_6} is the time-evolution equation for the displacement field, and \cref{eq_fl_mem_mem_disc_7,eq_fl_mem_mem_disc_8} the discrete versions of \cref{eq-dyn-dX1,eq-dyn-dX2}, respectively.
+        Here, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the \acp{pde} for the approximate velocities, \cref{eq_fl_mem_mem_disc_3} for pressure correction, and \cref{eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5} for the velocity correction. \Cref{eq_mem_flu_disc_4} is the time-evolution equation for the displacement field, and \cref{eq_mem_flu_disc_5,eq_mem_flu_disc_6} the discrete versions of \cref{eq-dyn-dX1,eq-dyn-dX2}, respectively.
         In \cref{bc_fl_rigid_6_reference_disc}, $\normalmem$ is the unit normal to \pomline{}: It lies in the tangent bundle of $\omlineeq$, is directed  outside $\omlineeq$, and is normalized according to $\normalmem^i \normalmem_i = 1$ \cite{reallGeneralRelativity,marchiafavaAppuntiDiGeometria2005,worthmullerIRENEFluIdLayeR2025}.\\
 
         This step determines the \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$.
