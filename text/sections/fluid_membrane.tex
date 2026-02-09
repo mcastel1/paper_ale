@@ -377,7 +377,7 @@ In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomated
 \begin{enumerate}
     \titleditem{Approximated velocities}{
         \label{item_mem_split_1}
-        Proceeding along the lines of the splitting scheme for  \ac{bflu} of \cref{sec_splitting_scheme_fl_rig_fl}, we introduce some auxiliary  velocities $\bvbar^i$ and $\wbar$, which approximate, respectively, $\vmem^i$ and $\wmem$ \cite{chorinNumericalSolutionNavierStokes1968}. We define $\vbar$ and $\wbar$ as solutions of the \acp{pde}
+        Proceeding along the lines of the splitting scheme for  \ac{bflu} of \cref{sec_splitting_scheme_fl_rig_fl}, we introduce the auxiliary  velocities $\bvbarmem$ and $\wbarmem$, which approximate, respectively, $\vmem^i$ and $\wmem$ \cite{chorinNumericalSolutionNavierStokes1968}. We define $\bvbarmem$ and $\wbarmem$ as solutions of the \acp{pde}
         \bw
         \begin{align}
             \label{eq_fl_mem_mem_disc_1}
@@ -400,6 +400,8 @@ In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomated
             \sigmamast & \equiv \sigmam^{n-3/2},
         \end{align}
         \Cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the analog of \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, respectively,  with a fixed pressure field $\sigmamast$ from the preceding step---in what follows, we will synonymously use the terms `pressure' and `tension'  for conciseness \cite{worthmullerIRENEFluIdLayeR2025}.
+
+        Overall, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} determine $\vbarmem$ and $\wbarmem$.
     }
     \titleditem{Pressure correction}{
         \label{item_mem_split_2}
@@ -418,11 +420,17 @@ In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomated
         \label{eq_fl_mem_mem_disc_5}
         \wmem^n                                                                     =  \wbarmem.
         \ee
-        %sign
-
+        By taking the covariant derivative of \cref{eq_fl_mem_mem_disc_4} and using the mass-conservation equation \crefs{eq_mem_flu_disc_3} and \cref{eq_fl_mem_mem_disc_5}, we obtain
+        \begin{align}
+            \label{eq_poisson_like_phi_mem}
+            \nab^\nmhalf_i \nab^{\nmhalf,\, i} \phimem                                & =  \newlinenn
+            \frac{\rhom}{\deltat} (\nab^\nmhalf_i \vbarmem^i - 2 H^\nmhalf \wbarmem). &
+        \end{align}
+        \Cref{eq_poisson_like_phi_mem} is a second-order \ac{pde} which determines $\phimem$, and thus the tension $\sigmam^\nmhalf$ through \cref{eq_def_phimem}.
     }
     \titleditem{Velocity correction}{
         \label{item_mem_split_3}
+        The \ac{mem} velocity $\bvmem^n$ is determined by means of \cref{eq_poisson_like_phi_mem} in terms of $\bvbarmem$ and $\phimem$.
     }
 \end{enumerate}
 
@@ -442,13 +450,9 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
 
 
-        We   solve the \ac{bvp} given by \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6}, and
-        \begin{align}
-            \label{eq_fl_mem_mem_disc_3}
-            \nab^\nmhalf_i   \nab^{\nmhalf, \, i}    \phimem                            =
-             & \frac{\rhom}{\deltat}(\nab^\nmhalf_i \vbarmem^i - \newlinenn
-             & 2 H^\nmhalf \wbarmem)     ,
-        \end{align}
+        We   solve the \ac{bvp} given by \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem},
+        %sign
+
         with \acp{bc}
         \begin{align}
             \label{bc_fl_mem_mem_1_disc}
@@ -468,7 +472,7 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
             \pder{\umem^{\nmhalf, \, 2}}{x^1}                  & = 0 \text{ on } \pomlineouteqr.
         \end{align}
 
-        Here, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the \acp{pde} for the approximate velocities, \cref{eq_fl_mem_mem_disc_3} for pressure correction, and \cref{eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5} for the velocity correction. \Cref{eq_mem_flu_disc_4} is the time-evolution equation for the displacement field, and \cref{eq_mem_flu_disc_5,eq_mem_flu_disc_6} the discrete versions of \cref{eq-dyn-dX1,eq-dyn-dX2}, respectively.
+        Here, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the \acp{pde} for the approximate velocities, \cref{eq_poisson_like_phi_mem} for pressure correction, and \cref{eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5} for the velocity correction. \Cref{eq_mem_flu_disc_4} is the time-evolution equation for the displacement field, and \cref{eq_mem_flu_disc_5,eq_mem_flu_disc_6} the discrete versions of \cref{eq-dyn-dX1,eq-dyn-dX2}, respectively.
         In \cref{bc_fl_rigid_6_reference_disc}, $\normalmem$ is the unit normal to \pomline{}: It lies in the tangent bundle of $\omlineeq$, is directed  outside $\omlineeq$, and is normalized according to $\normalmem^i \normalmem_i = 1$ \cite{reallGeneralRelativity,marchiafavaAppuntiDiGeometria2005,worthmullerIRENEFluIdLayeR2025}.\\
 
         This step determines the \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$.
