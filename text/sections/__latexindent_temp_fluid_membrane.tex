@@ -502,16 +502,14 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
 
 \begin{itemize}
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
-
-
-
-
         This step determines the \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$.
     }
+
     \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
         We determine the \ac{dom} displacement field and its time derivative, $\budom^n$ and $\budomdot^n$, from the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot,bc_fl_mem_dom_1_disc,bc_fl_mem_dom_2_disc,bc_fl_mem_dom_3_disc,bc_fl_mem_dom_4_disc,bc_fl_mem_dom_5_disc,bc_fl_mem_dom_6_disc,bc_fl_mem_dom_7_disc,bc_fl_mem_dom_8_disc}.
 
     }
+    
     \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
         We determine the \ac{bflu} fields $\bvbarf $ and $\sigmafr^\nmhalf$ by solving the \acp{pde}
         % 
