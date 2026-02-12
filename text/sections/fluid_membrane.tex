@@ -1,8 +1,8 @@
-\subsection{Fluid and Helfrich membrane}\label{sec_fl_mem}
+\subsection{\Acl{bflu} and \acl{mem}}\label{sec_fl_mem}
 
-In this Section, we will build on the analysis of \cref{sec_fl_elastic}, and complexify the structure of the elastic body with which \ac{bflu} interacts by considering, instead of an elastic material, an \ac{mem} \cite{helfrichElasticPropertiesLipid1973,derenyiFormationInteractionMembrane2002}.
+In this Section, we will build on the analysis of \cref{sec_fl_elastic}, and complexify the structure of the \acl{ela} with which \ac{bflu} interacts by considering, instead of an elastic material, an \ac{mem} \cite{helfrichElasticPropertiesLipid1973,derenyiFormationInteractionMembrane2002}.
 
-For this problem, we will consider the  geometry depicted in \cref{fig_ref_cur_mem}. A vertical channel with mirror symmetry about its mid axis is considered. The left boundary of the channel is \pomin{}, and the boundary \pomout{} lies on the symmetry axis. Fluid is injected from bottom to top on \pombottom. \ac{mem} lies on the top boundary of \ac{bflu}, \pomtop{}, which  coincides with the \ac{mem} manifold \pomline{}. Finally, we denote by $\om$ the region enclosed by the boundaries, and all the quantities above will be considered in the \ac{ref} and \ac{cur} configurations.
+For this problem, we will consider the  geometry depicted in \cref{fig_ref_cur_mem}. A vertical channel with mirror symmetry about its mid axis is considered. The left boundary of the channel is \pomin{}, and the right boundary \pomout{} lies on the symmetry axis. Fluid is injected from bottom to top on \pombottom. Here, \ac{mem} lies on the top boundary of \ac{bflu}, \pomtop{}, which  coincides with the \ac{mem} manifold \pomline{}. Finally, we denote by $\om$ the region enclosed by the boundaries, and all the quantities above will be considered in the \ac{ref} and \ac{cur} configurations.
 
 The geometry of \cref{fig_ref_cur_mem} may represent \ac{bflu} being confined in a large reservoir, lying on bottom of the channel, where the channel is a vertical neck of the reservoir, covered on top by \ac{mem}.
 
@@ -510,7 +510,7 @@ The \acp{pde} for \ac{bflu} are
     G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                   & ,
 \end{align}
 \ew
-where
+where we have set
 \begin{align}
     \label{eq_def_Vf}
     \bVf          & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\

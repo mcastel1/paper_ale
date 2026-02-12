@@ -1,48 +1,16 @@
-\subsection{Fluid and rigid body}\label{sec_fl_rigid}
+\subsection{\Acl{bflu} and \acl{rig}}\label{sec_fl_rigid}
 
-In this Section, we will discuss the interaction between a  \ac{bflu} and the simplest structure---a  \ac{rig} which is only allowed to turn about one point.
-
-
-In all the systems that we will consider, we will introduce the \ac{ref} and \ac{cur} configuration \cite{kamenskyLectureNotesMAE,landauTheoryElasticity1986,slaughterLinearizedTheoryElasticity2002}, see \cref{fig_ref_curr_rigid}. All quantities relative to the \ac{ref} and \ac{cur} configuration will be denoted by the superscript \ac{ref} and \ac{cur}, respectively.
-In the \ac{ref} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxr$. The  axis of the ellipse, e..g, the rigid body, lies parallel to the $\xc^1$ axis.
-In the \ac{cur} configuration, the region occupied by the bulk fluid is described by Cartesian coordinates $\bxc$. The  axis of the ellipse, \ac{rig}, forms an angle  $\theta$ (red arc) with respect to the $\xc^1$ axis.
+In this Section, we will discuss the interaction between a  \ac{bflu} and the simplest structure---a  \ac{rig} which is only allowed to turn about one point. Only the main results will be presented here; details can be found in \cref{sec_rigid_body_body,sec_rigid_body_fl,sec_eq_fluid_domain}, respectively, and the temporal discretization is discussed in \cref{sec_temp_discretization_rig}.
 
 
-The \ac{ref} configuration, is related to the \ac{cur} one as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr_rigid}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the reference configuration through the deformation field \cite{landauFluidMechanics1987}
-\be\label{eq_def_u}
-\budom^t(\bxr) \equiv \bxc - \bxr.
-\ee
-and the deformation-gradient tensor
-\be
-\label{eq_def_F}
-F_{\alpha \beta}(\bu) \equiv \delta_{\alpha \beta} + \pderr{u^ \alpha}{\beta}.
-\ee
-In what follows, greek indices $\alpha, \beta, \cdots$ will be used to denote vectors and tensors in  two-dimensional Euclidean space---their position as upper or lower indices is thus immaterial \cite{marchiafavaAppuntiDiGeometria2005,landauTheoryElasticity1986}.
 
-Here, we will denote the mapping between $\bxc$ and $\bxr$ in \cref{eq_def_u} with the fields
-\begin{align}\label{eq_def_phi}
-        \bxc & = \bm{\varphi}^t(\bxr), \\
-        \label{eq_def_psi}
-        \bxr & = \bm{\psi}^t(\bxc).
-\end{align}
-
-We denote the \ac{bflu} velocity and surface tension by $\vfc(\bxc)$ and $\sigmafc(\bxc)$, respectively, where the superscript \ac{cur} specifies that these fields depend on the coordinate $\bxc$ in the \ac{cur} configuration.
-
-For each field $\bvfc({\bxc}), \sigmaf(\bxc)$ which depends on the coordinate $\bxc$ in the \ac{cur} configuration, we introduce its counterpart in the \ac{ref} configuration:
-\begin{align}
-        \label{eq_vf_ref}
-        \bvfr(\bxr, t)    & \equiv {\bm \vfc}( \bm{\varphi}^t(\bxr), t), \\
-        \label{eq_sigmaf_ref}
-        \sigmafr(\bxr, t) & \equiv  \sigmafc( \bm{\varphi}^t(\bxr), t).
-\end{align}
-
-
-The solution of the interaction dynamics between \ac{bflu} and \ac{rig} is  involved because of the presence of the moving boundary \pomellipsec, cf. \cref{fig_ref_curr_rigid}. Following the \ac{ale} procedure, we will  bridge between the Lagrangian and the Eulerian description used to describe, respectively,  \ac{rig} and \ac{bflu}  \cite{kamenskyLectureNotesMAE}. To achieve this, in what follows we will write the equations of motion for \ac{rig} and \ac{bflu}, which are naturally formulated the \ac{cur} configuration first, and then rewrite them in the \ac{ref} configuration.
+As shown in  \cref{fig_ref_curr_rigid}, in the \ac{ref} configuration the  axis of the ellipse, e..g, \ac{rig}, lies parallel to the $\xc^1$ axis, while in the \ac{cur} configuration, such axis forms an angle  $\theta$ (red arc) with respect to the $\xc^1$ axis,
 
 
 \begin{figure*}
         \centering
-        \includegraphics[width=\textwidth]{figures/figure_6/figure_6.pdf}
+        \hspace{-1cm}
+        \includegraphics[width=1.05\textwidth]{figures/figure_6/figure_6.pdf}
         \caption{
                 \label{fig_ref_curr_rigid}
                 \Acl{ref} and \acl{cur} configuration for the interaction between a bulk fluid and a rigid body.
@@ -53,27 +21,16 @@ The solution of the interaction dynamics between \ac{bflu} and \ac{rig} is  invo
         }
 \end{figure*}
 
-%M revise to embed in text
-Details on the motion of \ac{rig}, \ac{bflu} and \ac{dom} can be found in \cref{sec_rigid_body_body,sec_rigid_body_fl,sec_eq_fluid_domain}, respectively, and the temporal discretization is discussed in \cref{sec_temp_discretization_rig}.
 
 
 
-An example of the system dynamics is shown in \cref{fig_fluid_rigid}, where we study the interaction between air (\ac{bflu}) and an aerogel (\ac{rig})---an ultra light solid material involving a large porous structure \cite{kistlerCoherentExpandedAerogels1931}. The channel  dimension are $L = 2.2 \, \met$, $h =  0.41 \, \met$, which have been taken from the \ac{feat2d} DFG 2D-3 benchmark example for a fuid flow around a cylinder \cite{blumFEAT2DFiniteElement1995,schaferBenchmarkComputationsLaminar1996}, see  \cref{fig_ref_curr_rigid}. Given that the materials, such as \ac{bflu} and \ac{bod}, are two dimensional, in what follows we will estimate their parameter values by considering their three-dimensional counterparts, and assume a unit thickness in the out-of-plane direction.
-The parameters for \ac{bod} have been estimated from the  properties of air: $\rhof = 1 \, \kg / \met^2$, $\etaf = 10^{-5} \, \pas\, \met \, \sec$ \cite{hilsenrath1955tables}. The  inflow velocity profile is chosen as a Poiseuille flow
+An example of the system dynamics is shown in \cref{fig_fluid_rigid}, where we study the interaction between air (\ac{bflu}) and an aerogel (\ac{rig})---an ultra light solid material involving a large porous structure \cite{kistlerCoherentExpandedAerogels1931}. The channel  dimension are $L = 2.2 \, \met$, $h =  0.41 \, \met$, which have been taken from the \ac{feat2d} DFG 2D-3 benchmark example for a fuid flow around a cylinder \cite{blumFEAT2DFiniteElement1995,schaferBenchmarkComputationsLaminar1996}, see  \cref{fig_ref_curr_rigid}. Given that the materials, such as \ac{bflu} and \ac{rig}, are two dimensional, in what follows we will estimate their parameter values by considering their three-dimensional counterparts, and assume a unit thickness in the out-of-plane direction.
+The parameters for \ac{rig} have been estimated from the  properties of air: $\rhof = 1 \, \kg / \met^2$, $\etaf = 10^{-5} \, \pas\, \met \, \sec$ \cite{hilsenrath1955tables}. The  inflow velocity profile is chosen as a Poiseuille flow
 \be\label{eq_inflow_profile}
 \vfin(\bxc) = \frac{6 v_0}{h^2} \xc^2 (\xc^2 - h),
 \ee
-with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-3} \,  \kg \, \met^2$, which corresponds to an aerogel density of $\sim 6 \, \kg/\met^3$ \cite{niculescuUpdatedOverviewSilica2024}. As shown in \cref{fig_fluid_rigid_timescale},  \ac{rig}  has an oscillatory behavior, whose period can be understood with scaling arguments---see \cref{sec_fluid_rigid_timescale}.
+with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}, see \cref{sec_fl_mem_dom} for details.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-3} \,  \kg \, \met^2$, which corresponds to an aerogel density of $\sim 6 \, \kg/\met^3$ \cite{niculescuUpdatedOverviewSilica2024}. As shown in \cref{fig_fluid_rigid_timescale},  \ac{rig}  has an oscillatory behavior, whose period can be understood with scaling arguments---see \cref{sec_fluid_rigid_timescale}.
 
-
-\begin{figure}
-        \centering
-        \includegraphics[width=\columnwidth]{figures/figure_8/figure_8.pdf}
-        \caption{
-                \label{fig_fluid_rigid_timescale}
-                Angle of the \acl{rig} as a function of time for the interaction between a  \acl{bflu} and a  \acl{rig} shown in \cref{fig_fluid_rigid}.
-        }
-\end{figure}
 
 
 
