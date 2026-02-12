@@ -1,4 +1,4 @@
-\section{Fluid and Helfrich membrane}\label{sec_fl_mem}
+\subsection{Fluid and Helfrich membrane}\label{sec_fl_mem}
 
 In this Section, we will build on the analysis of \cref{sec_fl_elastic}, and complexify the structure of the elastic body with which \ac{bflu} interacts by considering, instead of an elastic material, an \ac{mem} \cite{helfrichElasticPropertiesLipid1973,derenyiFormationInteractionMembrane2002}.
 
@@ -6,7 +6,7 @@ For this problem, we will consider the  geometry depicted in \cref{fig_ref_cur_m
 
 The geometry of \cref{fig_ref_cur_mem} may represent \ac{bflu} being confined in a large reservoir, lying on bottom of the channel, where the channel is a vertical neck of the reservoir, covered on top by \ac{mem}.
 
-\subsection{\Acl{mem} motion}
+\subsubsection{\Acl{mem} motion}
 \label{sec_fl_mem_mem}
 
 Both the physical nature and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: its material elements can flow both tangentially and normally to it.
@@ -149,7 +149,7 @@ Finally, \cref{bc_fl_mem_mem_5} fixes the \ac{mem} tension on \pomlinein.
 
 
 
-\subsection{\Acl{dom} motion}
+\subsubsection{\Acl{dom} motion}
 \label{sec_fl_mem_dom}
 
 
@@ -230,13 +230,13 @@ We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \
     }
 \end{figure*}
 
-\subsection{\Acl{bflu} motion}
+\subsubsection{\Acl{bflu} motion}
 \label{sec_fl_mem_flu}
 
 We will now discuss the \ac{bflu} equations of motion, and present them first in \ac{cur} configuration coordinates, and then transform them in \ac{ref} coordinates.
 
 
-\subsubsection{Equations of motion in  \acl{cur} configuration coordinates}
+\paragraph{Equations of motion in  \acl{cur} configuration coordinates}
 \label{sec_fl_mem_flu_cur}
 
 In \ac{cur} coordinates, the \ac{bflu} equations of motion are the \ac{ns} and continuity equations \cite{landauFluidMechanics1987}:
@@ -274,7 +274,7 @@ According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bot
 Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension  matches the reservoir's.
 
 
-\subsubsection{Equations of motion in  \acl{ref} configuration coordinates}
+\paragraph{Equations of motion in  \acl{ref} configuration coordinates}
 \label{sec_fl_mem_flu_ref}
 
 We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem_flu_cur}   in terms of $\bvfr$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} yield, respectively,
@@ -295,7 +295,7 @@ G_{\alpha \beta}(\bu) \equiv [F(\bu)]^{-1}_{\alpha \beta}.
 
 
 
-\subsection{Temporal discretization}\label{sec_temp_discretization_mem}
+\subsubsection{Temporal discretization}\label{sec_temp_discretization_mem}
 
 To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discretize time by setting $\deltat \equiv T/N$, $t_n \equiv n\, \deltat$, with $n = 0, 1, \cdots, N$.
 
@@ -316,7 +316,7 @@ and similarly for other \ac{bflu} and \ac{mem} fields.
 
 
 %C add details in these sections - start 
-\subsubsection{\Acl{mem}}\label{sec_temp_discretization_mem_mem}
+\paragraph{\Acl{mem}}\label{sec_temp_discretization_mem_mem}
 
 
 We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-dyn-dX2} as follows
@@ -459,7 +459,7 @@ The \acp{bc} for \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_d
 
 In \cref{bc_fl_mem_mem_6_disc}, $\bm \normalmem$ is the unit normal to \pomline{}: It lies in the tangent bundle of $\omlineeq$, it is directed  outside $\omlineeq$, and it is normalized according to $\normalmem^i \normalmem_i = 1$ \cite{reallGeneralRelativity,marchiafavaAppuntiDiGeometria2005,worthmullerIRENEFluIdLayeR2025}.
 
-\subsubsection{\Acl{dom}}\label{sec_temp_discretization_mem_dom}
+\paragraph{\Acl{dom}}\label{sec_temp_discretization_mem_dom}
 
 The discretization of the equations of motion for  \ac{dom} proceeds along the same lines as in \cref{sec_fl_rigid}, see \cref{sec_splitting_scheme_fl_rig_dom}. The discrete version of the \acp{pde} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} is
 
@@ -492,7 +492,7 @@ with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_d
 %sign
 
 
-\subsubsection{\Acl{bflu}}\label{sec_temp_discretization_mem_bflu}
+\paragraph{\Acl{bflu}}\label{sec_temp_discretization_mem_bflu}
 
 
 The discretization of the equations of motion for  \ac{bflu} proceeds along the same lines as in \cref{sec_fl_rigid}, see \cref{sec_splitting_scheme_fl_rig_fl}.
