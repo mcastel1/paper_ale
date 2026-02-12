@@ -434,7 +434,7 @@ In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomated
     }
 \end{enumerate}
 
-We   solve the \ac{bvp} given by \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem}, with \acp{bc}
+The \acp{bc} for \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem} are
 \begin{align}
     \label{bc_fl_mem_mem_1_disc}
     \vbarmem^i                                         & = 0 \text{ on } \pomlineineqr,  \\
@@ -448,8 +448,11 @@ We   solve the \ac{bvp} given by \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2
     \phimem                                            & = 0 \text{ on } \pomlineineqr,  \\
     \label{bc_fl_mem_mem_6_disc}
     \normalmem^\nmhalf_i  \nab^{\nmhalf, \, i} \phimem & = 0 \text{ on } \pomlineeqr,    \\
+    \label{bc_fl_mem_mem_7_disc}
     \bumem^{\nmhalf}                                   & = 0 \text{ on } \pomlineineqr,  \\
+    \label{bc_fl_mem_mem_8_disc}
     \umem^{\nmhalf,\, 1}                               & = 0 \text{ on } \pomlineouteqr, \\
+    \label{bc_fl_mem_mem_9_disc}
     \pder{\umem^{\nmhalf, \, 2}}{x^1}                  & = 0 \text{ on } \pomlineouteqr.
 \end{align}
 
@@ -493,6 +496,67 @@ with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_d
 
 
 The discretization of the equations of motion for  \ac{bflu} proceeds along the same lines as in \cref{sec_fl_rigid}, see \cref{sec_splitting_scheme_fl_rig_fl}.
+
+
+
+The \acp{pde} for \ac{bflu} are
+\bw
+\begin{align}
+    \label{eq_fl_rigid_fl_1_reference_disc_aux}
+    \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
+    G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                          \\
+    \label{eq_poiss_like_phi}
+    \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                   & = \newlinenn
+    G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                   & ,
+\end{align}
+\ew
+where
+\begin{align}
+    \label{eq_def_Vf}
+    \bVf          & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\
+    \label{eq_def_sigmarast}
+    \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                     \\
+    \label{eq_def_phi_pressure}
+    \phif         & \equiv \sigmafr^\ast - \sigmafr^{n-1/2}.
+\end{align}
+
+
+The \acp{bc} for \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} are
+\begin{align}
+    \label{bc_fl_membrane_1_current_disc}
+    \bvbarf                                         & =  \vfbottom  \text{ on } \pombottomeqr, \\
+    \label{bc_fl_membrane_2_current_disc}
+    \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,        \\
+    \label{bc_fl_membrane_3_current_disc}
+    \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,         \\
+    \label{bc_fl_membrane_4_current_disc}
+    G(\budom^{n-1})_{\alpha 1}\pderr{\Vf^2}{\alpha} & =  0 \; \text{ on } \pomouteqr ,
+\end{align}
+\begin{align}
+    \label{bc_fl_membrane_5_current_disc}
+    \bvbarf(x^1, h) & = \umemdot^\nmhalf(x^1)  \text{ on } \pomtopeqr, & \\
+    \label{bc_fl_membrane_6_current_disc}
+    \phif           & = 0 \text{ on } \pombottomeqr,
+\end{align}
+\begin{align}
+    \label{bc_fl_membrane_7_current_disc}
+    \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1})
+    \pderr{ \phif   }{\beta }                        & = \newlinenn
+    0
+    \text{ on } \pomineqr \cup \pomtopeqr ,          &                             \\
+    \label{bc_fl_membrane_8_current_disc}
+    G(\budom^{n-1})_{\alpha 1} \pderr{\phif}{\alpha} & = 0 \text{ on } \pomouteqr.
+\end{align}
+
+
+Finally, $\bvfr^n$ is determined from $\bvbarf $ and $\sigmafr^\nmhalf$ by means of the relation
+
+\be
+\label{eq_phi_1}
+\rhof \frac{\vbarf^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phif   }{\beta } \text{ in } \omr.
+\ee\vspace{1cm}\\
+
+
 %C add details in these sections - end
 
 
@@ -502,69 +566,17 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
 
 \begin{itemize}
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
-
-
-
-
-        This step determines the \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$.
+        The \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$ are determined by solving the \ac{bvp} given by  \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem,bc_fl_mem_mem_1_disc,bc_fl_mem_mem_2_disc,bc_fl_mem_mem_3_disc,bc_fl_mem_mem_4_disc,bc_fl_mem_mem_5_disc,bc_fl_mem_mem_6_disc,bc_fl_mem_mem_7_disc,bc_fl_mem_mem_8_disc,bc_fl_mem_mem_9_disc}.
     }
+
     \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
         We determine the \ac{dom} displacement field and its time derivative, $\budom^n$ and $\budomdot^n$, from the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot,bc_fl_mem_dom_1_disc,bc_fl_mem_dom_2_disc,bc_fl_mem_dom_3_disc,bc_fl_mem_dom_4_disc,bc_fl_mem_dom_5_disc,bc_fl_mem_dom_6_disc,bc_fl_mem_dom_7_disc,bc_fl_mem_dom_8_disc}.
 
     }
+
     \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
-        We determine the \ac{bflu} fields $\bvbarf $ and $\sigmafr^\nmhalf$ by solving the \acp{pde}
-        % 
-        \bw
-        \begin{align}
-            \label{eq_fl_rigid_fl_1_reference_disc_aux}
-            \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
-            G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                          \\
-            \label{eq_poiss_like_phi}
-            \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                   & = \newlinenn
-            G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                   & ,
-        \end{align}
-        \ew
-        where
-        \begin{align}
-            \label{eq_def_Vf}
-            \bVf          & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\
-            \label{eq_def_sigmarast}
-            \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                     \\
-            \label{eq_def_phi_pressure}
-            \phif         & \equiv \sigmafr^\ast - \sigmafr^{n-1/2}.
-        \end{align}
-        The \acp{bc} for \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} are
-        \begin{align}
-            \label{bc_fl_membrane_1_current_disc}
-            \bvbarf                                         & =  \vfbottom  \text{ on } \pombottomeqr, \\
-            \label{bc_fl_membrane_2_current_disc}
-            \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,        \\
-            \label{bc_fl_membrane_3_current_disc}
-            \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,         \\
-            \label{bc_fl_membrane_4_current_disc}
-            G(\budom^{n-1})_{\alpha 1}\pderr{\Vf^2}{\alpha} & =  0 \; \text{ on } \pomouteqr ,
-        \end{align}
-        \begin{align}
-            \label{bc_fl_membrane_5_current_disc}
-            \bvbarf(x^1, h)                                  & = \newlinenn
-            \umemdot^\nmhalf(x^1)  \text{ on } \pomtopeqr,   &                                \\
-            \label{bc_fl_membrane_6_current_disc}
-            \phif                                            & = 0 \text{ on } \pombottomeqr, \\
-            \label{bc_fl_membrane_7_current_disc}
-            \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1})
-            \pderr{ \phif   }{\beta }                        & = \newlinenn
-            0
-            \text{ on } \pomineqr \cup \pomtopeqr ,          &                                \\
-            G(\budom^{n-1})_{\alpha 1} \pderr{\phif}{\alpha} & = 0 \text{ on } \pomouteqr.
-        \end{align}
-        Finally, $\bvfr^n$ is determined from $\bvbarf $ and $\sigmafr^\nmhalf$ by means of the relation
-        % 
-        \be
-        \label{eq_phi_1}
-        \rhof \frac{\vbarf^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phif   }{\beta } \text{ in } \omr.
-        \ee
-        % 
+        We determine the \ac{bflu} fields $\bvmem^n $ and $\sigmafr^\nmhalf$ by solving the \ac{bvp} given by  \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi,bc_fl_membrane_1_current_disc,bc_fl_membrane_2_current_disc,bc_fl_membrane_3_current_disc,bc_fl_membrane_4_current_disc,bc_fl_membrane_5_current_disc,bc_fl_membrane_6_current_disc,bc_fl_membrane_7_current_disc,bc_fl_membrane_8_current_disc}, and by solving  \cref{eq_phi_1}.
+
     }
 \end{itemize}
 
