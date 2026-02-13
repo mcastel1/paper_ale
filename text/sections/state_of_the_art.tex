@@ -1,0 +1,22 @@
+\subsection{State of the art}\label{sec_state_of_the_art}
+
+A number of existing studies rely on the hypothesis that the \acl{bflu} surrounding the \acl{mem} is inertialess.
+For instance, Arroyo et al. study the interaction between a \acl{mem} and bulk fluid in the Stokes approximation, for simple membrane geometries that can be described by a single parameter \cite{arroyoRelaxationDynamicsFluid2009i}.
+% 
+Boedec and coauthors combined  \ac{fe} and \ac{be} methods describe an \acl{mem} interacting with  an inertialess \acl{bflu} \cite{boedecIsogeometricFEMBEMSimulations2017}. In there, the membrane surface rheology, such as viscous effects and  flows induced by surface-tension gradients, is neglected.
+% 
+A \acl{mem} coupled to a \acl{bflu} has been recently studied by Zhou and co-authors  with \ac{be} and \ac{fe} methods, under the assumption that the \acl{bflu} is inertialess and that \acl{mem}  is  inextensible \cite{zhouModelingSimulationOpen2026}.
+% 
+Barakat and Shaqfeh  modelled vesicles in a circular tube by means of  \ac{be} methods and lubrication theory, by neglecting \acl{mem} rheology and describing \acl{bflu}  as inertialess \cite{barakatStokesFlowVesicles2018}.
+% 
+Finally, Rodrigues et al., studied the interaction between an inertialess, closed \aclp{mem} and \aclp{bflu}  with \ac{fe} methods, by adopting a minimal description for the fluid, which is solely modelled as a volume constraint \cite{rodriguesSemiimplicitFiniteElement2015}.
+
+
+
+Other studies go beyond the inertialess approximation, and rely on simplifying assumptions for the \acl{mem}.
+% 
+For instance, Bonito et al. propose a \ac{fe} model for a \acl{mem} interacting  an \acl{bflu},  the latter being in the inertial regime  \cite{bonitoDynamicsBiomembranesEffect2011,bonitoParametricFEMGeometric2010}. In this study \acl{mem} is treated as a purely \acl{ela}, characterized  solely by bending rigidity, area and volume constraints---its fluid features, such as tangential and normal flows, are neglected.
+% 
+Laadhari extended the analyses above to the interaction   between a \acl{mem} and a non-Newtonian \acl{bflu}, in which membrane rheology is still neglected  \cite{laadhariFiniteElementMethodSimulation2023}.
+% 
+The interaction between a \acl{mem} and a \acl{bflu}---both in the inertial regime---has been studied by Barrett and co-authors, \cite{barrettFiniteElementApproximation2016}, under the assumption that the \ac{mem} is perfectly inextensible. Such analysis is based on  a fluidic approach, in which the \acl{mem} does not obey its own, intrinsic rheology---see below---but it is advected by the surrounding \acl{bflu}. As a result, the membrane tangential and normal velocities are not determined as the result of the surfacial \ac{ns} equations, but they match the respective components of the \acl{bflu} velocity.

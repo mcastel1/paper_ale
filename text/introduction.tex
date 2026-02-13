@@ -1,2 +1,13 @@
 \section{Introduction}
 \label{sec_introduction}
+
+
+\input{text/sections/state_of_the_art}
+\vspace{0.5cm}\\
+
+In this study, we propose a novel \ac{fe} study of the interaction between a \acf{bflu} and a \acf{mem}, based on the \ac{ale} method \cite{malvernIntroductionMechanicsContinuous1969,howellp.AppliedSolidMechanics2008}. Our analysis  includes a complete description of the physical features of both \ac{mem} and \ac{bflu}, it may describe the inertial regime of both, and it accounts for a detailed description of \ac{mem} elasticity, rheology, and extensibility. Unlike fluidic approaches where the \ac{mem} dynamics is determined by the \ac{bflu}, here both the flows and shape of \ac{mem} are determined by intrinsic physical evolution equations. In addition, our study can account for both closed and open surfaces, by leveraging the flexibility of its \ac{fe} formulation \cite{loggAutomatedSolutionDifferential2012}.
+
+
+We solve for the system rheology by  implementing a splitting scheme \cite{chorinNumericalSolutionNavierStokes1968,loggAutomatedSolutionDifferential2012} for the \ac{ns} equations, applied  simultaneously to the \ac{mem} and \ac{bflu} flow dynamics, and demonstrate it to be numerically stable. As for the membrane shape, we generalize the \ac{al} gauge---previously proposed to describe the steady state of membrane tubes \cite{derenyiFormationInteractionMembrane2002}---to the system dynamics, by means of a time-dependent gauge fixing. Overall, this implementation allows for handling strongly turbulent \ac{mem} and \ac{bflu} flows, as well as large \ac{mem} deformations.\vspace{0.5cm}\\
+
+The paper is structured as follows. In \cref{sec_results} we discuss the \ac{ale} method, and present two illustrative examples: The interaction between \ac{bflu} and a \ac{rig} in \cref{sec_fl_rigid}, and that between  \ac{bflu} and \ac{ela} in \cref{sec_fl_elastic}. In \cref{sec_fl_mem} we present our approach for the interaction between \ac{bflu} and \ac{mem}. In particular, in \cref{sec_fl_mem_mem,sec_fl_mem_dom,sec_fl_mem_flu}, we discuss the splitting scheme and gauge-fixing procedure for the \ac{mem}, \ac{dom} and \ac{bflu}, respectively. Finally, \cref{sec_discussion} is devoted to the discussion of the results, and future directions.
