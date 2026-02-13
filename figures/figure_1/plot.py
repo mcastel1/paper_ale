@@ -26,7 +26,7 @@ import graphics.vector_plot as vec
 
 '''
 you can copy the data from abacus with
-./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'mu_n_12_*' 'nu_n_12_*' 'psi_n_12_*'  ~/Documents/paper_ale/figures/figure_1 1 100000 10
+./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'mu_n_12_*' 'nu_n_12_*' 'psi_n_12_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_1 1 100000 10
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of

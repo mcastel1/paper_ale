@@ -1,7 +1,7 @@
 '''
 copy data for this plot with
 
-./copy_from_abacus.sh line_1/solution/snapshots/csv/  'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' ~/Documents/paper_ale/figures/figure_4 1 1000000 1000
+./copy_from_abacus.sh line_1/solution/snapshots/csv/  'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' ~/Documents/work/manuscripts/paper_ale/figures/figure_4 1 1000000 1000
 
 '''
 import matplotlib

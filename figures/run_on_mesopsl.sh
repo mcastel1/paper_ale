@@ -6,7 +6,7 @@ clear
 clear
 
 # define the paths 
-ROOT_PATH=/Users/michelecastellana/Documents/paper_ale
+ROOT_PATH=/Users/michelecastellana/Documents/work/manuscripts/paper_ale
 PYTHON_MODULES_PATH=/Users/michelecastellana/Documents/python_modules
 LATEX_MODULES_PATH=/Users/michelecastellana/Documents/latex_modules
 FIGURES_PATH=$ROOT_PATH'/figures'

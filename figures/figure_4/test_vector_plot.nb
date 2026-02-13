@@ -1451,7 +1451,7 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{
   RowBox[{"Export", "[", 
-   RowBox[{"\"\</Users/michelecastellana/Documents/paper_ale/figures/figure_4/\
+   RowBox[{"\"\</Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_4/\
 solution/snapshots/csv/nodal_values/X_n_12_1.csv\>\"", ",", "t"}], "]"}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.968642610675683*^9, 3.968642636697345*^9}, {
@@ -1785,7 +1785,7 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{
   RowBox[{"Export", "[", 
-   RowBox[{"\"\</Users/michelecastellana/Documents/paper_ale/figures/figure_4/\
+   RowBox[{"\"\</Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_4/\
 solution/snapshots/csv/nodal_values/nu_n_12_1.csv\>\"", ",", "t"}], "]"}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.968642610675683*^9, 3.968642636697345*^9}, {
@@ -2103,7 +2103,7 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{
   RowBox[{"Export", "[", 
-   RowBox[{"\"\</Users/michelecastellana/Documents/paper_ale/figures/figure_4/\
+   RowBox[{"\"\</Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_4/\
 solution/snapshots/csv/nodal_values/psi_n_12_1.csv\>\"", ",", "t"}], "]"}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.968642610675683*^9, 3.968642636697345*^9}, {
@@ -2515,7 +2515,7 @@ Cell[BoxData[
 Cell[BoxData[
  RowBox[{
   RowBox[{"Export", "[", 
-   RowBox[{"\"\</Users/michelecastellana/Documents/paper_ale/figures/figure_4/\
+   RowBox[{"\"\</Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_4/\
 solution/snapshots/csv/nodal_values/v_n_1.csv\>\"", ",", "t"}], "]"}], 
   ";"}]], "Input",
  CellChangeTimes->{{3.968642610675683*^9, 3.968642636697345*^9}, {
