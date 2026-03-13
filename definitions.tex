@@ -1,5 +1,5 @@
 % definitions for equations and  symbols
-\providecommand{\mtitle}{Interaction between fluids and Helfrich membranes}
+\providecommand{\mtitle}{Interaction between  fluids and Helfrich membranes}
 \providecommand{\fluid}{\textrm{F}}
 \providecommand{\bod}{\textrm{B}}
 \providecommand{\ela}{\textrm{E}}
@@ -65,22 +65,22 @@
 
 \providecommand{\xcoord}{x}
 \providecommand{\xcartesian}{{\mathsf{x}}}
-\providecommand{\xc}{\xcartesian_\current}
-\providecommand{\xr}{\xcartesian_\reference}
+\newcommand{\xc}[1][]{{\xcartesian_{\current\ifx\empty#1\empty\else\, #1\fi}}}
+\newcommand{\xr}[1][]{{\xcartesian_{\reference\ifx\empty#1\empty\else\, #1\fi}}}
 \providecommand{\xmemc}{{\xc^\mem}}
 \providecommand{\xmemr}{{\xr^\mem}}
 \providecommand{\bxmemc}{{\bm{\xmemc}}}
 \providecommand{\bxmemr}{{\bm{\xmemr}}}
-\providecommand{\bxc}{{\bm{\xc}}}
-\providecommand{\bxr}{{\bm{\xr}}}
+\providecommand{\bxc}{{\bm{\xcartesian}_{\current}}}
+\providecommand{\bxr}{{\bm{\xcartesian}_{\reference}}}
 \providecommand{\bnormalr}{\hat{\bm n}^\reference}
 \providecommand{\normalmem}{{n_\mem}}
 \providecommand{\bnormalc}{\hat{\bm n}^\current}
 \providecommand{\normalr}[1]{\hat{n}^{\reference\, #1}}
 \providecommand{\normalc}[1]{\hat{n}^{\current\, #1}}
 
-\providecommand{\pderc}[2]{\pder{#1}{\xc^#2}}
-\providecommand{\pderr}[2]{\pder{#1}{\xr^#2}}
+\providecommand{\pderc}[2]{\pder{#1}{\xc[#2]}}
+\providecommand{\pderr}[2]{\pder{#1}{\xr[#2]}}
 
 
 %stress tensor
@@ -90,7 +90,7 @@
 
 \providecommand{\eqsfluidbodyref}{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference,eq_fl_rigid_rigid_reference,bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference}
 
-\definecolor{glossary-link-color}{RGB}{153,0,0}
+\definecolor{glossary-link-color}{RGB}{0,0,180}
 
 % elastic moduli
 \providecommand{\focalpoint}{f}

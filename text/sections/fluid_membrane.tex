@@ -15,9 +15,9 @@ In fact, a general parametrization of \ac{mem} is given by two functions $\bxmem
 Despite this pair of functions, a single \ac{pde}  determines the \ac{mem} shape \cite{zhong-canBendingEnergyVesicle1989}.
 To understand this redundancy, consider the  stretching field $\nu>0$, defined by
 \begin{align}\label{eq_intro_nu}
-    \nu ^ 2   & \equiv \bevec{1}   \cdot \bevec{1}, \\
-    \label{eq_def_e}
-    \bevec{i} & \equiv \pder{{\bxmemc}}{\xcoord^i}.
+        \nu ^ 2   & \equiv \bevec{1}   \cdot \bevec{1}, \\
+        \label{eq_def_e}
+        \bevec{i} & \equiv \pder{{\bxmemc}}{\xcoord^i}.
 \end{align}
 It is then easy to realize that two  parametrizations with different $\nu$s
 may yield the same physical shape. Such  redundancy  may be removed by a gauge fixing, i.e., by adding a constraint on $\bxmemc$, or its derivatives.
@@ -41,10 +41,10 @@ which is shown in \cref{fig_ref_cur_mem}A.
 %
 In addition, we introduce the  angle $\psi$ formed by the tangent to \ac{mem} with the $\xcartesian^1$ axis \cite{derenyiFormationInteractionMembrane2002}, defined by
 \begin{align}
-    \label{def_nu_psi_1}
-    \evec{1}{1} & = \nu \cos \psi, \\
-    \label{def_nu_psi_2}
-    \evec{1}{2} & =-\nu \sin \psi.
+        \label{def_nu_psi_1}
+        \evec{1}{1} & = \nu \cos \psi, \\
+        \label{def_nu_psi_2}
+        \evec{1}{2} & =-\nu \sin \psi.
 \end{align}
 Finally, the \ac{mem} metric tensor is defined by  \cite{marchiafavaAppuntiDiGeometria2005}
 \be\label{eq_def_g}
@@ -68,10 +68,10 @@ is the \ac{bflu} stress tensor \cite{landauFluidMechanics1987} and $\normalc{}$ 
 %
 The components of the force \crefs{def_f_fluid_mem} tangential and normal to \ac{mem} are \cite{desernoFluidLipidMembranes2015}
 \begin{align}
-    \label{def_force_tan}
-    f_{\fluid\, \text{t}}^i(\sigmastressc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\sigmastressc, \nu, \psi) \\
-    \label{def_force_norm}
-    f_{\fluid\, \text{n}} (\sigmastressc, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\sigmastressc, \nu, \psi),
+        \label{def_force_tan}
+        f_{\fluid\, \text{t}}^i(\sigmastressc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\sigmastressc, \nu, \psi) \\
+        \label{def_force_norm}
+        f_{\fluid\, \text{n}} (\sigmastressc, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\sigmastressc, \nu, \psi),
 \end{align}
 where in \cref{def_force_tan} we used the feature that the metric tensor depends on $\nu$ only, see \cref{eq_def_g,eq_intro_nu}.
 
@@ -79,18 +79,18 @@ The equations of motion for \ac{mem}  are \cite{worthmullerIRENEFluIdLayeR2025,a
 
 \bw
 \begin{align}
-    \label{eq-dyn-continuity}
-    \nab_i \vmem^i - 2 H \wmem                                                                              =            & 0,                                                                                                                                                                                                     \\
-    \label{eq-dyn-v}
-    \rhom \left( \pder{\vmem^i}{t}+ \vmem^j \nab_j \vmem^i  - 2 \vmem^j \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \nab^i \sigmam + f_{\etam\, \text{t}}^i + f_{\fluid\, \text{t}}^i,                                                                                                                                     \\
-    \label{eq-dyn-w}
-    \rhom \left[ \pder{\wmem}{t} + \vmem^i ( \vmem^j b_{ji} + \nabla_i \wmem  ) \right]                               =  & 2 \sigmam H    +  f_\kap +                                                         f_{\etam\, \text{n}}+ f_{\fluid\, \text{n}}                                                                       , \\
-    \label{eq-dyn-dX}
-    \pder {\bumem}{t}                                                                                            =       & \wmem \normalc{},                                                                                                                                                                                      \\
-    \label{eq-dyn-dX1}
-    \pder {\umem^1}{x^1}                                                                                            =    & -1 + \nu \cos \psi,                                                                                                                                                                                    \\
-    \label{eq-dyn-dX2}
-    \pder {\umem^2}{x^1}                                                                                               = & -\nu \sin \psi,
+        \label{eq-dyn-continuity}
+        \nab_i \vmem^i - 2 H \wmem                                                                              =            & 0,                                                                                                                                                                                                     \\
+        \label{eq-dyn-v}
+        \rhom \left( \pder{\vmem^i}{t}+ \vmem^j \nab_j \vmem^i  - 2 \vmem^j \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \nab^i \sigmam + f_{\etam\, \text{t}}^i + f_{\fluid\, \text{t}}^i,                                                                                                                                     \\
+        \label{eq-dyn-w}
+        \rhom \left[ \pder{\wmem}{t} + \vmem^i ( \vmem^j b_{ji} + \nabla_i \wmem  ) \right]                               =  & 2 \sigmam H    +  f_\kap +                                                         f_{\etam\, \text{n}}+ f_{\fluid\, \text{n}}                                                                       , \\
+        \label{eq-dyn-dX}
+        \pder {\bumem}{t}                                                                                            =       & \wmem \normalc{},                                                                                                                                                                                      \\
+        \label{eq-dyn-dX1}
+        \pder {\umem^1}{x^1}                                                                                            =    & -1 + \nu \cos \psi,                                                                                                                                                                                    \\
+        \label{eq-dyn-dX2}
+        \pder {\umem^2}{x^1}                                                                                               = & -\nu \sin \psi,
 \end{align}
 \ew
 and they hold for $\xcoord^1 \in \omlineeqr$.
@@ -101,17 +101,17 @@ We refer to \cite{desernoFluidLipidMembranes2015,worthmullerIRENEFluIdLayeR2025,
 \Cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively.
 The first term in the \ac{rhs} of \cref{eq-dyn-v} represnts the force on membrane elements induced by gradients of line tension, while the first term in the \ac{rhs} of \cref{eq-dyn-w} constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004,landauFluidMechanics1987}. The other terms read
 \begin{align}
-    \label{eq_def_f_kap}
-    f_\kap (\nu, \psi)                                                                                                       & \equiv                                                                                                  \newlinenn
-    -2\kap [ \nab_i \nab^i H + 2 H (H^2-K)],                                                                                 &                                                                                                                                 \\
-    \label{eq_def_f_eta_t}
-    f_{\etam\, \text{t}}^i(\vmem, \wmem,
-    \nu, \psi)                                                                                                               & \equiv                                                                                                             & \newlinenn
-    \etam [ - \nablb \vmem^i - \newlinenn
-    2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j \wmem + 2 K \vmem^i  ]                                                & ,                                                                                                                  &            \\
-    \label{eq_def_f_eta_n}
-    f_{\etam\, \text{n}}      (\vmem, \wmem, \nu, \psi)                                                                      & \equiv                                                                                                             & \newlinenn
-    2 \etam [ (\nab^i \vmem^j)b_{ij} - 2 \wmem (2 H^2 - K)                                                                 ] & .
+        \label{eq_def_f_kap}
+        f_\kap (\nu, \psi)                                                                                                       & \equiv                                                                                                  \newlinenn
+        -2\kap [ \nab_i \nab^i H + 2 H (H^2-K)],                                                                                 &                                                                                                                                 \\
+        \label{eq_def_f_eta_t}
+        f_{\etam\, \text{t}}^i(\vmem, \wmem,
+        \nu, \psi)                                                                                                               & \equiv                                                                                                             & \newlinenn
+        \etam [ - \nablb \vmem^i - \newlinenn
+        2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j \wmem + 2 K \vmem^i  ]                                                & ,                                                                                                                  &            \\
+        \label{eq_def_f_eta_n}
+        f_{\etam\, \text{n}}      (\vmem, \wmem, \nu, \psi)                                                                      & \equiv                                                                                                             & \newlinenn
+        2 \etam [ (\nab^i \vmem^j)b_{ij} - 2 \wmem (2 H^2 - K)                                                                 ] & .
 \end{align}
 In \cref{eq_def_f_kap}, $f_\kappa$ is represents the resistance of \ac{mem} to bending, and it is derived from Helfrich model \cite{helfrichElasticPropertiesLipid1973}, while $f_{\etam\, t}$ and $f_{\etam\, \text{n}}$ in \cref{eq_def_f_eta_t,eq_def_f_eta_n} are, respectively, the tangential and normal component of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i}.
 %
@@ -123,22 +123,22 @@ Finally, $\rhom$, $\sigmam$ and $\kappa$ are, respectively, the density, line te
 
 We choose the following \acp{bc} for \cref{eq-dyn-continuity,eq-dyn-v,eq-dyn-w,eq-dyn-dX,eq-dyn-dX1,eq-dyn-dX2}:
 \begin{align}
-    \label{bc_fl_mem_mem_1}
-    \vmem^i                   & = 0 \text{ on } \pomlineineqr,        \\
-    \label{bc_fl_mem_mem_2}
-    \vmem^i                   & = 0 \text{ on } \pomlineouteqr,       \\
-    \label{bc_fl_mem_mem_3}
-    \wmem                     & = 0 \text{ on } \pomlineineqr,        \\
-    \label{bc_fl_mem_mem_4}
-    \nab_i \wmem              & = 0 \text{ on } \pomlineouteqr,       \\
-    \label{bc_fl_mem_mem_5}
-    \sigmam                   & = \sigmaml \text{ on } \pomlineineqr, \\
-    \label{bc_fl_mem_mem_6}
-    \bumem                    & = 0 \text{ on } \pomlineineqr,        \\
-    \label{bc_fl_mem_mem_7}
-    \umem^1                   & = 0 \text{ on } \pomlineouteqr,       \\
-    \label{bc_fl_mem_mem_8}
-    \pder{\umem^2}{\xcoord^1} & = 0 \text{ on } \pomlineouteqr.
+        \label{bc_fl_mem_mem_1}
+        \vmem^i                   & = 0 \text{ on } \pomlineineqr,        \\
+        \label{bc_fl_mem_mem_2}
+        \vmem^i                   & = 0 \text{ on } \pomlineouteqr,       \\
+        \label{bc_fl_mem_mem_3}
+        \wmem                     & = 0 \text{ on } \pomlineineqr,        \\
+        \label{bc_fl_mem_mem_4}
+        \nab_i \wmem              & = 0 \text{ on } \pomlineouteqr,       \\
+        \label{bc_fl_mem_mem_5}
+        \sigmam                   & = \sigmaml \text{ on } \pomlineineqr, \\
+        \label{bc_fl_mem_mem_6}
+        \bumem                    & = 0 \text{ on } \pomlineineqr,        \\
+        \label{bc_fl_mem_mem_7}
+        \umem^1                   & = 0 \text{ on } \pomlineouteqr,       \\
+        \label{bc_fl_mem_mem_8}
+        \pder{\umem^2}{\xcoord^1} & = 0 \text{ on } \pomlineouteqr.
 \end{align}
 
 \Cref{bc_fl_mem_mem_1,bc_fl_mem_mem_3,bc_fl_mem_mem_6} enforce the condition that the left extremity of \ac{mem}, \pomlinein, is clamped on the channel wall \pomin.
@@ -156,7 +156,7 @@ Finally, \cref{bc_fl_mem_mem_5} fixes the \ac{mem} tension on \pomlinein.
 
 We will determine $\budom$ as the solution of a \ac{bvp} given by the following elastic model \cite{kamenskyLectureNotesMAE,marsdenMathematicalFoundationsElasticity1994}
 \be\label{eq_mesh_fluid_rigid}
-\pder{\Sdom_{\alpha \beta}(\budom)}{\xr^\beta} = 0 \text{ in } \omr,
+\pder{\Sdom_{\alpha \beta}(\budom)}{\xr[\beta]} = 0 \text{ in } \omr,
 \ee
 where the elastic stress tensor $\Sdom$ is given by
 \be
@@ -165,70 +165,70 @@ where the elastic stress tensor $\Sdom$ is given by
 \ee
 and
 \begin{align}
-    \label{eq_ela_1}
-    T_{\alpha \beta}  \equiv & \kel(\budom) E_{\gamma \gamma} \delta_{\alpha \beta} +\newlinenn
-                             & 2 \muel(\budom) \left(E_{\alpha \beta} - \frac{1}{2} \delta_{\alpha \beta} E_{\gamma \gamma}\right), \\
-    \label{eq_ela_2}
-    E_{\alpha \beta}  \equiv & \frac{1}{2}\left( F_{\gamma \alpha}F_{\gamma \beta} - \delta_{\alpha \beta}\right),                  \\
-    \label{eq_ela_3}
-    \kel(\bu)         \equiv & \frac{1}{[\det(F(\bu))]^\zeta},                                                                      \\
-    \label{eq_ela_4}
-    \muel(\bu)        \equiv & \frac{1}{[\det(F(\bu))]^\zeta}.
+        \label{eq_ela_1}
+        T_{\alpha \beta}  \equiv & \kel(\budom) E_{\gamma \gamma} \delta_{\alpha \beta} +\newlinenn
+                                 & 2 \muel(\budom) \left(E_{\alpha \beta} - \frac{1}{2} \delta_{\alpha \beta} E_{\gamma \gamma}\right), \\
+        \label{eq_ela_2}
+        E_{\alpha \beta}  \equiv & \frac{1}{2}\left( F_{\gamma \alpha}F_{\gamma \beta} - \delta_{\alpha \beta}\right),                  \\
+        \label{eq_ela_3}
+        \kel(\bu)         \equiv & \frac{1}{[\det(F(\bu))]^\zeta},                                                                      \\
+        \label{eq_ela_4}
+        \muel(\bu)        \equiv & \frac{1}{[\det(F(\bu))]^\zeta}.
 \end{align}
 In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulus $\kel$ and the shear modulus $\muel$ on the deformation-gradient tensor \crefs{eq_def_F}. In the absence of this dependence, the elastic model above would be unstable under local compression \cite{kamenskyLectureNotesMAE}. In fact, the model's Lagrangian would not penalize configurations with  small $\det F$. The inclusion of the dependence \crefs{eq_ela_3,eq_ela_4} on $\det F$  allows for penalizing these configurations---the larger the exponent $\zeta > 0$, the stronger the penalty. As a result, this dependence makes the model stable under mesh compression, such as the one shown below \ac{rig} in \cref{fig_ref_curr_rigid}B.
 
 The equation of motion for $\budomdot$ is obtained by deriving \cref{eq_mesh_fluid_rigid} with respect to time, and using the fact that \ac{ref} coordinates are time independent:
 \be
 \label{eq_mesh_fluid_rigid_dot}
-\pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budom)}{t}  = 0 \text{ in } \omr.
+\pder{}{\xr[\beta]}\der{\Sdom_{\alpha \beta}(\budom)}{t}  = 0 \text{ in } \omr.
 \ee
 We impose the following \acp{bc} for  \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot}:
 \begin{align}
-    \label{bc_fl_mem_dom_1}
-    \budom                   & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
-    \label{bc_fl_mem_dom_2}
-    \udom^1                  & = 0 \text{ on } \pomouteqr,                       \\
-    \label{bc_fl_mem_dom_3}
-    \pder{\udom^2}{\xr^1}    & = 0 \text{ on }\pomouteqr,                        \\
-    \label{bc_fl_mem_dom_4}
-    \budom                   & = \bumem \text{ on }\pomtopeqr,                   \\
-    \label{bc_fl_mem_dom_5}
-    \budomdot                & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
-    \label{bc_fl_mem_dom_6}
-    \udomdot^1               & = 0 \text{ on } \pomouteqr,                       \\
-    \label{bc_fl_mem_dom_7}
-    \pder{\udomdot^2}{\xr^1} & = 0 \text{ on }\pomouteqr,                        \\
-    \label{bc_fl_mem_dom_8}
-    \budomdot                & = \bumemdot \text{ on }\pomtopeqr.
+        \label{bc_fl_mem_dom_1}
+        \budom                    & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
+        \label{bc_fl_mem_dom_2}
+        \udom^1                   & = 0 \text{ on } \pomouteqr,                       \\
+        \label{bc_fl_mem_dom_3}
+        \pder{\udom^2}{\xr[1]}    & = 0 \text{ on }\pomouteqr,                        \\
+        \label{bc_fl_mem_dom_4}
+        \budom                    & = \bumem \text{ on }\pomtopeqr,                   \\
+        \label{bc_fl_mem_dom_5}
+        \budomdot                 & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
+        \label{bc_fl_mem_dom_6}
+        \udomdot^1                & = 0 \text{ on } \pomouteqr,                       \\
+        \label{bc_fl_mem_dom_7}
+        \pder{\udomdot^2}{\xr[1]} & = 0 \text{ on }\pomouteqr,                        \\
+        \label{bc_fl_mem_dom_8}
+        \budomdot                 & = \bumemdot \text{ on }\pomtopeqr.
 \end{align}
 \Cref{bc_fl_mem_dom_1} ensures that \ac{dom} is not deformed on $\pomineqr \cup \pombottomeqr$, cf. \cref{bc_ela_1}. \Cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3} follow from axial symmetry, and \cref{bc_fl_mem_dom_4} from the requirement that \ac{dom} and \ac{mem} deformations stay conforming \cite{kamenskyLectureNotesMAE}. Finally, the  \acp{bc} for $\bumemdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
 
 We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} contains up to second derivatives of $\budom$ and $\budomdot$. As a result, the \acp{bc} \crefs{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8} uniquely determine the solution of the \ac{bvp} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} \cite{evansPartialDifferentialEquations2010}.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/figure_9/figure_9.pdf}
-    \caption{
-        \label{fig_ref_cur_mem}
-        \Acl{ref} and \acl{cur} configuration for the interaction between a  \acf{bflu} and a \acf{mem}.
-        The Figure follows the same notation as \cref{fig_ref_curr_rigid}, and it represents a vertical channel with mirror symmetry about its mid axis, which coincides with \pomout; the right, mirrored part of the channel is not shown.
-        The top edge of the \ac{bflu} mesh, $\pomtopeqr$, coincides with the one-dimensional  manifold $\omlineeqr$ of \ac{mem}.
-    }
+        \centering
+        \includegraphics[width=\columnwidth]{figures/figure_9/figure_9.pdf}
+        \caption{
+                \label{fig_ref_cur_mem}
+                \Acl{ref} and \acl{cur} configuration for the interaction between a  \acf{bflu} and a \acf{mem}.
+                The Figure follows the same notation as \cref{fig_ref_curr_rigid}, and it represents a vertical channel with mirror symmetry about its mid axis, which coincides with \pomout; the right, mirrored part of the channel is not shown.
+                The top edge of the \ac{bflu} mesh, $\pomtopeqr$, coincides with the one-dimensional  manifold $\omlineeqr$ of \ac{mem}.
+        }
 \end{figure}
 
 \begin{figure*}
-    \centering
-    \includegraphics[width=\textwidth]{figures/figure_5/figure_5.pdf}
-    \caption{
-        Interaction between a \acf{bflu}  and a \acf{mem}. Here, \ac{bflu} is air, and \ac{mem} an elastomer, and the \ac{bflu} Reynolds number is $R \sim 200$.
-        \plab{A}  \Acf{ref} and \acf{cur} configuration of \ac{mem} (red and green curve, respectively), and \ac{mem} displacement field $\bumem$ (black arrows).
-        \plab{B} Stretch field of \ac{mem}.
-        \plab{C} Tangent angle of \ac{mem}.
-        \plab{D} and \plab{E}: \ac{bflu} velocity and tension, respectively; the notation is the same as in \cref{fig_fluid_rigid}.
-        \plab{F}, \plab{G} and \plab{H}: Tangential velocity, normal velocity and tension of \ac{mem}, respectively.
-        All panels refer to the same instant of time, shown on top, and they display also the deformed mesh (gray lines).
-        \label{fig_fluid_mem}
-    }
+        \centering
+        % \includegraphics[width=\textwidth]{figures/figure_5/figure_5.pdf}
+        \caption{
+                Interaction between a \acf{bflu}  and a \acf{mem}. Here, \ac{bflu} is air, and \ac{mem} an elastomer, and the \ac{bflu} Reynolds number is $R \sim 200$.
+                \plab{A}  \Acf{ref} and \acf{cur} configuration of \ac{mem} (red and green curve, respectively), and \ac{mem} displacement field $\bumem$ (black arrows).
+                \plab{B} Stretch field of \ac{mem}.
+                \plab{C} Tangent angle of \ac{mem}.
+                \plab{D} and \plab{E}: \ac{bflu} velocity and tension, respectively; the notation is the same as in \cref{fig_fluid_rigid}.
+                \plab{F}, \plab{G} and \plab{H}: Tangential velocity, normal velocity and tension of \ac{mem}, respectively.
+                All panels refer to the same instant of time, shown on top, and they display also the deformed mesh (gray lines).
+                \label{fig_fluid_mem}
+        }
 \end{figure*}
 
 \subsubsection{\Acl{bflu} motion}
@@ -243,10 +243,10 @@ We will now discuss the \ac{bflu} equations of motion, and present them first in
 In \ac{cur} coordinates, the \ac{bflu} equations of motion are the \ac{ns} and continuity equations \cite{landauFluidMechanics1987}:
 
 \begin{align}
-    \label{eq_fl_rigid_fl_1_current}
-    \rho_\fluid \left( \partial_t \vfc^\alpha + \vfc^\beta  \pderc{\vfc^\alpha}{\beta} \right) & =  \pderc{  \sigmastressc_{\alpha \beta }}{\beta} ,                                              \\
-    \label{eq_fl_rigid_fl_2_current}
-    \pderc{ \vfc^\alpha }{\alpha}                                                              & =                                                              0                               ,
+        \label{eq_fl_rigid_fl_1_current}
+        \rho_\fluid \left( \partial_t \vfc^\alpha + \vfc^\beta  \pderc{\vfc^\alpha}{\beta} \right) & =  \pderc{  \sigmastressc_{\alpha \beta }}{\beta} ,                                              \\
+        \label{eq_fl_rigid_fl_2_current}
+        \pderc{ \vfc^\alpha }{\alpha}                                                              & =                                                              0                               ,
 \end{align}
 and they hold for $\bxc \in \omc$.
 \Cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} describe the \ac{bflu} motion in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}---an example of the corresponding  \ac{ns} equations on a curved geometry is given by \cref{eq-dyn-v}.
@@ -256,18 +256,18 @@ and they hold for $\bxc \in \omc$.
 
 We enforce the following \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}:
 \begin{align}
-    \label{bc_fl_membrane_1_current}
-    \bvfc             & =  \vfbottom  \text{ on } \pombottomeqc,                                                                 \\
-    \label{bc_fl_membrane_2_current}
-    \bvfc             & =  \bzero  \text{ on } \pomineqc,                                                                        \\
-    \label{bc_fl_membrane_3_current}
-    \vfc^1            & =  0 \; \text{ on } \pomouteqc ,                                                                         \\
-    \label{bc_fl_membrane_4_current}
-    \pderc{\vfc^2}{2} & =  0 \; \text{ on } \pomouteqc ,                                                                         \\
-    \label{bc_fl_membrane_5_current}
-    \bvfc(\bxc)       & = \left. \der{\bumem(\xcoord^1)}{t} \right|_{\xcoord^1 = [{\bm \psi}^t(\bxc)]^1} \text{ on } \pomtopeqc, \\
-    \label{bc_fl_membrane_6_current}
-    \sigmafc          & = \sigmafbottomc \text{ on } \pombottomeqc.
+        \label{bc_fl_membrane_1_current}
+        \bvfc             & =  \vfbottom  \text{ on } \pombottomeqc,                                                                 \\
+        \label{bc_fl_membrane_2_current}
+        \bvfc             & =  \bzero  \text{ on } \pomineqc,                                                                        \\
+        \label{bc_fl_membrane_3_current}
+        \vfc^1            & =  0 \; \text{ on } \pomouteqc ,                                                                         \\
+        \label{bc_fl_membrane_4_current}
+        \pderc{\vfc^2}{2} & =  0 \; \text{ on } \pomouteqc ,                                                                         \\
+        \label{bc_fl_membrane_5_current}
+        \bvfc(\bxc)       & = \left. \der{\bumem(\xcoord^1)}{t} \right|_{\xcoord^1 = [{\bm \psi}^t(\bxc)]^1} \text{ on } \pomtopeqc, \\
+        \label{bc_fl_membrane_6_current}
+        \sigmafc          & = \sigmafbottomc \text{ on } \pombottomeqc.
 \end{align}
 
 According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bottom edge of $\omc$, \pombottomc, while \cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left wall \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} result from symmetry.
@@ -281,11 +281,11 @@ Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservo
 We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem_flu_cur} in terms of $\bvfr$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} yield, respectively,
 \bw
 \begin{align}
-    \label{eq_fl_rigid_fl_1_reference}
-    \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr^\beta} \right\}                                                       & =              \newlinenn
-    G_{\beta \alpha}(\budom^t(\bxr))  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^t(\bxr))           \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^t(\bxr)) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
-    \label{eq_fl_rigid_fl_2_reference}
-    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                                & = 0,
+        \label{eq_fl_rigid_fl_1_reference}
+        \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr[\beta]} \right\}                                                      & =              \newlinenn
+        G_{\beta \alpha}(\budom^t(\bxr))  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^t(\bxr))           \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^t(\bxr)) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
+        \label{eq_fl_rigid_fl_2_reference}
+        G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                                & = 0,
 \end{align}
 \ew
 which hold in $\omr$. In \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} the tensor $G$ is given by the inverse of $F$ \cite{kamenskyLectureNotesMAE}:
@@ -306,10 +306,10 @@ The  dynamics of the system is obtained as follows.\\ \vspace{5mm}
 
 Following the \ac{cn} temporal-discretization scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  \cite{loggAutomatedSolutionDifferential2012}: For example, we set
 \begin{align}
-    \label{eq_time_step_1}
-    \bvfr^n(\bxr)          & \equiv \bvfr(\bxr, t_n)  ,                               \\
-    \label{eq_time_step_2}
-    \sigmafr^{n-1/2}(\bxr) & \equiv \sigmafr\left(\bxr, \frac{t_n+t_{n-1}}{2}\right),
+        \label{eq_time_step_1}
+        \bvfr^n(\bxr)          & \equiv \bvfr(\bxr, t_n)  ,                               \\
+        \label{eq_time_step_2}
+        \sigmafr^{n-1/2}(\bxr) & \equiv \sigmafr\left(\bxr, \frac{t_n+t_{n-1}}{2}\right),
 \end{align}
 and similarly for other \ac{bflu} and \ac{mem} fields.
 
@@ -323,138 +323,138 @@ and similarly for other \ac{bflu} and \ac{mem} fields.
 We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-dyn-dX2} as follows
 \bw
 \begin{align}
-    \label{eq_mem_flu_disc_3}
-    \nab^\nmhalf_i \vmem^i - 2 H^\nmhalf \wmem^n                                                                              =                                                                                                                                     & 0,                        \\
-    \label{eq_mem_flu_disc_1}
-    \rhom \Big(  \frac{\vmem^{n,\, i} - \vmem^{n-1,\, i}}{\deltat} +   \frac{3}{2}\vmem^{n-1,\, j}  \nab^{\nmhalf}_j \vmem^{n-1,\, i} -   \frac{1}{2}\vmem^{n-2,\, j}  \nab^{\nmhalf}_j \vmem^{n-2,\, i} - 2 \vmem^{n-1,\, j} \wmem^{n-1} \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
-    \wmem^{n-1} \nab^{\nmhalf, \, i} \wmem^{n-1} \Big)                                                                                                                                                                                                              & =              \newlinenn
-    \nab^{\nmhalf, \, i} \sigmam^\nmhalf     +         f_{\etam\, \text{t}}^i\left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
-    f_{\fluid\, \text{t}}^i({\bm \sigmastressr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                          &
-    \\
-    \label{eq_mem_flu_disc_2}
-    \rhom \left( \frac{\wmem^n - \wmem^{n-1}}{\deltat} + \vmem^{n-1,\, i} \vmem^{n-1,\, j} b^\nmhalf_{ji} + \frac{3}{2} \vmem^{n-1, \, i}  \nab^\nmhalf_i \wmem^{n-1}  - \frac{1}{2} \vmem^{n-2, \, i}  \nab^\nmhalf_i \wmem^{n-2} \right)                          & =\newlinenn
-    f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmam^\nmhalf H^\nmhalf + f_{\etam\, \text{n}}     \left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
-    f_{\fluid\, \text{n}} ({\bm \sigmastressr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                            &\end{align}
+        \label{eq_mem_flu_disc_3}
+        \nab^\nmhalf_i \vmem^i - 2 H^\nmhalf \wmem^n                                                                              =                                                                                                                                     & 0,                        \\
+        \label{eq_mem_flu_disc_1}
+        \rhom \Big(  \frac{\vmem^{n,\, i} - \vmem^{n-1,\, i}}{\deltat} +   \frac{3}{2}\vmem^{n-1,\, j}  \nab^{\nmhalf}_j \vmem^{n-1,\, i} -   \frac{1}{2}\vmem^{n-2,\, j}  \nab^{\nmhalf}_j \vmem^{n-2,\, i} - 2 \vmem^{n-1,\, j} \wmem^{n-1} \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
+        \wmem^{n-1} \nab^{\nmhalf, \, i} \wmem^{n-1} \Big)                                                                                                                                                                                                              & =              \newlinenn
+        \nab^{\nmhalf, \, i} \sigmam^\nmhalf     +         f_{\etam\, \text{t}}^i\left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
+        f_{\fluid\, \text{t}}^i({\bm \sigmastressr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                          &
+        \\
+        \label{eq_mem_flu_disc_2}
+        \rhom \left( \frac{\wmem^n - \wmem^{n-1}}{\deltat} + \vmem^{n-1,\, i} \vmem^{n-1,\, j} b^\nmhalf_{ji} + \frac{3}{2} \vmem^{n-1, \, i}  \nab^\nmhalf_i \wmem^{n-1}  - \frac{1}{2} \vmem^{n-2, \, i}  \nab^\nmhalf_i \wmem^{n-2} \right)                          & =\newlinenn
+        f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmam^\nmhalf H^\nmhalf + f_{\etam\, \text{n}}     \left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
+        f_{\fluid\, \text{n}} ({\bm \sigmastressr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                            &\end{align}
 \ew
 \begin{align}
-    \label{eq_mem_flu_disc_4}
-    \frac {\bumem^\nmhalf-\bumem^\nmthreehalf}{\deltat}                                                                                 = & \wmem^{n-1} \normalc{\nmhalf}, \\
-    \label{eq_mem_flu_disc_5}
-    \pder {\umem^{\nmhalf, \, 1}}{x^1}                                                                                            =       &
-    -1 + \nu^\nmhalf \cos \psi^\nmhalf,                                                                                                                                    \\
-    \label{eq_mem_flu_disc_6}
-    \pder {\umem^{\nmhalf, \, 2}}{x^1}                                                                                               =    &
-    -\nu^\nmhalf \sin \psi^\nmhalf.
+        \label{eq_mem_flu_disc_4}
+        \frac {\bumem^\nmhalf-\bumem^\nmthreehalf}{\deltat}                                                                                 = & \wmem^{n-1} \normalc{\nmhalf}, \\
+        \label{eq_mem_flu_disc_5}
+        \pder {\umem^{\nmhalf, \, 1}}{x^1}                                                                                            =       &
+        -1 + \nu^\nmhalf \cos \psi^\nmhalf,                                                                                                                                    \\
+        \label{eq_mem_flu_disc_6}
+        \pder {\umem^{\nmhalf, \, 2}}{x^1}                                                                                               =    &
+        -\nu^\nmhalf \sin \psi^\nmhalf.
 \end{align}
 In \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, $\sigmastressr$ denotes the \ac{bflu} stress tensor in the \ac{ref} configuration:
 \begin{align}
-    \label{eq_def_sigma_current}
-    \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
-    =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
-                                                 & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfc^\beta}{\gamma}\Big].
+        \label{eq_def_sigma_current}
+        \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
+        =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
+                                                     & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfc^\beta}{\gamma}\Big].
 \end{align}
 
 Proceeding along the same lines, the discrete form of the \acp{bc} \crefs{bc_fl_mem_mem_1,bc_fl_mem_mem_2,bc_fl_mem_mem_3,bc_fl_mem_mem_4,bc_fl_mem_mem_5,bc_fl_mem_mem_6,bc_fl_mem_mem_7,bc_fl_mem_mem_8} reads, respectively,
 \begin{align}
-    \label{bc_fl_mem_mem_1_disc_bis}
-    \vmem^{n, \,i}                          & = 0 \text{ on } \pomlineineqr,        \\
-    \label{bc_fl_mem_mem_2_disc_bis}
-    \vmem^{n, \, i}                         & = 0 \text{ on } \pomlineouteqr,       \\
-    \label{bc_fl_mem_mem_3_disc_bis}
-    \wmem^n                                 & = 0 \text{ on } \pomlineineqr,        \\
-    \label{bc_fl_mem_mem_4_disc_bis}
-    \nab^\nmhalf_i \wmem^n                  & = 0 \text{ on } \pomlineouteqr,       \\
-    \label{bc_fl_mem_mem_5_disc_bis}
-    \sigmam^\nmhalf                         & = \sigmaml \text{ on } \pomlineineqr, \\
-    \label{bc_fl_mem_mem_6_disc_bis}
-    \bumem^\nmhalf                          & = 0 \text{ on } \pomlineineqr,        \\
-    \label{bc_fl_mem_mem_7_disc_bis}
-    \umem^{\nmhalf, \, 1}                   & = 0 \text{ on } \pomlineouteqr,       \\
-    \label{bc_fl_mem_mem_8_disc_bis}
-    \pder{\umem^{\nmhalf, \, 2}}{\xcoord^1} & = 0 \text{ on } \pomlineouteqr.
+        \label{bc_fl_mem_mem_1_disc_bis}
+        \vmem^{n, \,i}                          & = 0 \text{ on } \pomlineineqr,        \\
+        \label{bc_fl_mem_mem_2_disc_bis}
+        \vmem^{n, \, i}                         & = 0 \text{ on } \pomlineouteqr,       \\
+        \label{bc_fl_mem_mem_3_disc_bis}
+        \wmem^n                                 & = 0 \text{ on } \pomlineineqr,        \\
+        \label{bc_fl_mem_mem_4_disc_bis}
+        \nab^\nmhalf_i \wmem^n                  & = 0 \text{ on } \pomlineouteqr,       \\
+        \label{bc_fl_mem_mem_5_disc_bis}
+        \sigmam^\nmhalf                         & = \sigmaml \text{ on } \pomlineineqr, \\
+        \label{bc_fl_mem_mem_6_disc_bis}
+        \bumem^\nmhalf                          & = 0 \text{ on } \pomlineineqr,        \\
+        \label{bc_fl_mem_mem_7_disc_bis}
+        \umem^{\nmhalf, \, 1}                   & = 0 \text{ on } \pomlineouteqr,       \\
+        \label{bc_fl_mem_mem_8_disc_bis}
+        \pder{\umem^{\nmhalf, \, 2}}{\xcoord^1} & = 0 \text{ on } \pomlineouteqr.
 \end{align}
 
 In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDifferential2012,chorinNumericalSolutionNavierStokes1968}:
 \begin{enumerate}
-    \titleditem{Approximated velocities}{
-        \label{item_mem_split_1}
-        Proceeding along the lines of the splitting scheme for  \ac{bflu} of \cref{sec_splitting_scheme_fl_rig_fl}, we introduce the auxiliary  velocities $\bvbarmem$ and $\wbarmem$, which approximate, respectively, $\bvmem^n$ and $\wmem^n$ \cite{chorinNumericalSolutionNavierStokes1968}. We define $\bvbarmem$ and $\wbarmem$ as solutions of the \acp{pde}
-        \bw
-        \begin{align}
-            \label{eq_fl_mem_mem_disc_1}
-            \rhom \Big[  \frac{\vbarmem^i - \vmem^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem^{n-1,\, j} - \frac{1}{2} \vmem^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} -    \Wmem \nab^{\nmhalf, \, i} \Wmem \Big] & =              \newlinenn
-            \nab^{\nmhalf, \, i} \sigmamast     +         f_{\etam, \text{t}}^i\left( \bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
-            f_{\fluid\, \text{t}}^i({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                          &                           \\
-            \label{eq_fl_mem_mem_disc_2}
-            \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j b^\nmhalf_{ji} + \left( \frac{3}{2} \vmem^{n-1, \, i} - \frac{1}{2}\vmem^{n-3/2,\,i}\right) \nab^\nmhalf_i \Wmem \right]                                                             & =\newlinenn
-            f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f_{\etam\, \text{n}}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
-            f_{\fluid\, \text{n}} ({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf)                                                                                                                                             & ,
-        \end{align}
-        \ew
-        where we have set
-        \begin{align}
-            \label{eq_def_Vmem}
-            \Vmem^i    & \equiv \frac{\vbarmem^i + \vmem^{n-1,\,i}}{2}, \\
-            \label{eq_def_Wmem}
-            \Wmem      & \equiv \frac{\wbarmem + \wmem^{n-1}}{2},       \\
-            \label{eq_def_sigmamasst}
-            \sigmamast & \equiv \sigmam^{n-3/2},
-        \end{align}
-        \Cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the analog of \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, respectively,  with a fixed pressure field $\sigmamast$ from the preceding step---in what follows, we will synonymously use the terms `pressure' and `tension'  for conciseness \cite{worthmullerIRENEFluIdLayeR2025}.
+        \titleditem{Approximated velocities}{
+                \label{item_mem_split_1}
+                Proceeding along the lines of the splitting scheme for  \ac{bflu} of \cref{sec_splitting_scheme_fl_rig_fl}, we introduce the auxiliary  velocities $\bvbarmem$ and $\wbarmem$, which approximate, respectively, $\bvmem^n$ and $\wmem^n$ \cite{chorinNumericalSolutionNavierStokes1968}. We define $\bvbarmem$ and $\wbarmem$ as solutions of the \acp{pde}
+                \bw
+                \begin{align}
+                        \label{eq_fl_mem_mem_disc_1}
+                        \rhom \Big[  \frac{\vbarmem^i - \vmem^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem^{n-1,\, j} - \frac{1}{2} \vmem^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} -    \Wmem \nab^{\nmhalf, \, i} \Wmem \Big] & =              \newlinenn
+                        \nab^{\nmhalf, \, i} \sigmamast     +         f_{\etam, \text{t}}^i\left( \bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
+                        f_{\fluid\, \text{t}}^i({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                          &                           \\
+                        \label{eq_fl_mem_mem_disc_2}
+                        \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j b^\nmhalf_{ji} + \left( \frac{3}{2} \vmem^{n-1, \, i} - \frac{1}{2}\vmem^{n-3/2,\,i}\right) \nab^\nmhalf_i \Wmem \right]                                                             & =\newlinenn
+                        f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f_{\etam\, \text{n}}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
+                        f_{\fluid\, \text{n}} ({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf)                                                                                                                                             & ,
+                \end{align}
+                \ew
+                where we have set
+                \begin{align}
+                        \label{eq_def_Vmem}
+                        \Vmem^i    & \equiv \frac{\vbarmem^i + \vmem^{n-1,\,i}}{2}, \\
+                        \label{eq_def_Wmem}
+                        \Wmem      & \equiv \frac{\wbarmem + \wmem^{n-1}}{2},       \\
+                        \label{eq_def_sigmamasst}
+                        \sigmamast & \equiv \sigmam^{n-3/2},
+                \end{align}
+                \Cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the analog of \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, respectively,  with a fixed pressure field $\sigmamast$ from the preceding step---in what follows, we will synonymously use the terms `pressure' and `tension'  for conciseness \cite{worthmullerIRENEFluIdLayeR2025}.
 
-        Overall, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} determine $\vbarmem$ and $\wbarmem$.
-    }
-    \titleditem{Pressure correction}{
-        \label{item_mem_split_2}
-        Subtracting \cref{eq_mem_flu_disc_1,eq_fl_mem_mem_disc_1} and neglecting $\odeltat$ \cite{worthmullerIRENEFluIdLayeR2025}, we obtain
-        \be
-        \label{eq_fl_mem_mem_disc_4}
-        \rhom \frac{\vmem^{n, \, i} - \vbarmem^i }{\deltat}                         =   - \nab^{\nmhalf, \, i}\phimem,
-        \ee
-        where we have defined the pressure increment as
-        \begin{align}
-            \label{eq_def_phimem}
-            \phimem & \equiv \sigmamast - \sigmam^\nmhalf.
-        \end{align}
-        Proceeding along the same lines for \cref{eq_mem_flu_disc_2,eq_fl_mem_mem_disc_2}, we obtain
-        \be
-        \label{eq_fl_mem_mem_disc_5}
-        \wmem^n                                                                     =  \wbarmem.
-        \ee
-        By taking the covariant derivative of \cref{eq_fl_mem_mem_disc_4} and using the mass-conservation equation \crefs{eq_mem_flu_disc_3} and \cref{eq_fl_mem_mem_disc_5}, we obtain
-        \begin{align}
-            \label{eq_poisson_like_phi_mem}
-            \nab^\nmhalf_i \nab^{\nmhalf,\, i} \phimem                                & =  \newlinenn
-            \frac{\rhom}{\deltat} (\nab^\nmhalf_i \vbarmem^i - 2 H^\nmhalf \wbarmem). &
-        \end{align}
-        \Cref{eq_poisson_like_phi_mem} is a second-order \ac{pde} which determines $\phimem$, and thus the tension $\sigmam^\nmhalf$ through \cref{eq_def_phimem}.
-    }
-    \titleditem{Velocity correction}{
-        \label{item_mem_split_3}
-        The \ac{mem} velocity $\bvmem^n$ is determined by means of \cref{eq_poisson_like_phi_mem} in terms of $\bvbarmem$ and $\phimem$.
-    }
+                Overall, \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} determine $\vbarmem$ and $\wbarmem$.
+        }
+        \titleditem{Pressure correction}{
+                \label{item_mem_split_2}
+                Subtracting \cref{eq_mem_flu_disc_1,eq_fl_mem_mem_disc_1} and neglecting $\odeltat$ \cite{worthmullerIRENEFluIdLayeR2025}, we obtain
+                \be
+                \label{eq_fl_mem_mem_disc_4}
+                \rhom \frac{\vmem^{n, \, i} - \vbarmem^i }{\deltat}                         =   - \nab^{\nmhalf, \, i}\phimem,
+                \ee
+                where we have defined the pressure increment as
+                \begin{align}
+                        \label{eq_def_phimem}
+                        \phimem & \equiv \sigmamast - \sigmam^\nmhalf.
+                \end{align}
+                Proceeding along the same lines for \cref{eq_mem_flu_disc_2,eq_fl_mem_mem_disc_2}, we obtain
+                \be
+                \label{eq_fl_mem_mem_disc_5}
+                \wmem^n                                                                     =  \wbarmem.
+                \ee
+                By taking the covariant derivative of \cref{eq_fl_mem_mem_disc_4} and using the mass-conservation equation \crefs{eq_mem_flu_disc_3} and \cref{eq_fl_mem_mem_disc_5}, we obtain
+                \begin{align}
+                        \label{eq_poisson_like_phi_mem}
+                        \nab^\nmhalf_i \nab^{\nmhalf,\, i} \phimem                                & =  \newlinenn
+                        \frac{\rhom}{\deltat} (\nab^\nmhalf_i \vbarmem^i - 2 H^\nmhalf \wbarmem). &
+                \end{align}
+                \Cref{eq_poisson_like_phi_mem} is a second-order \ac{pde} which determines $\phimem$, and thus the tension $\sigmam^\nmhalf$ through \cref{eq_def_phimem}.
+        }
+        \titleditem{Velocity correction}{
+                \label{item_mem_split_3}
+                The \ac{mem} velocity $\bvmem^n$ is determined by means of \cref{eq_poisson_like_phi_mem} in terms of $\bvbarmem$ and $\phimem$.
+        }
 \end{enumerate}
 
 The \acp{bc} for \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem} are
 \begin{align}
-    \label{bc_fl_mem_mem_1_disc}
-    \vbarmem^i                                         & = 0 \text{ on } \pomlineineqr,  \\
-    \label{bc_fl_mem_mem_2_disc}
-    \vbarmem^i                                         & = 0 \text{ on } \pomlineouteqr, \\
-    \label{bc_fl_mem_mem_3_disc}
-    \wbarmem                                           & = 0 \text{ on } \pomlineineqr,  \\
-    \label{bc_fl_mem_mem_4_disc}
-    \nab^\nmhalf_i \wbarmem                            & = 0 \text{ on } \pomlineouteqr, \\
-    \label{bc_fl_mem_mem_5_disc}
-    \phimem                                            & = 0 \text{ on } \pomlineineqr,  \\
-    \label{bc_fl_mem_mem_6_disc}
-    \normalmem^\nmhalf_i  \nab^{\nmhalf, \, i} \phimem & = 0 \text{ on } \pomlineeqr,    \\
-    \label{bc_fl_mem_mem_7_disc}
-    \bumem^{\nmhalf}                                   & = 0 \text{ on } \pomlineineqr,  \\
-    \label{bc_fl_mem_mem_8_disc}
-    \umem^{\nmhalf,\, 1}                               & = 0 \text{ on } \pomlineouteqr, \\
-    \label{bc_fl_mem_mem_9_disc}
-    \pder{\umem^{\nmhalf, \, 2}}{x^1}                  & = 0 \text{ on } \pomlineouteqr.
+        \label{bc_fl_mem_mem_1_disc}
+        \vbarmem^i                                         & = 0 \text{ on } \pomlineineqr,  \\
+        \label{bc_fl_mem_mem_2_disc}
+        \vbarmem^i                                         & = 0 \text{ on } \pomlineouteqr, \\
+        \label{bc_fl_mem_mem_3_disc}
+        \wbarmem                                           & = 0 \text{ on } \pomlineineqr,  \\
+        \label{bc_fl_mem_mem_4_disc}
+        \nab^\nmhalf_i \wbarmem                            & = 0 \text{ on } \pomlineouteqr, \\
+        \label{bc_fl_mem_mem_5_disc}
+        \phimem                                            & = 0 \text{ on } \pomlineineqr,  \\
+        \label{bc_fl_mem_mem_6_disc}
+        \normalmem^\nmhalf_i  \nab^{\nmhalf, \, i} \phimem & = 0 \text{ on } \pomlineeqr,    \\
+        \label{bc_fl_mem_mem_7_disc}
+        \bumem^{\nmhalf}                                   & = 0 \text{ on } \pomlineineqr,  \\
+        \label{bc_fl_mem_mem_8_disc}
+        \umem^{\nmhalf,\, 1}                               & = 0 \text{ on } \pomlineouteqr, \\
+        \label{bc_fl_mem_mem_9_disc}
+        \pder{\umem^{\nmhalf, \, 2}}{x^1}                  & = 0 \text{ on } \pomlineouteqr.
 \end{align}
 
 
@@ -465,29 +465,29 @@ In \cref{bc_fl_mem_mem_6_disc}, $\bm \normalmem$ is the unit normal to \pomline{
 The discretization of the equations of motion for  \ac{dom} proceeds along the same lines as in \cref{sec_fl_rigid}, see \cref{sec_splitting_scheme_fl_rig_dom}. The discrete version of the \acp{pde} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} is
 
 \begin{align}
-    \label{eq_domain_fluid_rigid_disc}
-    \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr^\beta}          & = 0 \text{ in } \omr, \\
-    \label{eq_domain_fluid_rigid_disc_dot}
-    \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budom^n)}{t} & = 0 \text{ in } \omr,
+        \label{eq_domain_fluid_rigid_disc}
+        \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr[\beta]}          & = 0 \text{ in } \omr, \\
+        \label{eq_domain_fluid_rigid_disc_dot}
+        \pder{}{\xr[\beta]}\der{\Sdom_{\alpha \beta}(\budom^n)}{t} & = 0 \text{ in } \omr,
 \end{align}
 with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
 \begin{align}
-    \label{bc_fl_mem_dom_1_disc}
-    \budom^n                         & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
-    \label{bc_fl_mem_dom_2_disc}
-    \udom^{n, \, 1}                  & = 0 \text{ on } \pomouteqr,                        \\
-    \label{bc_fl_mem_dom_3_disc}
-    \pder{\udom^{n, \, 2}}{\xr^1}    & = 0 \text{ on } \pomouteqr,                        \\
-    \label{bc_fl_mem_dom_4_disc}
-    \budom^n                         & = \bumem^{\nmhalf} \text{ on } \pomtopeqr,         \\
-    \label{bc_fl_mem_dom_5_disc}
-    \budomdot^n                      & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
-    \label{bc_fl_mem_dom_6_disc}
-    \udomdot^{n, \, 1}               & = 0 \text{ on } \pomouteqr,                        \\
-    \label{bc_fl_mem_dom_7_disc}
-    \pder{\udomdot^{n, \, 2}}{\xr^1} & = 0 \text{ on } \pomouteqr,                        \\
-    \label{bc_fl_mem_dom_8_disc}
-    \budomdot^n                      & = \bumem^{\nmhalf} \text{ on } \pomtopeqr.
+        \label{bc_fl_mem_dom_1_disc}
+        \budom^n                          & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
+        \label{bc_fl_mem_dom_2_disc}
+        \udom^{n, \, 1}                   & = 0 \text{ on } \pomouteqr,                        \\
+        \label{bc_fl_mem_dom_3_disc}
+        \pder{\udom^{n, \, 2}}{\xr[1]}    & = 0 \text{ on } \pomouteqr,                        \\
+        \label{bc_fl_mem_dom_4_disc}
+        \budom^n                          & = \bumem^{\nmhalf} \text{ on } \pomtopeqr,         \\
+        \label{bc_fl_mem_dom_5_disc}
+        \budomdot^n                       & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
+        \label{bc_fl_mem_dom_6_disc}
+        \udomdot^{n, \, 1}                & = 0 \text{ on } \pomouteqr,                        \\
+        \label{bc_fl_mem_dom_7_disc}
+        \pder{\udomdot^{n, \, 2}}{\xr[1]} & = 0 \text{ on } \pomouteqr,                        \\
+        \label{bc_fl_mem_dom_8_disc}
+        \budomdot^n                       & = \bumem^{\nmhalf} \text{ on } \pomtopeqr.
 \end{align}
 
 
@@ -502,50 +502,50 @@ The discretization of the equations of motion for  \ac{bflu} proceeds along the 
 The resulting \acp{pde} for $\bvbarf$ and $\sigmafr$ are
 \bw
 \begin{align}
-    \label{eq_fl_rigid_fl_1_reference_disc_aux}
-    \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
-    G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                          \\
-    \label{eq_poiss_like_phi}
-    \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                   & = \newlinenn
-    G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                   & ,
+        \label{eq_fl_rigid_fl_1_reference_disc_aux}
+        \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr[\beta]}\right\} & =              \newlinenn
+        G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                           \\
+        \label{eq_poiss_like_phi}
+        \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                    & = \newlinenn
+        G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                    & ,
 \end{align}
 \ew
 where we have set
 \begin{align}
-    \label{eq_def_Vf}
-    \bVf          & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\
-    \label{eq_def_sigmarast}
-    \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                     \\
-    \label{eq_def_phi_pressure}
-    \phif         & \equiv \sigmafr^\ast - \sigmafr^{n-1/2}.
+        \label{eq_def_Vf}
+        \bVf          & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\
+        \label{eq_def_sigmarast}
+        \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                     \\
+        \label{eq_def_phi_pressure}
+        \phif         & \equiv \sigmafr^\ast - \sigmafr^{n-1/2}.
 \end{align}
 
 
 The \acp{bc} for \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} are \cite{loggAutomatedSolutionDifferential2012}
 \begin{align}
-    \label{bc_fl_membrane_1_current_disc}
-    \bvbarf                                         & =  \vfbottom  \text{ on } \pombottomeqr, \\
-    \label{bc_fl_membrane_2_current_disc}
-    \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,        \\
-    \label{bc_fl_membrane_3_current_disc}
-    \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,         \\
-    \label{bc_fl_membrane_4_current_disc}
-    G(\budom^{n-1})_{\alpha 1}\pderr{\Vf^2}{\alpha} & =  0 \; \text{ on } \pomouteqr ,
+        \label{bc_fl_membrane_1_current_disc}
+        \bvbarf                                         & =  \vfbottom  \text{ on } \pombottomeqr, \\
+        \label{bc_fl_membrane_2_current_disc}
+        \bvbarf                                         & =  \bzero  \text{ on } \pomineqr,        \\
+        \label{bc_fl_membrane_3_current_disc}
+        \vbarf^1                                        & =  0 \; \text{ on } \pomouteqr ,         \\
+        \label{bc_fl_membrane_4_current_disc}
+        G(\budom^{n-1})_{\alpha 1}\pderr{\Vf^2}{\alpha} & =  0 \; \text{ on } \pomouteqr ,
 \end{align}
 \begin{align}
-    \label{bc_fl_membrane_5_current_disc}
-    \bvbarf(x^1, h) & = \umemdot^\nmhalf(x^1)  \text{ on } \pomtopeqr, & \\
-    \label{bc_fl_membrane_6_current_disc}
-    \phif           & = 0 \text{ on } \pombottomeqr,
+        \label{bc_fl_membrane_5_current_disc}
+        \bvbarf(x^1, h) & = \umemdot^\nmhalf(x^1)  \text{ on } \pomtopeqr, & \\
+        \label{bc_fl_membrane_6_current_disc}
+        \phif           & = 0 \text{ on } \pombottomeqr,
 \end{align}
 \begin{align}
-    \label{bc_fl_membrane_7_current_disc}
-    \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1})
-    \pderr{ \phif   }{\beta }                        & = \newlinenn
-    0
-    \text{ on } \pomineqr \cup \pomtopeqr ,          &                             \\
-    \label{bc_fl_membrane_8_current_disc}
-    G(\budom^{n-1})_{\alpha 1} \pderr{\phif}{\alpha} & = 0 \text{ on } \pomouteqr.
+        \label{bc_fl_membrane_7_current_disc}
+        \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1})
+        \pderr{ \phif   }{\beta }                        & = \newlinenn
+        0
+        \text{ on } \pomineqr \cup \pomtopeqr ,          &                             \\
+        \label{bc_fl_membrane_8_current_disc}
+        G(\budom^{n-1})_{\alpha 1} \pderr{\phif}{\alpha} & = 0 \text{ on } \pomouteqr.
 \end{align}
 
 
@@ -565,19 +565,19 @@ Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2
 
 
 \begin{itemize}
-    \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
-        The \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$ are determined by solving the \ac{bvp} given by  \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem,bc_fl_mem_mem_1_disc,bc_fl_mem_mem_2_disc,bc_fl_mem_mem_3_disc,bc_fl_mem_mem_4_disc,bc_fl_mem_mem_5_disc,bc_fl_mem_mem_6_disc,bc_fl_mem_mem_7_disc,bc_fl_mem_mem_8_disc,bc_fl_mem_mem_9_disc}.
-    }
+        \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
+                The \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$ are determined by solving the \ac{bvp} given by  \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem,bc_fl_mem_mem_1_disc,bc_fl_mem_mem_2_disc,bc_fl_mem_mem_3_disc,bc_fl_mem_mem_4_disc,bc_fl_mem_mem_5_disc,bc_fl_mem_mem_6_disc,bc_fl_mem_mem_7_disc,bc_fl_mem_mem_8_disc,bc_fl_mem_mem_9_disc}.
+        }
 
-    \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
-        We determine the \ac{dom} displacement field and its time derivative, $\budom^n$ and $\budomdot^n$, from the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot,bc_fl_mem_dom_1_disc,bc_fl_mem_dom_2_disc,bc_fl_mem_dom_3_disc,bc_fl_mem_dom_4_disc,bc_fl_mem_dom_5_disc,bc_fl_mem_dom_6_disc,bc_fl_mem_dom_7_disc,bc_fl_mem_dom_8_disc}.
+        \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
+                We determine the \ac{dom} displacement field and its time derivative, $\budom^n$ and $\budomdot^n$, from the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot,bc_fl_mem_dom_1_disc,bc_fl_mem_dom_2_disc,bc_fl_mem_dom_3_disc,bc_fl_mem_dom_4_disc,bc_fl_mem_dom_5_disc,bc_fl_mem_dom_6_disc,bc_fl_mem_dom_7_disc,bc_fl_mem_dom_8_disc}.
 
-    }
+        }
 
-    \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
-        We determine the \ac{bflu} fields $\bvmem^n $ and $\sigmafr^\nmhalf$ by solving the \ac{bvp} given by  \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi,bc_fl_membrane_1_current_disc,bc_fl_membrane_2_current_disc,bc_fl_membrane_3_current_disc,bc_fl_membrane_4_current_disc,bc_fl_membrane_5_current_disc,bc_fl_membrane_6_current_disc,bc_fl_membrane_7_current_disc,bc_fl_membrane_8_current_disc}, and by solving  \cref{eq_phi_1}.
+        \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
+                We determine the \ac{bflu} fields $\bvmem^n $ and $\sigmafr^\nmhalf$ by solving the \ac{bvp} given by  \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi,bc_fl_membrane_1_current_disc,bc_fl_membrane_2_current_disc,bc_fl_membrane_3_current_disc,bc_fl_membrane_4_current_disc,bc_fl_membrane_5_current_disc,bc_fl_membrane_6_current_disc,bc_fl_membrane_7_current_disc,bc_fl_membrane_8_current_disc}, and by solving  \cref{eq_phi_1}.
 
-    }
+        }
 \end{itemize}
 
 The fields ${\bm \vfc}^n$, $\sigmafc^{n-1/2}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.\\ \vspace{5mm}
@@ -588,16 +588,16 @@ The  channel has dimensions $L = 1 \, \met$, $h = 0.2 \, \met$. Proceeding along
 We chose $\rhom = 1 \, \kg /  \met$ and $\etam = 1 \, \kg\, \met /\sec $ as the density and viscosity of an elastomer, respectively \cite{caiSoftPolydimethylsiloxaneElastomers2015,pochivalovDevelopmentVibrationDamping2021},  and we take $\sigmaml = 1 \, \newt$.
 The \ac{bflu} parameters have been estimated from the air parameters:  $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-5} \, \kg / \sec$ \cite{hilsenrath1955tables}.
 Also, we take $\sigmafbottomc = - 1 \, \newt / \met^2$,
-and $\vfbottom^1 =0$, $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc^1 (2 L -\xc^1) v_0$, where $v_0 = 10^{-2}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
+and $\vfbottom^1 =0$, $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc[1] (2 L -\xc[1]) v_0$, where $v_0 = 10^{-2}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
 
 
 
 \begin{figure}
-    \centering
-    \hspace{-0.5cm}
-    \includegraphics[width=1.05\columnwidth]{figures/figure_1/figure_1.pdf}
-    \caption{
-        \label{fig_no_circle}
-        Curvature of the \Acl{mem}  interacting  with a \acl{bflu} shown in \cref{fig_fluid_mem}. The Figure follows the same notation and it corresponds to the same instant of time as \cref{fig_fluid_mem}.
-    }
+        \centering
+        \hspace{-0.5cm}
+        \includegraphics[width=1.05\columnwidth]{figures/figure_1/figure_1.pdf}
+        \caption{
+                \label{fig_no_circle}
+                Curvature of the \Acl{mem}  interacting  with a \acl{bflu} shown in \cref{fig_fluid_mem}. The Figure follows the same notation and it corresponds to the same instant of time as \cref{fig_fluid_mem}.
+        }
 \end{figure}

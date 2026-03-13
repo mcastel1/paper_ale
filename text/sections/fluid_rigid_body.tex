@@ -1,37 +1,22 @@
 \subsection{\Acl{bflu} and \acl{rig}}\label{sec_fl_rigid}
 \acresetall
 
-
 In this Section, we will discuss the interaction between a  \ac{bflu} and the simplest structure---a  \ac{rig} which is only allowed to turn about one point. Only the main results will be presented here; details can be found in \cref{sec_rigid_body_body,sec_rigid_body_fl,sec_eq_fluid_domain}, respectively, and the temporal discretization is discussed in \cref{sec_temp_discretization_rig}.
 
 
 
-As shown in  \cref{fig_ref_curr_rigid}, in the \ac{ref} configuration the  axis of the ellipse, e..g, \ac{rig}, lies parallel to the $\xc^1$ axis, while in the \ac{cur} configuration, such axis forms an angle  $\theta$ (red arc) with respect to the $\xc^1$ axis,
-
-
-\begin{figure*}
-        \centering
-        \hspace{-1cm}
-        \includegraphics[width=1.05\textwidth]{figures/figure_6/figure_6.pdf}
-        \caption{
-                \label{fig_ref_curr_rigid}
-                \Acl{ref} and \acl{cur} configuration for the interaction between a bulk fluid and a rigid body.
-                %
-                \plab{A} \Acl{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr^1 \leq L$, $0 \leq \xr^2 \leq h$ with the elliptical hole, and is delimited by the mesh (gray lines).  Boundaries in the \acl{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
-                %
-                \plab{B} \Acl{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \acl{cur} configuration are denoted by $\pomineqc$, $\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The Cartesian coordinates $\bxc$ are also shown.
-        }
-\end{figure*}
-
+As shown in  \cref{fig_ref_curr_rigid}, in the \ac{ref} configuration the  axis of the ellipse, e..g, \ac{rig}, lies parallel to the $\xc[1]$ axis, while in the \ac{cur} configuration, such axis forms an angle  $\theta$ (red arc) with respect to the $\xc[1]$ axis,
 
 
 
 An example of the system dynamics is shown in \cref{fig_fluid_rigid}, where we study the interaction between air (\ac{bflu}) and an aerogel (\ac{rig})---an ultra light solid material involving a large porous structure \cite{kistlerCoherentExpandedAerogels1931}. The channel  dimension are $L = 2.2 \, \met$, $h =  0.41 \, \met$, which have been taken from the \ac{feat2d} DFG 2D-3 benchmark example for a fuid flow around a cylinder \cite{blumFEAT2DFiniteElement1995,schaferBenchmarkComputationsLaminar1996}, see  \cref{fig_ref_curr_rigid}. Given that the materials, such as \ac{bflu} and \ac{rig}, are two dimensional, in what follows we will estimate their parameter values by considering their three-dimensional counterparts, and assume a unit thickness in the out-of-plane direction.
 The parameters for \ac{rig} have been estimated from the  properties of air: $\rhof = 1 \, \kg / \met^2$, $\etaf = 10^{-5} \, \pas\, \met \, \sec$ \cite{hilsenrath1955tables}. The  inflow velocity profile is chosen as a Poiseuille flow
 \be\label{eq_inflow_profile}
-\vfin(\bxc) = \frac{6 v_0}{h^2} \xc^2 (\xc^2 - h),
+\vfin(\bxc) = \frac{6 v_0}{h^2} \xc[2] (\xc[2] - h),
 \ee
-with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}, see \cref{sec_fl_mem_dom} for details.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-3} \,  \kg \, \met^2$, which corresponds to an aerogel density of $\sim 6 \, \kg/\met^3$ \cite{niculescuUpdatedOverviewSilica2024}. As shown in \cref{fig_fluid_rigid_timescale},  \ac{rig}  has an oscillatory behavior, whose period can be understood with scaling arguments---see \cref{sec_fluid_rigid_timescale}.
+with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent---which sets the rigidity of the \ac{dom} mesh under deformations \cite{kamenskyLectureNotesMAE}---has been chosen to be $\zeta = 3$, see \cref{sec_fl_mem_dom} for details.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-3} \,  \kg \, \met^2$, which corresponds to an aerogel density of $\sim 6 \, \kg/\met^3$ \cite{niculescuUpdatedOverviewSilica2024}. As shown in \cref{fig_fluid_rigid_timescale},  \ac{rig}  has an oscillatory behavior, whose period can be understood with scaling arguments---see \cref{sec_fluid_rigid_timescale}.
+
+
 
 
 
@@ -41,7 +26,20 @@ with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chos
         \includegraphics[width=\textwidth]{figures/figure_2/figure_2.pdf}
         \caption{
                 \label{fig_fluid_rigid}
-                Interaction between a  \acf{bflu} and a rigid \acf{rig}, whose material properties roughly correspond to air (\ac{bflu}) and an aerogel (\ac{rig}).  \plab{A} Temporal snapshot of the mesh (black lines) and  velocity field (arrows) at the \acl{cur} time $t$, shown on top. The direction of the velocity field is indicated by the arrows, and its norm by their color; the direction of arrows with velocity close to zero is not defined. Here,  \ac{rig} (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $\xc^1$ direction is denoted by a red arc.  Here, the Reynolds number is $R \sim 2 \times 10^2$.
+                Interaction between a  \acf{bflu} and a rigid \acf{rig}, whose material properties roughly correspond to air (\ac{bflu}) and an aerogel (\ac{rig}).  \plab{A} Temporal snapshot of the mesh (black lines) and  velocity field (arrows) at the \acl{cur} time $t$, shown on top. The direction of the velocity field is indicated by the arrows, and its norm by their color; the direction of arrows with velocity close to zero is not defined. Here,  \ac{rig} (ellipse) is allowed to pivot about its left focal point (red dot), and the related angle with respect to the $\xc[1]$ direction is denoted by a red arc.  Here, the Reynolds number is $R \sim 2 \times 10^2$.
                 \plab{B} Color map of the surface tension at the \acl{cur} instant of time $t$.
+        }
+\end{figure*}
+
+\begin{figure*}[!ht]
+        \centering
+        \includegraphics[width=\textwidth]{figures/figure_6/figure_6.pdf}
+        \caption{
+                \label{fig_ref_curr_rigid}
+                \Acf{ref} and \acf{cur} configuration for the interaction between a \acl{bflu} and a \acf{rig}.
+                %
+                \plab{A} \ac{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr[1] \leq L$, $0 \leq \xr[2] \leq h$ with the elliptical hole (\ac{rig}), and is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
+                %
+                \plab{B} \ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$, $\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of \ac{rig} is shown as an arc (black dotted line). The Cartesian coordinates $\bxc$ are also shown.
         }
 \end{figure*}
