@@ -14,7 +14,7 @@ The parameters for \ac{rig} have been estimated from the  properties of air: $\r
 \be\label{eq_inflow_profile}
 \vfin(\bxc) = \frac{6 v_0}{h^2} \xc[2] (\xc[2] - h),
 \ee
-with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}, see \cref{sec_fl_mem_dom} for details.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-3} \,  \kg \, \met^2$, which corresponds to an aerogel density of $\sim 6 \, \kg/\met^3$ \cite{niculescuUpdatedOverviewSilica2024}. As shown in \cref{fig_fluid_rigid_timescale},  \ac{rig}  has an oscillatory behavior, whose period can be understood with scaling arguments---see \cref{sec_fluid_rigid_timescale}.
+with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent---which sets the rigidity of the \ac{dom} mesh under deformations \cite{kamenskyLectureNotesMAE}---has been chosen to be $\zeta = 3$, see \cref{sec_fl_mem_dom} for details.  Finally,  \ac{rig} is an ellipse with semi-axes $a = 0.1\, \met$, $b = 0.075\, \met$,  center located at  $\bxr = (0.25 \, \met, 0.2\, \met)$, and moment of inertia $I =10^{-3} \,  \kg \, \met^2$, which corresponds to an aerogel density of $\sim 6 \, \kg/\met^3$ \cite{niculescuUpdatedOverviewSilica2024}. As shown in \cref{fig_fluid_rigid_timescale},  \ac{rig}  has an oscillatory behavior, whose period can be understood with scaling arguments---see \cref{sec_fluid_rigid_timescale}.
 
 
 
@@ -38,7 +38,7 @@ with $v_0 = 1 \, \met/\sec$. The \ac{dom} mesh stiffness exponent  has been chos
                 \label{fig_ref_curr_rigid}
                 \Acf{ref} and \acf{cur} configuration for the interaction between a \acl{bflu} and a \acf{rig}.
                 %
-                \plab{A} \ac{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr^1 \leq L$, $0 \leq \xr^2 \leq h$ with the elliptical hole (\ac{rig}), and is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
+                \plab{A} \ac{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr[1] \leq L$, $0 \leq \xr[2] \leq h$ with the elliptical hole (\ac{rig}), and is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
                 %
                 \plab{B} \ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$, $\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of \ac{rig} is shown as an arc (black dotted line). The Cartesian coordinates $\bxc$ are also shown.
         }

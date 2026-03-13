@@ -156,7 +156,7 @@ Finally, \cref{bc_fl_mem_mem_5} fixes the \ac{mem} tension on \pomlinein.
 
 We will determine $\budom$ as the solution of a \ac{bvp} given by the following elastic model \cite{kamenskyLectureNotesMAE,marsdenMathematicalFoundationsElasticity1994}
 \be\label{eq_mesh_fluid_rigid}
-\pder{\Sdom_{\alpha \beta}(\budom)}{\xr^\beta} = 0 \text{ in } \omr,
+\pder{\Sdom_{\alpha \beta}(\budom)}{\xr[\beta]} = 0 \text{ in } \omr,
 \ee
 where the elastic stress tensor $\Sdom$ is given by
 \be
@@ -180,26 +180,26 @@ In \cref{eq_ela_3,eq_ela_4}, we included an additional dependence of bulk modulu
 The equation of motion for $\budomdot$ is obtained by deriving \cref{eq_mesh_fluid_rigid} with respect to time, and using the fact that \ac{ref} coordinates are time independent:
 \be
 \label{eq_mesh_fluid_rigid_dot}
-\pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budom)}{t}  = 0 \text{ in } \omr.
+\pder{}{\xr[\beta]}\der{\Sdom_{\alpha \beta}(\budom)}{t}  = 0 \text{ in } \omr.
 \ee
 We impose the following \acp{bc} for  \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot}:
 \begin{align}
         \label{bc_fl_mem_dom_1}
-        \budom                   & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
+        \budom                    & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
         \label{bc_fl_mem_dom_2}
-        \udom^1                  & = 0 \text{ on } \pomouteqr,                       \\
+        \udom^1                   & = 0 \text{ on } \pomouteqr,                       \\
         \label{bc_fl_mem_dom_3}
-        \pder{\udom^2}{\xr^1}    & = 0 \text{ on }\pomouteqr,                        \\
+        \pder{\udom^2}{\xr[1]}    & = 0 \text{ on }\pomouteqr,                        \\
         \label{bc_fl_mem_dom_4}
-        \budom                   & = \bumem \text{ on }\pomtopeqr,                   \\
+        \budom                    & = \bumem \text{ on }\pomtopeqr,                   \\
         \label{bc_fl_mem_dom_5}
-        \budomdot                & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
+        \budomdot                 & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
         \label{bc_fl_mem_dom_6}
-        \udomdot^1               & = 0 \text{ on } \pomouteqr,                       \\
+        \udomdot^1                & = 0 \text{ on } \pomouteqr,                       \\
         \label{bc_fl_mem_dom_7}
-        \pder{\udomdot^2}{\xr^1} & = 0 \text{ on }\pomouteqr,                        \\
+        \pder{\udomdot^2}{\xr[1]} & = 0 \text{ on }\pomouteqr,                        \\
         \label{bc_fl_mem_dom_8}
-        \budomdot                & = \bumemdot \text{ on }\pomtopeqr.
+        \budomdot                 & = \bumemdot \text{ on }\pomtopeqr.
 \end{align}
 \Cref{bc_fl_mem_dom_1} ensures that \ac{dom} is not deformed on $\pomineqr \cup \pombottomeqr$, cf. \cref{bc_ela_1}. \Cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3} follow from axial symmetry, and \cref{bc_fl_mem_dom_4} from the requirement that \ac{dom} and \ac{mem} deformations stay conforming \cite{kamenskyLectureNotesMAE}. Finally, the  \acp{bc} for $\bumemdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
 
@@ -282,7 +282,7 @@ We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem
 \bw
 \begin{align}
         \label{eq_fl_rigid_fl_1_reference}
-        \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr^\beta} \right\}                                                       & =              \newlinenn
+        \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr[\beta]} \right\}                                                      & =              \newlinenn
         G_{\beta \alpha}(\budom^t(\bxr))  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^t(\bxr))           \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^t(\bxr)) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
         \label{eq_fl_rigid_fl_2_reference}
         G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                                & = 0,
@@ -466,28 +466,28 @@ The discretization of the equations of motion for  \ac{dom} proceeds along the s
 
 \begin{align}
         \label{eq_domain_fluid_rigid_disc}
-        \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr^\beta}          & = 0 \text{ in } \omr, \\
+        \pder{\Sdom_{\alpha \beta}(\budom^n)}{\xr[\beta]}          & = 0 \text{ in } \omr, \\
         \label{eq_domain_fluid_rigid_disc_dot}
-        \pder{}{\xr^\beta}\der{\Sdom_{\alpha \beta}(\budom^n)}{t} & = 0 \text{ in } \omr,
+        \pder{}{\xr[\beta]}\der{\Sdom_{\alpha \beta}(\budom^n)}{t} & = 0 \text{ in } \omr,
 \end{align}
 with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
 \begin{align}
         \label{bc_fl_mem_dom_1_disc}
-        \budom^n                         & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
+        \budom^n                          & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
         \label{bc_fl_mem_dom_2_disc}
-        \udom^{n, \, 1}                  & = 0 \text{ on } \pomouteqr,                        \\
+        \udom^{n, \, 1}                   & = 0 \text{ on } \pomouteqr,                        \\
         \label{bc_fl_mem_dom_3_disc}
-        \pder{\udom^{n, \, 2}}{\xr^1}    & = 0 \text{ on } \pomouteqr,                        \\
+        \pder{\udom^{n, \, 2}}{\xr[1]}    & = 0 \text{ on } \pomouteqr,                        \\
         \label{bc_fl_mem_dom_4_disc}
-        \budom^n                         & = \bumem^{\nmhalf} \text{ on } \pomtopeqr,         \\
+        \budom^n                          & = \bumem^{\nmhalf} \text{ on } \pomtopeqr,         \\
         \label{bc_fl_mem_dom_5_disc}
-        \budomdot^n                      & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
+        \budomdot^n                       & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
         \label{bc_fl_mem_dom_6_disc}
-        \udomdot^{n, \, 1}               & = 0 \text{ on } \pomouteqr,                        \\
+        \udomdot^{n, \, 1}                & = 0 \text{ on } \pomouteqr,                        \\
         \label{bc_fl_mem_dom_7_disc}
-        \pder{\udomdot^{n, \, 2}}{\xr^1} & = 0 \text{ on } \pomouteqr,                        \\
+        \pder{\udomdot^{n, \, 2}}{\xr[1]} & = 0 \text{ on } \pomouteqr,                        \\
         \label{bc_fl_mem_dom_8_disc}
-        \budomdot^n                      & = \bumem^{\nmhalf} \text{ on } \pomtopeqr.
+        \budomdot^n                       & = \bumem^{\nmhalf} \text{ on } \pomtopeqr.
 \end{align}
 
 
@@ -503,11 +503,11 @@ The resulting \acp{pde} for $\bvbarf$ and $\sigmafr$ are
 \bw
 \begin{align}
         \label{eq_fl_rigid_fl_1_reference_disc_aux}
-        \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr^\beta}\right\} & =              \newlinenn
-        G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                          \\
+        \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr[\beta]}\right\} & =              \newlinenn
+        G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                           \\
         \label{eq_poiss_like_phi}
-        \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                   & = \newlinenn
-        G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                   & ,
+        \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                    & = \newlinenn
+        G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                    & ,
 \end{align}
 \ew
 where we have set
