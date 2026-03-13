@@ -65,13 +65,14 @@
 
 \providecommand{\xcoord}{x}
 \providecommand{\xcartesian}{{\mathsf{x}}}
-\providecommand{\xc}{\xcartesian_\current}
+% \providecommand{\xc}{\xcartesian_\current}
+\newcommand{\xc}[1][]{{\xcartesian_{\current\ifx\empty#1\empty\else\, #1\fi}}}
 \providecommand{\xr}{\xcartesian_\reference}
 \providecommand{\xmemc}{{\xc^\mem}}
 \providecommand{\xmemr}{{\xr^\mem}}
 \providecommand{\bxmemc}{{\bm{\xmemc}}}
 \providecommand{\bxmemr}{{\bm{\xmemr}}}
-\providecommand{\bxc}{{\bm{\xc}}}
+\providecommand{\bxc}{{\bm{\xcartesian}_{\current}}}
 \providecommand{\bxr}{{\bm{\xr}}}
 \providecommand{\bnormalr}{\hat{\bm n}^\reference}
 \providecommand{\normalmem}{{n_\mem}}
