@@ -67,8 +67,6 @@ solution_parameters = io.read_parameters_from_csv_file(os.path.join(
 
 solution_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), "solution/")
-mesh_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), "mesh/solution/")
 figure_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
@@ -82,8 +80,6 @@ data_theta_omega = pd.read_csv(
     solution_path + 'theta_omega.csv')
 
 
-data_boundary_vertices_ellipse = pd.read_csv(os.path.join(
-    mesh_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
 
 
 fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_margin_l'],
@@ -111,8 +107,15 @@ def plot_snapshot(fig, n_file,
                   sigma_min_max=None):
 
     n_snapshot = str(n_file)
+
+
     data_line_vertices = pd.read_csv(
         solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
+    data_boundary_vertices_ellipse = pd.read_csv(os.path.join(
+    solution_path, 'snapshots', 'mesh', 'n_' + n_snapshot, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
+
+
+
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' +
                          n_snapshot + '.csv')
     data_sigma = pd.read_csv(
