@@ -62,6 +62,8 @@ print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
 parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+mesh_parameters = io.read_parameters_from_csv_file(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), 'mesh_parameters.csv'))
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
 
@@ -144,7 +146,7 @@ def plot_snapshot(fig, n_file,
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
                                                                                             [0, 0],
-                                                                                            [parameters['L'], parameters['h']],
+                                                                                            [mesh_parameters['L'], mesh_parameters['h']],
                                                                                             parameters['n_bins_v'],
                                                                                             clab.label_x_column,
                                                                                             clab.label_y_column,
@@ -154,10 +156,10 @@ def plot_snapshot(fig, n_file,
         norm_v_min_max = [norm_v_min, norm_v_max]
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
-                          parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_x, np.nan)
-    gr.set_inside_ellipse(X, Y, parameters['c'], parameters['a'],
-                          parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
+    gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
+                          mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_x, np.nan)
+    gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
+                          mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
 
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
@@ -175,7 +177,7 @@ def plot_snapshot(fig, n_file,
 
     # plot the ellipse focal point
     focal_point_position = [
-        parameters['c'][0] - np.sqrt(parameters['a']**2-parameters['b']**2), parameters['c'][1]]
+        mesh_parameters['c'][0] - np.sqrt(mesh_parameters['a']**2-mesh_parameters['b']**2), mesh_parameters['c'][1]]
     theta_1 = min(0, data_theta_omega.loc[int(
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
     theta_2 = max(0, data_theta_omega.loc[int(
@@ -224,7 +226,7 @@ def plot_snapshot(fig, n_file,
 
     ax.add_patch(theta_arc)
 
-    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
@@ -260,7 +262,7 @@ def plot_snapshot(fig, n_file,
                     zorder=1)
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [parameters['L'], parameters['h']], parameters['n_bins_sigma'])
+        data_sigma, [0, 0], [mesh_parameters['L'], mesh_parameters['h']], parameters['n_bins_sigma'])
 
     if sigma_min_max == None:
         sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
@@ -292,7 +294,7 @@ def plot_snapshot(fig, n_file,
                              origin='lower',
                              cmap=gr.cb.color_map_type,
                              aspect='equal',
-                             extent=[0, parameters['L'], 0, parameters['h']],
+                             extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
                              vmin=sigma_min_max[0], vmax=sigma_min_max[1],
                              interpolation='bilinear',
                              zorder=0
@@ -317,7 +319,7 @@ def plot_snapshot(fig, n_file,
         axis=sigma_colorbar_axis
     )
 
-    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],

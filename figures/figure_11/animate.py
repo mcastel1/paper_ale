@@ -26,7 +26,7 @@ norm_v_min_max_abs = cal.min_max_vector_field(
     os.path.join(plot.solution_path + 'snapshots/csv/nodal_values'),
     'def_v_n_',
     plot.parameters['n_bins_v'],
-    [[0, 0], [plot.parameters['L'], plot.parameters['h']]]
+    [[0, 0], [plot.mesh_parameters['L'], plot.mesh_parameters['h']]]
 )
 
 # sigma_min_max_abs = cal.min_max_files(
