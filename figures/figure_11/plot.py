@@ -78,15 +78,8 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 
 # labels of columns to read
-columns_line_vertices = [clab.label_start_x_column, clab.label_start_y_column, clab.label_start_z_column,
-                         clab.label_end_x_column,
-                         clab.label_end_y_column, clab.label_end_z_column]
-columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + clab.label_x_column,
-             clab.label_v_column + clab.label_y_column]
-columns_theta_omega = ["theta", "omega"]
-
 data_theta_omega = pd.read_csv(
-    solution_path + 'theta_omega.csv', usecols=columns_theta_omega)
+    solution_path + 'theta_omega.csv')
 
 
 data_boundary_vertices_ellipse = pd.read_csv(os.path.join(
@@ -119,13 +112,13 @@ def plot_snapshot(fig, n_file,
 
     n_snapshot = str(n_file)
     data_line_vertices = pd.read_csv(
-        solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
+        solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
     data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' +
-                         n_snapshot + '.csv', usecols=columns_v)
+                         n_snapshot + '.csv')
     data_sigma = pd.read_csv(
         solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
     data_u = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_n_' +
-                         n_snapshot + '.csv', usecols=columns_v)
+                         n_snapshot + '.csv')
 
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
