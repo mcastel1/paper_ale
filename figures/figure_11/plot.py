@@ -24,7 +24,7 @@ import system.utils as sys_utils
 '''
 to copy data for this figure from abacus, do:
  ./copy_from_abacus.sh rigid_obstacle_1/solution/snapshots/csv 'def_v_n_*' 'u_n_*' 'line_mesh_n_*' 'def_sigma_n_12_*' ~/Desktop 0 10000 1
- rsync -avr mcastel1@abacus:rigid_obstacle_1/solution/theta_omega.csv ~/Documents/work/manuscripts/paper_ale/figures/figure_2/solution
+ rsync -avr mcastel1@abacus:rigid_obstacle_1/solution/data.csv ~/Documents/work/manuscripts/paper_ale/figures/figure_2/solution
 
 Parameter meaning:
 - solution_stride: the stride with which data were saved as during the solution of the finite-element problem
@@ -78,8 +78,8 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 
 # labels of columns to read
-data_theta_omega = pd.read_csv(
-    solution_path + 'theta_omega.csv')
+data = pd.read_csv(
+    solution_path + 'data.csv')
 
 
 
@@ -155,11 +155,11 @@ def plot_snapshot(fig, n_file,
     if norm_v_min_max == None:
         norm_v_min_max = [norm_v_min, norm_v_max]
 
-    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
+    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data
     gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
-                          mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_x, np.nan)
+                          mesh_parameters['b'], data.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_x, np.nan)
     gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
-                          mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
+                          mesh_parameters['b'], data.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
 
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
@@ -178,9 +178,9 @@ def plot_snapshot(fig, n_file,
     # plot the ellipse focal point
     focal_point_position = [
         mesh_parameters['c'][0] - np.sqrt(mesh_parameters['a']**2-mesh_parameters['b']**2), mesh_parameters['c'][1]]
-    theta_1 = min(0, data_theta_omega.loc[int(
+    theta_1 = min(0, data.loc[int(
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
-    theta_2 = max(0, data_theta_omega.loc[int(
+    theta_2 = max(0, data.loc[int(
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
 
     ax.scatter(focal_point_position[0], focal_point_position[1],
@@ -199,7 +199,7 @@ def plot_snapshot(fig, n_file,
     )
     # 2) plot moving axis
     delta = np.dot(
-        gr.R_2d(data_theta_omega.loc[int(
+        gr.R_2d(data.loc[int(
             n_file/solution_parameters['print_out_stride']-1), 'theta']),
         [parameters['angle_axis_length'], 0]
     )
