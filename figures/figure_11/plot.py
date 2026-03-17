@@ -66,6 +66,10 @@ mesh_parameters = io.read_parameters_from_csv_file(os.path.join(
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
 
+
+if parameters['animation_frame_stride'] % solution_parameters['print_out_stride'] != 0:
+    raise RuntimeError('Error: Animation frame stride is not a multiple of print out stride ! Aborting...')
+
 solution_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), "solution/")
 figure_path = os.path.join(os.path.dirname(
