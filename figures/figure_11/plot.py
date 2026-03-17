@@ -21,18 +21,17 @@ import list.utils as lis
 import system.paths as paths
 import system.utils as sys_utils
 
-'''
-to copy data for this figure from abacus, do:
- ./copy_from_abacus.sh rigid_obstacle_1/solution/snapshots/csv 'def_v_n_*' 'u_n_*' 'line_mesh_n_*' 'def_sigma_n_12_*' ~/Desktop 0 10000 1
- rsync -avr mcastel1@abacus:rigid_obstacle_1/solution/data.csv ~/Documents/work/manuscripts/paper_ale/figures/figure_2/solution
-
-Parameter meaning:
-- solution_stride: the stride with which data were saved as during the solution of the finite-element problem
-- animation_stride: the stride with which frames will be read by animate.py to generate the animation
-'''
-
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
+
+'''
+some copy commands for this plot
+
+cp ~/Documents/finite_elements/generate_mesh/2d/square/polygon/mesh_parameters.csv ~/Documents/work/manuscripts/paper_ale/figures/figure_11/
+cp ~/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/parameters_bc_square_polygon.csv ~/Documents/work/manuscripts/paper_ale/figures/figure_11/solution_parameters.csv
+rm -rf ~/Documents/work/manuscripts/paper_ale/figures/figure_11/solution/; cp -r ~/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/solution ~/Documents/work/manuscripts/paper_ale/figures/figure_11 
+
+'''
 
 # add the path where to find the shared modules
 module_path = paths.root_path + "/figures/modules/"
@@ -78,11 +77,8 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 
 # labels of columns to read
-data = pd.read_csv(
-    solution_path + 'data.csv')
-
-
-
+data_theta_omega = pd.read_csv(os.path.join(solution_path, 'theta_omega.csv'))
+data_remesh = pd.read_csv(os.path.join(solution_path, 'remesh.csv'))
 
 fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_margin_l'],
                   bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'],
@@ -111,19 +107,13 @@ def plot_snapshot(fig, n_file,
     n_snapshot = str(n_file)
 
 
-    data_line_vertices = pd.read_csv(
-        solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
+    data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
     data_boundary_vertices_ellipse = pd.read_csv(os.path.join(
     solution_path, 'snapshots', 'mesh', 'n_' + n_snapshot, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
 
-
-
-    data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' +
-                         n_snapshot + '.csv')
-    data_sigma = pd.read_csv(
-        solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
-    data_u = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/u_n_' +
-                         n_snapshot + '.csv')
+    data_v = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv'))
+    data_sigma = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv'))
+    data_u = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/u_n_' + n_snapshot + '.csv'))
 
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
@@ -157,9 +147,9 @@ def plot_snapshot(fig, n_file,
 
     # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data
     gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
-                          mesh_parameters['b'], data.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_x, np.nan)
+                          mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_x, np.nan)
     gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
-                          mesh_parameters['b'], data.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
+                          mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
 
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
@@ -178,9 +168,9 @@ def plot_snapshot(fig, n_file,
     # plot the ellipse focal point
     focal_point_position = [
         mesh_parameters['c'][0] - np.sqrt(mesh_parameters['a']**2-mesh_parameters['b']**2), mesh_parameters['c'][1]]
-    theta_1 = min(0, data.loc[int(
+    theta_1 = min(0, data_theta_omega.loc[int(
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
-    theta_2 = max(0, data.loc[int(
+    theta_2 = max(0, data_theta_omega.loc[int(
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
 
     ax.scatter(focal_point_position[0], focal_point_position[1],
@@ -199,7 +189,7 @@ def plot_snapshot(fig, n_file,
     )
     # 2) plot moving axis
     delta = np.dot(
-        gr.R_2d(data.loc[int(
+        gr.R_2d(data_theta_omega.loc[int(
             n_file/solution_parameters['print_out_stride']-1), 'theta']),
         [parameters['angle_axis_length'], 0]
     )
