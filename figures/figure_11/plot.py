@@ -57,6 +57,9 @@ plt.rcParams.update({
     )
 })
 
+
+
+
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
@@ -93,6 +96,9 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
 fig.add_subplot(1, 1, 1)
 # fig.add_subplot(2, 1, 2)
 
+_colorbar_initialized = False
+
+
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
                                 parameters['v_colorbar_size'][0],
@@ -108,6 +114,9 @@ def plot_snapshot(fig, n_file,
                   snapshot_label='',
                   norm_v_min_max=None,
                   sigma_min_max=None):
+
+
+    global _colorbar_initialized
 
     start_time = time.time()
     last_time = start_time
@@ -174,22 +183,26 @@ def plot_snapshot(fig, n_file,
     print(f'4 took { time.time() - last_time}s')
     last_time =  time.time()
 
-    vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'red', 0,
+    vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
     
     print(f'5 took { time.time() - last_time}s')
     last_time =  time.time()
 
-    # gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'],
-    #                     label=parameters['v_colorbar_axis_label'],
-    #                     font_size=parameters['v_colorbar_font_size'],
-    #                     tick_length=parameters['v_colorbar_tick_length'],
-    #                     label_pad=parameters['v_colorbar_label_offset'],
-    #                     tick_label_offset=parameters['v_colorbar_tick_label_offset'],
-    #                     tick_label_angle=parameters['v_colorbar_tick_label_angle'],
-    #                     line_width=parameters['v_colorbar_line_width'],
-    #                     tick_label_format=parameters['v_colorbar_tick_label_format'],
-    #                     axis=v_colorbar_axis)
+    if not _colorbar_initialized:
+
+        gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'],
+                            label=parameters['v_colorbar_axis_label'],
+                            font_size=parameters['v_colorbar_font_size'],
+                            tick_length=parameters['v_colorbar_tick_length'],
+                            label_pad=parameters['v_colorbar_label_offset'],
+                            tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                            tick_label_angle=parameters['v_colorbar_tick_label_angle'],
+                            line_width=parameters['v_colorbar_line_width'],
+                            tick_label_format=parameters['v_colorbar_tick_label_format'],
+                            axis=v_colorbar_axis)
+        
+        _colorbar_initialized = True
 
     print(f'6 took { time.time() - last_time}s')
     last_time =  time.time()
