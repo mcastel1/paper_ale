@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import proplot as pplt
 import sys
+import time
 import warnings
 
 import calculus.geometry as geo
@@ -41,7 +42,7 @@ sys.path.append(module_path)
 warnings.filterwarnings(
     "ignore", message=".*Z contains NaN values.*", category=UserWarning)
 # clean the matplotlib cache to load the correct version of definitions.tex
-os.system("rm -rf ~/.matplotlib/tex.cache")
+# os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
@@ -89,8 +90,8 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
                   top=parameters['figure_margin_t'], wspace=0, hspace=0)
 
 # pre-create subplots and axes
-fig.add_subplot(2, 1, 1)
-fig.add_subplot(2, 1, 2)
+fig.add_subplot(1, 1, 1)
+# fig.add_subplot(2, 1, 2)
 
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
@@ -108,6 +109,9 @@ def plot_snapshot(fig, n_file,
                   norm_v_min_max=None,
                   sigma_min_max=None):
 
+    start_time = time.time()
+    last_time = start_time
+
     n_snapshot = str(n_file)
 
 
@@ -119,9 +123,14 @@ def plot_snapshot(fig, n_file,
     data_sigma = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv'))
     data_u = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/u_n_' + n_snapshot + '.csv'))
 
+    print(f'1 took { time.time() - last_time}s')
+    last_time =  time.time()
+
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
              snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
+
+
 
     # =============
     # v subplot
@@ -137,6 +146,10 @@ def plot_snapshot(fig, n_file,
                     line_width=parameters['mesh_line_width_v_plot'],
                     color='black',
                     alpha=parameters['alpha_mesh'])
+    
+    print(f'2 took { time.time() - last_time}s')
+    last_time =  time.time()
+
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
                                                                                             [0, 0],
@@ -145,6 +158,9 @@ def plot_snapshot(fig, n_file,
                                                                                             clab.label_x_column,
                                                                                             clab.label_y_column,
                                                                                             clab.label_v_column)
+    
+    print(f'3 took { time.time() - last_time}s')
+    last_time =  time.time()
 
     if norm_v_min_max == None:
         norm_v_min_max = [norm_v_min, norm_v_max]
@@ -155,8 +171,14 @@ def plot_snapshot(fig, n_file,
     gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
                           mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
 
+    print(f'4 took { time.time() - last_time}s')
+    last_time =  time.time()
+
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
+    
+    print(f'5 took { time.time() - last_time}s')
+    last_time =  time.time()
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'],
                         label=parameters['v_colorbar_axis_label'],
@@ -168,6 +190,9 @@ def plot_snapshot(fig, n_file,
                         line_width=parameters['v_colorbar_line_width'],
                         tick_label_format=parameters['v_colorbar_tick_label_format'],
                         axis=v_colorbar_axis)
+
+    print(f'6 took { time.time() - last_time}s')
+    last_time =  time.time()
 
     # plot the ellipse focal point
     focal_point_position = [
@@ -220,6 +245,9 @@ def plot_snapshot(fig, n_file,
 
     ax.add_patch(theta_arc)
 
+    print(f'7 took { time.time() - last_time}s')
+    last_time =  time.time()
+
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
@@ -239,6 +267,10 @@ def plot_snapshot(fig, n_file,
                     colorbar_axis=v_colorbar_axis,
                     colorbar_axis_offset=parameters['colorbar_axis_offset'])
 
+    print(f'8 took { time.time() - last_time}s')
+    last_time =  time.time()
+
+    '''
     # =============
     # sigma subplot
     # =============
@@ -331,6 +363,12 @@ def plot_snapshot(fig, n_file,
                     tick_label_angle=parameters['tick_label_angle'],
                     colorbar_axis=sigma_colorbar_axis,
                     colorbar_axis_offset=parameters['colorbar_axis_offset'])
+    '''
+
+    end_time = time.time()
+
+    print(f'time = {end_time - start_time}s')
+
 
 
 plot_snapshot(fig, parameters['snapshot_to_plot'],
