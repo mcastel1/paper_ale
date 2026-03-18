@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 import proplot as pplt
 import sys
-import time
 import warnings
 
 import calculus.geometry as geo
@@ -29,7 +28,6 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 some copy commands for this plot
 
 cp ~/Documents/finite_elements/generate_mesh/2d/square/polygon/mesh_parameters.csv ~/Documents/work/manuscripts/paper_ale/figures/figure_11/
-cp ~/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/parameters_bc_square_polygon.csv ~/Documents/work/manuscripts/paper_ale/figures/figure_11/solution_parameters.csv
 rm -rf ~/Documents/work/manuscripts/paper_ale/figures/figure_11/solution/; cp -r ~/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/solution ~/Documents/work/manuscripts/paper_ale/figures/figure_11 
 
 '''
@@ -68,11 +66,11 @@ parameters = io.read_parameters_from_csv_file(os.path.join(
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'mesh_parameters.csv'))
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
+    os.path.dirname(os.path.abspath(__file__)), 'solution', 'solution_metadata.csv'))
 
 
 if parameters['animation_frame_stride'] % solution_parameters['print_out_stride'] != 0:
-    raise RuntimeError('Error: Animation frame stride is not a multiple of print out stride ! Aborting...')
+    raise RuntimeError(f'Error: Animation frame stride is not a multiple of print out stride ! \n animation frame stride = {parameters["animation_frame_stride"]} \n print out stride = {solution_parameters["print_out_stride"]} \nAborting...')
 
 solution_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), "solution/")
@@ -118,22 +116,16 @@ def plot_snapshot(fig, n_file,
 
     global _colorbar_initialized
 
-    start_time = time.time()
-    last_time = start_time
-
     n_snapshot = str(n_file)
 
 
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
     data_boundary_vertices_ellipse = pd.read_csv(os.path.join(
-    solution_path, 'snapshots', 'mesh', 'n_' + n_snapshot, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
+    snapshot_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + f'_n_{n_snapshot}.csv'))
 
     data_v = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv'))
     data_sigma = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv'))
     data_u = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/u_n_' + n_snapshot + '.csv'))
-
-    print(f'1 took { time.time() - last_time}s')
-    last_time =  time.time()
 
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
@@ -156,9 +148,7 @@ def plot_snapshot(fig, n_file,
                     color='black',
                     alpha=parameters['alpha_mesh'])
     
-    print(f'2 took { time.time() - last_time}s')
-    last_time =  time.time()
-
+    
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vp.interpolate_2d_vector_field(data_v,
                                                                                             [0, 0],
@@ -168,9 +158,7 @@ def plot_snapshot(fig, n_file,
                                                                                             clab.label_y_column,
                                                                                             clab.label_v_column)
     
-    print(f'3 took { time.time() - last_time}s')
-    last_time =  time.time()
-
+  
     if norm_v_min_max == None:
         norm_v_min_max = [norm_v_min, norm_v_max]
 
@@ -180,15 +168,11 @@ def plot_snapshot(fig, n_file,
     gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
                           mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
 
-    print(f'4 took { time.time() - last_time}s')
-    last_time =  time.time()
-
+  
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
     
-    print(f'5 took { time.time() - last_time}s')
-    last_time =  time.time()
-
+  
     if not _colorbar_initialized:
 
         gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'],
@@ -204,8 +188,6 @@ def plot_snapshot(fig, n_file,
         
         _colorbar_initialized = True
 
-    print(f'6 took { time.time() - last_time}s')
-    last_time =  time.time()
 
     # plot the ellipse focal point
     focal_point_position = [
@@ -258,8 +240,6 @@ def plot_snapshot(fig, n_file,
 
     ax.add_patch(theta_arc)
 
-    print(f'7 took { time.time() - last_time}s')
-    last_time =  time.time()
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     tick_length=parameters['tick_length'],
@@ -280,9 +260,7 @@ def plot_snapshot(fig, n_file,
                     colorbar_axis=v_colorbar_axis,
                     colorbar_axis_offset=parameters['colorbar_axis_offset'])
 
-    print(f'8 took { time.time() - last_time}s')
-    last_time =  time.time()
-
+ 
     '''
     # =============
     # sigma subplot
@@ -378,9 +356,6 @@ def plot_snapshot(fig, n_file,
                     colorbar_axis_offset=parameters['colorbar_axis_offset'])
     '''
 
-    end_time = time.time()
-
-    print(f'time = {end_time - start_time}s')
 
 
 
