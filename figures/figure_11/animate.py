@@ -50,21 +50,19 @@ Writer = ani.writers['ffmpeg']
 writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(
     artist='Michele'), bitrate=(int)(plot.parameters['bit_rate']))
 
-text.empty_texts(plot.fig)
+# text.empty_texts(plot.fig)
 
 
 def update_animation(n):
     print("Calling update_animation with n = ", n, " ... ", flush=True)
-    start_time = time.time()
 
     # clear only the major axes of the plot. The colorbar axes need not be cleaned because make_colorbar already clears them
-    for ax in plot.fig.axes[:2]:
+    for ax in plot.fig.axes[:1]:
         ax.clear()
 
     # Clear text objects (the snapshot label accumulates)
     for txt in plot.fig.texts[:]:
         txt.remove()
-    # plot.gr.delete_all_axes(plot.fig)
 
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
@@ -76,9 +74,6 @@ def update_animation(n):
             n * plot.solution_parameters['T'] / plot.number_of_frames, 'hr_min_s', plot.parameters['n_decimals_snapshot_label']),
         norm_v_min_max=norm_v_min_max_abs    )
 
-    # Stop timer
-    end_time = time.time()
-    print(f"... done in {end_time - start_time:.2f} s", flush=True)
 
 
 animation = ani.FuncAnimation(
