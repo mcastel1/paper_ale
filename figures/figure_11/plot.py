@@ -25,11 +25,17 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 
 '''
-some copy commands for this plot
+- to copy from local
+
+OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
+rm -rf $OUTPUT_PATH/solution
+cp -r /Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/solution $OUTPUT_PATH
+
+- to copy from abacus
 
 INPUT_PATH="remesh_1"
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
-STRIDE="10"
+STRIDE="2"
 cd $OUTPUT_PATH/../
 rm -rf $OUTPUT_PATH/solution
 ./copy_from_abacus.sh remesh_1/solution/snapshots/csv 'line_mesh_n_*' 'def_v_n_*' 'u_n_*' 'def_sigma_n_12_*' 'boundary_points_id_6_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
@@ -376,7 +382,9 @@ def plot_snapshot(fig, n_file,
 
 
 
-plot_snapshot(fig, parameters['snapshot_to_plot'],
+# plot_snapshot(fig, parameters['snapshot_to_plot'],
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', 0))
+plot_snapshot(fig, snapshot_max,
               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
