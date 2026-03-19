@@ -74,6 +74,7 @@ def update_animation(n):
             n * plot.solution_parameters['T'] / plot.number_of_frames, 'hr_min_s', plot.parameters['n_decimals_snapshot_label']),
         norm_v_min_max=norm_v_min_max_abs    )
 
+    print(f'... done.')
 
 
 animation = ani.FuncAnimation(
