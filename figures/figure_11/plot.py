@@ -168,6 +168,12 @@ def plot_snapshot(fig, n_file,
     gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
                           mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
 
+
+    # set to nan the values of V_x, V_y which are on the lines x[1] = 0 or x[1] = h, because these will be vectors with zero norm which are not meaningful
+    mask = np.isclose(np.array(Y), 0) | np.isclose(np.array(Y), mesh_parameters['h'])
+    V_x[mask] = np.nan
+    V_y[mask] = np.nan
+
   
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
