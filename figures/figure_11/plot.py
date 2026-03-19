@@ -27,10 +27,12 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 '''
 some copy commands for this plot
 
-INPUT_PATH="remesh_1"; OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"; 
+INPUT_PATH="remesh_1"
+OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
+STRIDE="10"
 cd $OUTPUT_PATH/../
 rm -rf $OUTPUT_PATH/solution
-./copy_from_abacus.sh remesh_1/solution/snapshots/csv 'line_mesh_n_*' 'def_v_n_*' 'u_n_*' 'def_sigma_n_12_*' 'boundary_points_id_6_*' $OUTPUT_PATH 0 100000 10; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
+./copy_from_abacus.sh remesh_1/solution/snapshots/csv 'line_mesh_n_*' 'def_v_n_*' 'u_n_*' 'def_sigma_n_12_*' 'boundary_points_id_6_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
 rsync -avr mcastel1@abacus:$INPUT_PATH/solution/solution_metadata.csv $OUTPUT_PATH/solution
 rsync -avr mcastel1@abacus:$INPUT_PATH/solution/theta_omega.csv $OUTPUT_PATH/solution
 rsync -avr mcastel1@abacus:$INPUT_PATH/solution/remesh.csv $OUTPUT_PATH/solution
