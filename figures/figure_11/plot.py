@@ -132,6 +132,22 @@ def plot_snapshot(fig, n_file,
              snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
 
+    # plot the polygon of the boundary 'ellipse_loop_id'
+    #
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u)
+
+
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
+    data_def_boundary_vertices_ellipse = []
+    for _, row in data_boundary_vertices_ellipse.iterrows():
+        data_def_boundary_vertices_ellipse.append(
+            np.add(
+                [row[':0'], row[':1']],
+                [U_interp_x(row[':0'], row[':1']),
+                 U_interp_y(row[':0'], row[':1'])]
+            )
+        )
 
     # =============
     # v subplot
@@ -162,11 +178,11 @@ def plot_snapshot(fig, n_file,
     if norm_v_min_max == None:
         norm_v_min_max = [norm_v_min, norm_v_max]
 
-    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data
-    gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
-                          mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_x, np.nan)
-    gr.set_inside_ellipse(X, Y, np.pad(mesh_parameters['c'], (0, 1), constant_values=0), mesh_parameters['a'],
-                          mesh_parameters['b'], data_theta_omega.loc[int(n_file/solution_parameters['print_out_stride']-1), 'theta'], V_y, np.nan)
+
+    # set to nan the values of V_x and V_y which lie inside the polygon defined by data_def_boundary_vertices_ellipse
+    vp.set_in_polygon(data_def_boundary_vertices_ellipse,
+                      [X, Y],
+                      [V_x, V_y])
 
 
     # set to nan the values of V_x, V_y which are on the lines x[1] = 0 or x[1] = h, because these will be vectors with zero norm which are not meaningful
@@ -291,21 +307,9 @@ def plot_snapshot(fig, n_file,
         sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
         sigma_min_max = [sigma_min, sigma_max]
 
-    # plot the polygon of the boundary 'ellipse_loop_id'
-    #
-    # build two a vector field which interpolates the displacement field in data_u_msh
-    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u)
 
-    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_def_boundary_vertices_ellipse = []
-    for _, row in data_boundary_vertices_ellipse.iterrows():
-        data_def_boundary_vertices_ellipse.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x(row[':0'], row[':1']),
-                 U_interp_y(row[':0'], row[':1'])]
-            )
-        )
+
+
 
     # plot the boundary polygon in the current configuration
     poly = Polygon(data_def_boundary_vertices_ellipse, fill=True,
