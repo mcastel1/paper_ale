@@ -4,13 +4,13 @@ In this Section, we will build on the analysis of \cref{sec_fl_elastic}, and com
 
 For this problem, we will consider the  geometry depicted in \cref{fig_ref_cur_mem}. A vertical channel with mirror symmetry about its mid axis is considered. The left boundary of the channel is \pomin{}, and the right boundary \pomout{} lies on the symmetry axis. Fluid is injected from bottom to top on \pombottom. Here, \ac{mem} lies on the top boundary of \ac{bflu}, \pomtop{}, which  coincides with the \ac{mem} manifold \pomline{}. Finally, we denote by $\om$ the region enclosed by the boundaries, and all the quantities above will be considered in the \ac{ref} and \ac{cur} configurations.
 
-The geometry of \cref{fig_ref_cur_mem} may represent \ac{bflu} being confined in a large reservoir, lying on bottom of the channel, where the channel is a vertical neck of the reservoir, covered on top by \ac{mem}.
+The geometry of \cref{fig_ref_cur_mem} may represent \ac{bflu} being confined in a large reservoir, lying below the channel, where the channel is a vertical neck of the reservoir, covered on top by \ac{mem}.
 
 \subsubsection{\Acl{mem} motion}
 \label{sec_fl_mem_mem}
 
-Both the physical nature and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: its material elements can flow both tangentially and normally to it.
-Such fluid behavior requires an Eulerian description, which then needs to be connected to the Lagrangian description used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}, which are significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}. Third, the geometrical description of \ac{mem} requires fixing an appropriate \textit{gauge}.
+Both the physical nature and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: its material elements can both flow  tangentially and move normally to it.
+Such fluid behavior is  suited to an Eulerian description, which then needs to be connected to the Lagrangian description used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}. From  the mathematical, numerical and physical stand point, such \acp{pde} are significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}. Third, the geometrical description of \ac{mem} requires fixing an appropriate \textit{gauge}.
 In fact, a general parametrization of \ac{mem} is given by two functions $\bxmemc(\xcoord^1)$. Both of these functions  depend on the curvilinear coordinate $\xcoord^1$ which is defined in the \ac{ref} domain of \ac{mem}, $\pomlineeqr$, see \cref{fig_ref_cur_mem}---note that here $\xcoord^i$ differs from the Cartesian coordinate $\xcartesian^\alpha$.
 Despite this pair of functions, a single \ac{pde}  determines the \ac{mem} shape \cite{zhong-canBendingEnergyVesicle1989}.
 To understand this redundancy, consider the  stretching field $\nu>0$, defined by
@@ -57,7 +57,7 @@ In what follows, latin indices $i, j, k, \cdots$ will be used to denote vectors 
 In order to work out the  dynamical equations for \ac{mem}, let us derive the force exerted by \ac{bflu} on \ac{mem}. The force exerted on a line element $\dint{l_\current}$ of \ac{mem}  is \cite{landauFluidMechanics1987}
 \be
 \label{def_f_fluid_mem}
-f_{\fluid\, \alpha}(\sigmastressc, \nu, \psi) = - \sigmastressc_{\alpha \beta} \normalc{\gamma}(\nu, \psi),
+f_{\fluid\, \alpha}(\sigmastressc, \nu, \psi) = - \sigmastressc_{\alpha \beta} \normalc{\beta}(\nu, \psi),
 \ee
 where
 \be
@@ -99,7 +99,7 @@ Here, $\vmem^i$ and $w$ are the \ac{mem} tangential and normal velocity, respect
 We refer to \cite{desernoFluidLipidMembranes2015,worthmullerIRENEFluIdLayeR2025,marchiafavaAppuntiDiGeometria2005,arroyoRelaxationDynamicsFluid2009i} for details on the differential-geometry formulation, and we will now discuss each line in \cref{eq-dyn-continuity,eq-dyn-v,eq-dyn-w,eq-dyn-dX,eq-dyn-dX1,eq-dyn-dX2}.
 \Cref{eq-dyn-continuity} enforces mass conservation \cite{landauFluidMechanics1987}.
 \Cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively.
-The first term in the \ac{rhs} of \cref{eq-dyn-v} represnts the force on membrane elements induced by gradients of line tension, while the first term in the \ac{rhs} of \cref{eq-dyn-w} constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004,landauFluidMechanics1987}. The other terms read
+The first term in the \ac{rhs} of \cref{eq-dyn-v} represents the force on membrane elements induced by gradients of line tension, while the first term in the \ac{rhs} of \cref{eq-dyn-w} constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004,landauFluidMechanics1987}. The other terms read
 \begin{align}
         \label{eq_def_f_kap}
         f_\kap (\nu, \psi)                                                                                                       & \equiv                                                                                                  \newlinenn
@@ -116,8 +116,10 @@ The first term in the \ac{rhs} of \cref{eq-dyn-v} represnts the force on membran
 In \cref{eq_def_f_kap}, $f_\kappa$ is represents the resistance of \ac{mem} to bending, and it is derived from Helfrich model \cite{helfrichElasticPropertiesLipid1973}, while $f_{\etam\, t}$ and $f_{\etam\, \text{n}}$ in \cref{eq_def_f_eta_t,eq_def_f_eta_n} are, respectively, the tangential and normal component of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i}.
 %
 \Cref{eq-dyn-dX} is the time-evolution equation for the \ac{mem} shape, which evolves according to the normal $\normalc{}$, and it has been obtained from  \cref{eq_u_mem,eq_def_x_ref}.
-\Cref{eq-dyn-dX1,eq-dyn-dX2} re-express the definitions of $\nu$ and $\psi$, and they result from \cref{def_nu_psi_1,def_nu_psi_2,eq_def_e,eq_u_mem,eq_def_x_ref}.
-Finally, $\rhom$, $\sigmam$ and $\kappa$ are, respectively, the density, line tension and bending rigidity of \ac{mem}.
+We observe that the \ac{mem} shape velocity, $\pder{\bumem}{t}$, coincides with the normal displacement velocity of \ac{mem}, but is it independent of the tangential flow velocity $\bvmem$ of \ac{mem} elements along the shape. This implies that the \ac{mem} shape and \ac{bflu} motions are conforming \cite{kamenskyLectureNotesMAE}, but that the tangential part of the \ac{bflu} velocity at \ac{mem} need not coincide with $\bvmem$, thus allowing for a slip \cite{landauFluidMechanics1987}.
+%
+Finally, \cref{eq-dyn-dX1,eq-dyn-dX2} re-express the definitions of $\nu$ and $\psi$, and  result from \cref{def_nu_psi_1,def_nu_psi_2,eq_def_e,eq_u_mem,eq_def_x_ref}, and
+$\rhom$, $\sigmam$, $\etam$ and $\kappa$ are, respectively, the density, line tension, viscosity, and bending rigidity of \ac{mem}.
 
 
 
@@ -163,7 +165,7 @@ where the elastic stress tensor $\Sdom$ is given by
 \label{eq_def_S}
 \Sdom_{\alpha \beta} \equiv F_{\alpha \gamma} T_{\gamma \beta},
 \ee
-and
+where $F$ is defined in \cref{eq_def_F}, and
 \begin{align}
         \label{eq_ela_1}
         T_{\alpha \beta}  \equiv & \kel(\budom) E_{\gamma \gamma} \delta_{\alpha \beta} +\newlinenn
@@ -201,7 +203,7 @@ We impose the following \acp{bc} for  \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_ri
         \label{bc_fl_mem_dom_8}
         \budomdot                 & = \bumemdot \text{ on }\pomtopeqr.
 \end{align}
-\Cref{bc_fl_mem_dom_1} ensures that \ac{dom} is not deformed on $\pomineqr \cup \pombottomeqr$, cf. \cref{bc_ela_1}. \Cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3} follow from axial symmetry, and \cref{bc_fl_mem_dom_4} from the requirement that \ac{dom} and \ac{mem} deformations stay conforming \cite{kamenskyLectureNotesMAE}. Finally, the  \acp{bc} for $\bumemdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
+\Cref{bc_fl_mem_dom_1} ensures that \ac{dom} is not deformed on $\pomineqr \cup \pombottomeqr$, cf. \cref{bc_ela_1}. \Cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3} follow from axial symmetry, and \cref{bc_fl_mem_dom_4} from the requirement that \ac{dom} and \ac{mem} deformations stay conforming \cite{kamenskyLectureNotesMAE}. Finally, the  \acp{bc} for $\budomdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
 
 We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} contains up to second derivatives of $\budom$ and $\budomdot$. As a result, the \acp{bc} \crefs{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8} uniquely determine the solution of the \ac{bvp} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} \cite{evansPartialDifferentialEquations2010}.
 
@@ -233,6 +235,8 @@ We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \
 
 \subsubsection{\Acl{bflu} motion}
 \label{sec_fl_mem_flu}
+
+
 
 We will now discuss the \ac{bflu} equations of motion, and present them first in \ac{cur} configuration coordinates, and then transform them in \ac{ref} coordinates.
 
@@ -270,8 +274,13 @@ We enforce the following \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid
         \sigmafc          & = \sigmafbottomc \text{ on } \pombottomeqc.
 \end{align}
 
+
+
 According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bottom edge of $\omc$, \pombottomc, while \cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left wall \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} result from symmetry.
-\Cref{bc_fl_membrane_5_current} ensures that the motion of \ac{bflu} is conforming to that of \ac{mem}   \cite{kamenskyLectureNotesMAE}: In fact,   \cref{eq-dyn-dX} ensures that \ac{mem}  only moves normally to its profile, and \cref{bc_fl_membrane_5_current} thus ensures that \ac{bflu} stays in contact with \ac{mem} throughout its motion. On the other hand, \cref{bc_fl_membrane_5_current} implies a tangential slip between \ac{mem} and \ac{bflu}, allowing for the tangential part of the \ac{bflu} and \ac{mem} velocities to differ.
+\Cref{bc_fl_membrane_5_current} ensures that the motion of \ac{bflu} is conforming to that of \ac{mem}   \cite{kamenskyLectureNotesMAE}: In fact,   \cref{eq-dyn-dX} ensures that \ac{mem}  only moves normally to its profile, and \cref{bc_fl_membrane_5_current} thus ensures that \ac{bflu} stays in contact with \ac{mem} throughout its motion.
+%
+\Cref{bc_fl_membrane_5_current} ensures that the velocity of \ac{bflu} and of the \ac{mem} shape coincide, allowing for a slip between the tangential flow of \ac{mem}  elements and \ac{bflu} material elements, see \cref{sec_fl_mem_mem} and \cref{eq-dyn-dX} in there.
+%
 Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension  matches the reservoir's.
 
 
@@ -374,8 +383,10 @@ Proceeding along the same lines, the discrete form of the \acp{bc} \crefs{bc_fl_
         \pder{\umem^{\nmhalf, \, 2}}{\xcoord^1} & = 0 \text{ on } \pomlineouteqr.
 \end{align}
 
+%sign
 In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDifferential2012,chorinNumericalSolutionNavierStokes1968}:
-\begin{enumerate}
+
+\begin{enumerate}[label=\currentsec.\arabic*]
         \titleditem{Approximated velocities}{
                 \label{item_mem_split_1}
                 Proceeding along the lines of the splitting scheme for  \ac{bflu} of \cref{sec_splitting_scheme_fl_rig_fl}, we introduce the auxiliary  velocities $\bvbarmem$ and $\wbarmem$, which approximate, respectively, $\bvmem^n$ and $\wmem^n$ \cite{chorinNumericalSolutionNavierStokes1968}. We define $\bvbarmem$ and $\wbarmem$ as solutions of the \acp{pde}
@@ -584,7 +595,7 @@ The fields ${\bm \vfc}^n$, $\sigmafc^{n-1/2}$ in the \ac{cur} configuration are 
 
 
 An example of this dynamics is shown in \cref{fig_fluid_mem}, where we show the interaction between air (\ac{bflu}) and an elastomer (\ac{mem}).
-The  channel has dimensions $L = 1 \, \met$, $h = 0.2 \, \met$. Proceeding along the lines of \cref{sec_fl_rigid},   \ac{mem} parameters have been estimated by considering the parameters for a three-dimensional material, multiplying them by a unit length corresponding to the out-of-plane depth, and by the \ac{mem} thickness, chosen to be $\Delta = 10^{-3}\, \met$. The \ac{mem} bending rigidity $\kap$ has been estimated from the relation $\kap = E \Delta^3/[12(1-\nu^2)]$, which expresses $\kap$ as a function of the Young modulus $E$, the Poisson ratio $\nu$, and  $\Delta$ \cite{landauTheoryElasticity1986}. Typical values for an elastomer   are $E \sim 10^7 \, \pas$ \cite{fengPreparationCharacterizationSilicone2017} and $\nu \sim 0.5$ \cite{mullerQuickAccurateMethod2019}, yielding $\kap = 10^{-3} \, \kg \, \met^3/\sec^2$.
+The  channel has dimensions $L = 1 \, \met$, $h = 0.2 \, \met$. Proceeding along the lines of \cref{sec_fl_rigid},   \ac{mem} parameters have been estimated by considering the parameters for a three-dimensional material, multiplying them by a unit length corresponding to the out-of-plane depth, and by the \ac{mem} thickness, chosen to be $\Delta = 10^{-3}\, \met$. The \ac{mem} bending rigidity $\kap$ has been estimated from the relation $\kap = E \Delta^3/[12(1-\poissonratio^2)]$, which expresses $\kap$ as a function of the Young modulus $E$, the Poisson ratio $\poissonratio$, and  $\Delta$ \cite{landauTheoryElasticity1986}. Typical values for an elastomer   are $E \sim 10^7 \, \pas$ \cite{fengPreparationCharacterizationSilicone2017} and $\poissonratio \sim 0.5$ \cite{mullerQuickAccurateMethod2019}, yielding $\kap = 10^{-3} \, \kg \, \met^3/\sec^2$.
 We chose $\rhom = 1 \, \kg /  \met$ and $\etam = 1 \, \kg\, \met /\sec $ as the density and viscosity of an elastomer, respectively \cite{caiSoftPolydimethylsiloxaneElastomers2015,pochivalovDevelopmentVibrationDamping2021},  and we take $\sigmaml = 1 \, \newt$.
 The \ac{bflu} parameters have been estimated from the air parameters:  $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-5} \, \kg / \sec$ \cite{hilsenrath1955tables}.
 Also, we take $\sigmafbottomc = - 1 \, \newt / \met^2$,

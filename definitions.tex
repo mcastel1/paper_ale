@@ -101,4 +101,15 @@
 %time scales
 \providecommand{\tbody}{\tau_{\bod}}
 
-
+% define section label for enumerate with items that carry ID of section hierarchy
+\makeatletter
+\DeclareRobustCommand{\currentsec}{%
+    \ifnum\value{subsubsection}>0
+        \Roman{section}.\Alph{subsection}.\arabic{subsubsection}%
+    \else\ifnum\value{subsection}>0
+            \Roman{section}.\Alph{subsection}%
+        \else
+            \Roman{section}%
+        \fi\fi%
+}
+\makeatother
