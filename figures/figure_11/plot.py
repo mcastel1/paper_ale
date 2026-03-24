@@ -33,12 +33,13 @@ cp -r /Users/michelecastellana/Documents/finite_elements/fluid_structure_interac
 
 - to copy from abacus
 
-INPUT_PATH="remesh_1"
+INPUT_PATH="remesh_3"
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
-STRIDE="2"
+STRIDE="10"
 cd $OUTPUT_PATH/../
 rm -rf $OUTPUT_PATH/solution
-./copy_from_abacus.sh remesh_1/solution/snapshots/csv 'line_mesh_n_*' 'def_v_n_*' 'u_n_*' 'def_sigma_n_12_*' 'boundary_points_id_6_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
+./copy_from_abacus.sh $INPUT_PATH/solution/snapshots/csv 'line_mesh_n_*' 'def_v_n_*' 'u_n_*' 'def_sigma_n_12_*' 'boundary_points_id_6_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
+rsync -avr mcastel1@abacus:$INPUT_PATH/mesh/mesh_parameters.csv $OUTPUT_PATH
 rsync -avr mcastel1@abacus:$INPUT_PATH/solution/solution_metadata.csv $OUTPUT_PATH/solution
 rsync -avr mcastel1@abacus:$INPUT_PATH/solution/theta_omega.csv $OUTPUT_PATH/solution
 rsync -avr mcastel1@abacus:$INPUT_PATH/solution/remesh.csv $OUTPUT_PATH/solution
