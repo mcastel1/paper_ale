@@ -219,7 +219,7 @@ The discrete form of the \acp{bc} \crefs{bc_fl_rigid_1_reference,bc_fl_rigid_2_r
 
 
 We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDifferential2012,chorinNumericalSolutionNavierStokes1968}:
-\begin{enumerate}[label=\currentsec.\arabic*]
+\begin{enumerate}
         \titleditem{Approximated velocity}{
                 \label{item_split_1}
                 We introduce the velocity $\bvbarf$, which approximates the true velocity $\bm \vfr$, and which  satisfies the \ac{bvp} given by \cref{eq_fl_rigid_fl_1_reference_disc_aux} and \acp{bc}
@@ -296,7 +296,7 @@ The discrete version of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_
 
 We can now iterate in time for the ensemble of fields  of the \ac{bflu}-\ac{rig} system as follows.
 At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, ${\bm \vfr}^{n-1}$, $\sigmafr^{n-3/2}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
-\begin{enumerate}[label=\currentsec.\arabic*]
+\begin{enumerate}
         \titleditem{Update \ac{rig}}{ \label{fl_rigid_step_1}
                 Solve the algebraic equations \cref{eq_def_omega_disc,eq_fl_rigid_rigid_reference_disc} for $\theta^n$ and $\omega^n$.
         }

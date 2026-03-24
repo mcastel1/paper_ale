@@ -29,6 +29,7 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
 rm -rf $OUTPUT_PATH/solution
+cp ~/Documents/finite_elements/generate_mesh/2d/square/polygon/mesh_parameters.csv $OUTPUT_PATH
 cp -r /Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/solution $OUTPUT_PATH
 
 - to copy from abacus
@@ -226,22 +227,21 @@ def plot_snapshot(fig, n_file,
 
 
     # plot the ellipse focal point
-    focal_point_position = [
-        mesh_parameters['c'][0] - np.sqrt(mesh_parameters['a']**2-mesh_parameters['b']**2), mesh_parameters['c'][1]]
+    pivot_point_position = mesh_parameters['c']
     theta_1 = min(0, data_theta_omega.loc[int(
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
     theta_2 = max(0, data_theta_omega.loc[int(
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
 
-    ax.scatter(focal_point_position[0], focal_point_position[1],
+    ax.scatter(pivot_point_position[0], pivot_point_position[1],
                color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'])
 
     # plot the axes that define the angle theta
     # 1) plot fixed axis
     ax.plot(
-        [focal_point_position[0], focal_point_position[0] +
+        [pivot_point_position[0], pivot_point_position[0] +
             parameters['angle_axis_length']],
-        [focal_point_position[1]] * 2,
+        [pivot_point_position[1]] * 2,
         color=parameters['ellipse_angle_axis_color'],
         linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
@@ -255,15 +255,15 @@ def plot_snapshot(fig, n_file,
     )
 
     ax.plot(
-        [focal_point_position[0], focal_point_position[0] + delta[0]],
-        [focal_point_position[1], focal_point_position[1] + delta[1]],
+        [pivot_point_position[0], pivot_point_position[0] + delta[0]],
+        [pivot_point_position[1], pivot_point_position[1] + delta[1]],
         color=parameters['ellipse_angle_axis_color'],
         linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
         zorder=const.high_z_order
     )
 
-    theta_arc = Arc(focal_point_position,
+    theta_arc = Arc(pivot_point_position,
                     theta1=const.rad_to_deg * theta_1,
                     theta2=const.rad_to_deg * theta_2,
                     width=parameters['ellipse_angle_axis_length'],
