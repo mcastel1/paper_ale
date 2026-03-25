@@ -25,6 +25,11 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 
 '''
+- to copy to local
+
+cp ~/Documents/work/manuscripts/paper_ale/figures/figure_11/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square/polygon/
+cp ~/Documents/work/manuscripts/paper_ale/figures/figure_11/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/parameters_bc_square_polygon.csv 
+
 - to copy from local
 
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
@@ -34,9 +39,9 @@ cp -r /Users/michelecastellana/Documents/finite_elements/fluid_structure_interac
 
 - to copy from abacus
 
-INPUT_PATH="remesh_3"
+INPUT_PATH="remesh_2"
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
-STRIDE="10"
+STRIDE="100"
 cd $OUTPUT_PATH/../
 rm -rf $OUTPUT_PATH/solution
 ./copy_from_abacus.sh $INPUT_PATH/solution/snapshots/csv 'line_mesh_n_*' 'def_v_n_*' 'u_n_*' 'def_sigma_n_12_*' 'boundary_points_id_6_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
@@ -135,8 +140,8 @@ def plot_snapshot(fig, n_file,
 
 
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
-    data_boundary_vertices_ellipse = pd.read_csv(os.path.join(
-    snapshot_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + f'_n_{n_snapshot}.csv'))
+    data_boundary_vertices_polygon = pd.read_csv(os.path.join(
+    snapshot_path, 'boundary_points_id_' + str(parameters['polygon_loop_id']) + f'_n_{n_snapshot}.csv'))
 
     data_v = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv'))
     data_sigma = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv'))
@@ -147,16 +152,16 @@ def plot_snapshot(fig, n_file,
              snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
 
 
-    # plot the polygon of the boundary 'ellipse_loop_id'
+    # plot the polygon of the boundary 'polygon_loop_id'
     #
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u)
 
 
-    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_def_boundary_vertices_ellipse = []
-    for _, row in data_boundary_vertices_ellipse.iterrows():
-        data_def_boundary_vertices_ellipse.append(
+    # run through points in data_boundary_vertices_polygon (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
+    data_def_boundary_vertices_polygon = []
+    for _, row in data_boundary_vertices_polygon.iterrows():
+        data_def_boundary_vertices_polygon.append(
             np.add(
                 [row[':0'], row[':1']],
                 [U_interp_x(row[':0'], row[':1']),
@@ -194,8 +199,8 @@ def plot_snapshot(fig, n_file,
         norm_v_min_max = [norm_v_min, norm_v_max]
 
 
-    # set to nan the values of V_x and V_y which lie inside the polygon defined by data_def_boundary_vertices_ellipse
-    vp.set_in_polygon(data_def_boundary_vertices_ellipse,
+    # set to nan the values of V_x and V_y which lie inside the polygon defined by data_def_boundary_vertices_polygon
+    vp.set_in_polygon(data_def_boundary_vertices_polygon,
                       [X, Y],
                       [V_x, V_y])
 
@@ -226,7 +231,7 @@ def plot_snapshot(fig, n_file,
         _colorbar_initialized = True
 
 
-    # plot the ellipse focal point
+    # plot the polygon pivot point
     pivot_point_position = mesh_parameters['c']
     theta_1 = min(0, data_theta_omega.loc[int(
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
@@ -234,7 +239,9 @@ def plot_snapshot(fig, n_file,
         n_file/solution_parameters['print_out_stride']-1), 'theta'])
 
     ax.scatter(pivot_point_position[0], pivot_point_position[1],
-               color=parameters['ellipse_focal_point_color'], s=parameters['ellipse_focal_point_size'])
+               color=parameters['polygon_pivot_point_color'], 
+               s=parameters['polygon_pivot_point_size'],
+               zorder=const.high_z_order)
 
     # plot the axes that define the angle theta
     # 1) plot fixed axis
@@ -242,7 +249,7 @@ def plot_snapshot(fig, n_file,
         [pivot_point_position[0], pivot_point_position[0] +
             parameters['angle_axis_length']],
         [pivot_point_position[1]] * 2,
-        color=parameters['ellipse_angle_axis_color'],
+        color=parameters['polygon_angle_axis_color'],
         linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
         zorder=const.high_z_order
@@ -257,7 +264,7 @@ def plot_snapshot(fig, n_file,
     ax.plot(
         [pivot_point_position[0], pivot_point_position[0] + delta[0]],
         [pivot_point_position[1], pivot_point_position[1] + delta[1]],
-        color=parameters['ellipse_angle_axis_color'],
+        color=parameters['polygon_angle_axis_color'],
         linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
         zorder=const.high_z_order
@@ -266,15 +273,23 @@ def plot_snapshot(fig, n_file,
     theta_arc = Arc(pivot_point_position,
                     theta1=const.rad_to_deg * theta_1,
                     theta2=const.rad_to_deg * theta_2,
-                    width=parameters['ellipse_angle_axis_length'],
-                    height=parameters['ellipse_angle_axis_length'],
-                    color=parameters['ellipse_angle_axis_color'],
+                    width=parameters['polygon_angle_axis_length'],
+                    height=parameters['polygon_angle_axis_length'],
+                    color=parameters['polygon_angle_axis_color'],
                     linestyle=':',
-                    linewidth=parameters['ellipse_angle_line_width'],
+                    linewidth=parameters['polygon_angle_line_width'],
                     zorder=const.high_z_order
                     )
 
     ax.add_patch(theta_arc)
+
+    # plot the boundary polygon in the current configuration
+    polygon = Polygon(data_def_boundary_vertices_polygon, fill=True,
+                   linewidth=parameters['polygon_line_width'], 
+                   edgecolor=parameters['polygon_color'], 
+                   facecolor='white', 
+                   zorder=1)
+    ax.add_patch(polygon)
 
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
@@ -326,7 +341,7 @@ def plot_snapshot(fig, n_file,
 
 
     # plot the boundary polygon in the current configuration
-    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True,
+    poly = Polygon(data_def_boundary_vertices_polygon, fill=True,
                    linewidth=parameters['mesh_line_width_sigma_plot'], edgecolor='red', facecolor='white', zorder=1)
     ax.add_patch(poly)
     #
