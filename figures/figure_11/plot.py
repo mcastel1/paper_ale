@@ -39,7 +39,7 @@ cp -r /Users/michelecastellana/Documents/finite_elements/fluid_structure_interac
 
 - to copy from abacus
 
-INPUT_PATH="remesh_2"
+INPUT_PATH="remesh_3"
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
 STRIDE="100"
 cd $OUTPUT_PATH/../
