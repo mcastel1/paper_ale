@@ -56,18 +56,18 @@ plt.rcParams.update({
 })
 
 # define the folder where to read the data
-# 1. read data from local folder 
+'''# 1. read data from local folder 
 solution_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/")
 sub_mesh_1_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/sub_meshes/out/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
-
+'''
 # 2 read data from external folder
-# path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle'
-# solution_path = os.path.join(path, "solution/")
-# mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/ellipse_circle/solution/"
-# sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
-# snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
+path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic'
+solution_path = os.path.join(path, "solution/")
+mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/ellipse_circle/solution/"
+sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
+snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 
 
@@ -77,7 +77,7 @@ figure_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), paramete
 
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max(
-    'line_mesh_msh_n_', snapshot_path)
+    'line_mesh_n_', snapshot_path)
 
 number_of_frames = snapshot_max - snapshot_min + 1
 
@@ -126,9 +126,9 @@ fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size
 
 
 # pre-create subplots and axes
-fig.add_subplot(2, 1, 1)
-fig.add_subplot(2, 1, 2)
+fig.add_subplot(1, 1, 1)
 
+'''
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
                                 parameters['v_colorbar_size'][0],
@@ -137,25 +137,80 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                     parameters['sigma_colorbar_position'][1],
                                     parameters['sigma_colorbar_size'][0],
                                     parameters['sigma_colorbar_size'][1]])
+'''
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
     # load data
-    data_el_line_vertices = pd.read_csv(
-        solution_path + 'snapshots/csv/line_mesh_el_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
-    data_msh_line_vertices = pd.read_csv(
-        solution_path + 'snapshots/csv/line_mesh_msh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
-    data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' +
-                         n_snapshot + '.csv', usecols=columns_v)
+    data_line_vertices = pd.read_csv(
+        solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
+    # data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
 
-    data_u_msh_cur = pd.read_csv(
-        solution_path + 'snapshots/csv/nodal_values/u_msh_n_' + n_snapshot + '.csv', usecols=columns_v)
+    data_u_cur = pd.read_csv(solution_path + 'snapshots/csv/u_n_' + n_snapshot + '.csv', usecols=columns_v)
 
-    data_sigma = pd.read_csv(
-        solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
+    # data_sigma = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv')
 
+
+    # =============
+    # mesh subplot
+    # =============
+
+    ax = fig.axes[0]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+
+    # plot snapshot label
+    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
+             [1], snapshot_label, fontsize=8, ha='center', va='center')
+
+    # 1) plot the polygon of the boundary 'ellipse_loop_id'
+    #
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
+
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
+    data_def_boundary_vertices_ellipse = []
+    for _, row in data_boundary_vertices_ellipse.iterrows():
+        data_def_boundary_vertices_ellipse.append(
+            np.add(
+                [row[':0'], row[':1']],
+                [U_interp_x(row[':0'], row[':1']),
+                 U_interp_y(row[':0'], row[':1'])]
+            )
+        )
+
+
+
+    # plot mesh for elastic problem and for mesh oustide the elastic body
+    gr.plot_2d_mesh(ax, data_line_vertices,
+                    parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'],
+                    zorder=2)
+
+
+
+    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+                    axis_label=parameters['axis_label'],
+                    axis_label_angle=parameters['axis_label_angle'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    tick_label_offset=parameters['tick_label_offset'],
+                    tick_label_format=parameters['tick_label_format'],
+                    tick_label_angle=parameters['tick_label_angle'],
+                    font_size=parameters['font_size'],
+                    line_width=parameters['axis_line_width'],
+                    axis_origin=parameters['axis_origin'],
+                    tick_length=parameters['tick_length'],
+                    plot_label=parameters["v_plot_panel_label"],
+                    plot_label_offset=parameters['panel_label_position'],
+                    plot_label_font_size=parameters['panel_label_font_size'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length']
+                    )
+
+    '''
     # =============
     # v subplot
     # =============
@@ -174,7 +229,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     #
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
-        data_u_msh_cur)
+        data_u_cur)
 
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
         data_v,
@@ -200,7 +255,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                       [V_x, V_y])
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
-    gr.plot_2d_mesh(ax, data_el_line_vertices,
+    gr.plot_2d_mesh(ax, data_line_vertices,
                     parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'],
                     zorder=2)
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -209,7 +264,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
 
-    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh_cur,
+    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_cur,
                                                                          [0, 0],
                                                                          [parameters['L'],
                                                                              parameters['h']],
@@ -280,7 +335,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
-    gr.plot_2d_mesh(ax, data_el_line_vertices,
+    gr.plot_2d_mesh(ax, data_line_vertices,
                     parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'], zorder=2)
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'], zorder=1)
@@ -302,7 +357,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     #
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
-        data_u_msh_cur)
+        data_u_cur)
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_def_boundary_vertices_ellipse = []
@@ -367,12 +422,13 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
+    '''
 
 
-# plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
-#               solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
-plot_snapshot(fig, parameters['snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] *
+plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
               solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
+# plot_snapshot(fig, parameters['snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] *
+#               solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
