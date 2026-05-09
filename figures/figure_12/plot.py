@@ -10,6 +10,7 @@ import proplot as pplt
 import warnings
 
 import calculus.utils as cal
+import constants.utils as const
 import graphics.utils as gr
 import graphics.vector_plot as vp
 import list.column_labels as clab
@@ -189,6 +190,15 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_line_vertices,
                     parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'],
                     zorder=2)
+    
+    # plot the boundary partial_omega_circle_out in the current configuration
+    partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse, fill=False,
+                                           linewidth=parameters['partial_omega_line_width'],
+                                           edgecolor=parameters['partial_omega_circle_out_color'],
+                                           linestyle='-.',
+                                           zorder=const.high_z_order)
+
+    ax.add_patch(partial_omega_circle_out_cur)
 
 
 
