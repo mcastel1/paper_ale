@@ -32,8 +32,6 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
-solution_parameters = io.read_parameters_from_csv_file(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
 
 
 # Suppress the specific warning
@@ -71,6 +69,8 @@ sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_ellipse_circle.csv'))
+mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 
 
 
@@ -98,7 +98,7 @@ norm_v_min_max = cal.min_max_vector_field(snapshot_min,
                                           os.path.join(
                                               solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_',
                                           parameters['n_bins_v'],
-                                          [[0, 0], [parameters['L'], parameters['h']]]
+                                          [[0, 0], [mesh_parameters['L'], mesh_parameters['h']]]
                                           )
 '''
 '''
@@ -115,7 +115,7 @@ sigma_min_max = cal.min_max_files(
 
 
 data_boundary_vertices_ellipse = pd.read_csv(os.path.join(
-    mesh_path, 'boundary_points_id_' + str(parameters['ellipse_loop_id']) + '.csv'))
+    mesh_path, 'boundary_points_id_' + str(mesh_parameters['ellipse_loop_id']) + '.csv'))
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]),
                   left=parameters['figure_margin_l'],
@@ -202,7 +202,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
                     axis_label_offset=parameters['axis_label_offset'],
@@ -244,7 +244,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
         data_v,
         [0, 0],
-        [parameters['L'], parameters['h']],
+        [mesh_parameters['L'], mesh_parameters['h']],
         parameters['n_bins_v']
     )
 
@@ -276,8 +276,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_cur,
                                                                          [0, 0],
-                                                                         [parameters['L'],
-                                                                             parameters['h']],
+                                                                         [mesh_parameters['L'],
+                                                                             mesh_parameters['h']],
                                                                          parameters['n_bins_v'],
                                                                          clab.label_x_column,
                                                                          clab.label_y_column,
@@ -289,9 +289,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     Y_ref = np.array(lis.substract_lists_of_lists(Y, U_msh_y))
     # 2. once the coordinates in the reference configuration are known, assess whether they fall within the elastic body by checking whether they fall wihin the ellipse
     gr.set_inside_ellipse(
-        X_ref, Y_ref, parameters['c'], parameters['a'], parameters['b'], 0, V_x, np.nan)
+        X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_x, np.nan)
     gr.set_inside_ellipse(
-        X_ref, Y_ref, parameters['c'], parameters['a'], parameters['b'], 0, V_y, np.nan)
+        X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_y, np.nan)
 
     norm_v_min_max = [norm_v_min, norm_v_max]
 
@@ -317,7 +317,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                         axis=v_colorbar_axis
                         )
 
-    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
                     axis_label_offset=parameters['axis_label_offset'],
@@ -351,8 +351,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'], zorder=1)
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [parameters['L'],
-                             parameters['h']], parameters['n_bins_sigma'],
+        data_sigma, [0, 0], [mesh_parameters['L'],
+                             mesh_parameters['h']], parameters['n_bins_sigma'],
         method='griddata'
     )
 
@@ -391,7 +391,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
         origin='lower',
         cmap=gr.cb.color_map_type,
         aspect='equal',
-        extent=[0, parameters['L'], 0, parameters['h']],
+        extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
         vmin=sigma_min_max[0], vmax=sigma_min_max[1],
         interpolation='bilinear',
         zorder=0
@@ -415,7 +415,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
         axis=sigma_colorbar_axis
     )
 
-    gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
                     axis_label_offset=parameters['axis_label_offset'],
