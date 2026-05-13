@@ -170,13 +170,16 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # 
     df = pd.DataFrame(
         {
-            ":0": ["Yum Yum", "Yum Yum", "Indomie", "Indomie", "Indomie"],
-            ":1": ["cup", "cup", "cup", "pack", "pack"],
+            ":0": [1, 1, 2],
+            ":1": [4, 4, 3],
+            "f": [4.325, 3.543, 6.54],
         }
     )
 
     # for each line in the field ':0', check if it is a duplicated of preceeding lines
     df_duplicated = df.duplicated(subset=[":0"])
+
+    df_drop_duplicates = df.drop_duplicates(subset=[":0", ":1"])
     # 
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
