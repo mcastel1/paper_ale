@@ -166,6 +166,18 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
              [1], snapshot_label, fontsize=8, ha='center', va='center')
+    
+    # 
+    df = pd.DataFrame(
+        {
+            ":0": ["Yum Yum", "Yum Yum", "Indomie", "Indomie", "Indomie"],
+            ":1": ["cup", "cup", "cup", "pack", "pack"],
+        }
+    )
+
+    # for each line in the field ':0', check if it is a duplicated of preceeding lines
+    df_duplicated = df.duplicated(subset=[":0"])
+    # 
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
         data_sigma, [0, 0], [mesh_parameters['L'],
