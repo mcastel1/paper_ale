@@ -168,7 +168,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
              [1], snapshot_label, fontsize=8, ha='center', va='center')
     
     # 
-    df = pd.DataFrame(
+    data = pd.DataFrame(
         {
             ":0": [1, 1, 2],
             ":1": [4, 4, 3],
@@ -177,9 +177,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     )
 
     # for each line in the field ':0', check if it is a duplicated of preceeding lines
-    df_duplicated = df.duplicated(subset=[":0"])
+    data_duplicated = data.duplicated(subset=[":0"])
 
-    df_drop_duplicates = df.drop_duplicates(subset=[":0", ":1"])
+    data_drop_duplicates = data.drop_duplicates(subset=[":0", ":1"])
     # 
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
