@@ -187,8 +187,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [mesh_parameters['L']-0,
-                             mesh_parameters['h']-0], parameters['n_bins_sigma'],
+        data_sigma, [0, 0], [mesh_parameters['L'],
+                             mesh_parameters['h']], parameters['n_bins_sigma'],
         method='griddata',
         margin=parameters['dg_margin']
     )
@@ -200,7 +200,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
     sigma_min_max = [sigma_min, sigma_max]
     #
 
-    print(f"NaNs in Z_sigma: {np.any(np.isnan(Z_sigma))}")
 
 
     # 1) plot the polygon of the boundary 'ellipse_loop_id'
