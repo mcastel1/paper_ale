@@ -183,7 +183,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_drop_duplicates = data.drop_duplicates(subset=[":0", ":1"])
     ''' 
 
-    print(f"NaNs in data_sigma: {data_sigma.isna().sum()}")
 
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
