@@ -134,11 +134,12 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
                                 parameters['v_colorbar_size'][0],
                                 parameters['v_colorbar_size'][1]])
+'''
 sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                     parameters['sigma_colorbar_position'][1],
                                     parameters['sigma_colorbar_size'][0],
                                     parameters['sigma_colorbar_size'][1]])
-'''
+
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
@@ -167,7 +168,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
              [1], snapshot_label, fontsize=8, ha='center', va='center')
     
-    # 
+    '''
     data = pd.DataFrame(
         {
             ":0": [1, 1, 2],
@@ -180,7 +181,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_duplicated = data.duplicated(subset=[":0"])
 
     data_drop_duplicates = data.drop_duplicates(subset=[":0", ":1"])
-    # 
+    ''' 
+
     print(f"NaNs in data_sigma: {data_sigma.isna().sum()}")
 
 
@@ -197,8 +199,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
     sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
     sigma_min_max = [sigma_min, sigma_max]
     #
-
-    print(f'**** Z_sigma = {Z_sigma}')
 
     print(f"NaNs in Z_sigma: {np.any(np.isnan(Z_sigma))}")
 
@@ -227,13 +227,43 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     zorder=2)
     
     # plot the boundary partial_omega_circle_out in the current configuration
-    partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse, fill=False,
+    partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse, fill=True,
                                            linewidth=parameters['partial_omega_line_width'],
                                            edgecolor=parameters['partial_omega_circle_out_color'],
                                            linestyle='-.',
-                                           zorder=const.high_z_order)
+                                           zorder=const.high_z_order,
+                                           facecolor=parameters['partial_omega_circle_fill_color'])
 
     ax.add_patch(partial_omega_circle_out_cur)
+
+    contour_plot = ax.imshow(
+        Z_sigma.T,
+        origin='lower',
+        cmap=gr.cb.color_map_type,
+        aspect='equal',
+        extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
+        vmin=sigma_min_max[0], vmax=sigma_min_max[1],
+        interpolation='bilinear',
+        zorder=0
+    )
+
+    # Corrected make_colorbar call (remove 'location')
+    gr.cb.make_colorbar(
+        figure=fig,
+        grid_values=Z_sigma,
+        min_value=sigma_min_max[0],
+        max_value=sigma_min_max[1],
+        position=parameters['sigma_colorbar_position'],
+        size=parameters['sigma_colorbar_size'],
+        label_pad=parameters['sigma_colorbar_label_offset'],
+        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+        line_width=parameters['sigma_colorbar_tick_line_width'],
+        tick_length=parameters['sigma_colorbar_tick_length'],
+        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+        label=parameters['sigma_colorbar_axis_label'],
+        mappable=contour_plot,
+        axis=sigma_colorbar_axis
+    )
 
 
 
