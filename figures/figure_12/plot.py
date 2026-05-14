@@ -181,12 +181,27 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     data_drop_duplicates = data.drop_duplicates(subset=[":0", ":1"])
     # 
+    print(f"NaNs in data_sigma: {data_sigma.isna().sum()}")
+
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [mesh_parameters['L'],
-                             mesh_parameters['h']], parameters['n_bins_sigma'],
-        method='griddata'
+        data_sigma, [0, 0], [mesh_parameters['L']-0,
+                             mesh_parameters['h']-0], parameters['n_bins_sigma'],
+        method='griddata',
+        margin=parameters['dg_margin']
     )
+
+    # fork
+    # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
+    #
+    sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
+    sigma_min_max = [sigma_min, sigma_max]
+    #
+
+    print(f'**** Z_sigma = {Z_sigma}')
+
+    print(f"NaNs in Z_sigma: {np.any(np.isnan(Z_sigma))}")
+
 
     # 1) plot the polygon of the boundary 'ellipse_loop_id'
     #
