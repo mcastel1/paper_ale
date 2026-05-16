@@ -64,7 +64,7 @@ snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 # 2 read data from external folder
 path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic'
 solution_path = os.path.join(path, "solution/")
-mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/ellipse_circle/solution/"
+mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/shape_line/solution/mesh_0"
 sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
@@ -114,8 +114,6 @@ sigma_min_max = cal.min_max_files(
 '''
 
 
-data_boundary_vertices_ellipse = pd.read_csv(os.path.join(
-    mesh_path, 'boundary_points_id_' + str(mesh_parameters['ellipse_loop_id']) + '.csv'))
 
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]),
                   left=parameters['figure_margin_l'],
@@ -146,8 +144,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
     # load data
-    data_line_vertices = pd.read_csv(
-        solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
+    data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv', usecols=columns_line_vertices)
+    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_parameters["shape_id"]}_n_{n_snapshot}.csv'))
+
+
     # data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
 
     data_u_cur = pd.read_csv(solution_path + 'snapshots/csv/u_n_' + n_snapshot + '.csv', usecols=columns_v)
@@ -207,9 +207,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_def_boundary_vertices_ellipse = []
-    for _, row in data_boundary_vertices_ellipse.iterrows():
-        data_def_boundary_vertices_ellipse.append(
+    data_cur_boundary_vertices_shape = []
+    for _, row in data_ref_boundary_vertices_shape.iterrows():
+        data_cur_boundary_vertices_shape.append(
             np.add(
                 [row[':0'], row[':1']],
                 [U_interp_x(row[':0'], row[':1']),
@@ -225,7 +225,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     zorder=2)
     
     # plot the boundary partial_omega_circle_out in the current configuration
-    partial_omega_circle_out_cur = Polygon(data_def_boundary_vertices_ellipse, fill=True,
+    partial_omega_circle_out_cur = Polygon(data_cur_boundary_vertices_shape, fill=True,
                                            linewidth=parameters['partial_omega_line_width'],
                                            edgecolor=parameters['partial_omega_circle_out_color'],
                                            linestyle='-.',
@@ -320,9 +320,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
         data_u_cur)
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_def_boundary_vertices_ellipse = []
+    data_cur_boundary_vertices_shape = []
     for index, row in data_boundary_vertices_ellipse.iterrows():
-        data_def_boundary_vertices_ellipse.append(
+        data_cur_boundary_vertices_shape.append(
             np.add(
                 [row[':0'], row[':1']],
                 [U_interp_x(row[':0'], row[':1']),
@@ -331,7 +331,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
         )
 
     # plot the boundary polygon in the current configuration
-    poly = Polygon(data_def_boundary_vertices_ellipse, fill=True,
+    poly = Polygon(data_cur_boundary_vertices_shape, fill=True,
                    linewidth=parameters['mesh_el_line_width'], edgecolor='red', facecolor='white', zorder=1)
     ax.add_patch(poly)
     #
@@ -413,9 +413,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     )
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_def_boundary_vertices_ellipse = []
+    data_cur_boundary_vertices_shape = []
     for _, row in data_boundary_vertices_ellipse.iterrows():
-        data_def_boundary_vertices_ellipse.append(
+        data_cur_boundary_vertices_shape.append(
             np.add(
                 [row[':0'], row[':1']],
                 [U_interp_x(row[':0'], row[':1']),
@@ -423,8 +423,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
             )
         )
 
-    # set to nan the values of V_x and V_y which lie inside the polygon defined by data_def_boundary_vertices_ellipse
-    vp.set_in_polygon(data_def_boundary_vertices_ellipse,
+    # set to nan the values of V_x and V_y which lie inside the polygon defined by data_cur_boundary_vertices_shape
+    vp.set_in_polygon(data_cur_boundary_vertices_shape,
                       [X, Y],
                       [V_x, V_y])
 

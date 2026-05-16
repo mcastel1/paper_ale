@@ -41,7 +41,7 @@ def update_animation(n):
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
     plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(n *
-                       plot.solution_parameters['T'] / plot.number_of_frames, 's', 2))
+                       plot.solution_parameters['T'] / plot.solution_parameters['num_steps'], 's', 2))
 
     # Stop timer
     end_time = time.time()
