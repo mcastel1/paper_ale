@@ -10,7 +10,6 @@ import proplot as pplt
 import warnings
 
 import calculus.utils as cal
-import constants.utils as const
 import graphics.utils as gr
 import graphics.vector_plot as vp
 import list.column_labels as clab
@@ -69,7 +68,7 @@ sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 
-solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_ellipse_circle.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_circle.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 
 
@@ -138,10 +137,10 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                     parameters['sigma_colorbar_position'][1],
                                     parameters['sigma_colorbar_size'][0],
                                     parameters['sigma_colorbar_size'][1]])
-sigma_0_colorbar_axis = fig.add_axes([parameters['sigma_0_colorbar_position'][0],
-                                    parameters['sigma_0_colorbar_position'][1],
-                                    parameters['sigma_colorbar_size'][0],
-                                    parameters['sigma_colorbar_size'][1]])
+# sigma_0_colorbar_axis = fig.add_axes([parameters['sigma_0_colorbar_position'][0],
+#                                     parameters['sigma_0_colorbar_position'][1],
+#                                     parameters['sigma_colorbar_size'][0],
+#                                     parameters['sigma_colorbar_size'][1]])
 
 
 
@@ -166,7 +165,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_u_cur_0 = pd.read_csv(solution_path + 'snapshots/csv/u_0_n_' + n_snapshot + '.csv')
 
     # data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_0_n_' + n_snapshot + '.csv')
-    data_sigma_0 = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_0_n_' + n_snapshot + '.csv')
+    # data_sigma_0 = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_0_n_' + n_snapshot + '.csv')
 
 
 
@@ -298,17 +297,17 @@ def plot_snapshot(fig, n_file, snapshot_label):
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
              [1], snapshot_label, fontsize=8, ha='center', va='center')
 
-    _, _, Z_sigma_0, _, _, _ = gr.interpolate_surface(
-        data_sigma_0, [0, 0], [mesh_parameters['L'], mesh_parameters['h']], parameters['n_bins_sigma'],
-        method='griddata',
-        margin=parameters['dg_margin']
-    )
+    # _, _, Z_sigma_0, _, _, _ = gr.interpolate_surface(
+    #     data_sigma_0, [0, 0], [mesh_parameters['L'], mesh_parameters['h']], parameters['n_bins_sigma'],
+    #     method='griddata',
+    #     margin=parameters['dg_margin']
+    # )
 
     # fork
     # 1) to plot the figure, I set sigma_0_min_max to the min and max for the current frame
     #
-    sigma_0_min, sigma_0_max, _ = cal.min_max_scalar_field(Z_sigma_0)
-    sigma_min_max_0 = [sigma_0_min, sigma_0_max]
+    # sigma_0_min, sigma_0_max, _ = cal.min_max_scalar_field(Z_sigma_0)
+    # sigma_min_max_0 = [sigma_0_min, sigma_0_max]
     #
 
 
@@ -338,7 +337,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     
     # plot the boundary partial_omega_circle_out in the current configuration
     partial_omega_circle_out_cur_0 = Polygon(data_cur_boundary_vertices_shape_0, fill=True,
-                                           linewidth=parameters['partial_omega_line_width'],
+                                           linewidth=parameters['partial_omega_0_line_width'],
                                            edgecolor=parameters['partial_omega_circle_out_color'],
                                            linestyle='-.',
                                            zorder=1,
@@ -346,34 +345,34 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     ax.add_patch(partial_omega_circle_out_cur_0)
 
-    contour_plot_0 = ax.imshow(
-        Z_sigma_0.T,
-        origin='lower',
-        cmap=gr.cb.color_map_type,
-        aspect='equal',
-        extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
-        vmin=sigma_min_max[0], vmax=sigma_min_max[1],
-        interpolation='bilinear',
-        zorder=0
-    )
+    # contour_plot_0 = ax.imshow(
+    #     Z_sigma_0.T,
+    #     origin='lower',
+    #     cmap=gr.cb.color_map_type,
+    #     aspect='equal',
+    #     extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
+    #     vmin=sigma_min_max[0], vmax=sigma_min_max[1],
+    #     interpolation='bilinear',
+    #     zorder=0
+    # )
 
     # Corrected make_colorbar call (remove 'location')
-    gr.cb.make_colorbar(
-        figure=fig,
-        grid_values=Z_sigma_0,
-        min_value=sigma_min_max_0[0],
-        max_value=sigma_min_max_0[1],
-        position=parameters['sigma_colorbar_position'],
-        size=parameters['sigma_colorbar_size'],
-        label_pad=parameters['sigma_colorbar_label_offset'],
-        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-        line_width=parameters['sigma_colorbar_tick_line_width'],
-        tick_length=parameters['sigma_colorbar_tick_length'],
-        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=parameters['sigma_colorbar_axis_label'],
-        mappable=contour_plot_0,
-        axis=sigma_0_colorbar_axis
-    )
+    # gr.cb.make_colorbar(
+    #     figure=fig,
+    #     grid_values=Z_sigma_0,
+    #     min_value=sigma_min_max_0[0],
+    #     max_value=sigma_min_max_0[1],
+    #     position=parameters['sigma_colorbar_position'],
+    #     size=parameters['sigma_colorbar_size'],
+    #     label_pad=parameters['sigma_colorbar_label_offset'],
+    #     tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+    #     line_width=parameters['sigma_colorbar_tick_line_width'],
+    #     tick_length=parameters['sigma_colorbar_tick_length'],
+    #     tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+    #     label=parameters['sigma_colorbar_axis_label'],
+    #     mappable=contour_plot_0,
+    #     axis=sigma_0_colorbar_axis
+    # )
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
