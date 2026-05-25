@@ -7,6 +7,7 @@ import os
 import numpy as np
 import pandas as pd
 import proplot as pplt
+import time
 import warnings
 
 import calculus.utils as cal
@@ -63,12 +64,12 @@ snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 # 2 read data from external folder
 path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic'
 solution_path = os.path.join(path, "solution/")
-mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/shape_line/solution/mesh_0"
+mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/shape_shape/solution/"
 sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 
-solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_circle.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_shape.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 
 
@@ -147,9 +148,11 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
+    start_time = time.time()
+
     # 1 load data
     # 1.1 load boundary points
-    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_parameters["shape_id"]}_n_{n_snapshot}.csv'))
+    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_parameters["shape_out_id"]}_n_{n_snapshot}.csv'))
 
     
     # 1.2 load  mesh data for mesh deformed with u_n
@@ -168,7 +171,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # data_sigma_0 = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_0_n_' + n_snapshot + '.csv')
 
 
-
+    stop_time = time.time()
+    print(f"Time for read csv = {stop_time - start_time:.2f} s", flush=True)
 
 
     # =============
@@ -206,6 +210,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
 
+    stop_time = time.time()
+    print(f"Time to U_interp = {stop_time - start_time:.2f} s", flush=True)
+
+
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_cur_boundary_vertices_shape = []
     for _, row in data_ref_boundary_vertices_shape.iterrows():
@@ -223,6 +231,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_line_vertices,
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
                     zorder=2)
+    
+    stop_time = time.time()
+    print(f"Time to plot_2d_mesh = {stop_time - start_time:.2f} s", flush=True)
     
     # plot the boundary partial_omega_circle_out in the current configuration
     partial_omega_circle_out_cur = Polygon(data_cur_boundary_vertices_shape, fill=True,
@@ -245,7 +256,11 @@ def plot_snapshot(fig, n_file, snapshot_label):
         zorder=0
     )
 
+    stop_time = time.time()
+    print(f"Time to contour plot = {stop_time - start_time:.2f} s", flush=True)
+
     # Corrected make_colorbar call (remove 'location')
+    # bottleneck - start
     gr.cb.make_colorbar(
         figure=fig,
         grid_values=Z_sigma,
@@ -262,6 +277,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
         mappable=contour_plot,
         axis=sigma_colorbar_axis
     )
+    # bottleneck - end
+
+    stop_time = time.time()
+    print(f"Time to make colorbar = {stop_time - start_time:.2f} s", flush=True)
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
@@ -281,6 +300,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     minor_tick_length=parameters['minor_tick_length']
                     )
 
+
+
+    stop_time = time.time()
+    print(f"Time for mesh + sigma plot with u_n = {stop_time - start_time:.2f} s", flush=True)
 
 
     # =============
@@ -317,6 +340,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x_0, U_interp_y_0 = vec.interpolating_function_2d_vector_field(data_u_cur_0)
 
+
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x_0, U_interp_y_0] in order to obtain the boundary polygon in the current configuration
     data_cur_boundary_vertices_shape_0 = []
     for _, row in data_ref_boundary_vertices_shape.iterrows():
@@ -334,6 +358,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_mesh(ax, data_line_vertices_0,
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
                     zorder=2)
+    
+
     
     # plot the boundary partial_omega_circle_out in the current configuration
     partial_omega_circle_out_cur_0 = Polygon(data_cur_boundary_vertices_shape_0, fill=True,
@@ -391,6 +417,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
+
+
 
 
     '''           
@@ -608,6 +636,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     minor_tick_length=parameters['minor_tick_length']
                     )
     '''
+
+    stop_time = time.time()
+
+    print(f"Time for stop_snapshot = {stop_time - start_time:.2f} s", flush=True)
 
 
 
