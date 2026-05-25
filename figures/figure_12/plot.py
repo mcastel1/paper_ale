@@ -124,20 +124,23 @@ fig.add_subplot(3, 1, 1)
 fig.add_subplot(3, 1, 2)
 fig.add_subplot(3, 1, 3)
 
-'''
-v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
-                                parameters['v_colorbar_position'][1],
-                                parameters['v_colorbar_size'][0],
-                                parameters['v_colorbar_size'][1]])
-'''
+
 sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                     parameters['sigma_colorbar_position'][1],
                                     parameters['sigma_colorbar_size'][0],
                                     parameters['sigma_colorbar_size'][1]])
+
 # sigma_0_colorbar_axis = fig.add_axes([parameters['sigma_0_colorbar_position'][0],
 #                                     parameters['sigma_0_colorbar_position'][1],
 #                                     parameters['sigma_colorbar_size'][0],
 #                                     parameters['sigma_colorbar_size'][1]])
+
+v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
+                                parameters['v_colorbar_position'][1],
+                                parameters['v_colorbar_size'][0],
+                                parameters['v_colorbar_size'][1]])
+
+
 
 
 
@@ -251,25 +254,24 @@ def plot_snapshot(fig, n_file, snapshot_label):
     stop_time = time.time()
     print(f"Time to contour plot = {stop_time - start_time:.2f} s", flush=True)
 
-    # # Corrected make_colorbar call (remove 'location')
-    # # bottleneck - start
-    # gr.cb.make_colorbar(
-    #     figure=fig,
-    #     grid_values=Z_sigma,
-    #     min_value=sigma_min_max[0],
-    #     max_value=sigma_min_max[1],
-    #     position=parameters['sigma_colorbar_position'],
-    #     size=parameters['sigma_colorbar_size'],
-    #     label_pad=parameters['sigma_colorbar_label_offset'],
-    #     tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-    #     line_width=parameters['sigma_colorbar_tick_line_width'],
-    #     tick_length=parameters['sigma_colorbar_tick_length'],
-    #     tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-    #     label=parameters['sigma_colorbar_axis_label'],
-    #     mappable=contour_plot,
-    #     axis=sigma_colorbar_axis
-    # )
-    # # bottleneck - end
+    # bottleneck - start
+    gr.cb.make_colorbar(
+        figure=fig,
+        grid_values=Z_sigma,
+        min_value=sigma_min_max[0],
+        max_value=sigma_min_max[1],
+        position=parameters['sigma_colorbar_position'],
+        size=parameters['sigma_colorbar_size'],
+        label_pad=parameters['sigma_colorbar_label_offset'],
+        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+        line_width=parameters['sigma_colorbar_tick_line_width'],
+        tick_length=parameters['sigma_colorbar_tick_length'],
+        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+        label=parameters['sigma_colorbar_axis_label'],
+        mappable=contour_plot,
+        axis=sigma_colorbar_axis
+    )
+    # bottleneck - end
 
     stop_time = time.time()
     print(f"Time to make colorbar = {stop_time - start_time:.2f} s", flush=True)
@@ -455,14 +457,14 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     ax.add_patch(partial_omega_circle_out_cur)
 
-    '''
-    X, Y, V_x, V_y, _, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
+    
+    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
         data_v,
         [0, 0],
         [mesh_parameters['L'], mesh_parameters['h']],
         parameters['n_bins_v']
     )
-    '''
+    
 
     
     # plot mesh for elastic problem and for mesh oustide the elastic body
@@ -470,14 +472,13 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
                     zorder=2)
     
-    '''
+    
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
 
     _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_cur,
                                                                          [0, 0],
-                                                                         [mesh_parameters['L'],
-                                                                             mesh_parameters['h']],
+                                                                         [mesh_parameters['L'], mesh_parameters['h']],
                                                                          parameters['n_bins_v'],
                                                                          clab.label_x_column,
                                                                          clab.label_y_column,
@@ -488,10 +489,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
     X_ref = np.array(lis.substract_lists_of_lists(X, U_msh_x))
     Y_ref = np.array(lis.substract_lists_of_lists(Y, U_msh_y))
     # 2. once the coordinates in the reference configuration are known, assess whether they fall within the elastic body by checking whether they fall wihin the ellipse
-    gr.set_inside_ellipse(
-        X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_x, np.nan)
-    gr.set_inside_ellipse(
-        X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_y, np.nan)
+    # gr.set_inside_ellipse(
+    #     X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_x, np.nan)
+    # gr.set_inside_ellipse(
+    #     X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_y, np.nan)
 
     norm_v_min_max = [norm_v_min, norm_v_max]
 
@@ -504,9 +505,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
                              1,
                              'color_from_map',
                              0)
-    '''
+    
 
-    ''' 
+    
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
                         label_pad=parameters['v_colorbar_label_offset'],
@@ -518,7 +519,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                         line_width=parameters['v_colorbar_line_width'],
                         axis=v_colorbar_axis
                         )
-    '''
+    
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
