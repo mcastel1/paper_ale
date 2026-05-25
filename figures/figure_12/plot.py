@@ -64,13 +64,13 @@ snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 # 2 read data from external folder
 path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic'
 solution_path = os.path.join(path, "solution/")
-mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/shape_shape/solution/"
+mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/shape_line/solution/"
 sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 
-solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_shape.csv'))
-mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_line.csv'))
+mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
 
 
 
@@ -152,7 +152,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # 1 load data
     # 1.1 load boundary points
-    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_parameters["shape_out_id"]}_n_{n_snapshot}.csv'))
+    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_parameters["shape_id"]}_n_{n_snapshot}.csv'))
 
     
     # 1.2 load  mesh data for mesh deformed with u_n
@@ -259,25 +259,25 @@ def plot_snapshot(fig, n_file, snapshot_label):
     stop_time = time.time()
     print(f"Time to contour plot = {stop_time - start_time:.2f} s", flush=True)
 
-    # Corrected make_colorbar call (remove 'location')
-    # bottleneck - start
-    gr.cb.make_colorbar(
-        figure=fig,
-        grid_values=Z_sigma,
-        min_value=sigma_min_max[0],
-        max_value=sigma_min_max[1],
-        position=parameters['sigma_colorbar_position'],
-        size=parameters['sigma_colorbar_size'],
-        label_pad=parameters['sigma_colorbar_label_offset'],
-        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-        line_width=parameters['sigma_colorbar_tick_line_width'],
-        tick_length=parameters['sigma_colorbar_tick_length'],
-        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=parameters['sigma_colorbar_axis_label'],
-        mappable=contour_plot,
-        axis=sigma_colorbar_axis
-    )
-    # bottleneck - end
+    # # Corrected make_colorbar call (remove 'location')
+    # # bottleneck - start
+    # gr.cb.make_colorbar(
+    #     figure=fig,
+    #     grid_values=Z_sigma,
+    #     min_value=sigma_min_max[0],
+    #     max_value=sigma_min_max[1],
+    #     position=parameters['sigma_colorbar_position'],
+    #     size=parameters['sigma_colorbar_size'],
+    #     label_pad=parameters['sigma_colorbar_label_offset'],
+    #     tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+    #     line_width=parameters['sigma_colorbar_tick_line_width'],
+    #     tick_length=parameters['sigma_colorbar_tick_length'],
+    #     tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+    #     label=parameters['sigma_colorbar_axis_label'],
+    #     mappable=contour_plot,
+    #     axis=sigma_colorbar_axis
+    # )
+    # # bottleneck - end
 
     stop_time = time.time()
     print(f"Time to make colorbar = {stop_time - start_time:.2f} s", flush=True)
