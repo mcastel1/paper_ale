@@ -82,12 +82,7 @@ snapshot_min, snapshot_max = sys_utils.n_min_max(
 
 number_of_frames = snapshot_max - snapshot_min + 1
 
-# labels of columns to read
-columns_line_vertices = [clab.label_start_x_column, clab.label_start_y_column, clab.label_start_z_column,
-                         clab.label_end_x_column,
-                         clab.label_end_y_column, clab.label_end_z_column]
-columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + clab.label_x_column,
-             clab.label_v_column + clab.label_y_column]
+
 
 
 # fork
@@ -125,8 +120,9 @@ fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size
 
 
 # pre-create subplots and axes
-fig.add_subplot(2, 1, 1)
-fig.add_subplot(2, 1, 2)
+fig.add_subplot(3, 1, 1)
+fig.add_subplot(3, 1, 2)
+fig.add_subplot(3, 1, 3)
 
 '''
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
@@ -159,7 +155,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
     data_u_cur = pd.read_csv(solution_path + 'snapshots/csv/u_n_' + n_snapshot + '.csv')
 
-    # data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv', usecols=columns_v)
+    data_v = pd.read_csv(solution_path + 'snapshots/csv/def_v_n_' + n_snapshot + '.csv')
     data_sigma = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_n_' + n_snapshot + '.csv')
     
 
@@ -209,10 +205,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
     #
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
-
-    stop_time = time.time()
-    print(f"Time to U_interp = {stop_time - start_time:.2f} s", flush=True)
-
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_cur_boundary_vertices_shape = []
@@ -421,113 +413,12 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-    '''           
-    # =============
-    # sigma subplot
-    # =============
-
-    ax = fig.axes[1]  # Use the existing axis
-
-    ax.set_axis_off()
-    ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
-
-    # plot mesh for elastic problem and for mesh oustide the elastic body
-    gr.plot_2d_mesh(ax, data_line_vertices,
-                    parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'], zorder=2)
-    gr.plot_2d_mesh(ax, data_msh_line_vertices,
-                    parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'], zorder=1)
-
-    _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [mesh_parameters['L'],
-                             mesh_parameters['h']], parameters['n_bins_sigma'],
-        method='griddata'
-    )
-
-    # fork
-    # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
-    #
-    sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
-    sigma_min_max = [sigma_min, sigma_max]
-    #
-
-    # plot the polygon of the boundary 'ellipse_loop_id'
-    #
-    # build two a vector field which interpolates the displacement field in data_u_msh
-    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
-        data_u_cur)
-
-    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_cur_boundary_vertices_shape = []
-    for index, row in data_boundary_vertices_ellipse.iterrows():
-        data_cur_boundary_vertices_shape.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x(row[':0'], row[':1']),
-                 U_interp_y(row[':0'], row[':1'])]
-            )
-        )
-
-    # plot the boundary polygon in the current configuration
-    poly = Polygon(data_cur_boundary_vertices_shape, fill=True,
-                   linewidth=parameters['mesh_el_line_width'], edgecolor='red', facecolor='white', zorder=1)
-    ax.add_patch(poly)
-    #
-
-    contour_plot = ax.imshow(
-        Z_sigma.T,
-        origin='lower',
-        cmap=gr.cb.color_map_type,
-        aspect='equal',
-        extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
-        vmin=sigma_min_max[0], vmax=sigma_min_max[1],
-        interpolation='bilinear',
-        zorder=0
-    )
-
-    # Corrected make_colorbar call (remove 'location')
-    gr.cb.make_colorbar(
-        figure=fig,
-        grid_values=Z_sigma,
-        min_value=sigma_min_max[0],
-        max_value=sigma_min_max[1],
-        position=parameters['sigma_colorbar_position'],
-        size=parameters['sigma_colorbar_size'],
-        label_pad=parameters['sigma_colorbar_label_offset'],
-        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-        line_width=parameters['sigma_colorbar_tick_line_width'],
-        tick_length=parameters['sigma_colorbar_tick_length'],
-        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=parameters['sigma_colorbar_axis_label'],
-        mappable=contour_plot,
-        axis=sigma_colorbar_axis
-    )
-
-    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
-                    axis_label=parameters['axis_label'],
-                    axis_label_angle=parameters['axis_label_angle'],
-                    axis_label_offset=parameters['axis_label_offset'],
-                    tick_label_offset=parameters['tick_label_offset'],
-                    tick_label_format=parameters['tick_label_format'],
-                    tick_label_angle=parameters['tick_label_angle'],
-                    font_size=parameters['font_size'],
-                    line_width=parameters['axis_line_width'],
-                    axis_origin=parameters['axis_origin'],
-                    tick_length=parameters['tick_length'],
-                    plot_label=parameters["sigma_plot_panel_label"],
-                    plot_label_offset=parameters['panel_label_position'],
-                    plot_label_font_size=parameters['panel_label_font_size'],
-                    n_minor_ticks=parameters['n_minor_ticks'],
-                    minor_tick_length=parameters['minor_tick_length']
-                    )
-    
-
     
     # =============
     # v subplot
     # =============
 
-    ax = fig.axes[0]  # Use the existing axis
+    ax = fig.axes[2]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -537,22 +428,15 @@ def plot_snapshot(fig, n_file, snapshot_label):
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
              [1], snapshot_label, fontsize=8, ha='center', va='center')
 
+
     # 1) plot the polygon of the boundary 'ellipse_loop_id'
     #
     # build two a vector field which interpolates the displacement field in data_u_msh
-    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(
-        data_u_cur)
-
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
-        data_v,
-        [0, 0],
-        [mesh_parameters['L'], mesh_parameters['h']],
-        parameters['n_bins_v']
-    )
+    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
 
     # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
     data_cur_boundary_vertices_shape = []
-    for _, row in data_boundary_vertices_ellipse.iterrows():
+    for _, row in data_ref_boundary_vertices_shape.iterrows():
         data_cur_boundary_vertices_shape.append(
             np.add(
                 [row[':0'], row[':1']],
@@ -561,18 +445,32 @@ def plot_snapshot(fig, n_file, snapshot_label):
             )
         )
 
-    # set to nan the values of V_x and V_y which lie inside the polygon defined by data_cur_boundary_vertices_shape
-    vp.set_in_polygon(data_cur_boundary_vertices_shape,
-                      [X, Y],
-                      [V_x, V_y])
+    # plot the boundary partial_omega_circle_out in the current configuration
+    partial_omega_circle_out_cur = Polygon(data_cur_boundary_vertices_shape, fill=True,
+                                           linewidth=parameters['partial_omega_line_width'],
+                                           edgecolor=parameters['partial_omega_circle_out_color'],
+                                           linestyle='-.',
+                                           zorder=1,
+                                           facecolor=parameters['partial_omega_circle_fill_color'])
 
+    ax.add_patch(partial_omega_circle_out_cur)
+
+    '''
+    X, Y, V_x, V_y, _, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
+        data_v,
+        [0, 0],
+        [mesh_parameters['L'], mesh_parameters['h']],
+        parameters['n_bins_v']
+    )
+    '''
+
+    
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_line_vertices,
-                    parameters['mesh_el_line_width'], 'red', parameters['alpha_mesh'],
+                    parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
                     zorder=2)
-    gr.plot_2d_mesh(ax, data_msh_line_vertices,
-                    parameters['mesh_msh_line_width'], 'black', parameters['alpha_mesh'])
-
+    
+    '''
     # fork
     # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
 
@@ -606,7 +504,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
                              1,
                              'color_from_map',
                              0)
+    '''
 
+    ''' 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
                         label_pad=parameters['v_colorbar_label_offset'],
@@ -618,6 +518,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                         line_width=parameters['v_colorbar_line_width'],
                         axis=v_colorbar_axis
                         )
+    '''
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
@@ -635,7 +536,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     plot_label_font_size=parameters['panel_label_font_size'],                    n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-    '''
+    
 
     stop_time = time.time()
 
