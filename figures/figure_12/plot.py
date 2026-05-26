@@ -1,6 +1,5 @@
 import matplotlib
 from matplotlib.patches import Polygon
-from matplotlib.path import Path
 import matplotlib.pyplot as plt
 import os
 
@@ -25,7 +24,7 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
- ./copy_from_abacus.sh elastic_obstacle_1/solution/snapshots/csv 'line_mesh_el_n_*' 'line_mesh_msh_n_*' 'def_v_n_*' 'u_msh_n_*' 'def_sigma_n_12_*'  ~/Desktop 0 100000 10
+ ./copy_from_abacus.sh monolithic_2/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*'  ~/Desktop 0 100000 10
 
 '''
 
@@ -315,7 +314,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     line_width=parameters['axis_line_width'],
                     axis_origin=parameters['axis_origin'],
                     tick_length=parameters['tick_length'],
-                    plot_label=parameters["v_plot_panel_label"],
+                    plot_label=parameters["sigma_plot_panel_label"],
                     plot_label_offset=parameters['panel_label_position'],
                     plot_label_font_size=parameters['panel_label_font_size'],
                     n_minor_ticks=parameters['n_minor_ticks'],
