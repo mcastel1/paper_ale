@@ -304,6 +304,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                             tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
                             line_width=parameters['sigma_colorbar_tick_line_width'],
                             tick_length=parameters['sigma_colorbar_tick_length'],
+                            prune_ticks=False
                         )
 
     stop_time = time.time()
