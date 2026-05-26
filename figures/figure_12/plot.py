@@ -90,26 +90,27 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-'''
-norm_v_min_max = cal.min_max_vector_field(snapshot_min,
-                                          snapshot_max, parameters['frame_stride'],
-                                          os.path.join(
-                                              solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_',
-                                          parameters['n_bins_v'],
-                                          [[0, 0], [mesh_parameters['L'], mesh_parameters['h']]]
-                                          )
-'''
-'''
 # I compute sigma_min_max from snapshots between snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of sigma and an odd colorbars
 sigma_min_max = cal.min_max_files(
-                'def_sigma_n_12_',
-                os.path.join(solution_path + 'snapshots/csv/nodal_values'),
+                'def_sigma_n_',
+                os.path.join(solution_path + 'snapshots/csv'),
                 snapshot_min +
                     parameters['colorbar_sigma_snapshot_min_offset'],
                 snapshot_max,
                 parameters['frame_stride']
                  )
-'''
+
+norm_v_min_max = cal.min_max_vector_field(snapshot_min,
+                                          snapshot_max, parameters['frame_stride'],
+                                          os.path.join(
+                                              solution_path + 'snapshots/csv'), 'def_v_n_',
+                                          parameters['n_bins_v'],
+                                          [[0, 0], [mesh_parameters['L'], mesh_parameters['h']]]
+                                          )
+
+
+
+
 
 
 
@@ -221,13 +222,13 @@ def plot_snapshot(fig, n_file, snapshot_label):
         margin=parameters['dg_margin']
     )
 
-    # fork
-    # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
-    #
-    sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
-    sigma_min_max = [sigma_min, sigma_max]
-    #
-
+    '''    # fork
+        # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
+        #
+        sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
+        sigma_min_max = [sigma_min, sigma_max]
+        #
+    '''
 
 
 
@@ -278,10 +279,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     if sigma_colorbar is None:
-
-        print(f'A) Generating')
         
-
         # first frame: create with real data, axis already positioned by ProPlot
         sigma_colorbar, _ = gr.cb.make_colorbar(
             figure=fig,
@@ -298,17 +296,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
             label=parameters['sigma_colorbar_axis_label'],
             axis=sigma_colorbar_axis
         )
-    else:
-    # subsequent frames: cheap update
-
-        print(f'B Updating')
-
-        gr.cb.update_colorbar(sigma_colorbar, sigma_min_max[0], sigma_min_max[1],
-                            tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-                            line_width=parameters['sigma_colorbar_tick_line_width'],
-                            tick_length=parameters['sigma_colorbar_tick_length'],
-                            prune_ticks=False
-                        )
+    
 
     stop_time = time.time()
     print(f"Time for block 5 = {stop_time - start_time:.2f} s", flush=True)
@@ -374,7 +362,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.add_patch(partial_omega_circle_out_cur)
 
     
-    X, Y, V_x, V_y, grid_norm_v, norm_v_min, norm_v_max, _ = vec.interpolate_2d_vector_field(
+    X, Y, V_x, V_y, grid_norm_v, _, _, _ = vec.interpolate_2d_vector_field(
         data_v,
         [0, 0],
         [mesh_parameters['L'], mesh_parameters['h']],
@@ -410,7 +398,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # gr.set_inside_ellipse(
     #     X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_y, np.nan)
 
-    norm_v_min_max = [norm_v_min, norm_v_max]
+    # norm_v_min_max = [norm_v_min, norm_v_max]
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y],
@@ -429,8 +417,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     if v_colorbar is None:
 
-        print(f'A) Generating')
-
         # first frame: create with real data, axis already positioned by ProPlot
         v_colorbar, _ = gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
@@ -443,17 +429,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                         line_width=parameters['v_colorbar_line_width'],
                         axis=v_colorbar_axis
                         )
-    else:
-    # subsequent frames: cheap update
-
-        print(f'B Updating')
-
-        gr.cb.update_colorbar(v_colorbar, norm_v_min_max[0], norm_v_min_max[1],
-                            tick_label_offset=parameters['v_colorbar_tick_label_offset'],
-                            line_width=parameters['v_colorbar_tick_line_width'],
-                            tick_length=parameters['v_colorbar_tick_length'],
-                            prune_ticks=False
-                        )
+    
     
     
 
