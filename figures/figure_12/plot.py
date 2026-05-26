@@ -20,6 +20,8 @@ import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
 
+
+
 '''
 to copy files for this figure from abacus do :
 
@@ -70,7 +72,8 @@ snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_line.csv'))
-mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
+mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
+mesh_0_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
 
 
 
@@ -130,11 +133,6 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                     parameters['sigma_colorbar_size'][0],
                                     parameters['sigma_colorbar_size'][1]])
 
-# sigma_0_colorbar_axis = fig.add_axes([parameters['sigma_0_colorbar_position'][0],
-#                                     parameters['sigma_0_colorbar_position'][1],
-#                                     parameters['sigma_colorbar_size'][0],
-#                                     parameters['sigma_colorbar_size'][1]])
-
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
                                 parameters['v_colorbar_size'][0],
@@ -157,23 +155,25 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # 1 load data
     # 1.1 load boundary points
-    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_parameters["shape_id"]}_n_{n_snapshot}.csv'))
+    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_0_parameters["shape_id"]}_n_{n_snapshot}.csv'))
 
     
     # 1.2 load  mesh data for mesh deformed with u_n
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
     data_u_cur = pd.read_csv(solution_path + 'snapshots/csv/u_n_' + n_snapshot + '.csv')
 
-    data_v = pd.read_csv(solution_path + 'snapshots/csv/def_v_n_' + n_snapshot + '.csv')
-    data_sigma = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_n_' + n_snapshot + '.csv')
+    data_v_raw = pd.read_csv(solution_path + 'snapshots/csv/def_v_n_' + n_snapshot + '.csv')
+    # select from data_v_raw only data which belong to sub_mesh_0_1
+    data_v = data_v_raw[data_v_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
+
+    data_sigma_raw = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_n_' + n_snapshot + '.csv')
+    # select from data_sigma_raw only data which belong to sub_mesh_0_1
+    data_sigma = data_sigma_raw[data_sigma_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
     
 
     # 1.3 load  mesh data for mesh deformed with u_0
     data_line_vertices_0 = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_0_n_' + n_snapshot + '.csv')
     data_u_cur_0 = pd.read_csv(solution_path + 'snapshots/csv/u_0_n_' + n_snapshot + '.csv')
-
-    # data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_0_n_' + n_snapshot + '.csv')
-    # data_sigma_0 = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_0_n_' + n_snapshot + '.csv')
 
 
     stop_time = time.time()
@@ -198,8 +198,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
              [1], snapshot_label, fontsize=8, ha='center', va='center')
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [mesh_parameters['L'],
-                             mesh_parameters['h']], parameters['n_bins_sigma'],
+        data_sigma, [0, 0], [mesh_0_parameters['L'],
+                             mesh_0_parameters['h']], parameters['n_bins_sigma'],
         method='griddata',
         margin=parameters['dg_margin']
     )
@@ -261,7 +261,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
         origin='lower',
         cmap=gr.cb.color_map_type,
         aspect='equal',
-        extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
+        extent=[0, mesh_0_parameters['L'], 0, mesh_0_parameters['h']],
         vmin=sigma_min_max[0], vmax=sigma_min_max[1],
         interpolation='bilinear',
         zorder=0
@@ -312,7 +312,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     start_time = time.time()
 
 
-    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_0_parameters['L'], mesh_0_parameters['h']],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
                     axis_label_offset=parameters['axis_label_offset'],
@@ -571,8 +571,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
-              solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
+plot_snapshot(fig, snapshot_max, rf'$n = \,$ { snapshot_max}')
 # plot_snapshot(fig, parameters['snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] *
 #               solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 
