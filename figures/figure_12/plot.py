@@ -147,6 +147,9 @@ sigma_colorbar = None
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
+    global sigma_colorbar
+
+
     start_time = time.time()
 
     # 1 load data
@@ -267,7 +270,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
     start_time = time.time()
 
 
-    global sigma_colorbar
 
     if sigma_colorbar is None:
 
@@ -297,8 +299,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
         gr.cb.update_colorbar(sigma_colorbar, sigma_min_max[0], sigma_min_max[1])
 
-
-    
     stop_time = time.time()
     print(f"Time for block 5 = {stop_time - start_time:.2f} s", flush=True)
 
