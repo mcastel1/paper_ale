@@ -150,6 +150,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     global sigma_colorbar
 
 
+    start_time_plot_snapshot = time.time()
+
+
     start_time = time.time()
 
     # 1 load data
@@ -297,7 +300,11 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
         print(f'B Updating')
 
-        gr.cb.update_colorbar(sigma_colorbar, sigma_min_max[0], sigma_min_max[1])
+        gr.cb.update_colorbar(sigma_colorbar, sigma_min_max[0], sigma_min_max[1],
+                            tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+                            line_width=parameters['sigma_colorbar_tick_line_width'],
+                            tick_length=parameters['sigma_colorbar_tick_length'],
+                        )
 
     stop_time = time.time()
     print(f"Time for block 5 = {stop_time - start_time:.2f} s", flush=True)
@@ -327,6 +334,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     stop_time = time.time()
     print(f"Time for block 6 = {stop_time - start_time:.2f} s", flush=True)
+
+    stop_time_plot_snapshot = time.time()
+    print(f"Time for plot_snapshot = {stop_time_plot_snapshot- start_time_plot_snapshot:.2f} s", flush=True)
+
 
     '''
     # =============
