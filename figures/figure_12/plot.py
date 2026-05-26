@@ -141,7 +141,7 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_size'][1]])
 
 
-
+sigma_colorbar = None
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
@@ -254,29 +254,41 @@ def plot_snapshot(fig, n_file, snapshot_label):
     stop_time = time.time()
     print(f"Time to contour plot = {stop_time - start_time:.2f} s", flush=True)
 
-    '''   
-    # bottleneck - start
-    gr.cb.make_colorbar(
-        figure=fig,
-        grid_values=Z_sigma,
-        min_value=sigma_min_max[0],
-        max_value=sigma_min_max[1],
-        position=parameters['sigma_colorbar_position'],
-        size=parameters['sigma_colorbar_size'],
-        label_pad=parameters['sigma_colorbar_label_offset'],
-        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-        line_width=parameters['sigma_colorbar_tick_line_width'],
-        tick_length=parameters['sigma_colorbar_tick_length'],
-        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=parameters['sigma_colorbar_axis_label'],
-        mappable=contour_plot,
-        axis=sigma_colorbar_axis
-    )
-    # bottleneck - end
-    '''
+    global sigma_colorbar
 
-    stop_time = time.time()
-    print(f"Time to make colorbar = {stop_time - start_time:.2f} s", flush=True)
+    if sigma_colorbar is None:
+
+        print(f'A) Generating')
+        
+
+        # first frame: create with real data, axis already positioned by ProPlot
+        sigma_colorbar, _ = gr.cb.make_colorbar(
+            figure=fig,
+            grid_values=Z_sigma,
+            min_value=sigma_min_max[0],
+            max_value=sigma_min_max[1],
+            position=parameters['sigma_colorbar_position'],
+            size=parameters['sigma_colorbar_size'],
+            label_pad=parameters['sigma_colorbar_label_offset'],
+            tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+            line_width=parameters['sigma_colorbar_tick_line_width'],
+            tick_length=parameters['sigma_colorbar_tick_length'],
+            tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+            label=parameters['sigma_colorbar_axis_label'],
+            axis=sigma_colorbar_axis
+        )
+    else:
+    # subsequent frames: cheap update
+
+        print(f'B Updating')
+
+        start_time = time.time()
+
+
+        gr.cb.update_colorbar(sigma_colorbar, sigma_min_max[0], sigma_min_max[1])
+
+        stop_time = time.time()
+        print(f"Time to update colorbar = {stop_time - start_time:.2f} s", flush=True)
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
@@ -301,7 +313,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     stop_time = time.time()
     print(f"Time for mesh + sigma plot with u_n = {stop_time - start_time:.2f} s", flush=True)
 
-
+    '''
     # =============
     # mesh + sigma subplot for deformation with u_0
     # =============
@@ -493,22 +505,22 @@ def plot_snapshot(fig, n_file, snapshot_label):
                              0)
     
 
+
     
-    '''
     # bottleneck - start
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
-                        parameters['v_colorbar_position'], parameters['v_colorbar_size'],
-                        label_pad=parameters['v_colorbar_label_offset'],
-                        label=parameters['v_colorbar_axis_label'],
-                        font_size=parameters['color_map_font_size'],
-                        tick_label_offset=parameters['v_colorbar_tick_label_offset'],
-                        tick_label_angle=parameters['v_colorbar_tick_label_angle'],
-                        tick_length=parameters['v_colorbar_tick_length'],
-                        line_width=parameters['v_colorbar_line_width'],
-                        axis=v_colorbar_axis
-                        )
+    # gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
+    #                     parameters['v_colorbar_position'], parameters['v_colorbar_size'],
+    #                     label_pad=parameters['v_colorbar_label_offset'],
+    #                     label=parameters['v_colorbar_axis_label'],
+    #                     font_size=parameters['color_map_font_size'],
+    #                     tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+    #                     tick_label_angle=parameters['v_colorbar_tick_label_angle'],
+    #                     tick_length=parameters['v_colorbar_tick_length'],
+    #                     line_width=parameters['v_colorbar_line_width'],
+    #                     axis=v_colorbar_axis
+    #                     )
     # bottleneck - end
-    '''
+    
     
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
@@ -527,7 +539,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     plot_label_font_size=parameters['panel_label_font_size'],                    n_minor_ticks=parameters['n_minor_ticks'],
                     minor_tick_length=parameters['minor_tick_length']
                     )
-    
+    '''
 
     stop_time = time.time()
 
