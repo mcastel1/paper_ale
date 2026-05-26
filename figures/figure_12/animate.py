@@ -29,7 +29,7 @@ def update_animation(n):
     start_time = time.time()
 
     # clear only the major axes of the plot. The colorbar axes need not be cleaned because make_colorbar already clears them
-    for ax in plot.fig.axes[:4]:
+    for ax in plot.fig.axes[:5]:
         ax.clear()
 
     # Clear text objects (the snapshot label accumulates)
@@ -37,11 +37,10 @@ def update_animation(n):
         txt.remove()
     # plot.gr.delete_all_axes(plot.fig)
 
-    text.clear_labels_with_patterns(
-        plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
+    # text.clear_labels_with_patterns(
+    #     plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(n *
-                       plot.solution_parameters['T'] / plot.solution_parameters['num_steps'], 's', 2))
+    plot.plot_snapshot(plot.fig, n, rf'$n = \,$' + io.time_to_string(n, 's', 2))
 
     # Stop timer
     end_time = time.time()

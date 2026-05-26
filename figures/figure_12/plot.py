@@ -20,6 +20,8 @@ import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
 
+
+
 '''
 to copy files for this figure from abacus do :
 
@@ -70,7 +72,8 @@ snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_line.csv'))
-mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
+mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
+mesh_0_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
 
 
 
@@ -130,53 +133,60 @@ sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
                                     parameters['sigma_colorbar_size'][0],
                                     parameters['sigma_colorbar_size'][1]])
 
-# sigma_0_colorbar_axis = fig.add_axes([parameters['sigma_0_colorbar_position'][0],
-#                                     parameters['sigma_0_colorbar_position'][1],
-#                                     parameters['sigma_colorbar_size'][0],
-#                                     parameters['sigma_colorbar_size'][1]])
-
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
                                 parameters['v_colorbar_size'][0],
                                 parameters['v_colorbar_size'][1]])
 
 
-
+sigma_colorbar = None
+v_colorbar = None
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
+    global sigma_colorbar, v_colorbar
+
+
+    start_time_plot_snapshot = time.time()
+
+
     start_time = time.time()
 
     # 1 load data
     # 1.1 load boundary points
-    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_parameters["shape_id"]}_n_{n_snapshot}.csv'))
+    data_ref_boundary_vertices_shape = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/boundary_points_id_{mesh_0_parameters["shape_id"]}_n_{n_snapshot}.csv'))
 
     
     # 1.2 load  mesh data for mesh deformed with u_n
     data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
     data_u_cur = pd.read_csv(solution_path + 'snapshots/csv/u_n_' + n_snapshot + '.csv')
 
-    data_v = pd.read_csv(solution_path + 'snapshots/csv/def_v_n_' + n_snapshot + '.csv')
-    data_sigma = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_n_' + n_snapshot + '.csv')
+    data_v_raw = pd.read_csv(solution_path + 'snapshots/csv/def_v_n_' + n_snapshot + '.csv')
+    # select from data_v_raw only data which belong to sub_mesh_0_1
+    data_v = data_v_raw[data_v_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
+
+    data_sigma_raw = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_n_' + n_snapshot + '.csv')
+    # select from data_sigma_raw only data which belong to sub_mesh_0_1
+    data_sigma = data_sigma_raw[data_sigma_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
     
 
     # 1.3 load  mesh data for mesh deformed with u_0
     data_line_vertices_0 = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_0_n_' + n_snapshot + '.csv')
     data_u_cur_0 = pd.read_csv(solution_path + 'snapshots/csv/u_0_n_' + n_snapshot + '.csv')
 
-    # data_v = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_v_0_n_' + n_snapshot + '.csv')
-    # data_sigma_0 = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_0_n_' + n_snapshot + '.csv')
-
 
     stop_time = time.time()
-    print(f"Time for read csv = {stop_time - start_time:.2f} s", flush=True)
+    print(f"Time for block 1 = {stop_time - start_time:.2f} s", flush=True)
 
 
     # =============
     # mesh + sigma subplot for deformation with u_n
     # =============
+
+    start_time = time.time()
+
 
     ax = fig.axes[0]  # Use the existing axis
 
@@ -189,8 +199,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
              [1], snapshot_label, fontsize=8, ha='center', va='center')
 
     _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [mesh_parameters['L'],
-                             mesh_parameters['h']], parameters['n_bins_sigma'],
+        data_sigma, [0, 0], [mesh_0_parameters['L'],
+                             mesh_0_parameters['h']], parameters['n_bins_sigma'],
         method='griddata',
         margin=parameters['dg_margin']
     )
@@ -220,6 +230,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
             )
         )
 
+    stop_time = time.time()
+    print(f"Time for block 2 = {stop_time - start_time:.2f} s", flush=True)
+
+    start_time = time.time()
 
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
@@ -228,7 +242,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     zorder=2)
     
     stop_time = time.time()
-    print(f"Time to plot_2d_mesh = {stop_time - start_time:.2f} s", flush=True)
+    print(f"Time for block 3 = {stop_time - start_time:.2f} s", flush=True)
+
+    start_time = time.time()
+
     
     # plot the boundary partial_omega_circle_out in the current configuration
     partial_omega_circle_out_cur = Polygon(data_cur_boundary_vertices_shape, fill=True,
@@ -245,142 +262,59 @@ def plot_snapshot(fig, n_file, snapshot_label):
         origin='lower',
         cmap=gr.cb.color_map_type,
         aspect='equal',
-        extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
+        extent=[0, mesh_0_parameters['L'], 0, mesh_0_parameters['h']],
         vmin=sigma_min_max[0], vmax=sigma_min_max[1],
         interpolation='bilinear',
         zorder=0
     )
 
     stop_time = time.time()
-    print(f"Time to contour plot = {stop_time - start_time:.2f} s", flush=True)
+    print(f"Time for block 4 = {stop_time - start_time:.2f} s", flush=True)
 
-    '''   
-    # bottleneck - start
-    gr.cb.make_colorbar(
-        figure=fig,
-        grid_values=Z_sigma,
-        min_value=sigma_min_max[0],
-        max_value=sigma_min_max[1],
-        position=parameters['sigma_colorbar_position'],
-        size=parameters['sigma_colorbar_size'],
-        label_pad=parameters['sigma_colorbar_label_offset'],
-        tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-        line_width=parameters['sigma_colorbar_tick_line_width'],
-        tick_length=parameters['sigma_colorbar_tick_length'],
-        tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-        label=parameters['sigma_colorbar_axis_label'],
-        mappable=contour_plot,
-        axis=sigma_colorbar_axis
-    )
-    # bottleneck - end
-    '''
-
-    stop_time = time.time()
-    print(f"Time to make colorbar = {stop_time - start_time:.2f} s", flush=True)
-
-    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
-                    axis_label=parameters['axis_label'],
-                    axis_label_angle=parameters['axis_label_angle'],
-                    axis_label_offset=parameters['axis_label_offset'],
-                    tick_label_offset=parameters['tick_label_offset'],
-                    tick_label_format=parameters['tick_label_format'],
-                    tick_label_angle=parameters['tick_label_angle'],
-                    font_size=parameters['font_size'],
-                    line_width=parameters['axis_line_width'],
-                    axis_origin=parameters['axis_origin'],
-                    tick_length=parameters['tick_length'],
-                    plot_label=parameters["v_plot_panel_label"],
-                    plot_label_offset=parameters['panel_label_position'],
-                    plot_label_font_size=parameters['panel_label_font_size'],
-                    n_minor_ticks=parameters['n_minor_ticks'],
-                    minor_tick_length=parameters['minor_tick_length']
-                    )
+    start_time = time.time()
 
 
 
-    stop_time = time.time()
-    print(f"Time for mesh + sigma plot with u_n = {stop_time - start_time:.2f} s", flush=True)
+    if sigma_colorbar is None:
 
+        print(f'A) Generating')
+        
 
-    # =============
-    # mesh + sigma subplot for deformation with u_0
-    # =============
-
-    ax = fig.axes[1]  # Use the existing axis
-
-    ax.set_axis_off()
-    ax.set_aspect('equal')
-    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
-
-    # plot snapshot label
-    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
-             [1], snapshot_label, fontsize=8, ha='center', va='center')
-
-    # _, _, Z_sigma_0, _, _, _ = gr.interpolate_surface(
-    #     data_sigma_0, [0, 0], [mesh_parameters['L'], mesh_parameters['h']], parameters['n_bins_sigma'],
-    #     method='griddata',
-    #     margin=parameters['dg_margin']
-    # )
-
-    # fork
-    # 1) to plot the figure, I set sigma_0_min_max to the min and max for the current frame
-    #
-    # sigma_0_min, sigma_0_max, _ = cal.min_max_scalar_field(Z_sigma_0)
-    # sigma_min_max_0 = [sigma_0_min, sigma_0_max]
-    #
-
-
-
-    # 1) plot the polygon of the boundary 'ellipse_loop_id'
-    #
-    # build two a vector field which interpolates the displacement field in data_u_msh
-    U_interp_x_0, U_interp_y_0 = vec.interpolating_function_2d_vector_field(data_u_cur_0)
-
-
-    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x_0, U_interp_y_0] in order to obtain the boundary polygon in the current configuration
-    data_cur_boundary_vertices_shape_0 = []
-    for _, row in data_ref_boundary_vertices_shape.iterrows():
-        data_cur_boundary_vertices_shape_0.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x_0(row[':0'], row[':1']),
-                 U_interp_y_0(row[':0'], row[':1'])]
-            )
+        # first frame: create with real data, axis already positioned by ProPlot
+        sigma_colorbar, _ = gr.cb.make_colorbar(
+            figure=fig,
+            grid_values=Z_sigma,
+            min_value=sigma_min_max[0],
+            max_value=sigma_min_max[1],
+            position=parameters['sigma_colorbar_position'],
+            size=parameters['sigma_colorbar_size'],
+            label_pad=parameters['sigma_colorbar_label_offset'],
+            tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+            line_width=parameters['sigma_colorbar_tick_line_width'],
+            tick_length=parameters['sigma_colorbar_tick_length'],
+            tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+            label=parameters['sigma_colorbar_axis_label'],
+            axis=sigma_colorbar_axis
         )
+    else:
+    # subsequent frames: cheap update
+
+        print(f'B Updating')
+
+        gr.cb.update_colorbar(sigma_colorbar, sigma_min_max[0], sigma_min_max[1],
+                            tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+                            line_width=parameters['sigma_colorbar_tick_line_width'],
+                            tick_length=parameters['sigma_colorbar_tick_length'],
+                            prune_ticks=False
+                        )
+
+    stop_time = time.time()
+    print(f"Time for block 5 = {stop_time - start_time:.2f} s", flush=True)
+
+    start_time = time.time()
 
 
-
-    # plot mesh for elastic problem and for mesh oustide the elastic body
-    gr.plot_2d_mesh(ax, data_line_vertices_0,
-                    parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
-                    zorder=2)
-    
-
-    
-    # plot the boundary partial_omega_circle_out in the current configuration
-    partial_omega_circle_out_cur_0 = Polygon(data_cur_boundary_vertices_shape_0, fill=True,
-                                           linewidth=parameters['partial_omega_0_line_width'],
-                                           edgecolor=parameters['partial_omega_circle_out_color'],
-                                           linestyle='-.',
-                                           zorder=1,
-                                           facecolor=parameters['partial_omega_circle_fill_color'])
-
-    ax.add_patch(partial_omega_circle_out_cur_0)
-
-    # contour_plot_0 = ax.imshow(
-    #     Z_sigma_0.T,
-    #     origin='lower',
-    #     cmap=gr.cb.color_map_type,
-    #     aspect='equal',
-    #     extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
-    #     vmin=sigma_min_max[0], vmax=sigma_min_max[1],
-    #     interpolation='bilinear',
-    #     zorder=0
-    # )
-
-   
-
-    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_0_parameters['L'], mesh_0_parameters['h']],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
                     axis_label_offset=parameters['axis_label_offset'],
@@ -399,6 +333,12 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     )
 
 
+
+    stop_time = time.time()
+    print(f"Time for block 6 = {stop_time - start_time:.2f} s", flush=True)
+
+    stop_time_plot_snapshot = time.time()
+    print(f"Time for plot_snapshot = {stop_time_plot_snapshot- start_time_plot_snapshot:.2f} s", flush=True)
 
 
     
@@ -406,7 +346,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # v subplot
     # =============
 
-    ax = fig.axes[2]  # Use the existing axis
+    ax = fig.axes[1]  # Use the existing axis
 
     ax.set_axis_off()
     ax.set_aspect('equal')
@@ -493,10 +433,16 @@ def plot_snapshot(fig, n_file, snapshot_label):
                              0)
     
 
+
     
-    '''
-    # bottleneck - start
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
+
+
+    if v_colorbar is None:
+
+        print(f'A) Generating')
+
+        # first frame: create with real data, axis already positioned by ProPlot
+        v_colorbar, _ = gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
                         label_pad=parameters['v_colorbar_label_offset'],
                         label=parameters['v_colorbar_axis_label'],
@@ -507,8 +453,18 @@ def plot_snapshot(fig, n_file, snapshot_label):
                         line_width=parameters['v_colorbar_line_width'],
                         axis=v_colorbar_axis
                         )
-    # bottleneck - end
-    '''
+    else:
+    # subsequent frames: cheap update
+
+        print(f'B Updating')
+
+        gr.cb.update_colorbar(v_colorbar, norm_v_min_max[0], norm_v_min_max[1],
+                            tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                            line_width=parameters['v_colorbar_tick_line_width'],
+                            tick_length=parameters['v_colorbar_tick_length'],
+                            prune_ticks=False
+                        )
+    
     
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
@@ -529,14 +485,109 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     )
     
 
-    stop_time = time.time()
 
-    print(f"Time for stop_snapshot = {stop_time - start_time:.2f} s", flush=True)
+    # =============
+    # mesh + sigma subplot for deformation with u_0
+    # =============
+
+    ax = fig.axes[2]  # Use the existing axis
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)  # <-- disables ProPlot's auto-enabled grid
+
+    # plot snapshot label
+    fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
+             [1], snapshot_label, fontsize=8, ha='center', va='center')
+
+    # _, _, Z_sigma_0, _, _, _ = gr.interpolate_surface(
+    #     data_sigma_0, [0, 0], [mesh_parameters['L'], mesh_parameters['h']], parameters['n_bins_sigma'],
+    #     method='griddata',
+    #     margin=parameters['dg_margin']
+    # )
+
+    # fork
+    # 1) to plot the figure, I set sigma_0_min_max to the min and max for the current frame
+    #
+    # sigma_0_min, sigma_0_max, _ = cal.min_max_scalar_field(Z_sigma_0)
+    # sigma_min_max_0 = [sigma_0_min, sigma_0_max]
+    #
 
 
 
-plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
-              solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
+    # 1) plot the polygon of the boundary 'ellipse_loop_id'
+    #
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x_0, U_interp_y_0 = vec.interpolating_function_2d_vector_field(data_u_cur_0)
+
+
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x_0, U_interp_y_0] in order to obtain the boundary polygon in the current configuration
+    data_cur_boundary_vertices_shape_0 = []
+    for _, row in data_ref_boundary_vertices_shape.iterrows():
+        data_cur_boundary_vertices_shape_0.append(
+            np.add(
+                [row[':0'], row[':1']],
+                [U_interp_x_0(row[':0'], row[':1']),
+                 U_interp_y_0(row[':0'], row[':1'])]
+            )
+        )
+
+
+
+    # plot mesh for elastic problem and for mesh oustide the elastic body
+    gr.plot_2d_mesh(ax, data_line_vertices_0,
+                    parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
+                    zorder=2)
+    
+
+    
+    # plot the boundary partial_omega_circle_out in the current configuration
+    partial_omega_circle_out_cur_0 = Polygon(data_cur_boundary_vertices_shape_0, fill=True,
+                                           linewidth=parameters['partial_omega_0_line_width'],
+                                           edgecolor=parameters['partial_omega_circle_out_color'],
+                                           linestyle='-.',
+                                           zorder=1,
+                                           facecolor=parameters['partial_omega_circle_fill_color'])
+
+    ax.add_patch(partial_omega_circle_out_cur_0)
+
+    # contour_plot_0 = ax.imshow(
+    #     Z_sigma_0.T,
+    #     origin='lower',
+    #     cmap=gr.cb.color_map_type,
+    #     aspect='equal',
+    #     extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
+    #     vmin=sigma_min_max[0], vmax=sigma_min_max[1],
+    #     interpolation='bilinear',
+    #     zorder=0
+    # )
+
+   
+
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
+                    axis_label=parameters['axis_label'],
+                    axis_label_angle=parameters['axis_label_angle'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    tick_label_offset=parameters['tick_label_offset'],
+                    tick_label_format=parameters['tick_label_format'],
+                    tick_label_angle=parameters['tick_label_angle'],
+                    font_size=parameters['font_size'],
+                    line_width=parameters['axis_line_width'],
+                    axis_origin=parameters['axis_origin'],
+                    tick_length=parameters['tick_length'],
+                    plot_label=parameters["u_0_plot_panel_label"],
+                    plot_label_offset=parameters['panel_label_position'],
+                    plot_label_font_size=parameters['panel_label_font_size'],
+                    n_minor_ticks=parameters['n_minor_ticks'],
+                    minor_tick_length=parameters['minor_tick_length']
+                    )
+
+
+
+
+
+
+plot_snapshot(fig, snapshot_max, rf'$n = \,$ { snapshot_max}')
 # plot_snapshot(fig, parameters['snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] *
 #               solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 
