@@ -180,6 +180,22 @@ def plot_snapshot(fig, n_file, snapshot_label):
     stop_time = time.time()
     print(f"Time for block 1 = {stop_time - start_time:.2f} s", flush=True)
 
+    # build two a vector field which interpolates the displacement field in data_u_msh
+    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
+
+        # 1) plot the polygon of the boundary 'ellipse_loop_id'
+
+    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
+    data_cur_boundary_vertices_shape = []
+    for _, row in data_ref_boundary_vertices_shape.iterrows():
+        data_cur_boundary_vertices_shape.append(
+            np.add(
+                [row[':0'], row[':1']],
+                [U_interp_x(row[':0'], row[':1']),
+                 U_interp_y(row[':0'], row[':1'])]
+            )
+        )
+
 
     # =============
     # mesh + sigma subplot for deformation with u_n
@@ -214,21 +230,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-    # 1) plot the polygon of the boundary 'ellipse_loop_id'
-    #
-    # build two a vector field which interpolates the displacement field in data_u_msh
-    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
 
-    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_cur_boundary_vertices_shape = []
-    for _, row in data_ref_boundary_vertices_shape.iterrows():
-        data_cur_boundary_vertices_shape.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x(row[':0'], row[':1']),
-                 U_interp_y(row[':0'], row[':1'])]
-            )
-        )
 
     stop_time = time.time()
     print(f"Time for block 2 = {stop_time - start_time:.2f} s", flush=True)
@@ -359,19 +361,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     # 1) plot the polygon of the boundary 'ellipse_loop_id'
     #
-    # build two a vector field which interpolates the displacement field in data_u_msh
-    U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
 
-    # run through points in data_boundary_vertices_ellipse (reference configuration) and add to them [U_interp_x, U_interp_y] in order to obtain the boundary polygon in the current configuration
-    data_cur_boundary_vertices_shape = []
-    for _, row in data_ref_boundary_vertices_shape.iterrows():
-        data_cur_boundary_vertices_shape.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x(row[':0'], row[':1']),
-                 U_interp_y(row[':0'], row[':1'])]
-            )
-        )
 
     # plot the boundary partial_omega_circle_out in the current configuration
     partial_omega_circle_out_cur = Polygon(data_cur_boundary_vertices_shape, fill=True,
