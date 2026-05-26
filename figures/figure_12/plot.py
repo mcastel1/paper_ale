@@ -171,12 +171,15 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     stop_time = time.time()
-    print(f"Time for read csv = {stop_time - start_time:.2f} s", flush=True)
+    print(f"Time for block 1 = {stop_time - start_time:.2f} s", flush=True)
 
 
     # =============
     # mesh + sigma subplot for deformation with u_n
     # =============
+
+    start_time = time.time()
+
 
     ax = fig.axes[0]  # Use the existing axis
 
@@ -220,6 +223,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
             )
         )
 
+    stop_time = time.time()
+    print(f"Time for block 2 = {stop_time - start_time:.2f} s", flush=True)
+
+    start_time = time.time()
 
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
@@ -228,7 +235,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     zorder=2)
     
     stop_time = time.time()
-    print(f"Time to plot_2d_mesh = {stop_time - start_time:.2f} s", flush=True)
+    print(f"Time for block 3 = {stop_time - start_time:.2f} s", flush=True)
+
+    start_time = time.time()
+
     
     # plot the boundary partial_omega_circle_out in the current configuration
     partial_omega_circle_out_cur = Polygon(data_cur_boundary_vertices_shape, fill=True,
@@ -252,7 +262,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
     )
 
     stop_time = time.time()
-    print(f"Time to contour plot = {stop_time - start_time:.2f} s", flush=True)
+    print(f"Time for block 4 = {stop_time - start_time:.2f} s", flush=True)
+
+    start_time = time.time()
+
 
     global sigma_colorbar
 
@@ -282,13 +295,15 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
         print(f'B Updating')
 
-        start_time = time.time()
-
-
         gr.cb.update_colorbar(sigma_colorbar, sigma_min_max[0], sigma_min_max[1])
 
-        stop_time = time.time()
-        print(f"Time to update colorbar = {stop_time - start_time:.2f} s", flush=True)
+
+    
+    stop_time = time.time()
+    print(f"Time for block 5 = {stop_time - start_time:.2f} s", flush=True)
+
+    start_time = time.time()
+
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
@@ -311,7 +326,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     stop_time = time.time()
-    print(f"Time for mesh + sigma plot with u_n = {stop_time - start_time:.2f} s", flush=True)
+    print(f"Time for block 6 = {stop_time - start_time:.2f} s", flush=True)
 
     '''
     # =============
@@ -541,9 +556,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     )
     '''
 
-    stop_time = time.time()
 
-    print(f"Time for stop_snapshot = {stop_time - start_time:.2f} s", flush=True)
 
 
 
