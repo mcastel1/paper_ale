@@ -70,7 +70,7 @@ sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
 
-solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_line_a.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_line_b.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 mesh_0_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
 
@@ -112,7 +112,6 @@ norm_v_min_max = cal.min_max_vector_field(snapshot_min,
 
 
 
-
 fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size'][1]),
                   left=parameters['figure_margin_l'],
                   bottom=parameters['figure_margin_b'],
@@ -123,9 +122,9 @@ fig = pplt.figure(figsize=(parameters['figure_size'][0], parameters['figure_size
 
 
 # pre-create subplots and axes
-fig.add_subplot(3, 1, 1)
-fig.add_subplot(3, 1, 2)
-fig.add_subplot(3, 1, 3)
+fig.add_subplot(1, 3, 1)
+fig.add_subplot(1, 3, 2)
+fig.add_subplot(1, 3, 3)
 
 
 sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
@@ -410,7 +409,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                              parameters['arrow_line_width'],
                              1,
                              'color_from_map',
-                             0)
+                             0,
+                             threshold_arrow_length=parameters['threshold_arrow_length'])
     
 
 
@@ -429,6 +429,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                         tick_label_angle=parameters['v_colorbar_tick_label_angle'],
                         tick_length=parameters['v_colorbar_tick_length'],
                         line_width=parameters['v_colorbar_line_width'],
+                        tick_label_format=parameters['v_colorbar_tick_label_format'],
                         axis=v_colorbar_axis
                         )
     
@@ -512,8 +513,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot the boundary partial_omega_circle_out in the current configuration
     partial_omega_circle_out_cur_0 = Polygon(data_cur_boundary_vertices_shape_0, fill=True,
                                            linewidth=parameters['partial_omega_0_line_width'],
-                                           edgecolor=parameters['partial_omega_circle_out_color'],
-                                           linestyle='-.',
+                                           edgecolor=parameters['partial_omega_circle_out_rigid_color'],
+                                           linestyle='-',
                                            zorder=1,
                                            facecolor=parameters['partial_omega_circle_fill_color'])
 
@@ -555,7 +556,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-plot_snapshot(fig, snapshot_max, rf'$n = \,$ { snapshot_max}')
+plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 # plot_snapshot(fig, parameters['snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] *
 #               solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 

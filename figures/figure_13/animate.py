@@ -40,7 +40,7 @@ def update_animation(n):
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    plot.plot_snapshot(plot.fig, n, rf'$n = \,$' + io.time_to_string(n, 's', 2))
+    plot.plot_snapshot(plot.fig, n, rf'$t = \,$' + io.time_to_string(plot.parameters['snapshot_to_plot'] * plot.solution_parameters['T'] / plot.solution_parameters['num_steps'], 'min_s', plot.parameters['n_decimals_snapshot_label']))
 
     # Stop timer
     end_time = time.time()
