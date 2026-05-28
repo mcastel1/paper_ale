@@ -81,6 +81,8 @@ figure_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), paramete
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max(
     'line_mesh_n_', snapshot_path)
+#cut the animation at a custom snapshot
+snapshot_max = parameters['custom_snapshot_max']
 
 number_of_frames = snapshot_max - snapshot_min + 1
 
