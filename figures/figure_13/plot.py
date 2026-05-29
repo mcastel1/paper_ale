@@ -85,7 +85,7 @@ figure_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), paramete
 snapshot_min, snapshot_max = sys_utils.n_min_max(
     'line_mesh_n_', snapshot_path)
 #cut the animation at a custom snapshot
-snapshot_max = parameters['custom_snapshot_max']
+# snapshot_max = parameters['custom_snapshot_max']
 
 number_of_frames = snapshot_max - snapshot_min + 1
 
@@ -561,7 +561,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
+plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 # plot_snapshot(fig, parameters['snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] *
 #               solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 
