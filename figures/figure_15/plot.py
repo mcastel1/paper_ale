@@ -24,7 +24,7 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
- ./copy_from_abacus.sh monolithic_2/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*' 'def_mu_n_*'  ~/Desktop 0 100000 10
+ ./copy_from_abacus.sh surface_tension_1/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*' 'def_mu_n_*'  ~/Desktop 0 100000 10
 
 '''
 
@@ -91,14 +91,15 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-# I compute mu_min_max from snapshots between snapshot_min + parameters['colorbar_mu_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of mu and an odd colorbars
+# I compute mu_min_max from snapshots between snapshot_min + parameters['colorbar_mu_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of mu and an odd colorbars. I restrict the min max to the values outside the shape because values in the shape are large and may make the color code not clear. 
 mu_min_max = cal.min_max_files(
                 'def_mu_n_',
                 os.path.join(solution_path + 'snapshots/csv'),
                 snapshot_min +
                     parameters['colorbar_mu_snapshot_min_offset'],
                 snapshot_max,
-                parameters['frame_stride']
+                parameters['frame_stride'],
+                tag=mesh_parameters['sub_mesh_0_1_id']
                  )
 
 
