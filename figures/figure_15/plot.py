@@ -24,7 +24,7 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
- ./copy_from_abacus.sh monolithic_2/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*'  ~/Desktop 0 100000 10
+ ./copy_from_abacus.sh monolithic_2/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*' 'def_mu_n_*'  ~/Desktop 0 100000 10
 
 '''
 
@@ -91,15 +91,16 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-# I compute sigma_min_max from snapshots between snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of sigma and an odd colorbars
-sigma_min_max = cal.min_max_files(
-                'def_sigma_n_',
+# I compute mu_min_max from snapshots between snapshot_min + parameters['colorbar_mu_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of mu and an odd colorbars
+mu_min_max = cal.min_max_files(
+                'def_mu_n_',
                 os.path.join(solution_path + 'snapshots/csv'),
                 snapshot_min +
-                    parameters['colorbar_sigma_snapshot_min_offset'],
+                    parameters['colorbar_mu_snapshot_min_offset'],
                 snapshot_max,
                 parameters['frame_stride']
                  )
+
 
 norm_v_min_max = cal.min_max_vector_field(snapshot_min,
                                           snapshot_max, parameters['frame_stride'],
@@ -108,6 +109,7 @@ norm_v_min_max = cal.min_max_vector_field(snapshot_min,
                                           parameters['n_bins_v'],
                                           [[0, 0], [mesh_parameters['L'], mesh_parameters['h']]]
                                           )
+
 
 
 
@@ -130,10 +132,10 @@ fig.add_subplot(3, 1, 2)
 fig.add_subplot(3, 1, 3)
 
 
-sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
-                                    parameters['sigma_colorbar_position'][1],
-                                    parameters['sigma_colorbar_size'][0],
-                                    parameters['sigma_colorbar_size'][1]])
+mu_colorbar_axis = fig.add_axes([parameters['mu_colorbar_position'][0],
+                                    parameters['mu_colorbar_position'][1],
+                                    parameters['mu_colorbar_size'][0],
+                                    parameters['mu_colorbar_size'][1]])
 
 v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_position'][1],
@@ -141,14 +143,14 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_size'][1]])
 
 
-sigma_colorbar = None
+mu_colorbar = None
 v_colorbar = None
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
-    global sigma_colorbar, v_colorbar
+    global mu_colorbar, v_colorbar
 
 
     start_time_plot_snapshot = time.time()
@@ -169,9 +171,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # select from data_v_raw only data which belong to sub_mesh_0_1
     data_v = data_v_raw[data_v_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
 
-    data_sigma_raw = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_n_' + n_snapshot + '.csv')
-    # select from data_sigma_raw only data which belong to sub_mesh_0_1
-    data_sigma = data_sigma_raw[data_sigma_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
+    data_mu_raw = pd.read_csv(solution_path + 'snapshots/csv/def_mu_n_' + n_snapshot + '.csv')
+    # select from data_mu_raw only data which belong to sub_mesh_0_1
+    data_mu = data_mu_raw[data_mu_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
     
 
     # 1.3 load  mesh data for mesh deformed with u_0
@@ -200,7 +202,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     # =============
-    # mesh + sigma subplot for deformation with u_n
+    # mesh + mu subplot for deformation with u_n
     # =============
 
     start_time = time.time()
@@ -216,18 +218,18 @@ def plot_snapshot(fig, n_file, snapshot_label):
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
              [1], snapshot_label, fontsize=8, ha='center', va='center')
 
-    _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
-        data_sigma, [0, 0], [mesh_0_parameters['L'],
-                             mesh_0_parameters['h']], parameters['n_bins_sigma'],
+    _, _, Z_mu, _, _, _ = gr.interpolate_surface(
+        data_mu, [0, 0], [mesh_0_parameters['L'],
+                             mesh_0_parameters['h']], parameters['n_bins_mu'],
         method='griddata',
         margin=parameters['dg_margin']
     )
 
     '''    # fork
-        # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
+        # 1) to plot the figure, I set mu_min_max to the min and max for the current frame
         #
-        sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
-        sigma_min_max = [sigma_min, sigma_max]
+        mu_min, mu_max, _ = cal.min_max_scalar_field(Z_mu)
+        mu_min_max = [mu_min, mu_max]
         #
     '''
 
@@ -262,12 +264,12 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.add_patch(partial_omega_circle_out_cur)
 
     contour_plot = ax.imshow(
-        Z_sigma.T,
+        Z_mu.T,
         origin='lower',
         cmap=gr.cb.color_map_type,
         aspect='equal',
         extent=[0, mesh_0_parameters['L'], 0, mesh_0_parameters['h']],
-        vmin=sigma_min_max[0], vmax=sigma_min_max[1],
+        vmin=mu_min_max[0], vmax=mu_min_max[1],
         interpolation='bilinear',
         zorder=0
     )
@@ -279,23 +281,23 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
 
-    if sigma_colorbar is None:
+    if mu_colorbar is None:
         
         # first frame: create with real data, axis already positioned by ProPlot
-        sigma_colorbar, _ = gr.cb.make_colorbar(
+        mu_colorbar, _ = gr.cb.make_colorbar(
             figure=fig,
-            grid_values=Z_sigma,
-            min_value=sigma_min_max[0],
-            max_value=sigma_min_max[1],
-            position=parameters['sigma_colorbar_position'],
-            size=parameters['sigma_colorbar_size'],
-            label_pad=parameters['sigma_colorbar_label_offset'],
-            tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
-            line_width=parameters['sigma_colorbar_tick_line_width'],
-            tick_length=parameters['sigma_colorbar_tick_length'],
-            tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-            label=parameters['sigma_colorbar_axis_label'],
-            axis=sigma_colorbar_axis
+            grid_values=Z_mu,
+            min_value=mu_min_max[0],
+            max_value=mu_min_max[1],
+            position=parameters['mu_colorbar_position'],
+            size=parameters['mu_colorbar_size'],
+            label_pad=parameters['mu_colorbar_label_offset'],
+            tick_label_offset=parameters['mu_colorbar_tick_label_offset'],
+            line_width=parameters['mu_colorbar_tick_line_width'],
+            tick_length=parameters['mu_colorbar_tick_length'],
+            tick_label_angle=parameters['mu_colorbar_tick_label_angle'],
+            label=parameters['mu_colorbar_axis_label'],
+            axis=mu_colorbar_axis
         )
     
 
@@ -316,7 +318,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     line_width=parameters['axis_line_width'],
                     axis_origin=parameters['axis_origin'],
                     tick_length=parameters['tick_length'],
-                    plot_label=parameters["sigma_plot_panel_label"],
+                    plot_label=parameters["mu_plot_panel_label"],
                     plot_label_offset=parameters['panel_label_position'],
                     plot_label_font_size=parameters['panel_label_font_size'],
                     n_minor_ticks=parameters['n_minor_ticks'],
@@ -457,7 +459,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     # =============
-    # mesh + sigma subplot for deformation with u_0
+    # mesh subplot for deformation with u_0
     # =============
 
     ax = fig.axes[2]  # Use the existing axis
@@ -469,19 +471,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
              [1], snapshot_label, fontsize=8, ha='center', va='center')
-
-    # _, _, Z_sigma_0, _, _, _ = gr.interpolate_surface(
-    #     data_sigma_0, [0, 0], [mesh_parameters['L'], mesh_parameters['h']], parameters['n_bins_sigma'],
-    #     method='griddata',
-    #     margin=parameters['dg_margin']
-    # )
-
-    # fork
-    # 1) to plot the figure, I set sigma_0_min_max to the min and max for the current frame
-    #
-    # sigma_0_min, sigma_0_max, _ = cal.min_max_scalar_field(Z_sigma_0)
-    # sigma_min_max_0 = [sigma_0_min, sigma_0_max]
-    #
 
 
 
@@ -521,18 +510,6 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     ax.add_patch(partial_omega_circle_out_cur_0)
 
-    # contour_plot_0 = ax.imshow(
-    #     Z_sigma_0.T,
-    #     origin='lower',
-    #     cmap=gr.cb.color_map_type,
-    #     aspect='equal',
-    #     extent=[0, mesh_parameters['L'], 0, mesh_parameters['h']],
-    #     vmin=sigma_min_max[0], vmax=sigma_min_max[1],
-    #     interpolation='bilinear',
-    #     zorder=0
-    # )
-
-   
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
                     axis_label=parameters['axis_label'],
