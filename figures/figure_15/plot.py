@@ -1,5 +1,7 @@
 import matplotlib
 from matplotlib.patches import Polygon
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
 import matplotlib.pyplot as plt
 import os
 
@@ -113,7 +115,15 @@ norm_v_min_max = cal.min_max_vector_field(snapshot_min,
 
 
 
-
+sigma_min_max = cal.min_max_files(
+                'def_sigma_n_',
+                os.path.join(solution_path + 'snapshots/csv'),
+                snapshot_min +
+                    parameters['colorbar_sigma_snapshot_min_offset'],
+                snapshot_max,
+                parameters['frame_stride'],
+                tag=mesh_parameters['sub_mesh_0_1_id']
+                )
 
 
 
@@ -132,6 +142,10 @@ fig.add_subplot(3, 1, 1)
 fig.add_subplot(3, 1, 2)
 fig.add_subplot(3, 1, 3)
 
+sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
+                                    parameters['sigma_colorbar_position'][1],
+                                    parameters['sigma_colorbar_size'][0],
+                                    parameters['sigma_colorbar_size'][1]])
 
 mu_colorbar_axis = fig.add_axes([parameters['mu_colorbar_position'][0],
                                     parameters['mu_colorbar_position'][1],
@@ -144,14 +158,17 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_size'][1]])
 
 
+
+
 mu_colorbar = None
+sigma_colorbar = None
 v_colorbar = None
 
 
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
-    global mu_colorbar, v_colorbar
+    global mu_colorbar, sigma_colorbar, v_colorbar
 
 
     start_time_plot_snapshot = time.time()
@@ -171,6 +188,11 @@ def plot_snapshot(fig, n_file, snapshot_label):
     data_v_raw = pd.read_csv(solution_path + 'snapshots/csv/def_v_n_' + n_snapshot + '.csv')
     # select from data_v_raw only data which belong to sub_mesh_0_1
     data_v = data_v_raw[data_v_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
+
+    data_sigma_raw = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_n_' + n_snapshot + '.csv')
+    # select from data_sigma_raw only data which belong to sub_mesh_0_1
+    data_sigma = data_sigma_raw[data_sigma_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
+  
 
     data_mu_raw = pd.read_csv(solution_path + 'snapshots/csv/def_mu_n_' + n_snapshot + '.csv')
     # select from data_mu_raw only data which belong to sub_mesh_0_1
@@ -203,7 +225,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     # =============
-    # mesh + mu subplot for deformation with u_n
+    # mesh + mu + sigma for deformation with u_n
     # =============
 
     start_time = time.time()
@@ -218,6 +240,13 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position']
              [1], snapshot_label, fontsize=8, ha='center', va='center')
+
+    _, _, Z_sigma, _, _, _ = gr.interpolate_surface(
+        data_sigma, [0, 0], [mesh_0_parameters['L'],
+                             mesh_0_parameters['h']], parameters['n_bins_sigma'],
+        method='griddata',
+        margin=parameters['dg_margin']
+    )
 
     _, _, Z_mu, _, _, _ = gr.interpolate_surface(
         data_mu, [0, 0], [mesh_0_parameters['L'],
@@ -255,7 +284,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     
     # plot the boundary partial_omega_circle_out in the current configuration
-    partial_omega_circle_out_cur = Polygon(data_cur_boundary_vertices_shape, fill=True,
+    partial_omega_circle_out_cur = Polygon(data_cur_boundary_vertices_shape, 
+                                           fill=True,
                                            linewidth=parameters['partial_omega_line_width'],
                                            edgecolor=parameters['partial_omega_circle_out_color'],
                                            linestyle='-.',
@@ -264,7 +294,31 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     ax.add_patch(partial_omega_circle_out_cur)
 
-    contour_plot = ax.imshow(
+    # draw outer + inner loop - start
+    data_cur_boundary_vertices_shape_array = np.array(data_cur_boundary_vertices_shape)
+    shape_center = data_cur_boundary_vertices_shape_array.mean(axis=0)
+
+    shape_out = shape_center + (data_cur_boundary_vertices_shape_array - shape_center) * parameters['shape_scale_out']
+    shape_in = (shape_center + (data_cur_boundary_vertices_shape_array - shape_center) * parameters['shape_scale_in'])[::-1]  # reversed → makes a hole
+
+    #list of vertices of the compound polygon, involving both the inner and outer loop.  I add shape_out[0] and shape_in[0] in order to close outer and inner loop
+    vertices = np.vstack([shape_out, shape_out[0], shape_in, shape_in[0]])
+
+    N = len(mesh_parameters['shape_coordinates'])
+
+    '''
+    a series of instructions to draw the path given by the outer and inner loop, `MOVETO` means `move the pen to this position by lifting it with respect ot the paper` and `LINETO` means `move the pen by holding it down (draw) to this position`
+    '''
+    codes = ([Path.MOVETO] + [Path.LINETO]*(N-1) + [Path.CLOSEPOLY] +
+         [Path.MOVETO] + [Path.LINETO]*(N-1) + [Path.CLOSEPOLY])
+    
+    # apply `codes` to `vertices` and draw the outer + inner loop = `band_patch`
+    band_patch = PathPatch(Path(vertices, codes), facecolor='none', edgecolor='black')
+
+    ax.add_patch(band_patch)
+    # draw outer + inner loop - end
+
+    contour_plot_mu = ax.imshow(
         Z_mu.T,
         origin='lower',
         cmap=gr.cb.color_map_type,
@@ -272,8 +326,24 @@ def plot_snapshot(fig, n_file, snapshot_label):
         extent=[0, mesh_0_parameters['L'], 0, mesh_0_parameters['h']],
         vmin=mu_min_max[0], vmax=mu_min_max[1],
         interpolation='bilinear',
+        zorder=2
+    )
+
+    contour_plot_sigma = ax.imshow(
+        Z_sigma.T,
+        origin='lower',
+        cmap=gr.cb.color_map_type,
+        aspect='equal',
+        extent=[0, mesh_0_parameters['L'], 0, mesh_0_parameters['h']],
+        vmin=sigma_min_max[0], vmax=sigma_min_max[1],
+        interpolation='bilinear',
         zorder=0
     )
+    
+
+    # contour_plot.set_clip_path(partial_omega_circle_out_cur)
+    contour_plot_mu.set_clip_path(band_patch)
+
 
     stop_time = time.time()
     print(f"Time for block 4 = {stop_time - start_time:.2f} s", flush=True)
@@ -299,6 +369,25 @@ def plot_snapshot(fig, n_file, snapshot_label):
             tick_label_angle=parameters['mu_colorbar_tick_label_angle'],
             label=parameters['mu_colorbar_axis_label'],
             axis=mu_colorbar_axis
+        )
+
+    if sigma_colorbar is None:
+        
+        # first frame: create with real data, axis already positioned by ProPlot
+        sigma_colorbar, _ = gr.cb.make_colorbar(
+            figure=fig,
+            grid_values=Z_sigma,
+            min_value=sigma_min_max[0],
+            max_value=sigma_min_max[1],
+            position=parameters['sigma_colorbar_position'],
+            size=parameters['sigma_colorbar_size'],
+            label_pad=parameters['sigma_colorbar_label_offset'],
+            tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+            line_width=parameters['sigma_colorbar_tick_line_width'],
+            tick_length=parameters['sigma_colorbar_tick_length'],
+            tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+            label=parameters['sigma_colorbar_axis_label'],
+            axis=sigma_colorbar_axis
         )
     
 
@@ -530,7 +619,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     minor_tick_length=parameters['minor_tick_length']
                     )
 
-
+    
 
 
 
