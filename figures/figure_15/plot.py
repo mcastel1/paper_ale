@@ -275,6 +275,9 @@ def plot_snapshot(fig, n_file, snapshot_label):
         zorder=0
     )
 
+    contour_plot.set_clip_path(partial_omega_circle_out_cur)
+
+
     stop_time = time.time()
     print(f"Time for block 4 = {stop_time - start_time:.2f} s", flush=True)
 
@@ -335,7 +338,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     print(f"Time for plot_snapshot = {stop_time_plot_snapshot- start_time_plot_snapshot:.2f} s", flush=True)
 
 
-    
+    '''
     # =============
     # v subplot
     # =============
@@ -530,7 +533,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     minor_tick_length=parameters['minor_tick_length']
                     )
 
-
+    '''
 
 
 
