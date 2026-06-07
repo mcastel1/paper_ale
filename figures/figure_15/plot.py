@@ -1,5 +1,7 @@
 import matplotlib
 from matplotlib.patches import Polygon
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
 import matplotlib.pyplot as plt
 import os
 
@@ -263,6 +265,24 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
     ax.add_patch(partial_omega_circle_out_cur)
 
+    vertices_array = np.array(data_cur_boundary_vertices_shape)
+    center = vertices_array.mean(axis=0)
+
+    scale_outer = 1.1  # 5% bigger
+    scale_inner = 0.9  # 5% smaller
+
+    outer = center + (vertices_array - center) * scale_outer
+    inner = (center + (vertices_array - center) * scale_inner)[::-1]  # reversed → makes a hole
+
+
+    verts = np.vstack([outer, outer[0:1], inner, inner[0:1]])
+    N = len(mesh_parameters['shape_coordinates'])
+    codes = ([Path.MOVETO] + [Path.LINETO]*(N-1) + [Path.CLOSEPOLY] +
+         [Path.MOVETO] + [Path.LINETO]*(N-1) + [Path.CLOSEPOLY])
+    
+    band_patch = PathPatch(Path(verts, codes), facecolor='none', edgecolor='none')
+    ax.add_patch(band_patch)
+
     contour_plot = ax.imshow(
         Z_mu.T,
         origin='lower',
@@ -273,8 +293,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
         interpolation='bilinear',
         zorder=0
     )
+    
 
-    contour_plot.set_clip_path(partial_omega_circle_out_cur)
+    # contour_plot.set_clip_path(partial_omega_circle_out_cur)
+    contour_plot.set_clip_path(band_patch)
 
 
     stop_time = time.time()
