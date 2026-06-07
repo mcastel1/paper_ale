@@ -259,8 +259,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                                            linewidth=parameters['partial_omega_line_width'],
                                            edgecolor=parameters['partial_omega_circle_out_color'],
                                            linestyle='-.',
-                                           zorder=1,
-                                           facecolor=parameters['partial_omega_circle_fill_color'])
+                                           zorder=1)
 
     ax.add_patch(partial_omega_circle_out_cur)
 
