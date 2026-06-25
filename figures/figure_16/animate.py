@@ -29,7 +29,7 @@ def update_animation(n):
     start_time = time.time()
 
     # clear only the major axes of the plot. The colorbar axes need not be cleaned because make_colorbar already clears them
-    for ax in plot.fig.axes[:4]:
+    for ax in plot.fig.axes[:1]:
         ax.clear()
 
     # Clear text objects (the snapshot label accumulates)
@@ -40,7 +40,7 @@ def update_animation(n):
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    plot.plot_snapshot(plot.fig, n, rf'$n = \,$' + io.time_to_string(n, 's', 2))
+    plot.plot_snapshot(plot.fig, plot.parameters['azimuth'], plot.parameters['altitude'])
 
     # Stop timer
     end_time = time.time()
@@ -50,7 +50,7 @@ def update_animation(n):
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(plot.snapshot_min, plot.snapshot_max,
+    frames=range(0, plot.parameters['number_of_frames'],
                  plot.parameters['frame_stride']),
     interval=30
 )
