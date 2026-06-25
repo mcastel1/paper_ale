@@ -78,9 +78,16 @@ def plot_snapshot(fig, azimuth_altitude):
     data_line_vertices_start = data_line_vertices[["start:0", "start:1", "start:2"]]
     data_line_vertices_end = data_line_vertices[["end:0", "end:1", "end:2"]]
 
+    '''
+    start and end vertex of the last edge in `edges_to_plot`
+    
+    '''
     start_vertex = data_line_vertices_to_plot[["start:0", "start:1", "start:2"]].values
     end_vertex = data_line_vertices_to_plot[["end:0", "end:1", "end:2"]].values
 
+    '''
+    find other edges that have `start_vertex` of `end_vertex` as either start or end point: match[i] = True if the i-th edge contains either of these, and False otherwise
+    '''
     match = ( 
         data_line_vertices_start.eq(start_vertex).all(axis=1) 
         | data_line_vertices_start.eq(end_vertex).all(axis=1)
@@ -92,8 +99,10 @@ def plot_snapshot(fig, azimuth_altitude):
     match.iloc[edges_to_plot] = False
 
     if match.any():
+        # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
         next_edge = match.idxmax()
     else:
+        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new edge not in `edges_to_plot`
         remaining_edges = [i for i in range(len(data_line_vertices)) if i not in edges_to_plot]
         next_edge = remaining_edges[0] if remaining_edges else None
 
@@ -108,7 +117,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
     ax = fig.axes[0]  # Use the existing axis
 
-    # ax.set_box_aspect([parameters['L'], parameters['h'], z_max - z_min])
+    ax.set_box_aspect([1] * 3)
     gr.empty_panes(ax)
     ax.set_axis_off()
     ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
@@ -129,9 +138,10 @@ def plot_snapshot(fig, azimuth_altitude):
                     n_minor_ticks=parameters['n_minor_ticks_3d'],
                     font_size=parameters['font_size'],
                     line_width=parameters['axis_line_width_3d'],
-                    plot_label=r'$\textbf{B}$',
                     plot_label_position=parameters['plot_label_offset_3d'],
                     plot_label_font_size=parameters['plot_label_font_size'])
+    
+    gr.set_axes_limits(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [mesh_parameters['r'], mesh_parameters['r'], mesh_parameters['r']])
         
 
 
