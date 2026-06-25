@@ -61,6 +61,7 @@ figure_path = os.path.join(os.path.dirname(
 # labels of columns to read
 data_line_vertices = pd.read_csv(os.path.join(mesh_path, "line_vertices.csv"))
 
+N = len(data_line_vertices)
 
 fig = pplt.figure(figsize=np.array(parameters['figure_size']),
                   left=parameters['figure_margin'][0][0],

@@ -8,12 +8,12 @@ import plot
 
 
 animation_duration_in_sec = (
-    plot.parameters['number_of_frames'] / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
+    len(plot.data_line_vertices) / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
 animation_path = os.path.join(os.path.dirname(os.path.abspath(
     __file__)), 'animation_' + plot.parameters['figure_name'] + '.mp4')
 
 print(
-    f"number of frames: {plot.parameters['number_of_frames']} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.parameters['number_of_frames']/plot.parameters['frame_stride'])}",
+    f"number of frames: {len(plot.data_line_vertices)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(len(plot.data_line_vertices)/plot.parameters['frame_stride'])}",
     flush=True)
 
 
@@ -50,7 +50,7 @@ def update_animation(n):
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(0, plot.parameters['number_of_frames'],
+    frames=range(0, len(plot.data_line_vertices),
                  plot.parameters['frame_stride']),
     interval=30
 )
