@@ -145,6 +145,7 @@ def plot_snapshot(fig, azimuth, altitude):
         
     else: 
         print(f'* Did not find it')
+        print(f'edges_to_plot = {edges_to_plot}\n start_vertex = {start_vertex} \n end_vertex = {end_vertex}')
 
 
 
