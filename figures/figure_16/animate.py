@@ -40,7 +40,7 @@ def update_animation(n):
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    plot.plot_snapshot(plot.fig, plot.parameters['azimuth'], plot.parameters['altitude'])
+    plot.plot_snapshot(n, plot.fig, plot.parameters['azimuth'], plot.parameters['altitude'])
 
     # Stop timer
     end_time = time.time()

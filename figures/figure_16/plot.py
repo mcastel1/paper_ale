@@ -61,8 +61,7 @@ figure_path = os.path.join(os.path.dirname(
 # labels of columns to read
 data_line_vertices = pd.read_csv(os.path.join(mesh_path, "line_vertices.csv"))
 
-N = len(data_line_vertices)
-
+\
 fig = pplt.figure(figsize=np.array(parameters['figure_size']),
                   left=parameters['figure_margin'][0][0],
                   right=parameters['figure_margin'][0][1],
@@ -75,7 +74,7 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
-def plot_snapshot(fig, azimuth, altitude):
+def plot_snapshot(n, fig, azimuth, altitude):
 
     # =============
     # mesh plot
@@ -88,7 +87,7 @@ def plot_snapshot(fig, azimuth, altitude):
     ax.set_axis_off()
     ax.view_init(elev=altitude, azim=azimuth)
 
-    gr.plot_mesh(ax, data_line_vertices,
+    gr.plot_mesh(ax, data_line_vertices[:n],
                  parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
 
 
@@ -109,7 +108,7 @@ def plot_snapshot(fig, azimuth, altitude):
                     plot_label_font_size=parameters['plot_label_font_size'])
 
 
-plot_snapshot(fig, parameters['azimuth'], parameters['altitude'])
+plot_snapshot(len(data_line_vertices), fig, parameters['azimuth'], parameters['altitude'])
 
 plt.savefig(figure_path + "_large.pdf")
 os.system(
