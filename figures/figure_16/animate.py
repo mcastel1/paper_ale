@@ -2,7 +2,7 @@ import matplotlib.animation as ani
 import os
 import time
 
-import input_output.utils as io
+import graphics.utils as gr
 import text.utils as text
 import plot
 
@@ -12,8 +12,10 @@ animation_duration_in_sec = (
 animation_path = os.path.join(os.path.dirname(os.path.abspath(
     __file__)), 'animation_' + plot.parameters['figure_name'] + '.mp4')
 
+number_of_frames = len(plot.data_line_vertices) - len(plot.edges_to_plot)
+
 print(
-    f"number of frames: {len(plot.data_line_vertices)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(len(plot.data_line_vertices)/plot.parameters['frame_stride'])}",
+    f"number of frames: {len(plot.data_line_vertices) - len(plot.edges_to_plot)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(number_of_frames/plot.parameters['frame_stride'])}",
     flush=True)
 
 
@@ -21,7 +23,6 @@ Writer = ani.writers['ffmpeg']
 writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(
     artist='Michele'), bitrate=(int)(plot.parameters['bit_rate']))
 
-# text.empty_texts(plot.fig)
 
 
 def update_animation(n):
@@ -40,20 +41,24 @@ def update_animation(n):
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    plot.plot_snapshot(plot.fig, plot.parameters['azimuth'], plot.parameters['altitude'])
+    plot.plot_snapshot(plot.fig, gr.azimuth_altitude(n, number_of_frames, 
+                                                     [plot.parameters['azimuth_min'], plot.parameters['azimuth_max']],
+                                                     [plot.parameters['altitude_min'], plot.parameters['altitude_max']]))
 
     # Stop timer
     end_time = time.time()
     print(f"... done in {end_time - start_time:.2f} s", flush=True)
 
 
+
+
+plot.edges_to_plot = [0]      # state is now length 1
+
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(0, len(plot.data_line_vertices),
-                 plot.parameters['frame_stride']),
+    frames=range(0, len(plot.data_line_vertices) - len(plot.edges_to_plot)),  # 27 - 1 = 26
     interval=30
 )
-
 
 animation.save(animation_path, dpi=plot.parameters['dpi'], writer=writer)

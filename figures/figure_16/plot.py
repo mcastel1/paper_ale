@@ -6,10 +6,7 @@ import pandas as pd
 import proplot as pplt
 import warnings
 
-import graphics.color_bar as cb
-import constants.utils as const
 import input_output.utils as io
-import list.column_labels as clab
 import graphics.utils as gr
 import system.paths as paths
 
@@ -45,15 +42,10 @@ mesh_parameters = io.read_parameters_from_csv_file(
 # define the folder where to read the data
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
-solution_path = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "solution/nodal_values/"
-)
-solution_ode_path = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "solution-ode"
-)
 
-mesh_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), "mesh/solution/")
+# mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/ball/', "solution/")
+
 figure_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), parameters['figure_name'])
 
@@ -80,7 +72,7 @@ edges_to_plot=[0]
 
 
 
-def plot_snapshot(fig, azimuth, altitude):
+def plot_snapshot(fig, azimuth_altitude):
 
     data_line_vertices_to_plot = data_line_vertices.iloc[edges_to_plot[-1]]
     data_line_vertices_start = data_line_vertices[["start:0", "start:1", "start:2"]]
@@ -100,56 +92,51 @@ def plot_snapshot(fig, azimuth, altitude):
     match.iloc[edges_to_plot] = False
 
     if match.any():
-        next = match.idxmax()
+        next_edge = match.idxmax()
     else:
-        next = None
+        remaining_edges = [i for i in range(len(data_line_vertices)) if i not in edges_to_plot]
+        next_edge = remaining_edges[0] if remaining_edges else None
 
-    if next != None: 
+    if next_edge != None:
+        edges_to_plot.append(next_edge)
 
-        print(f'* Found it')
+    # print(f'vertices_to_plot = {edges_to_plot}')
+
+    # =============
+    # mesh plot
+    # =============
+
+    ax = fig.axes[0]  # Use the existing axis
+
+    # ax.set_box_aspect([parameters['L'], parameters['h'], z_max - z_min])
+    gr.empty_panes(ax)
+    ax.set_axis_off()
+    ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
+
+    gr.plot_mesh(ax, data_line_vertices.iloc[edges_to_plot],
+                parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
+
+
+    gr.plot_3d_axes(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [2*mesh_parameters['r'], 2*mesh_parameters['r'], 2*mesh_parameters['r']],
+                    scale_factor=[1, 1, parameters['scale_factor_z']],
+                    axis_origin=parameters['axis_origin_3d'],
+                    axis_label=parameters['axis_label_3d'],
+                    axis_label_offset=parameters['axis_label_offset_3d'],
+                    tick_label_offset=parameters['tick_label_offset_3d'],
+                    tick_label_format=parameters['tick_label_format_3d'],
+                    tick_length=parameters['tick_length_3d'],
+                    minor_tick_length=parameters['minor_tick_length_3d'],
+                    n_minor_ticks=parameters['n_minor_ticks_3d'],
+                    font_size=parameters['font_size'],
+                    line_width=parameters['axis_line_width_3d'],
+                    plot_label=r'$\textbf{B}$',
+                    plot_label_position=parameters['plot_label_offset_3d'],
+                    plot_label_font_size=parameters['plot_label_font_size'])
         
-        edges_to_plot.append(next)
-
-        print(f'vertices_to_plot = {edges_to_plot}')
-
-        # =============
-        # mesh plot
-        # =============
-
-        ax = fig.axes[0]  # Use the existing axis
-
-        # ax.set_box_aspect([parameters['L'], parameters['h'], z_max - z_min])
-        gr.empty_panes(ax)
-        ax.set_axis_off()
-        ax.view_init(elev=altitude, azim=azimuth)
-
-        gr.plot_mesh(ax, data_line_vertices.iloc[edges_to_plot],
-                    parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
-
-
-        gr.plot_3d_axes(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [2*mesh_parameters['r'], 2*mesh_parameters['r'], 2*mesh_parameters['r']],
-                        scale_factor=[1, 1, parameters['scale_factor_z']],
-                        axis_origin=parameters['axis_origin_3d'],
-                        axis_label=parameters['axis_label_3d'],
-                        axis_label_offset=parameters['axis_label_offset_3d'],
-                        tick_label_offset=parameters['tick_label_offset_3d'],
-                        tick_label_format=parameters['tick_label_format_3d'],
-                        tick_length=parameters['tick_length_3d'],
-                        minor_tick_length=parameters['minor_tick_length_3d'],
-                        n_minor_ticks=parameters['n_minor_ticks_3d'],
-                        font_size=parameters['font_size'],
-                        line_width=parameters['axis_line_width_3d'],
-                        plot_label=r'$\textbf{B}$',
-                        plot_label_position=parameters['plot_label_offset_3d'],
-                        plot_label_font_size=parameters['plot_label_font_size'])
-        
-    else: 
-        print(f'* Did not find it')
-        print(f'edges_to_plot = {edges_to_plot}\n start_vertex = {start_vertex} \n end_vertex = {end_vertex} \n match = {match}')
 
 
 
-plot_snapshot(fig, parameters['azimuth'], parameters['altitude'])
+# plot_snapshot(fig, parameters['azimuth'], parameters['altitude'])
 
 plt.savefig(figure_path + "_large.pdf")
 os.system(
