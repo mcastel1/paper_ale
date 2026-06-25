@@ -74,7 +74,7 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
-vertices_to_plot=[0]
+edges_to_plot=[0]
 
 
 
@@ -82,7 +82,7 @@ vertices_to_plot=[0]
 
 def plot_snapshot(fig, azimuth, altitude):
 
-    data_line_vertices_to_plot = data_line_vertices.iloc[vertices_to_plot[-1]]
+    data_line_vertices_to_plot = data_line_vertices.iloc[edges_to_plot[-1]]
     data_line_vertices_start = data_line_vertices[["start:0", "start:1", "start:2"]]
     data_line_vertices_end = data_line_vertices[["end:0", "end:1", "end:2"]]
 
@@ -97,7 +97,7 @@ def plot_snapshot(fig, azimuth, altitude):
         )
 
     # don't reuse rows already in the path
-    match.iloc[vertices_to_plot] = False
+    match.iloc[edges_to_plot] = False
 
     if match.any():
         next = match.idxmax()
@@ -108,9 +108,9 @@ def plot_snapshot(fig, azimuth, altitude):
 
         print(f'* Found it')
         
-        vertices_to_plot.append(next)
+        edges_to_plot.append(next)
 
-        print(f'vertices_to_plot = {vertices_to_plot}')
+        print(f'vertices_to_plot = {edges_to_plot}')
 
         # =============
         # mesh plot
@@ -123,7 +123,7 @@ def plot_snapshot(fig, azimuth, altitude):
         ax.set_axis_off()
         ax.view_init(elev=altitude, azim=azimuth)
 
-        gr.plot_mesh(ax, data_line_vertices.iloc[vertices_to_plot],
+        gr.plot_mesh(ax, data_line_vertices.iloc[edges_to_plot],
                     parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
 
 
