@@ -1,5 +1,6 @@
 import matplotlib
 import matplotlib.pyplot as plt
+import more_itertools 
 import numpy as np
 import os
 import pandas as pd
@@ -10,6 +11,7 @@ import list.column_labels as clab
 import input_output.utils as io
 import graphics.utils as gr
 import system.paths as paths
+
 
 matplotlib.use(
     "Agg"
@@ -47,7 +49,8 @@ print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
 # mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/shapes/tomcat', "solution/")
+# mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/shapes/tomcat', "solution/")
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/ball', "solution/")
 
 figure_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), parameters['figure_name'])
@@ -126,9 +129,12 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
-triangles_to_plot=[i for i in range(len(data_triangles))]
+# triangles_to_plot=[i for i in range(len(data_triangles))]
+triangles_to_plot = []
 
 def plot_snapshot(fig, azimuth_altitude):
+
+    global triangles_to_plot
 
 
     # =============
@@ -137,7 +143,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
     ax = fig.axes[0]  # Use the existing axis
 
-    ax.set_box_aspect([1] * 3)
+    ax.set_box_aspect([min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]])
     gr.empty_panes(ax)
     ax.set_axis_off()
     ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
@@ -152,7 +158,6 @@ def plot_snapshot(fig, azimuth_altitude):
     gr.plot_3d_axes(ax, 
                     [min_max[0][0], min_max[1][0], min_max[2][0]], 
                     [min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]],
-                    scale_factor=[1, 1, parameters['scale_factor_z']],
                     axis_origin=parameters['axis_origin_3d'],
                     axis_label=parameters['axis_label_3d'],
                     axis_label_offset=parameters['axis_label_offset_3d'],
@@ -166,7 +171,9 @@ def plot_snapshot(fig, azimuth_altitude):
                     plot_label_position=parameters['plot_label_offset_3d'],
                     plot_label_font_size=parameters['plot_label_font_size'])
     
-    # gr.set_axes_limits(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [mesh_parameters['r'], mesh_parameters['r'], mesh_parameters['r']])
+    # gr.set_axes_limits(ax, 
+    #                 [min_max[0][0], min_max[1][0], min_max[2][0]], 
+    #                 [min_max[0][1], min_max[1][1], min_max[2][1]])
 
 
     if len(triangles_to_plot) > 1:
@@ -209,7 +216,12 @@ def plot_snapshot(fig, azimuth_altitude):
 
     if match.any():
         # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
-        next_triangle = match.idxmax()
+
+        next_triangle = []
+        for i in range(len(match)):
+            if match[i]:
+                next_triangle.append(i)
+
     else:
         # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
         remaining_triangles = [i for i in range(len(data_triangles)) if i not in triangles_to_plot]
@@ -217,6 +229,12 @@ def plot_snapshot(fig, azimuth_altitude):
 
     if next_triangle != None:
         triangles_to_plot.append(next_triangle)
+        # flatten `triangles_to_plot`
+        triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
+
+        print(f'')
+
+
 
     # print(f'vertices_to_plot = {edges_to_plot}')
 
@@ -224,7 +242,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
 
-plot_snapshot(fig, [0, 45])
+plot_snapshot(fig, [120, 45])
 plt.savefig(figure_path + "_large.pdf")
 os.system(
     f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'

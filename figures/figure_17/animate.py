@@ -12,10 +12,9 @@ animation_duration_in_sec = (
 animation_path = os.path.join(os.path.dirname(os.path.abspath(
     __file__)), 'animation_' + plot.parameters['figure_name'] + '.mp4')
 
-number_of_frames = len(plot.data_triangles) - len(plot.triangles_to_plot)
 
 print(
-    f"number of frames: {len(plot.data_triangles) - len(plot.triangles_to_plot)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(number_of_frames/plot.parameters['frame_stride'])}",
+    f"number of frames: {len(plot.data_triangles) - len(plot.triangles_to_plot)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.parameters['number_of_frames']/plot.parameters['frame_stride'])}",
     flush=True)
 
 
@@ -41,9 +40,11 @@ def update_animation(n):
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    plot.plot_snapshot(plot.fig, gr.azimuth_altitude(n, number_of_frames, 
-                                                     [plot.parameters['azimuth_min'], plot.parameters['azimuth_max']],
-                                                     [plot.parameters['altitude_min'], plot.parameters['altitude_max']]))
+    # plot.plot_snapshot(plot.fig, gr.azimuth_altitude(n, plot.parameters['number_of_frames'], 
+    #                                                  [plot.parameters['azimuth_min'], plot.parameters['azimuth_max']],
+    #                                                  [plot.parameters['altitude_min'], plot.parameters['altitude_max']]))
+
+    plot.plot_snapshot(plot.fig,    [plot.parameters['azimuth_min'], plot.parameters['altitude_min']])
 
     # Stop timer
     end_time = time.time()
@@ -57,7 +58,7 @@ plot.triangles_to_plot = []
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(0, len(plot.data_triangles) - len(plot.triangles_to_plot)), 
+    frames=range(0, plot.parameters['number_of_frames']), 
     interval=30
 )
 
