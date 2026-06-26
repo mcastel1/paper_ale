@@ -40,11 +40,11 @@ def update_animation(n):
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    # plot.plot_snapshot(plot.fig, gr.azimuth_altitude(n, plot.parameters['number_of_frames'], 
-    #                                                  [plot.parameters['azimuth_min'], plot.parameters['azimuth_max']],
-    #                                                  [plot.parameters['altitude_min'], plot.parameters['altitude_max']]))
+    plot.plot_snapshot(plot.fig, gr.azimuth_altitude(n, plot.parameters['number_of_frames'], 
+                                                     [plot.parameters['azimuth_min'], plot.parameters['azimuth_max']],
+                                                     [plot.parameters['altitude_min'], plot.parameters['altitude_max']]))
 
-    plot.plot_snapshot(plot.fig,    [plot.parameters['azimuth_min'], plot.parameters['altitude_min']])
+    # plot.plot_snapshot(plot.fig,    [plot.parameters['azimuth_min'], plot.parameters['altitude_min']])
 
     # Stop timer
     end_time = time.time()

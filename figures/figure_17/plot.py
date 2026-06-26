@@ -49,8 +49,8 @@ print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
 # mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-# mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/shapes/tomcat', "solution/")
-mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/ball', "solution/")
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/shapes/tomcat', "solution/")
+# mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/ball', "solution/")
 
 figure_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), parameters['figure_name'])
@@ -178,33 +178,37 @@ def plot_snapshot(fig, azimuth_altitude):
 
     if len(triangles_to_plot) > 1:
 
-        last_plotted_triangle = data_triangles.iloc[triangles_to_plot[-1]]
+        match = pd.Series(False, index=data_triangles.index)
 
-        '''
-        tags of the vertices in the last triangle in `triangles_to_plot`
-        '''
-        p_1_vertex = last_plotted_triangle[['p_1']].values[0]
-        p_2_vertex = last_plotted_triangle[['p_2']].values[0]
-        p_3_vertex = last_plotted_triangle[['p_3']].values[0]
+        for i in range(len(triangles_to_plot)):
 
-        '''
-        find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
-        '''
-        match = ( 
+            plotted_triangle = data_triangles.iloc[triangles_to_plot[i]]
 
-            data_triangles['p_1'].eq(p_1_vertex) 
-            | data_triangles['p_1'].eq(p_2_vertex)
-            | data_triangles['p_1'].eq(p_3_vertex)
+            '''
+            tags of the vertices in the last triangle in `triangles_to_plot`
+            '''
+            p_1_vertex = plotted_triangle[['p_1']].values[0]
+            p_2_vertex = plotted_triangle[['p_2']].values[0]
+            p_3_vertex = plotted_triangle[['p_3']].values[0]
 
-            | data_triangles['p_2'].eq(p_1_vertex)
-            | data_triangles['p_2'].eq(p_2_vertex)
-            | data_triangles['p_2'].eq(p_3_vertex)
+            '''
+            find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
+            '''
+            match = match | ( 
 
-            | data_triangles['p_3'].eq(p_1_vertex)
-            | data_triangles['p_3'].eq(p_2_vertex)
-            | data_triangles['p_3'].eq(p_3_vertex)
+                data_triangles['p_1'].eq(p_1_vertex) 
+                | data_triangles['p_1'].eq(p_2_vertex)
+                | data_triangles['p_1'].eq(p_3_vertex)
 
-            )
+                | data_triangles['p_2'].eq(p_1_vertex)
+                | data_triangles['p_2'].eq(p_2_vertex)
+                | data_triangles['p_2'].eq(p_3_vertex)
+
+                | data_triangles['p_3'].eq(p_1_vertex)
+                | data_triangles['p_3'].eq(p_2_vertex)
+                | data_triangles['p_3'].eq(p_3_vertex)
+
+                )
 
         # don't reuse rows already in the path
         match.iloc[triangles_to_plot] = False
@@ -215,7 +219,6 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
     if match.any():
-        # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
 
         next_triangle = []
         for i in range(len(match)):
@@ -225,14 +228,13 @@ def plot_snapshot(fig, azimuth_altitude):
     else:
         # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
         remaining_triangles = [i for i in range(len(data_triangles)) if i not in triangles_to_plot]
-        next_triangle = remaining_triangles[0] if remaining_triangles else None
+        next_triangle = remaining_triangles[-1] if remaining_triangles else None
 
     if next_triangle != None:
         triangles_to_plot.append(next_triangle)
         # flatten `triangles_to_plot`
         triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
 
-        print(f'')
 
 
 
