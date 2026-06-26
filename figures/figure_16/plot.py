@@ -54,13 +54,13 @@ figure_path = os.path.join(os.path.dirname(
 
 # labels of columns to read
 data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('tag')
-data_line_vertices = pd.read_csv(os.path.join(mesh_path, "edges.csv"))
+data_edges = pd.read_csv(os.path.join(mesh_path, "edges.csv"))
 
 edge_coordinates = []
-for i in range(len(data_line_vertices)):
+for i in range(len(data_edges)):
     
-    start_tag = data_line_vertices['start'][i]
-    end_tag = data_line_vertices['end'][i]
+    start_tag = data_edges['p_1'][i]
+    end_tag = data_edges['p_2'][i]
 
     edge_coordinates.append([[data_vertices[':0'][start_tag], data_vertices[':1'][start_tag], data_vertices[':2'][start_tag]], 
                              [data_vertices[':0'][end_tag], data_vertices[':1'][end_tag], data_vertices[':2'][end_tag]]])
@@ -69,12 +69,12 @@ edge_coordinates = np.array(edge_coordinates)
 
 
 edge_data_frame = pd.DataFrame({
-    'start:0': edge_coordinates[:, 0, 0],
-    'start:1': edge_coordinates[:, 0, 1],
-    'start:2': edge_coordinates[:, 0, 2],
-    'end:0':   edge_coordinates[:, 1, 0],
-    'end:1':   edge_coordinates[:, 1, 1],
-    'end:2':   edge_coordinates[:, 1, 2],
+    'p_1:0': edge_coordinates[:, 0, 0],
+    'p_1:1': edge_coordinates[:, 0, 1],
+    'p_1:2': edge_coordinates[:, 0, 2],
+    'p_2:0':   edge_coordinates[:, 1, 0],
+    'p_2:1':   edge_coordinates[:, 1, 1],
+    'p_2:2':   edge_coordinates[:, 1, 2],
 })
 
 
@@ -90,49 +90,11 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
-edges_to_plot=[0]
-
-
-
+edges_to_plot=[]
 
 
 def plot_snapshot(fig, azimuth_altitude):
 
-    last_plotted_edge = data_line_vertices.iloc[edges_to_plot[-1]]
-    data_line_vertices_start = data_line_vertices['start']
-    data_line_vertices_end = data_line_vertices['end']
-
-    '''
-    start and end vertex of the last edge in `edges_to_plot`
-    '''
-    start_vertex = last_plotted_edge[['start']].values[0]
-    end_vertex = last_plotted_edge[['end']].values[0]
-
-    '''
-    find other edges that have `start_vertex` of `end_vertex` as either start or end point: match[i] = True if the i-th edge contains either of these, and False otherwise
-    '''
-    match = ( 
-        data_line_vertices_start.eq(start_vertex) 
-        | data_line_vertices_start.eq(end_vertex)
-        | data_line_vertices_end.eq(start_vertex)
-        | data_line_vertices_end.eq(end_vertex)
-        )
-
-    # don't reuse rows already in the path
-    match.iloc[edges_to_plot] = False
-
-    if match.any():
-        # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
-        next_edge = match.idxmax()
-    else:
-        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new edge not in `edges_to_plot`
-        remaining_edges = [i for i in range(len(data_line_vertices)) if i not in edges_to_plot]
-        next_edge = remaining_edges[0] if remaining_edges else None
-
-    if next_edge != None:
-        edges_to_plot.append(next_edge)
-
-    # print(f'vertices_to_plot = {edges_to_plot}')
 
     # =============
     # mesh plot
@@ -166,6 +128,48 @@ def plot_snapshot(fig, azimuth_altitude):
                     plot_label_font_size=parameters['plot_label_font_size'])
     
     gr.set_axes_limits(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [mesh_parameters['r'], mesh_parameters['r'], mesh_parameters['r']])
+
+    if len(edges_to_plot) > 1:
+
+        last_plotted_edge = data_edges.iloc[edges_to_plot[-1]]
+
+
+        '''
+        tags of the vertices in the last edge in `edges_to_plot`
+        '''
+        p_1_vertex = last_plotted_edge[['p_1']].values[0]
+        p_2_vertex = last_plotted_edge[['p_2']].values[0]
+
+        '''
+        find other edges that have `p_1_vertex` of `p_2_vertex` as either start or end point: match[i] = True if the i-th edge contains either of these, and False otherwise
+        '''
+        match = ( 
+            data_edges['p_1'].eq(p_1_vertex) 
+            | data_edges['p_1'].eq(p_2_vertex)
+            | data_edges['p_2'].eq(p_1_vertex)
+            | data_edges['p_2'].eq(p_2_vertex)
+            )
+
+        # don't reuse rows already in the path
+        match.iloc[edges_to_plot] = False
+
+    else: 
+
+        match = np.bool_(False)
+
+
+    if match.any():
+        # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
+        next_edge = match.idxmax()
+    else:
+        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new edge not in `edges_to_plot`
+        remaining_edges = [i for i in range(len(data_edges)) if i not in edges_to_plot]
+        next_edge = remaining_edges[0] if remaining_edges else None
+
+    if next_edge != None:
+        edges_to_plot.append(next_edge)
+
+
         
 
 
