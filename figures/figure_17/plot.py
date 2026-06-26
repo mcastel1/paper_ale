@@ -223,7 +223,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
 
-plot_snapshot(fig, [0, 45])
+# plot_snapshot(fig, [0, 45])
 
 plt.savefig(figure_path + "_large.pdf")
 os.system(
