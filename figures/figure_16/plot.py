@@ -31,6 +31,8 @@ plt.rcParams.update({
 })
 
 
+
+
 parameters = io.read_parameters_from_csv_file(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), "parameters.csv")
 )
@@ -51,6 +53,7 @@ figure_path = os.path.join(os.path.dirname(
 
 
 # labels of columns to read
+data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv"))
 data_line_vertices = pd.read_csv(os.path.join(mesh_path, "line_vertices.csv"))
 
 
@@ -75,24 +78,23 @@ edges_to_plot=[0]
 def plot_snapshot(fig, azimuth_altitude):
 
     data_line_vertices_to_plot = data_line_vertices.iloc[edges_to_plot[-1]]
-    data_line_vertices_start = data_line_vertices[["start:0", "start:1", "start:2"]]
-    data_line_vertices_end = data_line_vertices[["end:0", "end:1", "end:2"]]
+    data_line_vertices_start = data_line_vertices['start']
+    data_line_vertices_end = data_line_vertices['end']
 
     '''
     start and end vertex of the last edge in `edges_to_plot`
-    
     '''
-    start_vertex = data_line_vertices_to_plot[["start:0", "start:1", "start:2"]].values
-    end_vertex = data_line_vertices_to_plot[["end:0", "end:1", "end:2"]].values
+    start_vertex = data_line_vertices_to_plot[['start']].values[0]
+    end_vertex = data_line_vertices_to_plot[['end']].values[0]
 
     '''
     find other edges that have `start_vertex` of `end_vertex` as either start or end point: match[i] = True if the i-th edge contains either of these, and False otherwise
     '''
     match = ( 
-        data_line_vertices_start.eq(start_vertex).all(axis=1) 
-        | data_line_vertices_start.eq(end_vertex).all(axis=1)
-        | data_line_vertices_end.eq(start_vertex).all(axis=1)
-        | data_line_vertices_end.eq(end_vertex).all(axis=1)
+        data_line_vertices_start.eq(start_vertex) 
+        | data_line_vertices_start.eq(end_vertex)
+        | data_line_vertices_end.eq(start_vertex)
+        | data_line_vertices_end.eq(end_vertex)
         )
 
     # don't reuse rows already in the path
@@ -146,7 +148,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
 
-# plot_snapshot(fig, parameters['azimuth'], parameters['altitude'])
+plot_snapshot(fig, [0, 45])
 
 plt.savefig(figure_path + "_large.pdf")
 os.system(
