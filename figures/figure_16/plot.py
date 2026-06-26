@@ -53,8 +53,29 @@ figure_path = os.path.join(os.path.dirname(
 
 
 # labels of columns to read
-data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv"))
+data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('tag')
 data_line_vertices = pd.read_csv(os.path.join(mesh_path, "line_vertices.csv"))
+
+edge_coordinates = []
+for i in range(len(data_line_vertices)):
+    
+    start_tag = data_line_vertices['start'][i]
+    end_tag = data_line_vertices['end'][i]
+
+    edge_coordinates.append([[data_vertices[':0'][start_tag], data_vertices[':1'][start_tag], data_vertices[':2'][start_tag]], 
+                             [data_vertices[':0'][end_tag], data_vertices[':1'][end_tag], data_vertices[':2'][end_tag]]])
+
+edge_coordinates = np.array(edge_coordinates)
+
+
+edge_data_frame = pd.DataFrame({
+    'start:0': edge_coordinates[:, 0, 0],
+    'start:1': edge_coordinates[:, 0, 1],
+    'start:2': edge_coordinates[:, 0, 2],
+    'end:0':   edge_coordinates[:, 1, 0],
+    'end:1':   edge_coordinates[:, 1, 1],
+    'end:2':   edge_coordinates[:, 1, 2],
+})
 
 
 fig = pplt.figure(figsize=np.array(parameters['figure_size']),
@@ -124,7 +145,8 @@ def plot_snapshot(fig, azimuth_altitude):
     ax.set_axis_off()
     ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
 
-    gr.plot_mesh(ax, data_line_vertices.iloc[edges_to_plot],
+
+    gr.plot_mesh(ax, edge_data_frame.iloc[edges_to_plot],
                 parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
 
 
@@ -148,7 +170,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
 
-plot_snapshot(fig, [0, 45])
+# plot_snapshot(fig, [0, 45])
 
 plt.savefig(figure_path + "_large.pdf")
 os.system(
