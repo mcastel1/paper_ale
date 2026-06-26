@@ -54,27 +54,39 @@ figure_path = os.path.join(os.path.dirname(
 
 # labels of columns to read
 data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('tag')
-data_edges = pd.read_csv(os.path.join(mesh_path, "edges.csv"))
+data_tetrahedra = pd.read_csv(os.path.join(mesh_path, "tetrahedra.csv"))
 
-edge_coordinates = []
-for i in range(len(data_edges)):
+tetrahedron_coordinates = []
+for i in range(len(data_tetrahedra)):
     
-    start_tag = data_edges['start'][i]
-    end_tag = data_edges['end'][i]
+    p_1_tag = data_tetrahedra['p_1'][i]
+    p_2_tag = data_tetrahedra['p_2'][i]
+    p_3_tag = data_tetrahedra['p_3'][i]
+    p_4_tag = data_tetrahedra['p_4'][i]
 
-    edge_coordinates.append([[data_vertices[':0'][start_tag], data_vertices[':1'][start_tag], data_vertices[':2'][start_tag]], 
-                             [data_vertices[':0'][end_tag], data_vertices[':1'][end_tag], data_vertices[':2'][end_tag]]])
+    tetrahedron_coordinates.append([
+        [data_vertices[':0'][p_1_tag], data_vertices[':1'][p_1_tag], data_vertices[':2'][p_1_tag]], 
+        [data_vertices[':0'][p_2_tag], data_vertices[':1'][p_2_tag], data_vertices[':2'][p_2_tag]],
+        [data_vertices[':0'][p_3_tag], data_vertices[':1'][p_3_tag], data_vertices[':2'][p_3_tag]],
+        [data_vertices[':0'][p_4_tag], data_vertices[':1'][p_4_tag], data_vertices[':2'][p_4_tag]]
+        ])
 
-edge_coordinates = np.array(edge_coordinates)
+tetrahedron_coordinates = np.array(tetrahedron_coordinates)
 
 
 edge_data_frame = pd.DataFrame({
-    'start:0': edge_coordinates[:, 0, 0],
-    'start:1': edge_coordinates[:, 0, 1],
-    'start:2': edge_coordinates[:, 0, 2],
-    'end:0':   edge_coordinates[:, 1, 0],
-    'end:1':   edge_coordinates[:, 1, 1],
-    'end:2':   edge_coordinates[:, 1, 2],
+    'p_1:0': tetrahedron_coordinates[:, 0, 0],
+    'p_1:1': tetrahedron_coordinates[:, 0, 1],
+    'p_1:2': tetrahedron_coordinates[:, 0, 2],
+    'p_2:0':   tetrahedron_coordinates[:, 1, 0],
+    'p_2:1':   tetrahedron_coordinates[:, 1, 1],
+    'p_2:2':   tetrahedron_coordinates[:, 1, 2],
+    'p_3:0':   tetrahedron_coordinates[:, 2, 0],
+    'p_3:1':   tetrahedron_coordinates[:, 2, 1],
+    'p_3:2':   tetrahedron_coordinates[:, 2, 2],
+    'p_4:0':   tetrahedron_coordinates[:, 3, 0],
+    'p_4:1':   tetrahedron_coordinates[:, 3, 1],
+    'p_4:2':   tetrahedron_coordinates[:, 3, 2],
 })
 
 
@@ -90,47 +102,65 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
-edges_to_plot=[0]
+tetrahedra_to_plot=[0]
 
-
+# data_line_vertices_start = data_tetrahedra['start']
+# data_line_vertices_end = data_tetrahedra['end']
 
 
 
 def plot_snapshot(fig, azimuth_altitude):
 
-    last_plotted_edge = data_edges.iloc[edges_to_plot[-1]]
-    data_line_vertices_start = data_edges['start']
-    data_line_vertices_end = data_edges['end']
+    last_plotted_tetrahedron = data_tetrahedra.iloc[tetrahedra_to_plot[-1]]
+
 
     '''
-    start and end vertex of the last edge in `edges_to_plot`
+    vertices of the last tetrahedron in `tetrahedra_to_plot`
     '''
-    start_vertex = last_plotted_edge[['start']].values[0]
-    end_vertex = last_plotted_edge[['end']].values[0]
+    p_1_vertex = last_plotted_tetrahedron[['p_1']].values[0]
+    p_2_vertex = last_plotted_tetrahedron[['p_2']].values[0]
+    p_3_vertex = last_plotted_tetrahedron[['p_3']].values[0]
+    p_4_vertex = last_plotted_tetrahedron[['p_4']].values[0]
 
     '''
     find other edges that have `start_vertex` of `end_vertex` as either start or end point: match[i] = True if the i-th edge contains either of these, and False otherwise
     '''
     match = ( 
-        data_line_vertices_start.eq(start_vertex) 
-        | data_line_vertices_start.eq(end_vertex)
-        | data_line_vertices_end.eq(start_vertex)
-        | data_line_vertices_end.eq(end_vertex)
+
+          data_tetrahedra['p_1'].eq(p_1_vertex) 
+        | data_tetrahedra['p_1'].eq(p_2_vertex)
+        | data_tetrahedra['p_1'].eq(p_3_vertex)
+        | data_tetrahedra['p_1'].eq(p_4_vertex)
+
+        | data_tetrahedra['p_2'].eq(p_1_vertex)
+        | data_tetrahedra['p_2'].eq(p_2_vertex)
+        | data_tetrahedra['p_2'].eq(p_3_vertex)
+        | data_tetrahedra['p_2'].eq(p_4_vertex)
+
+        | data_tetrahedra['p_3'].eq(p_1_vertex)
+        | data_tetrahedra['p_3'].eq(p_2_vertex)
+        | data_tetrahedra['p_3'].eq(p_3_vertex)
+        | data_tetrahedra['p_3'].eq(p_4_vertex)
+
+        | data_tetrahedra['p_4'].eq(p_1_vertex)
+        | data_tetrahedra['p_4'].eq(p_2_vertex)
+        | data_tetrahedra['p_4'].eq(p_3_vertex)
+        | data_tetrahedra['p_4'].eq(p_4_vertex)
         )
 
     # don't reuse rows already in the path
-    match.iloc[edges_to_plot] = False
+    match.iloc[tetrahedra_to_plot] = False
 
     if match.any():
         # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
-        next_edge = match.idxmax()
+        next_tetrahedron = match.idxmax()
     else:
         # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new edge not in `edges_to_plot`
-        remaining_edges = [i for i in range(len(data_edges)) if i not in edges_to_plot]
-        next_edge = remaining_edges[0] if remaining_edges else None
+        remaining_tetrahedra = [i for i in range(len(data_tetrahedra)) if i not in tetrahedra_to_plot]
+        next_tetrahedron = remaining_tetrahedra[0] if remaining_tetrahedra else None
 
-    if next_edge != None:
-        edges_to_plot.append(next_edge)
+    if next_tetrahedron != None:
+        tetrahedra_to_plot.append(next_tetrahedron)
 
     # print(f'vertices_to_plot = {edges_to_plot}')
 
@@ -146,7 +176,7 @@ def plot_snapshot(fig, azimuth_altitude):
     ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
 
 
-    gr.plot_mesh(ax, edge_data_frame.iloc[edges_to_plot],
+    gr.plot_mesh(ax, edge_data_frame.iloc[tetrahedra_to_plot],
                 parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
 
 
@@ -170,7 +200,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
 
-# plot_snapshot(fig, [0, 45])
+plot_snapshot(fig, [0, 45])
 
 plt.savefig(figure_path + "_large.pdf")
 os.system(
