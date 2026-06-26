@@ -47,7 +47,7 @@ print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
 # mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/ball/', "solution/")
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/shapes/tomcat', "solution/")
 
 figure_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), parameters['figure_name'])
@@ -56,6 +56,8 @@ figure_path = os.path.join(os.path.dirname(
 # labels of columns to read
 data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('tag')
 data_triangles = pd.read_csv(os.path.join(mesh_path, "triangles.csv"))
+
+min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
 
 '''
 triangle_coordinates = [
@@ -124,7 +126,7 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
-triangles_to_plot=[]
+triangles_to_plot=[i for i in range(len(data_triangles))]
 
 def plot_snapshot(fig, azimuth_altitude):
 
@@ -147,7 +149,9 @@ def plot_snapshot(fig, azimuth_altitude):
                 parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
 
 
-    gr.plot_3d_axes(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [2*mesh_parameters['r'], 2*mesh_parameters['r'], 2*mesh_parameters['r']],
+    gr.plot_3d_axes(ax, 
+                    [min_max[0][0], min_max[1][0], min_max[2][0]], 
+                    [min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]],
                     scale_factor=[1, 1, parameters['scale_factor_z']],
                     axis_origin=parameters['axis_origin_3d'],
                     axis_label=parameters['axis_label_3d'],
@@ -162,7 +166,7 @@ def plot_snapshot(fig, azimuth_altitude):
                     plot_label_position=parameters['plot_label_offset_3d'],
                     plot_label_font_size=parameters['plot_label_font_size'])
     
-    gr.set_axes_limits(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [mesh_parameters['r'], mesh_parameters['r'], mesh_parameters['r']])
+    # gr.set_axes_limits(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [mesh_parameters['r'], mesh_parameters['r'], mesh_parameters['r']])
 
 
     if len(triangles_to_plot) > 1:
@@ -220,8 +224,8 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
 
-# plot_snapshot(fig, [0, 45])
-# plt.savefig(figure_path + "_large.pdf")
-# os.system(
-#     f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'
-# )
+plot_snapshot(fig, [0, 45])
+plt.savefig(figure_path + "_large.pdf")
+os.system(
+    f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'
+)
