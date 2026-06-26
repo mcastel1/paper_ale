@@ -54,7 +54,7 @@ figure_path = os.path.join(os.path.dirname(
 
 # labels of columns to read
 data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('tag')
-data_line_vertices = pd.read_csv(os.path.join(mesh_path, "line_vertices.csv"))
+data_line_vertices = pd.read_csv(os.path.join(mesh_path, "edges.csv"))
 
 edge_coordinates = []
 for i in range(len(data_line_vertices)):
@@ -98,15 +98,15 @@ edges_to_plot=[0]
 
 def plot_snapshot(fig, azimuth_altitude):
 
-    data_line_vertices_to_plot = data_line_vertices.iloc[edges_to_plot[-1]]
+    last_plotted_edge = data_line_vertices.iloc[edges_to_plot[-1]]
     data_line_vertices_start = data_line_vertices['start']
     data_line_vertices_end = data_line_vertices['end']
 
     '''
     start and end vertex of the last edge in `edges_to_plot`
     '''
-    start_vertex = data_line_vertices_to_plot[['start']].values[0]
-    end_vertex = data_line_vertices_to_plot[['end']].values[0]
+    start_vertex = last_plotted_edge[['start']].values[0]
+    end_vertex = last_plotted_edge[['end']].values[0]
 
     '''
     find other edges that have `start_vertex` of `end_vertex` as either start or end point: match[i] = True if the i-th edge contains either of these, and False otherwise
