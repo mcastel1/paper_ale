@@ -6,6 +6,7 @@ import pandas as pd
 import proplot as pplt
 import warnings
 
+import list.column_labels as clab
 import input_output.utils as io
 import graphics.utils as gr
 import system.paths as paths
@@ -74,19 +75,26 @@ for i in range(len(data_tetrahedra)):
 tetrahedron_coordinates = np.array(tetrahedron_coordinates)
 
 
+# the 6 edges of a tet, as index pairs into the 4 vertices
+edge_pairs = [(0,1),(0,2),(0,3),(1,2),(1,3),(2,3)]
+
+start = []
+end = []
+for tet in tetrahedron_coordinates:        # tet is (4,3)
+    for a, b in edge_pairs:
+        start.append(tet[a])
+        end.append(tet[b])
+
+start = np.array(start)                  # (6N, 3)
+end   = np.array(end)
+
 edge_data_frame = pd.DataFrame({
-    'p_1:0': tetrahedron_coordinates[:, 0, 0],
-    'p_1:1': tetrahedron_coordinates[:, 0, 1],
-    'p_1:2': tetrahedron_coordinates[:, 0, 2],
-    'p_2:0':   tetrahedron_coordinates[:, 1, 0],
-    'p_2:1':   tetrahedron_coordinates[:, 1, 1],
-    'p_2:2':   tetrahedron_coordinates[:, 1, 2],
-    'p_3:0':   tetrahedron_coordinates[:, 2, 0],
-    'p_3:1':   tetrahedron_coordinates[:, 2, 1],
-    'p_3:2':   tetrahedron_coordinates[:, 2, 2],
-    'p_4:0':   tetrahedron_coordinates[:, 3, 0],
-    'p_4:1':   tetrahedron_coordinates[:, 3, 1],
-    'p_4:2':   tetrahedron_coordinates[:, 3, 2],
+    clab.label_start_x_column: start[:, 0],
+    clab.label_start_y_column: start[:, 1],
+    clab.label_start_z_column: start[:, 2],
+    clab.label_end_x_column:   end[:, 0],
+    clab.label_end_y_column:   end[:, 1],
+    clab.label_end_z_column:   end[:, 2],
 })
 
 
@@ -103,9 +111,6 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
 tetrahedra_to_plot=[0]
-
-# data_line_vertices_start = data_tetrahedra['start']
-# data_line_vertices_end = data_tetrahedra['end']
 
 
 
@@ -175,8 +180,9 @@ def plot_snapshot(fig, azimuth_altitude):
     ax.set_axis_off()
     ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
 
+    edge_rows = [6 * t + k for t in tetrahedra_to_plot for k in range(6)]
 
-    gr.plot_mesh(ax, edge_data_frame.iloc[tetrahedra_to_plot],
+    gr.plot_mesh(ax, edge_data_frame.iloc[edge_rows],
                 parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
 
 
