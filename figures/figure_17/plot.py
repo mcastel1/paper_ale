@@ -57,6 +57,15 @@ figure_path = os.path.join(os.path.dirname(
 data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('tag')
 data_tetrahedra = pd.read_csv(os.path.join(mesh_path, "tetrahedra.csv"))
 
+'''
+tetrahedron_coordinates = [
+                        [[p_1_tet_0_x, p_1_tet_0_y, p_1_tet_0_z], ..., [p_4_tet_0_x, p_4_tet_0_y, p_4_tet_0_z]],
+                        [[p_1_tet_1_x, p_1_tet_1_y, p_1_tet_1_z], ..., [p_4_tet_1_x, p_4_tet_1_y, p_4_tet_1_z]],
+                        ...
+                        ]
+
+
+'''
 tetrahedron_coordinates = []
 for i in range(len(data_tetrahedra)):
     
