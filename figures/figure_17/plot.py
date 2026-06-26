@@ -126,64 +126,12 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
-tetrahedra_to_plot=[0]
+tetrahedra_to_plot=[]
 
 
 
 def plot_snapshot(fig, azimuth_altitude):
 
-    last_plotted_tetrahedron = data_tetrahedra.iloc[tetrahedra_to_plot[-1]]
-
-
-    '''
-    tags of the vertices in the last tetrahedron in `tetrahedra_to_plot`
-    '''
-    p_1_vertex = last_plotted_tetrahedron[['p_1']].values[0]
-    p_2_vertex = last_plotted_tetrahedron[['p_2']].values[0]
-    p_3_vertex = last_plotted_tetrahedron[['p_3']].values[0]
-    p_4_vertex = last_plotted_tetrahedron[['p_4']].values[0]
-
-    '''
-    find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
-    '''
-    match = ( 
-
-          data_tetrahedra['p_1'].eq(p_1_vertex) 
-        | data_tetrahedra['p_1'].eq(p_2_vertex)
-        | data_tetrahedra['p_1'].eq(p_3_vertex)
-        | data_tetrahedra['p_1'].eq(p_4_vertex)
-
-        | data_tetrahedra['p_2'].eq(p_1_vertex)
-        | data_tetrahedra['p_2'].eq(p_2_vertex)
-        | data_tetrahedra['p_2'].eq(p_3_vertex)
-        | data_tetrahedra['p_2'].eq(p_4_vertex)
-
-        | data_tetrahedra['p_3'].eq(p_1_vertex)
-        | data_tetrahedra['p_3'].eq(p_2_vertex)
-        | data_tetrahedra['p_3'].eq(p_3_vertex)
-        | data_tetrahedra['p_3'].eq(p_4_vertex)
-
-        | data_tetrahedra['p_4'].eq(p_1_vertex)
-        | data_tetrahedra['p_4'].eq(p_2_vertex)
-        | data_tetrahedra['p_4'].eq(p_3_vertex)
-        | data_tetrahedra['p_4'].eq(p_4_vertex)
-        )
-
-    # don't reuse rows already in the path
-    match.iloc[tetrahedra_to_plot] = False
-
-    if match.any():
-        # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
-        next_tetrahedron = match.idxmax()
-    else:
-        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
-        remaining_tetrahedra = [i for i in range(len(data_tetrahedra)) if i not in tetrahedra_to_plot]
-        next_tetrahedron = remaining_tetrahedra[0] if remaining_tetrahedra else None
-
-    if next_tetrahedron != None:
-        tetrahedra_to_plot.append(next_tetrahedron)
-
-    # print(f'vertices_to_plot = {edges_to_plot}')
 
     # =============
     # mesh plot
@@ -219,13 +167,73 @@ def plot_snapshot(fig, azimuth_altitude):
                     plot_label_font_size=parameters['plot_label_font_size'])
     
     gr.set_axes_limits(ax, [-mesh_parameters['r'], -mesh_parameters['r'], -mesh_parameters['r']], [mesh_parameters['r'], mesh_parameters['r'], mesh_parameters['r']])
+
+
+    if len(tetrahedra_to_plot) > 1:
+
+        last_plotted_tetrahedron = data_tetrahedra.iloc[tetrahedra_to_plot[-1]]
+
+        '''
+        tags of the vertices in the last tetrahedron in `tetrahedra_to_plot`
+        '''
+        p_1_vertex = last_plotted_tetrahedron[['p_1']].values[0]
+        p_2_vertex = last_plotted_tetrahedron[['p_2']].values[0]
+        p_3_vertex = last_plotted_tetrahedron[['p_3']].values[0]
+        p_4_vertex = last_plotted_tetrahedron[['p_4']].values[0]
+
+        '''
+        find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
+        '''
+        match = ( 
+
+            data_tetrahedra['p_1'].eq(p_1_vertex) 
+            | data_tetrahedra['p_1'].eq(p_2_vertex)
+            | data_tetrahedra['p_1'].eq(p_3_vertex)
+            | data_tetrahedra['p_1'].eq(p_4_vertex)
+
+            | data_tetrahedra['p_2'].eq(p_1_vertex)
+            | data_tetrahedra['p_2'].eq(p_2_vertex)
+            | data_tetrahedra['p_2'].eq(p_3_vertex)
+            | data_tetrahedra['p_2'].eq(p_4_vertex)
+
+            | data_tetrahedra['p_3'].eq(p_1_vertex)
+            | data_tetrahedra['p_3'].eq(p_2_vertex)
+            | data_tetrahedra['p_3'].eq(p_3_vertex)
+            | data_tetrahedra['p_3'].eq(p_4_vertex)
+
+            | data_tetrahedra['p_4'].eq(p_1_vertex)
+            | data_tetrahedra['p_4'].eq(p_2_vertex)
+            | data_tetrahedra['p_4'].eq(p_3_vertex)
+            | data_tetrahedra['p_4'].eq(p_4_vertex)
+            )
+
+        # don't reuse rows already in the path
+        match.iloc[tetrahedra_to_plot] = False
+
+    else: 
+
+        match = np.bool_(False)
+
+
+    if match.any():
+        # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
+        next_tetrahedron = match.idxmax()
+    else:
+        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
+        remaining_tetrahedra = [i for i in range(len(data_tetrahedra)) if i not in tetrahedra_to_plot]
+        next_tetrahedron = remaining_tetrahedra[0] if remaining_tetrahedra else None
+
+    if next_tetrahedron != None:
+        tetrahedra_to_plot.append(next_tetrahedron)
+
+    # print(f'vertices_to_plot = {edges_to_plot}')
+
         
 
 
 
 # plot_snapshot(fig, [0, 45])
-
-plt.savefig(figure_path + "_large.pdf")
-os.system(
-    f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'
-)
+# plt.savefig(figure_path + "_large.pdf")
+# os.system(
+#     f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'
+# )

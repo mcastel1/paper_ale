@@ -52,7 +52,7 @@ def update_animation(n):
 
 
 
-plot.tetrahedra_to_plot = [0]      # state is now length 1
+plot.tetrahedra_to_plot = []     
 
 animation = ani.FuncAnimation(
     fig=plot.fig,
