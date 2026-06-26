@@ -97,6 +97,13 @@ for tet in tetrahedron_coordinates:        # tet is (4,3)
 start = np.array(start)                  # (6N, 3)
 end   = np.array(end)
 
+'''
+edge_data_frame contains all the edges obtained from `tetrahedron_coordinates` and it has the structure
+
+    p_start_edge_0_x,p_start_edge_0_y,p_start_edge_0_z,p_end_edge_0_x,p_end_edge_0_y,p_end_edge_0_z,
+    p_start_edge_1_x,p_start_edge_1_y,p_start_edge_1_z,p_end_edge_1_x,p_end_edge_1_y,p_end_edge_1_z,
+    ...
+'''
 edge_data_frame = pd.DataFrame({
     clab.label_start_x_column: start[:, 0],
     clab.label_start_y_column: start[:, 1],
@@ -129,7 +136,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
     '''
-    vertices of the last tetrahedron in `tetrahedra_to_plot`
+    tags of the vertices in the last tetrahedron in `tetrahedra_to_plot`
     '''
     p_1_vertex = last_plotted_tetrahedron[['p_1']].values[0]
     p_2_vertex = last_plotted_tetrahedron[['p_2']].values[0]
@@ -137,7 +144,7 @@ def plot_snapshot(fig, azimuth_altitude):
     p_4_vertex = last_plotted_tetrahedron[['p_4']].values[0]
 
     '''
-    find other edges that have `start_vertex` of `end_vertex` as either start or end point: match[i] = True if the i-th edge contains either of these, and False otherwise
+    find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
     '''
     match = ( 
 
@@ -169,7 +176,7 @@ def plot_snapshot(fig, azimuth_altitude):
         # match containts at least one True -> find the first True entry in match -> this will be the next edge to add 
         next_tetrahedron = match.idxmax()
     else:
-        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new edge not in `edges_to_plot`
+        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
         remaining_tetrahedra = [i for i in range(len(data_tetrahedra)) if i not in tetrahedra_to_plot]
         next_tetrahedron = remaining_tetrahedra[0] if remaining_tetrahedra else None
 
@@ -189,6 +196,7 @@ def plot_snapshot(fig, azimuth_altitude):
     ax.set_axis_off()
     ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
 
+    # construct the list of rows to pick into `edge_data_frame` by converting `tetrahedra_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `tetrahedra_to_plot`)
     edge_rows = [6 * t + k for t in tetrahedra_to_plot for k in range(6)]
 
     gr.plot_mesh(ax, edge_data_frame.iloc[edge_rows],

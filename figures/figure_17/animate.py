@@ -57,7 +57,7 @@ plot.tetrahedra_to_plot = [0]      # state is now length 1
 animation = ani.FuncAnimation(
     fig=plot.fig,
     func=update_animation,
-    frames=range(0, len(plot.data_tetrahedra) - len(plot.tetrahedra_to_plot)),  # 27 - 1 = 26
+    frames=range(0, len(plot.data_tetrahedra) - len(plot.tetrahedra_to_plot)), 
     interval=30
 )
 
