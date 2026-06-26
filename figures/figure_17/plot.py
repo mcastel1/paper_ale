@@ -58,9 +58,15 @@ figure_path = os.path.join(os.path.dirname(
 
 # labels of columns to read
 data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('tag')
+
+# scale the coordinates of `data_vertices` so they are expressed in units of \met
+data_vertices[[':0', ':1', ':2']] *= parameters['length_conversion_factor']
+
 data_triangles = pd.read_csv(os.path.join(mesh_path, "triangles.csv"))
 
 min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
+
+print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]]}')
 
 '''
 triangle_coordinates = [
