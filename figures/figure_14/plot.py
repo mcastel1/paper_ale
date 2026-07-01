@@ -243,7 +243,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_line_vertices,
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
-                    zorder=2)
+                    zorder=2,
+                    column_labels=[['start:0','start:1','start:2'], ['end:0','end:1','end:2']])
     
     stop_time = time.time()
     print(f"Time for block 3 = {stop_time - start_time:.2f} s", flush=True)
@@ -378,7 +379,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_line_vertices,
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
-                    zorder=2)
+                    zorder=2,
+                    column_labels=[['start:0','start:1','start:2'], ['end:0','end:1','end:2']])
     
     
     # fork
@@ -509,7 +511,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_line_vertices_0,
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
-                    zorder=2)
+                    zorder=2,
+                    column_labels=[['start:0','start:1','start:2'], ['end:0','end:1','end:2']])
     
 
     
