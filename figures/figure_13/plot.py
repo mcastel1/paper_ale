@@ -56,11 +56,14 @@ plt.rcParams.update({
 })
 
 # define the folder where to read the data
-'''# 1. read data from local folder 
+# 1. read data from local folder 
+path = os.path.dirname( os.path.abspath(__file__))
 solution_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/")
 sub_mesh_1_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/sub_meshes/out/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'solution_parameters.csv'))
+
 '''
 # 2 read data from external folder
 path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic'
@@ -68,9 +71,8 @@ solution_path = os.path.join(path, "solution/")
 mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/shape_line/solution/"
 sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
-
-
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_line_b.csv'))
+'''
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 mesh_0_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
 
@@ -245,7 +247,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_line_vertices,
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
-                    zorder=2)
+                    zorder=2,
+                    column_labels=[['start:0','start:1','start:2'], ['end:0','end:1','end:2']])
     
     stop_time = time.time()
     print(f"Time for block 3 = {stop_time - start_time:.2f} s", flush=True)
@@ -380,7 +383,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_line_vertices,
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
-                    zorder=2)
+                    zorder=2,
+                    column_labels=[['start:0','start:1','start:2'], ['end:0','end:1','end:2']])
     
     
     # fork
@@ -511,7 +515,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_line_vertices_0,
                     parameters['mesh_el_line_width'], parameters['mesh_color'], parameters['alpha_mesh'],
-                    zorder=2)
+                    zorder=2,
+                    column_labels=[['start:0','start:1','start:2'], ['end:0','end:1','end:2']])
     
 
     

@@ -1,6 +1,7 @@
 import matplotlib
 import matplotlib.pyplot as plt
 import more_itertools 
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 import os
 import pandas as pd
@@ -68,6 +69,9 @@ min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertice
 
 print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]]}')
 
+def f(x, y, z):
+    return np.sqrt(x**2 + y**2 + z**2)   # replace with your function
+
 '''
 triangle_coordinates = [
                         [[p_1_triangle_0_x, p_1_triangle_0_y, p_1_triangle_0_z], ..., [p_3_triangle_0_x, p_3_triangle_0_y, p_3_triangle_0_z]],
@@ -91,6 +95,15 @@ for i in range(len(data_triangles)):
         ])
 
 triangle_coordinates = np.array(triangle_coordinates)
+
+
+# centroid of each triangle 
+centroids = triangle_coordinates.mean(axis=1)          # (N, 3)
+# value of `f` computed on each centroid
+face_values = f(centroids[:, 0], centroids[:, 1], centroids[:, 2])  # (N,)
+
+norm = plt.Normalize(vmin=face_values.min(), vmax=face_values.max())
+cmap = plt.get_cmap('viridis')
 
 
 # the 6 edges of a tet, as index pairs into the 4 vertices
@@ -159,6 +172,15 @@ def plot_snapshot(fig, azimuth_altitude):
 
     gr.plot_mesh(ax, edge_data_frame.iloc[edge_rows],
                 parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
+
+    if triangles_to_plot:
+        # if `triangles_to_plot` is not empy, plot the colored face of each triangle in `triangles_to_plot`
+
+        faces = triangle_coordinates[triangles_to_plot]        # (M, 3, 3)
+        colors = cmap(norm(face_values[triangles_to_plot]))
+        poly = Poly3DCollection(faces, facecolors=colors,
+                                edgecolors='none', alpha=1.0)
+        ax.add_collection3d(poly)
 
 
     gr.plot_3d_axes(ax, 
@@ -241,7 +263,7 @@ def plot_snapshot(fig, azimuth_altitude):
         # flatten `triangles_to_plot`
         triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
 
-
+        pass
 
 
     # print(f'vertices_to_plot = {edges_to_plot}')
