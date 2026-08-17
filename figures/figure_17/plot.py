@@ -6,6 +6,7 @@ import numpy as np
 import os
 import pandas as pd
 import proplot as pplt
+import shutil
 import warnings
 
 import list.column_labels as clab
@@ -13,6 +14,10 @@ import input_output.utils as io
 import graphics.utils as gr
 import system.paths as paths
 
+# clean up the cache directory and create a new one
+cache_dir = os.path.expanduser("~/.matplotlib/tex.cache")
+shutil.rmtree(cache_dir, ignore_errors=True)
+os.makedirs(cache_dir, exist_ok=True)
 
 matplotlib.use(
     "Agg"
@@ -45,6 +50,8 @@ mesh_parameters = io.read_parameters_from_csv_file(
 )
 
 
+number_of_frames = parameters['number_of_frames_1'] + parameters['number_of_frames_2']
+
 # define the folder where to read the data
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
@@ -69,8 +76,9 @@ min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertice
 
 print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]]}')
 
+# function to be plotted on the 3d surface with color code
 def f(x, y, z):
-    return np.sqrt(x**2 + y**2 + z**2)   # replace with your function
+    return np.sqrt(y**2 + z**2) * np.cos(2.0*np.pi*x/(min_max[0][1] - min_max[0][0])) 
 
 '''
 triangle_coordinates = [
@@ -148,10 +156,12 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
 
+all_triangles = [i for i in range(len(data_triangles))]
+
 # triangles_to_plot=[i for i in range(len(data_triangles))]
 triangles_to_plot = []
 
-def plot_snapshot(fig, azimuth_altitude):
+def plot_snapshot(n, fig, azimuth_altitude):
 
     global triangles_to_plot
 
@@ -167,20 +177,32 @@ def plot_snapshot(fig, azimuth_altitude):
     ax.set_axis_off()
     ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
 
-    # construct the list of rows to pick into `edge_data_frame` by converting `triangles_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `triangles_to_plot`)
-    edge_rows = [3 * t + k for t in triangles_to_plot for k in range(3)]
+    if (n == 0) or (n == parameters['number_of_frames_1']):
+        # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames_1'] (beginnning of color draw) -> set `triangles_to_plot` to an empty list
+        triangles_to_plot = []
 
-    gr.plot_mesh(ax, edge_data_frame.iloc[edge_rows],
-                parameters['mesh_line_width'], 'black', parameters['alpha_mesh'])
 
-    if triangles_to_plot:
+    if n < parameters['number_of_frames_1']:
+
+        # construct the list of rows to pick into `edge_data_frame` by converting `triangles_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `triangles_to_plot`)
+        edge_rows = [3 * t + k for t in triangles_to_plot for k in range(3)]
+
+    else:
+
+        edge_rows = [3 * t + k for t in all_triangles for k in range(3)]
+
         # if `triangles_to_plot` is not empy, plot the colored face of each triangle in `triangles_to_plot`
-
         faces = triangle_coordinates[triangles_to_plot]        # (M, 3, 3)
         colors = cmap(norm(face_values[triangles_to_plot]))
         poly = Poly3DCollection(faces, facecolors=colors,
-                                edgecolors='none', alpha=1.0)
+                                edgecolors='none', alpha=parameters['alpha_faces'], zorder=0)
         ax.add_collection3d(poly)
+
+
+    gr.plot_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
+                 zorder=1)
+
+
 
 
     gr.plot_3d_axes(ax, 
@@ -272,7 +294,7 @@ def plot_snapshot(fig, azimuth_altitude):
 
 
 
-plot_snapshot(fig, [120, 45])
+plot_snapshot(0, fig, [120, 45])
 plt.savefig(figure_path + "_large.pdf")
 os.system(
     f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'
