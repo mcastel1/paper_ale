@@ -241,7 +241,7 @@ def plot_snapshot(fig, azimuth_altitude):
         # flatten `triangles_to_plot`
         triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
 
-
+        pass
 
 
     # print(f'vertices_to_plot = {edges_to_plot}')
