@@ -1,3 +1,10 @@
+'''
+this animation plots 
+    - in a first part, the mesh, by adding subsequently mesh triangles over time
+    - in a second part, a function `f` on the mesh surface, by coloring subsequent triangles of the mesh in terms of a color code corresponding to `f`
+'''
+
+
 import matplotlib
 import matplotlib.pyplot as plt
 import more_itertools 
@@ -13,6 +20,7 @@ import list.column_labels as clab
 import input_output.utils as io
 import graphics.utils as gr
 import system.paths as paths
+
 
 # clean up the cache directory and create a new one
 cache_dir = os.path.expanduser("~/.matplotlib/tex.cache")
@@ -70,6 +78,7 @@ data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('
 # scale the coordinates of `data_vertices` so they are expressed in units of \met
 data_vertices[[':0', ':1', ':2']] *= parameters['length_conversion_factor']
 
+# load the data on the triangles of the mesh: each triangle is a list of three vertex labels, labelled as in `data_vertices`: these vertices delimit the triangle
 data_triangles = pd.read_csv(os.path.join(mesh_path, "triangles.csv"))
 
 min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
@@ -105,12 +114,13 @@ for i in range(len(data_triangles)):
 triangle_coordinates = np.array(triangle_coordinates)
 
 
-# centroid of each triangle 
+# list of centroids of the triangles
 centroids = triangle_coordinates.mean(axis=1)          # (N, 3)
-# value of `f` computed on each centroid
+# live of values of `f` computed on each centroid
 face_values = f(centroids[:, 0], centroids[:, 1], centroids[:, 2])  # (N,)
-
+# norm used for the colorbar, which sets the color to be assigned to each face
 norm = plt.Normalize(vmin=face_values.min(), vmax=face_values.max())
+# the color map
 cmap = plt.get_cmap('viridis')
 
 
@@ -189,9 +199,10 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
     else:
 
+        # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `triangles_to_plot` replaced by `all_trianges`
         edge_rows = [3 * t + k for t in all_triangles for k in range(3)]
 
-        # if `triangles_to_plot` is not empy, plot the colored face of each triangle in `triangles_to_plot`
+        # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
         faces = triangle_coordinates[triangles_to_plot]        # (M, 3, 3)
         colors = cmap(norm(face_values[triangles_to_plot]))
         poly = Poly3DCollection(faces, facecolors=colors,
@@ -199,6 +210,7 @@ def plot_snapshot(n, fig, azimuth_altitude):
         ax.add_collection3d(poly)
 
 
+    # plot the mesh 
     gr.plot_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
                  zorder=1)
 
@@ -221,11 +233,8 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     plot_label_position=parameters['plot_label_offset_3d'],
                     plot_label_font_size=parameters['plot_label_font_size'])
     
-    # gr.set_axes_limits(ax, 
-    #                 [min_max[0][0], min_max[1][0], min_max[2][0]], 
-    #                 [min_max[0][1], min_max[1][1], min_max[2][1]])
-
-
+   
+    # update `triangles_to_plot`
     if len(triangles_to_plot) > 1:
 
         match = pd.Series(False, index=data_triangles.index)
