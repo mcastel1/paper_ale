@@ -35,7 +35,7 @@ matplotlib.use(
 warnings.filterwarnings(
     "ignore", message=".*Z contains NaN values.*", category=UserWarning)
 # clean the matplotlib cache to load the correct version of definitions.tex
-os.system(" rm -rf ~/.matplotlib/tex.cache")
+# os.system(" rm -rf ~/.matplotlib/tex.cache")
 
 plt.rcParams.update({
     "text.usetex": True,
