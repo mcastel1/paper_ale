@@ -202,10 +202,8 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
     ax = fig.axes[0]  # Use the existing axis
 
-    ax.set_box_aspect([min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]])
     gr.empty_panes(ax)
     ax.set_axis_off()
-    ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
 
     if colorbar is None: 
 
