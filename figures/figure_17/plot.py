@@ -117,9 +117,9 @@ triangle_coordinates = np.array(triangle_coordinates)
 # list of centroids of the triangles
 centroids = triangle_coordinates.mean(axis=1)          # (N, 3)
 # live of values of `f` computed on each centroid
-face_values = f(centroids[:, 0], centroids[:, 1], centroids[:, 2])  # (N,)
+grid_f_values = f(centroids[:, 0], centroids[:, 1], centroids[:, 2])  # (N,)
 # norm used for the colorbar, which sets the color to be assigned to each face
-norm = plt.Normalize(vmin=face_values.min(), vmax=face_values.max())
+norm_f_values = plt.Normalize(vmin=grid_f_values.min(), vmax=grid_f_values.max())
 # the color map
 cmap = plt.get_cmap('viridis')
 
@@ -199,14 +199,30 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
     else:
 
+        gr.cb.make_colorbar(fig, grid_f_values, np.min(grid_f_values), np.max(grid_f_values),
+                    position=parameters['colorbar_position'], 
+                    size=parameters['colorbar_size'],
+                    # label_pad=parameters['v_colorbar_label_offset'],
+                    # label=parameters['v_colorbar_axis_label'],
+                    # font_size=parameters['color_map_font_size'],
+                    # tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                    # tick_label_angle=parameters['v_colorbar_tick_label_angle'],
+                    # tick_length=parameters['v_colorbar_tick_length'],
+                    # line_width=parameters['v_colorbar_line_width']
+        )
+
         # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `triangles_to_plot` replaced by `all_trianges`
         edge_rows = [3 * t + k for t in all_triangles for k in range(3)]
 
         # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
         faces = triangle_coordinates[triangles_to_plot]        # (M, 3, 3)
-        colors = cmap(norm(face_values[triangles_to_plot]))
-        poly = Poly3DCollection(faces, facecolors=colors,
-                                edgecolors='none', alpha=parameters['alpha_faces'], zorder=0)
+        colors = cmap(norm_f_values(grid_f_values[triangles_to_plot]))
+        poly = Poly3DCollection(faces, 
+                                facecolors=colors,
+                                edgecolors='black',   
+                                linewidths=parameters['mesh_line_width'],                    
+                                alpha=parameters['alpha_faces'], 
+                                zorder=0)
         ax.add_collection3d(poly)
 
 
@@ -303,7 +319,7 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
 
 
-plot_snapshot(0, fig, [120, 45])
+plot_snapshot(parameters['number_of_frames_2'], fig, [120, 45])
 plt.savefig(figure_path + "_large.pdf")
 os.system(
     f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'
