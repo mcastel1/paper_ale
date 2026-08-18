@@ -176,8 +176,7 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 
 
 # create axes
-# 3d axes
-fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
+fig.add_subplot(1, 1, 1,  auto_add_to_figure=False)
 
 colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
                                     parameters['colorbar_position'][1],
