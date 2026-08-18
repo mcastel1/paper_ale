@@ -254,21 +254,25 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
 
 
-    gr.plot_3d_axes(ax, 
-                    [min_max[0][0], min_max[1][0], min_max[2][0]], 
-                    [min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]],
-                    axis_origin=parameters['axis_origin_3d'],
-                    axis_label=parameters['axis_label_3d'],
-                    axis_label_offset=parameters['axis_label_offset_3d'],
-                    tick_label_offset=parameters['tick_label_offset_3d'],
-                    tick_label_format=parameters['tick_label_format_3d'],
-                    tick_length=parameters['tick_length_3d'],
-                    minor_tick_length=parameters['minor_tick_length_3d'],
-                    n_minor_ticks=parameters['n_minor_ticks_3d'],
-                    font_size=parameters['font_size'],
-                    line_width=parameters['axis_line_width_3d'],
-                    plot_label_position=parameters['plot_label_offset_3d'],
-                    plot_label_font_size=parameters['plot_label_font_size'])
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
+                    # tick_length=parameters['tick_length'],
+                    # line_width=parameters['axis_line_width'],
+                    # axis_label=parameters['axis_label'],
+                    # tick_label_format=['f', 'f'],
+                    # font_size=[parameters['font_size'],
+                    #            parameters['font_size']],
+                    # tick_label_offset=parameters['tick_label_offset'],
+                    # axis_label_offset=parameters['axis_label_offset'],
+                    # axis_origin=parameters['axis_origin'],
+                    # plot_label=parameters["v_plot_panel_label"],
+                    # plot_label_offset=parameters['panel_label_position'],
+                    # plot_label_font_size=parameters['panel_label_font_size'],
+                    # n_minor_ticks=parameters['n_minor_ticks'],
+                    # minor_tick_length=parameters['minor_tick_length'],
+                    # tick_label_angle=parameters['tick_label_angle'],
+                    colorbar_axis=colorbar_axis,
+                    # colorbar_axis_offset=parameters['colorbar_axis_offset']
+                    )
     
    
     # update `triangles_to_plot`
@@ -334,11 +338,8 @@ def plot_snapshot(n, fig, azimuth_altitude):
         pass
 
 
-    # print(f'vertices_to_plot = {edges_to_plot}')
 
         
-
-
 
 plot_snapshot(parameters['number_of_frames_2'], fig, [120, 45])
 plt.savefig(figure_path + "_large.pdf")
