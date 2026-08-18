@@ -121,7 +121,9 @@ grid_f_values = f(centroids[:, 0], centroids[:, 1], centroids[:, 2])  # (N,)
 # norm used for the colorbar, which sets the color to be assigned to each face
 norm_f_values = plt.Normalize(vmin=grid_f_values.min(), vmax=grid_f_values.max())
 # the color map
-cmap = plt.get_cmap('viridis')
+# cmap = plt.get_cmap('viridis')
+
+
 
 
 # the 6 edges of a tet, as index pairs into the 4 vertices
@@ -162,18 +164,28 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
                   wspace=parameters['wspace'],
                   hspace=parameters['hspace'])
 
+
+
 # create axes
 # 3d axes
 fig.add_subplot(1, 1, 1, projection="3d", auto_add_to_figure=False)
+
+colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
+                                    parameters['colorbar_position'][1],
+                                    parameters['colorbar_size'][0],
+                                    parameters['colorbar_size'][1]])
 
 all_triangles = [i for i in range(len(data_triangles))]
 
 # triangles_to_plot=[i for i in range(len(data_triangles))]
 triangles_to_plot = []
 
+colorbar = None
+
+
 def plot_snapshot(n, fig, azimuth_altitude):
 
-    global triangles_to_plot
+    global triangles_to_plot, colorbar
 
 
     # =============
@@ -187,6 +199,20 @@ def plot_snapshot(n, fig, azimuth_altitude):
     ax.set_axis_off()
     ax.view_init(elev=azimuth_altitude[1], azim=azimuth_altitude[0])
 
+    if colorbar is None: 
+
+        gr.cb.make_colorbar(fig, grid_f_values, np.min(grid_f_values), np.max(grid_f_values),
+                    position=parameters['colorbar_position'], 
+                    size=parameters['colorbar_size'],
+                    label_pad=parameters['colorbar_axis_label_offset'],
+                    label=parameters['colorbar_axis_label'],
+                    font_size=parameters['colorbar_font_size'],
+                    tick_label_offset=parameters['colorbar_tick_label_offset'],
+                    tick_length=parameters['colorbar_tick_length'],
+                    line_width=parameters['colorbar_line_width'],
+                    axis=colorbar_axis
+        )
+
     if (n == 0) or (n == parameters['number_of_frames_1']):
         # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames_1'] (beginnning of color draw) -> set `triangles_to_plot` to an empty list
         triangles_to_plot = []
@@ -199,24 +225,13 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
     else:
 
-        gr.cb.make_colorbar(fig, grid_f_values, np.min(grid_f_values), np.max(grid_f_values),
-                    position=parameters['colorbar_position'], 
-                    size=parameters['colorbar_size'],
-                    label_pad=parameters['colorbar_axis_label_offset'],
-                    label=parameters['colorbar_axis_label'],
-                    font_size=parameters['colorbar_font_size'],
-                    tick_label_offset=parameters['colorbar_tick_label_offset'],
-                    # tick_label_angle=parameters['v_colorbar_tick_label_angle'],
-                    tick_length=parameters['colorbar_tick_length'],
-                    line_width=parameters['colorbar_line_width']
-        )
 
         # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `triangles_to_plot` replaced by `all_trianges`
         edge_rows = [3 * t + k for t in all_triangles for k in range(3)]
 
         # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
         faces = triangle_coordinates[triangles_to_plot]        # (M, 3, 3)
-        colors = cmap(norm_f_values(grid_f_values[triangles_to_plot]))
+        colors = gr.cb.color_map_type(norm_f_values(grid_f_values[triangles_to_plot]))
         poly = Poly3DCollection(faces, 
                                 facecolors=colors,
                                 edgecolors='black',   
