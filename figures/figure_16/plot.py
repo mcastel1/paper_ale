@@ -122,8 +122,21 @@ norm_f_values = plt.Normalize(vmin=grid_f_values.min(), vmax=grid_f_values.max()
 
 # sign
 
-# the 6 edges of a tet, as index pairs into the 4 vertices
+# the 3 edges of a triangle, as index pairs into the 3 vertices
 edge_pairs = [(0,1),(0,2),(1,2)]
+
+'''
+start = [
+    [p_edge_0_start_x, p_edge_0_start_y, p_edge_0_start_z],
+    [p_edge_1_start_x, p_edge_1_start_y, p_edge_1_start_z],
+    ....
+]
+end = [
+    [p_edge_0_end_x, p_edge_0_end_y, p_edge_0_end_z],
+    [p_edge_1_end_x, p_edge_1_end_y, p_edge_1_end_z],
+    ....
+]
+'''
 
 start = []
 end = []
@@ -132,7 +145,7 @@ for tri in triangle_coordinates:        # tet is (4,3)
         start.append(tri[a])
         end.append(tri[b])
 
-start = np.array(start)                  # (6N, 3)
+start = np.array(start)                  # (6 N, 3)
 end   = np.array(end)
 
 '''
