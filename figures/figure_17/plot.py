@@ -64,8 +64,8 @@ number_of_frames = parameters['number_of_frames_1'] + parameters['number_of_fram
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
-# mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/shapes/tomcat', "solution/")
+mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+# mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/shapes/tomcat', "solution/")
 # mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/3d/ball', "solution/")
 
 figure_path = os.path.join(os.path.dirname(
