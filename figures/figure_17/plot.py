@@ -202,13 +202,13 @@ def plot_snapshot(n, fig, azimuth_altitude):
         gr.cb.make_colorbar(fig, grid_f_values, np.min(grid_f_values), np.max(grid_f_values),
                     position=parameters['colorbar_position'], 
                     size=parameters['colorbar_size'],
-                    # label_pad=parameters['v_colorbar_label_offset'],
-                    # label=parameters['v_colorbar_axis_label'],
-                    # font_size=parameters['color_map_font_size'],
-                    # tick_label_offset=parameters['v_colorbar_tick_label_offset'],
+                    label_pad=parameters['colorbar_axis_label_offset'],
+                    label=parameters['colorbar_axis_label'],
+                    font_size=parameters['colorbar_font_size'],
+                    tick_label_offset=parameters['colorbar_tick_label_offset'],
                     # tick_label_angle=parameters['v_colorbar_tick_label_angle'],
-                    # tick_length=parameters['v_colorbar_tick_length'],
-                    # line_width=parameters['v_colorbar_line_width']
+                    tick_length=parameters['colorbar_tick_length'],
+                    line_width=parameters['colorbar_line_width']
         )
 
         # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `triangles_to_plot` replaced by `all_trianges`
