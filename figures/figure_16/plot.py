@@ -8,7 +8,7 @@ this animation plots
 import matplotlib
 import matplotlib.pyplot as plt
 import more_itertools 
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from matplotlib.collections import PolyCollection
 import numpy as np
 import os
 import pandas as pd
@@ -120,7 +120,7 @@ norm_f_values = plt.Normalize(vmin=grid_f_values.min(), vmax=grid_f_values.max()
 # cmap = plt.get_cmap('viridis')
 
 
-# sign
+
 
 # the 3 edges of a triangle, as index pairs into the 3 vertices
 edge_pairs = [(0,1),(0,2),(1,2)]
@@ -176,7 +176,7 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 
 
 # create axes
-fig.add_subplot(1, 1, 1,  auto_add_to_figure=False)
+fig.add_subplot(1, 1, 1)
 
 colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
                                     parameters['colorbar_position'][1],
@@ -201,13 +201,12 @@ def plot_snapshot(n, fig, azimuth_altitude):
     # =============
 
     ax = fig.axes[0]  # Use the existing axis
-
-    gr.empty_panes(ax)
+    ax.set_box_aspect(1)
     ax.set_axis_off()
 
     if colorbar is None: 
 
-        gr.cb.make_colorbar(fig, grid_f_values, np.min(grid_f_values), np.max(grid_f_values),
+        colorbar, _ = gr.cb.make_colorbar(fig, grid_f_values, np.min(grid_f_values), np.max(grid_f_values),
                     position=parameters['colorbar_position'], 
                     size=parameters['colorbar_size'],
                     label_pad=parameters['colorbar_axis_label_offset'],
@@ -218,6 +217,9 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     line_width=parameters['colorbar_line_width'],
                     axis=colorbar_axis
         )
+
+
+
 
     if (n == 0) or (n == parameters['number_of_frames_1']):
         # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames_1'] (beginnning of color draw) -> set `triangles_to_plot` to an empty list
@@ -236,47 +238,51 @@ def plot_snapshot(n, fig, azimuth_altitude):
         edge_rows = [3 * t + k for t in all_triangles for k in range(3)]
 
         # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
-        faces = triangle_coordinates[triangles_to_plot]        # (M, 3, 3)
+        faces = triangle_coordinates[triangles_to_plot]    # (M, 3, 3)
+        faces = [[vertex[:2] for vertex in triangle] for triangle in faces]
+
         colors = gr.cb.color_map_type(norm_f_values(grid_f_values[triangles_to_plot]))
-        poly = Poly3DCollection(faces, 
+        poly = PolyCollection(faces, 
                                 facecolors=colors,
                                 edgecolors='black',   
                                 linewidths=parameters['mesh_line_width'],                    
                                 alpha=parameters['alpha_faces'], 
                                 zorder=0)
-        ax.add_collection3d(poly)
+        ax.add_collection(poly)
 
 
     # plot the mesh 
-    gr.plot_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
+    gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
                  zorder=1)
 
 
 
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
-                    # tick_length=parameters['tick_length'],
-                    # line_width=parameters['axis_line_width'],
-                    # axis_label=parameters['axis_label'],
+                    tick_length=parameters['axis_tick_length'],
+                    line_width=parameters['axis_line_width'],
+                    axis_label=parameters['axis_label'],
                     # tick_label_format=['f', 'f'],
-                    # font_size=[parameters['font_size'],
-                    #            parameters['font_size']],
-                    # tick_label_offset=parameters['tick_label_offset'],
-                    # axis_label_offset=parameters['axis_label_offset'],
-                    # axis_origin=parameters['axis_origin'],
+                    font_size=parameters['axis_font_size'],
+                    tick_label_offset=parameters['axis_tick_label_offset'],
+                    axis_label_offset=parameters['axis_label_offset'],
+                    axis_origin=parameters['axis_origin'],
                     # plot_label=parameters["v_plot_panel_label"],
                     # plot_label_offset=parameters['panel_label_position'],
                     # plot_label_font_size=parameters['panel_label_font_size'],
-                    # n_minor_ticks=parameters['n_minor_ticks'],
-                    # minor_tick_length=parameters['minor_tick_length'],
-                    # tick_label_angle=parameters['tick_label_angle'],
+                    n_minor_ticks=parameters['axis_n_minor_ticks'],
+                    minor_tick_length=parameters['axis_minor_tick_length'],
+                    tick_label_angle=parameters['axis_tick_label_angle'],
+                    axis_label_angle=parameters['axis_label_angle'],
                     colorbar_axis=colorbar_axis,
-                    # colorbar_axis_offset=parameters['colorbar_axis_offset']
+                    colorbar_axis_offset=parameters['colorbar_position']
                     )
     
    
     # update `triangles_to_plot`
     if len(triangles_to_plot) > 1:
+
+
 
         match = pd.Series(False, index=data_triangles.index)
 
