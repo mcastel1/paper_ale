@@ -64,18 +64,15 @@ print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
 # mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square', "solution")
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/1d/line', "solution")
 
-figure_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), parameters['figure_name'])
-
+figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 
 # labels of columns to read
 data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('tag')
 
-
-# load the data on the triangles of the mesh: each triangle is a list of three vertex labels, labelled as in `data_vertices`: these vertices delimit the triangle
-data_triangles = pd.read_csv(os.path.join(mesh_path, "triangles.csv"))
+# load the data on the edges of the mesh: each edge is a list of 2 vertex labels, labelled as in `data_vertices`: these vertices delimit the edge
+data_edges = pd.read_csv(os.path.join(mesh_path, "edges.csv"))
 
 min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
 
@@ -83,35 +80,33 @@ print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_ma
 
 # function to be plotted on the 3d surface with color code
 def f(x, y, z):
-    return np.sqrt(y**2) * np.cos(2.0*np.pi*x/(min_max[0][1] - min_max[0][0])) 
+    return np.sqrt(x**2) * np.cos(2.0*np.pi*x/(min_max[0][1] - min_max[0][0])) 
 
 '''
-triangle_coordinates = [
-                        [[p_1_triangle_0_x, p_1_triangle_0_y, p_1_triangle_0_z], ..., [p_3_triangle_0_x, p_3_triangle_0_y, p_3_triangle_0_z]],
-                        [[p_1_triangle_1_x, p_1_triangle_1_y, p_1_triangle_1_z], ..., [p_3_triangle_1_x, p_3_triangle_1_y, p_3_triangle_1_z]],
+edge_coordinates = [
+                        [[p_1_edge_0_x, p_1_edge_0_y, p_1_edge_0_z], [p_2_edge_0_x, p_2_edge_0_y, p_2_edge_0_z]],
+                        [[p_1_edge_1_x, p_1_edge_1_y, p_1_edge_1_z], [p_2_edge_1_x, p_2_edge_1_y, p_2_edge_1_z]],
                         ...
-                        ]
-
+                    ]
 
 '''
-triangle_coordinates = []
-for i in range(len(data_triangles)):
-    
-    p_1_tag = data_triangles['p_1'][i]
-    p_2_tag = data_triangles['p_2'][i]
-    p_3_tag = data_triangles['p_3'][i]
 
-    triangle_coordinates.append([
+edge_coordinates = []
+for i in range(len(data_edges)):
+    
+    p_1_tag = data_edges['p_1'][i]
+    p_2_tag = data_edges['p_2'][i]
+
+    edge_coordinates.append([
         [data_vertices[':0'][p_1_tag], data_vertices[':1'][p_1_tag], data_vertices[':2'][p_1_tag]], 
         [data_vertices[':0'][p_2_tag], data_vertices[':1'][p_2_tag], data_vertices[':2'][p_2_tag]],
-        [data_vertices[':0'][p_3_tag], data_vertices[':1'][p_3_tag], data_vertices[':2'][p_3_tag]],
         ])
 
-triangle_coordinates = np.array(triangle_coordinates)
+edge_coordinates = np.array(edge_coordinates)
 
 
 # list of centroids of the triangles
-centroids = triangle_coordinates.mean(axis=1)          # (N, 3)
+centroids = edge_coordinates.mean(axis=1)          # (N, 3)
 # live of values of `f` computed on each centroid
 grid_f_values = f(centroids[:, 0], centroids[:, 1], centroids[:, 2])  # (N,)
 # norm used for the colorbar, which sets the color to be assigned to each face
@@ -120,10 +115,6 @@ norm_f_values = plt.Normalize(vmin=grid_f_values.min(), vmax=grid_f_values.max()
 # cmap = plt.get_cmap('viridis')
 
 
-
-
-# the 3 edges of a triangle, as index pairs into the 3 vertices
-edge_pairs = [(0,1),(0,2),(1,2)]
 
 '''
 start = [
@@ -140,10 +131,9 @@ end = [
 
 start = []
 end = []
-for tri in triangle_coordinates:        # tet is (4,3)
-    for a, b in edge_pairs:
-        start.append(tri[a])
-        end.append(tri[b])
+for tri in edge_coordinates:        # tet is (4,3)
+    start.append(tri[0])
+    end.append(tri[1])
 
 start = np.array(start)                  # (6 N, 3)
 end   = np.array(end)
@@ -183,17 +173,17 @@ colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
                                     parameters['colorbar_size'][0],
                                     parameters['colorbar_size'][1]])
 
-all_triangles = [i for i in range(len(data_triangles))]
+all_edges = [i for i in range(len(data_edges))]
 
 # triangles_to_plot=[i for i in range(len(data_triangles))]
-triangles_to_plot = []
+edges_to_plot = []
 
 colorbar = None
 
 
 def plot_snapshot(n, fig, azimuth_altitude):
 
-    global triangles_to_plot, colorbar
+    global edges_to_plot, colorbar
 
 
     # =============
@@ -222,26 +212,26 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
 
     if (n == 0) or (n == parameters['number_of_frames_1']):
-        # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames_1'] (beginnning of color draw) -> set `triangles_to_plot` to an empty list
-        triangles_to_plot = []
+        # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames_1'] (beginnning of color draw) -> set `edges_to_plot` to an empty list
+        edges_to_plot = []
 
 
     if n < parameters['number_of_frames_1']:
 
-        # construct the list of rows to pick into `edge_data_frame` by converting `triangles_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `triangles_to_plot`)
-        edge_rows = [3 * t + k for t in triangles_to_plot for k in range(3)]
+        # construct the list of rows to pick into `edge_data_frame` by converting `edges_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `edges_to_plot`)
+        edge_rows = [3 * t + k for t in edges_to_plot for k in range(3)]
 
     else:
 
 
-        # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `triangles_to_plot` replaced by `all_trianges`
-        edge_rows = [3 * t + k for t in all_triangles for k in range(3)]
+        # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `edges_to_plot` replaced by `all_edges`
+        edge_rows = [3 * t + k for t in all_edges for k in range(3)]
 
         # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
-        faces = triangle_coordinates[triangles_to_plot]    # (M, 3, 3)
-        faces = [[vertex[:2] for vertex in triangle] for triangle in faces]
+        faces = edge_coordinates[edges_to_plot]    # (M, 3, 3)
+        faces = [[vertex[:1] for vertex in edge] for edge in faces]
 
-        colors = gr.cb.color_map_type(norm_f_values(grid_f_values[triangles_to_plot]))
+        colors = gr.cb.color_map_type(norm_f_values(grid_f_values[edges_to_plot]))
         poly = PolyCollection(faces, 
                                 facecolors=colors,
                                 edgecolors='black',   
@@ -252,13 +242,10 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
 
     # plot the mesh 
-    gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
-                 zorder=1)
+    # gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
+    #              zorder=1)
 
-
-
-
-    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], parameters['h']],
                     tick_length=parameters['axis_tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
@@ -280,15 +267,15 @@ def plot_snapshot(n, fig, azimuth_altitude):
     
    
     # update `triangles_to_plot`
-    if len(triangles_to_plot) > 1:
+    if len(edges_to_plot) > 1:
 
 
 
-        match = pd.Series(False, index=data_triangles.index)
+        match = pd.Series(False, index=data_edges.index)
 
-        for i in range(len(triangles_to_plot)):
+        for i in range(len(edges_to_plot)):
 
-            plotted_triangle = data_triangles.iloc[triangles_to_plot[i]]
+            plotted_triangle = data_edges.iloc[edges_to_plot[i]]
 
             '''
             tags of the vertices in the last triangle in `triangles_to_plot`
@@ -302,22 +289,22 @@ def plot_snapshot(n, fig, azimuth_altitude):
             '''
             match = match | ( 
 
-                data_triangles['p_1'].eq(p_1_vertex) 
-                | data_triangles['p_1'].eq(p_2_vertex)
-                | data_triangles['p_1'].eq(p_3_vertex)
+                data_edges['p_1'].eq(p_1_vertex) 
+                | data_edges['p_1'].eq(p_2_vertex)
+                | data_edges['p_1'].eq(p_3_vertex)
 
-                | data_triangles['p_2'].eq(p_1_vertex)
-                | data_triangles['p_2'].eq(p_2_vertex)
-                | data_triangles['p_2'].eq(p_3_vertex)
+                | data_edges['p_2'].eq(p_1_vertex)
+                | data_edges['p_2'].eq(p_2_vertex)
+                | data_edges['p_2'].eq(p_3_vertex)
 
-                | data_triangles['p_3'].eq(p_1_vertex)
-                | data_triangles['p_3'].eq(p_2_vertex)
-                | data_triangles['p_3'].eq(p_3_vertex)
+                | data_edges['p_3'].eq(p_1_vertex)
+                | data_edges['p_3'].eq(p_2_vertex)
+                | data_edges['p_3'].eq(p_3_vertex)
 
                 )
 
         # don't reuse rows already in the path
-        match.iloc[triangles_to_plot] = False
+        match.iloc[edges_to_plot] = False
 
     else: 
 
@@ -333,13 +320,13 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
     else:
         # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
-        remaining_triangles = [i for i in range(len(data_triangles)) if i not in triangles_to_plot]
+        remaining_triangles = [i for i in range(len(data_edges)) if i not in edges_to_plot]
         next_triangle = remaining_triangles[-1] if remaining_triangles else None
 
     if next_triangle != None:
-        triangles_to_plot.append(next_triangle)
+        edges_to_plot.append(next_triangle)
         # flatten `triangles_to_plot`
-        triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
+        edges_to_plot = list(more_itertools.collapse(edges_to_plot))
 
         pass
 
