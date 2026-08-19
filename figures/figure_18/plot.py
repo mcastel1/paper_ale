@@ -66,6 +66,9 @@ print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 # mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/1d/line', "solution")
 
+# solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/poisson_equation/solve_u', "solution")
+
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 
 # labels of columns to read
@@ -73,6 +76,10 @@ data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('
 
 # load the data on the edges of the mesh: each edge is a list of 2 vertex labels, labelled as in `data_vertices`: these vertices delimit the edge
 data_edges = pd.read_csv(os.path.join(mesh_path, "edges.csv"))
+
+# load data for the field f
+data_u = pd.read_csv(os.path.join(solution_path, "u.csv"))
+
 
 min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
 
@@ -273,7 +280,9 @@ def plot_snapshot(n, fig, azimuth_altitude):
     mesh_nodes_x_coord = pd.concat([edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["end:0"]])
     mesh_nodes_y_coord = pd.concat([edge_data_frame.iloc[edge_rows]["start:1"], edge_data_frame.iloc[edge_rows]["end:1"]])
 
-
+    '''
+    plot the mesh nodes
+    '''
     ax.scatter(mesh_nodes_x_coord, mesh_nodes_y_coord,
                 color=parameters['mesh_node_color'], 
                 s=parameters['mesh_node_size'])
