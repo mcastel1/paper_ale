@@ -6,13 +6,14 @@ this animation plots
 
 
 import matplotlib
+from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
 import more_itertools 
-from matplotlib.collections import PolyCollection
 import numpy as np
 import os
 import pandas as pd
 import proplot as pplt
+from scipy.interpolate import lagrange as lag
 import shutil
 import warnings
 
@@ -267,6 +268,21 @@ def plot_snapshot(n, fig, azimuth_altitude):
                         color=parameters['f_dof_color'], 
                         s=parameters['f_dof_size'],
                         zorder=1)
+
+            start_p = list(zip(data_u[':0'], data_u['f']))
+            end_p = list(zip(data_u[':0'], data_u[':1']))
+
+            start_end_segments = np.stack([start_p, end_p], axis=1) 
+
+            lc = LineCollection(start_end_segments,
+                                linewidths=parameters['f_dof_line_width'],
+                                color=parameters['f_dof_color'],
+                                clip_on=False
+                    )
+            ax.add_collection(lc)
+
+            print(f' ')
+            pass
 
 
     # plot the mesh 
