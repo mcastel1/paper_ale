@@ -246,14 +246,38 @@ def plot_snapshot(n, fig, azimuth_altitude):
                 zorder=1)
 
     # 
-    print(f'plotted edges = {edge_data_frame.iloc[edge_rows]}')
-    print(f'vertices to plot = {edge_data_frame.iloc[edge_rows]["start:0"]}, {edge_data_frame.iloc[edge_rows]["start:1"]}')
+    # print(f'plotted edges = {edge_data_frame.iloc[edge_rows]}')
+    # print(f'vertices to plot = {edge_data_frame.iloc[edge_rows]["start:0"]}, {edge_data_frame.iloc[edge_rows]["start:1"]}')
 
-    # vertices_to_plot = list(zip(edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["start:1"]))
+    '''
+    collect the x and y coordinates of the start and end mesh nodes of the edges in `edge_rows` and store them in `mesh_nodes_x_coord`, `mesh_nodes_y_coord`
+    
+    mesh_nodes_x_coord = [
+        x_coord_start_vertex_of_plotted_edge_0, 
+        x_coord_start_vertex_of_plotted_edge_1,
+        ..., 
+        x_coord_end_vertex_of_plotted_edge_0, 
+        x_coord_end_vertex_of_plotted_edge_1,
+        ..., 
+    ]
+    
+    mesh_nodes_y_coord = [
+        y_coord_start_vertex_of_plotted_edge_0, 
+        y_coord_start_vertex_of_plotted_edge_1,
+        ..., 
+        y_coord_end_vertex_of_plotted_edge_0, 
+        y_coord_end_vertex_of_plotted_edge_1,
+        ..., 
+    ]
+    '''
+    mesh_nodes_x_coord = pd.concat([edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["end:0"]])
+    mesh_nodes_y_coord = pd.concat([edge_data_frame.iloc[edge_rows]["start:1"], edge_data_frame.iloc[edge_rows]["end:1"]])
 
-    ax.scatter(edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["start:1"],
-                color='cyan', s=1)
-    # 
+
+    ax.scatter(mesh_nodes_x_coord, mesh_nodes_y_coord,
+                color=parameters['mesh_node_color'], 
+                s=parameters['mesh_node_size'])
+    
 
     
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], parameters['h']],
