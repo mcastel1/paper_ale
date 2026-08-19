@@ -148,10 +148,8 @@ edge_data_frame contains all the edges obtained from `edge_coordinates` and it h
 edge_data_frame = pd.DataFrame({
     clab.label_start_x_column: start[:, 0],
     clab.label_start_y_column: start[:, 1],
-    clab.label_start_z_column: start[:, 2],
     clab.label_end_x_column:   end[:, 0],
-    clab.label_end_y_column:   end[:, 1],
-    clab.label_end_z_column:   end[:, 2],
+    clab.label_end_y_column:   end[:, 1]
 })
 
 
@@ -219,13 +217,13 @@ def plot_snapshot(n, fig, azimuth_altitude):
     if n < parameters['number_of_frames_1']:
 
         # construct the list of rows to pick into `edge_data_frame` by converting `edges_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `edges_to_plot`)
-        edge_rows = [3 * t + k for t in edges_to_plot for k in range(3)]
+        edge_rows = [t for t in edges_to_plot]
 
     else:
 
 
         # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `edges_to_plot` replaced by `all_edges`
-        edge_rows = [3 * t + k for t in all_edges for k in range(3)]
+        edge_rows = [t for t in all_edges]
 
         # build a list of `faces` from `edges` to plot -> I will draw colors on edges which correspond to `edges to plot`
         faces = edge_coordinates[edges_to_plot]    # (M, 3, 3)
@@ -242,12 +240,14 @@ def plot_snapshot(n, fig, azimuth_altitude):
         ax.add_collection(poly)
         '''
 
-    '''
-        # plot the mesh 
-        gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
-                    zorder=1)
 
-    '''
+    # plot the mesh 
+    print(f'edge_data_frame = {edge_data_frame}\nedge_rows = {edge_rows}')
+
+    gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
+                zorder=1)
+
+    
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], parameters['h']],
                     tick_length=parameters['axis_tick_length'],
                     line_width=parameters['axis_line_width'],
