@@ -242,10 +242,15 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
 
     # plot the mesh 
-    print(f'edge_data_frame = {edge_data_frame}\nedge_rows = {edge_rows}')
-
     gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
                 zorder=1)
+
+    # 
+    print(f'plotted edges = {edge_data_frame.iloc[edge_rows]}')
+    print(f'vertices to plot = {edge_data_frame.iloc[edge_rows]["start:0"]}, {edge_data_frame.iloc[edge_rows]["start:1"]}')
+
+    vertices_to_plot = list(zip(edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["start:1"]))
+    # 
 
     
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], parameters['h']],
