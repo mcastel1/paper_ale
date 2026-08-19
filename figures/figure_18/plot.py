@@ -1,7 +1,7 @@
 '''
 this animation plots 
-    - in a first part, the mesh, by adding subsequently mesh triangles over time
-    - in a second part, a function `f` on the mesh surface, by coloring subsequent triangles of the mesh in terms of a color code corresponding to `f`
+    - in a first part, the mesh, by adding subsequently mesh edges over time
+    - in a second part, a function `f` on the mesh surface, by coloring subsequent edges of the mesh in terms of a color code corresponding to `f`
 '''
 
 
@@ -105,7 +105,7 @@ for i in range(len(data_edges)):
 edge_coordinates = np.array(edge_coordinates)
 
 
-# list of centroids of the triangles
+# list of centroids of the edges
 centroids = edge_coordinates.mean(axis=1)          # (N, 3)
 # live of values of `f` computed on each centroid
 grid_f_values = f(centroids[:, 0], centroids[:, 1], centroids[:, 2])  # (N,)
@@ -139,7 +139,7 @@ start = np.array(start)                  # (6 N, 3)
 end   = np.array(end)
 
 '''
-edge_data_frame contains all the edges obtained from `triangle_coordinates` and it has the structure
+edge_data_frame contains all the edges obtained from `edge_coordinates` and it has the structure
 
     p_start_edge_0_x,p_start_edge_0_y,p_start_edge_0_z,p_end_edge_0_x,p_end_edge_0_y,p_end_edge_0_z,
     p_start_edge_1_x,p_start_edge_1_y,p_start_edge_1_z,p_end_edge_1_x,p_end_edge_1_y,p_end_edge_1_z,
@@ -175,7 +175,7 @@ colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
 
 all_edges = [i for i in range(len(data_edges))]
 
-# triangles_to_plot=[i for i in range(len(data_triangles))]
+# edges_to_plot=[i for i in range(len(data_edges))]
 edges_to_plot = []
 
 colorbar = None
@@ -227,11 +227,12 @@ def plot_snapshot(n, fig, azimuth_altitude):
         # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `edges_to_plot` replaced by `all_edges`
         edge_rows = [3 * t + k for t in all_edges for k in range(3)]
 
-        # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
+        # build a list of `faces` from `edges` to plot -> I will draw colors on edges which correspond to `edges to plot`
         faces = edge_coordinates[edges_to_plot]    # (M, 3, 3)
         faces = [[vertex[:1] for vertex in edge] for edge in faces]
 
         colors = gr.cb.color_map_type(norm_f_values(grid_f_values[edges_to_plot]))
+        '''
         poly = PolyCollection(faces, 
                                 facecolors=colors,
                                 edgecolors='black',   
@@ -239,6 +240,7 @@ def plot_snapshot(n, fig, azimuth_altitude):
                                 alpha=parameters['alpha_faces'], 
                                 zorder=0)
         ax.add_collection(poly)
+        '''
 
 
     # plot the mesh 
@@ -266,40 +268,31 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     )
     
    
-    # update `triangles_to_plot`
+    # update `edges_to_plot`
     if len(edges_to_plot) > 1:
-
-
 
         match = pd.Series(False, index=data_edges.index)
 
         for i in range(len(edges_to_plot)):
 
-            plotted_triangle = data_edges.iloc[edges_to_plot[i]]
+            plotted_edge = data_edges.iloc[edges_to_plot[i]]
 
             '''
-            tags of the vertices in the last triangle in `triangles_to_plot`
+            tags of the vertices in the last edge in `edges_to_plot`
             '''
-            p_1_vertex = plotted_triangle[['p_1']].values[0]
-            p_2_vertex = plotted_triangle[['p_2']].values[0]
-            p_3_vertex = plotted_triangle[['p_3']].values[0]
+            p_1_vertex = plotted_edge[['p_1']].values[0]
+            p_2_vertex = plotted_edge[['p_2']].values[0]
 
             '''
-            find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
+            find other tetrahedra that have `p_1_vertex` or `p_2_vertex` equal to either `p_1` or `p_2`: match[i] = True if the i-th edge contains either of these, and False otherwise
             '''
             match = match | ( 
 
                 data_edges['p_1'].eq(p_1_vertex) 
                 | data_edges['p_1'].eq(p_2_vertex)
-                | data_edges['p_1'].eq(p_3_vertex)
 
                 | data_edges['p_2'].eq(p_1_vertex)
                 | data_edges['p_2'].eq(p_2_vertex)
-                | data_edges['p_2'].eq(p_3_vertex)
-
-                | data_edges['p_3'].eq(p_1_vertex)
-                | data_edges['p_3'].eq(p_2_vertex)
-                | data_edges['p_3'].eq(p_3_vertex)
 
                 )
 
@@ -313,27 +306,28 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
     if match.any():
 
-        next_triangle = []
+        next_edge = []
         for i in range(len(match)):
             if match[i]:
-                next_triangle.append(i)
+                next_edge.append(i)
 
     else:
-        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
-        remaining_triangles = [i for i in range(len(data_edges)) if i not in edges_to_plot]
-        next_triangle = remaining_triangles[-1] if remaining_triangles else None
+        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new edge not in `edges_to_plot`
 
-    if next_triangle != None:
-        edges_to_plot.append(next_triangle)
-        # flatten `triangles_to_plot`
+        remaining_edges = [i for i in range(len(data_edges)) if i not in edges_to_plot]
+        next_edge = remaining_edges[-1] if remaining_edges else None
+
+    if next_edge != None:
+
+        edges_to_plot.append(next_edge)
+        # flatten `edges_to_plot`
         edges_to_plot = list(more_itertools.collapse(edges_to_plot))
 
         pass
 
 
 
-        
-
+    
 plot_snapshot(parameters['number_of_frames_2'], fig, [120, 45])
 plt.savefig(figure_path + "_large.pdf")
 os.system(
