@@ -249,7 +249,10 @@ def plot_snapshot(n, fig, azimuth_altitude):
     print(f'plotted edges = {edge_data_frame.iloc[edge_rows]}')
     print(f'vertices to plot = {edge_data_frame.iloc[edge_rows]["start:0"]}, {edge_data_frame.iloc[edge_rows]["start:1"]}')
 
-    vertices_to_plot = list(zip(edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["start:1"]))
+    # vertices_to_plot = list(zip(edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["start:1"]))
+
+    ax.scatter(edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["start:1"],
+                color='cyan', s=1)
     # 
 
     
