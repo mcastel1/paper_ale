@@ -242,11 +242,12 @@ def plot_snapshot(n, fig, azimuth_altitude):
         ax.add_collection(poly)
         '''
 
+    '''
+        # plot the mesh 
+        gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
+                    zorder=1)
 
-    # plot the mesh 
-    # gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
-    #              zorder=1)
-
+    '''
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], parameters['h']],
                     tick_length=parameters['axis_tick_length'],
                     line_width=parameters['axis_line_width'],
