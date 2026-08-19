@@ -57,7 +57,7 @@ mesh_parameters = io.read_parameters_from_csv_file(
 )
 
 
-number_of_frames = parameters['number_of_frames_1'] + parameters['number_of_frames_2']
+number_of_frames = parameters['number_of_frames_1'] + parameters['number_of_frames_2'] + parameters['number_of_frames_3']
 
 # define the folder where to read the data
 print("Current working directory:", os.getcwd())
@@ -82,6 +82,7 @@ data_u = pd.read_csv(os.path.join(solution_path, "u.csv"))
 
 
 min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
+h = np.max(data_u['f'])
 
 print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]]}')
 
@@ -179,11 +180,25 @@ colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
                                     parameters['colorbar_size'][1]])
 
 all_edges = [i for i in range(len(data_edges))]
+all_edge_rows = [t for t in range(len(data_edges))]
 
 # edges_to_plot=[i for i in range(len(data_edges))]
 edges_to_plot = []
 
 colorbar = None
+
+'''
+plot the DOFs
+'''
+def plot_dof(ax):
+
+    dof_x_coord = data_u[':0']
+    dof_y_coord = data_u[':1']
+
+    ax.scatter(dof_x_coord, dof_y_coord,
+                color=parameters['dof_color'], 
+                s=parameters['dof_size'],
+                zorder=1)
 
 
 def plot_snapshot(n, fig, azimuth_altitude):
@@ -226,35 +241,38 @@ def plot_snapshot(n, fig, azimuth_altitude):
         # construct the list of rows to pick into `edge_data_frame` by converting `edges_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `edges_to_plot`)
         edge_rows = [t for t in edges_to_plot]
 
-    else:
+    else: 
 
+        if n <  parameters['number_of_frames_1']+parameters['number_of_frames_2']:
 
-        # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `edges_to_plot` replaced by `all_edges`
-        edge_rows = [t for t in all_edges]
+            # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `edges_to_plot` replaced by `all_edges`
+            edge_rows = all_edge_rows
 
-        # build a list of `faces` from `edges` to plot -> I will draw colors on edges which correspond to `edges to plot`
-        faces = edge_coordinates[edges_to_plot]    # (M, 3, 3)
-        faces = [[vertex[:1] for vertex in edge] for edge in faces]
+            plot_dof(ax)
+            
+        else: 
 
-        colors = gr.cb.color_map_type(norm_f_values(grid_f_values[edges_to_plot]))
-        '''
-        poly = PolyCollection(faces, 
-                                facecolors=colors,
-                                edgecolors='black',   
-                                linewidths=parameters['mesh_line_width'],                    
-                                alpha=parameters['alpha_faces'], 
-                                zorder=0)
-        ax.add_collection(poly)
-        '''
+            # n > parameters['number_of_frames_1']+parameters['number_of_frames_2']: I want to plot the full mesh -> same as the case above, with `edges_to_plot` replaced by `all_edges`
+            edge_rows = all_edge_rows
+
+            plot_dof(ax)
+
+            '''
+            plot u
+            '''
+            dof_f_x_coord = data_u[':0']
+            dof_f_y_coord = data_u['f']
+
+            ax.scatter(dof_f_x_coord, dof_f_y_coord,
+                        color=parameters['f_dof_color'], 
+                        s=parameters['f_dof_size'],
+                        zorder=1)
 
 
     # plot the mesh 
     gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
-                zorder=1)
+                zorder=0)
 
-    # 
-    # print(f'plotted edges = {edge_data_frame.iloc[edge_rows]}')
-    # print(f'vertices to plot = {edge_data_frame.iloc[edge_rows]["start:0"]}, {edge_data_frame.iloc[edge_rows]["start:1"]}')
 
     '''
     collect the x and y coordinates of the start and end mesh nodes of the edges in `edge_rows` and store them in `mesh_nodes_x_coord`, `mesh_nodes_y_coord`
@@ -285,11 +303,14 @@ def plot_snapshot(n, fig, azimuth_altitude):
     '''
     ax.scatter(mesh_nodes_x_coord, mesh_nodes_y_coord,
                 color=parameters['mesh_node_color'], 
-                s=parameters['mesh_node_size'])
-    
+                s=parameters['mesh_node_size'],
+                zorder=0)
+
+
+
 
     
-    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], parameters['h']],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], h],
                     tick_length=parameters['axis_tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
