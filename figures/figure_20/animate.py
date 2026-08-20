@@ -24,6 +24,7 @@ writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(
 
 def init_animation():
     plot.u_dofs_to_plot = []
+    plot.colorbar = None
 
 def update_animation(n):
     print("Calling update_animation with n = ", n, " ... ", flush=True)
