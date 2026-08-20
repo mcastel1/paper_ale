@@ -6,6 +6,7 @@ this animation plots
 
 
 import matplotlib
+from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -197,10 +198,13 @@ def plot_dof(list, ax):
                 clip_on=False,
                 zorder=1)
 
-dofs_to_plot = []
+all_dofs = [i for i in range(len(data_u))]
+u_dofs_to_plot = []
+
 
 def plot_snapshot(n, fig):
 
+    global u_dofs_to_plot
 
     # =============
     # mesh plot
@@ -223,15 +227,41 @@ def plot_snapshot(n, fig):
                 clip_on=False,
                 zorder=0)
 
-
     '''
     plot DOFs
     ''' 
-    plot_dof(dofs_to_plot, ax)
+    plot_dof(all_dofs, ax)
+
+
+    '''
+    plot u DOFs
+    '''
+
+
+    dof_u_x_coord = data_u[':0'][u_dofs_to_plot]
+    dof_u_y_coord = data_u['f'][u_dofs_to_plot]
+
+    ax.scatter(dof_u_x_coord, dof_u_y_coord,
+                color=parameters['f_dof_color'], 
+                s=parameters['f_dof_size'],
+                zorder=1)
+
+    start_p = list(zip(data_u[':0'][u_dofs_to_plot], data_u['f'][u_dofs_to_plot]))
+    end_p = list(zip(data_u[':0'][u_dofs_to_plot], data_u[':1'][u_dofs_to_plot]))
+
+    start_end_segments = np.stack([start_p, end_p], axis=1) 
+
+    line_collection = LineCollection(start_end_segments,
+                        linewidths=parameters['f_dof_line_width'],
+                        color=parameters['f_dof_color'],
+                        clip_on=False
+            )
+    ax.add_collection(line_collection)
 
     if(n < len(data_u)):
-        dofs_to_plot.append(n)
+        u_dofs_to_plot.append(n)
 
+    
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], h],
                     tick_length=parameters['axis_tick_length'],
                     line_width=parameters['axis_line_width'],
