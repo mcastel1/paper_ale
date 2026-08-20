@@ -9,9 +9,12 @@ The geometry of \cref{fig_ref_cur_mem} may represent \ac{bflu} being confined in
 \subsubsection{\Acl{mem} motion}
 \label{sec_fl_mem_mem}
 
-Both the physical nature and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: its material elements can both flow  tangentially and move normally to it.
-Such fluid behavior is  suited to an Eulerian description, which then needs to be connected to the Lagrangian description used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}. From  the mathematical, numerical and physical stand point, such \acp{pde} are significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}. Third, the geometrical description of \ac{mem} requires fixing an appropriate \textit{gauge}.
-In fact, a general parametrization of \ac{mem} is given by two functions $\bxmemc(\xcoord^1)$. Both of these functions  depend on the curvilinear coordinate $\xcoord^1$ which is defined in the \ac{ref} domain of \ac{mem}, $\pomlineeqr$, see \cref{fig_ref_cur_mem}---note that here $\xcoord^i$ differs from the Cartesian coordinate $\xcartesian^\alpha$.
+Both the physical nature and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: Its material elements can  flow tangentially to the \ac{mem} shape, which also moves subjected to  bending-rigidity forces, and to the force exerted on it by \ac{bflu}.
+While the tangential motion is naturally suited to an Eulerian description \cite{landauFluidMechanics1987}, the shape motion---reminescent of that of an elastic body---is best described with a Lagrangian approach \cite{lacarbonaraNonlinearStructuralMechanics2013}.
+Also, such shape motion needs to be connected to the Lagrangian approach used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}. From  the mathematical and numerical point of view, such \acp{pde} are significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}. On top of this, from the physical standpoint, such fourth-order equations require more  \acp{bc} than the second-order ones for \ac{ela}: Such \acp{bc} may specify a number of physical features of the \ac{mem} system, such as forces, positions, torques, or stresses.
+%sign
+Third, the geometrical description of \ac{mem} requires fixing an appropriate \textit{gauge}.
+In fact, a general parametrization of \ac{mem} is given by two functions---the two Cartesian components of $\bxmemc(\xcoord^1)$. Both of these functions  depend on the curvilinear coordinate $\xcoord^1$ which is defined in the \ac{ref} domain of \ac{mem}, $\pomlineeqr$, see \cref{fig_ref_cur_mem}---note that here $\xcoord^i$ differs from the Cartesian coordinate $\xcartesian^\alpha$.
 Despite this pair of functions, a single \ac{pde}  determines the \ac{mem} shape \cite{zhong-canBendingEnergyVesicle1989}.
 To understand this redundancy, consider the  stretching field $\nu>0$, defined by
 \begin{align}\label{eq_intro_nu}
@@ -19,8 +22,7 @@ To understand this redundancy, consider the  stretching field $\nu>0$, defined b
         \label{eq_def_e}
         \bevec{i} & \equiv \pder{{\bxmemc}}{\xcoord^i}.
 \end{align}
-It is then easy to realize that two  parametrizations with different $\nu$s
-may yield the same physical shape. Such  redundancy  may be removed by a gauge fixing, i.e., by adding a constraint on $\bxmemc$, or its derivatives.
+It is then easy to realize that two  parametrizations with different $\nu$s can yield the same physical shape. Such  redundancy  may be removed by a gauge fixing, i.e., by adding a constraint on $\bxmemc$, or its derivatives.
 Two common gauge choices are the Monge  \cite{hsiungFirstCourseDifferential1981,desernoFluidLipidMembranes2015}, or the arc-length parametrization \cite{derenyiFormationInteractionMembrane2002}, in which one sets
 \be
 \label{eq_arc_length_gauge}
