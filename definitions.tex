@@ -67,8 +67,8 @@
 \providecommand{\xcartesian}{{\mathsf{x}}}
 \newcommand{\xc}[1][]{{\xcartesian_{\current\ifx\empty#1\empty\else\, #1\fi}}}
 \newcommand{\xr}[1][]{{\xcartesian_{\reference\ifx\empty#1\empty\else\, #1\fi}}}
-\providecommand{\xmemc}{{\xc^\mem}}
-\providecommand{\xmemr}{{\xr^\mem}}
+\providecommand{\xmemc}{{\xcartesian_\current^\mem}}
+\providecommand{\xmemr}{{\xcartesian_\reference^\mem}}
 \providecommand{\bxmemc}{{\bm{\xmemc}}}
 \providecommand{\bxmemr}{{\bm{\xmemr}}}
 \providecommand{\bxc}{{\bm{\xcartesian}_{\current}}}
@@ -90,7 +90,7 @@
 
 \providecommand{\eqsfluidbodyref}{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference,eq_fl_rigid_rigid_reference,bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference}
 
-\definecolor{acronym_link_color}{RGB}{0,0,102}
+\definecolor{acronym_link_color}{RGB}{0,51,25}
 
 % elastic moduli
 \providecommand{\focalpoint}{f}
