@@ -6,6 +6,7 @@ this animation plots
 
 
 import matplotlib
+from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -79,10 +80,14 @@ data_u = pd.read_csv(os.path.join(solution_path, "u.csv"))
 
 h = np.max(data_u['f'])
 
+print(f'u min and max = {np.min(data_u["f"])}, {np.max(data_u["f"])}')
+
 
 min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
 
-print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]]}')
+# # function to be plotted on the 3d surface with color code
+# def f(x, y, z):
+#     return 1 + np.cos(2 * np.pi * x) / (1 + x ** 2)
 
 '''
 edge_coordinates = [
@@ -169,6 +174,12 @@ mesh_nodes_y_coord = [
 mesh_nodes_x_coord = pd.concat([edge_data_frame["start:0"], edge_data_frame["end:0"]])
 mesh_nodes_y_coord = pd.concat([edge_data_frame["start:1"], edge_data_frame["end:1"]])
 
+# list of centroids of the edges
+centroids = edge_coordinates.mean(axis=1)          # (N, 3)
+# live of values of `f` computed on each centroid
+grid_f_values = data_u['f']
+# norm used for the colorbar, which sets the color to be assigned to each face
+norm_f_values = plt.Normalize(vmin=grid_f_values.min(), vmax=grid_f_values.max())
 
 fig = pplt.figure(figsize=np.array(parameters['figure_size']),
                   left=parameters['figure_margin'][0][0],
@@ -182,6 +193,11 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 
 # create axes
 fig.add_subplot(1, 1, 1)
+
+colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
+                                    parameters['colorbar_position'][1],
+                                    parameters['colorbar_size'][0],
+                                    parameters['colorbar_size'][1]])
 
 '''
 plot the a list of DOFs
@@ -197,10 +213,15 @@ def plot_dof(list, ax):
                 clip_on=False,
                 zorder=1)
 
-dofs_to_plot = []
+all_dofs = [i for i in range(len(data_u))]
+u_dofs_to_plot = []
+colorbar = None
+
+
 
 def plot_snapshot(n, fig):
 
+    global u_dofs_to_plot, colorbar
 
     # =============
     # mesh plot
@@ -209,6 +230,20 @@ def plot_snapshot(n, fig):
     ax = fig.axes[0]  # Use the existing axis
     ax.set_box_aspect(1)
     ax.set_axis_off()
+
+    if colorbar is None: 
+
+        colorbar, _ = gr.cb.make_colorbar(fig, grid_f_values, np.min(grid_f_values), np.max(grid_f_values),
+                    position=parameters['colorbar_position'], 
+                    size=parameters['colorbar_size'],
+                    label_pad=parameters['colorbar_axis_label_offset'],
+                    label=parameters['colorbar_axis_label'],
+                    font_size=parameters['colorbar_font_size'],
+                    tick_label_offset=parameters['colorbar_tick_label_offset'],
+                    tick_length=parameters['colorbar_tick_length'],
+                    line_width=parameters['colorbar_line_width'],
+                    axis=colorbar_axis
+        )
             
     # plot the mesh 
     gr.plot_2d_mesh(ax, edge_data_frame, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
@@ -223,16 +258,56 @@ def plot_snapshot(n, fig):
                 clip_on=False,
                 zorder=0)
 
-
     '''
     plot DOFs
     ''' 
-    plot_dof(dofs_to_plot, ax)
+    plot_dof(all_dofs, ax)
+
+
+    '''
+    plot u DOFs
+    '''
+
+    dof_u_x_coord = data_u[':0'][u_dofs_to_plot]
+    dof_u_y_coord = data_u['f'][u_dofs_to_plot]
+
+    # build colors in order to color the points cooredponding to u DOF
+    colors = data_u['f'][u_dofs_to_plot]
+
+    cbar_vmin, cbar_vmax = colorbar.mappable.get_clim()
+    # plot the points corresponding to u DOF
+    ax.scatter(dof_u_x_coord, dof_u_y_coord,
+                c=colors, 
+                cmap=gr.cb.color_map_type,
+                vmin=cbar_vmin,
+                vmax=cbar_vmax,                
+                s=parameters['u_dof_size'],
+                clip_on=False,
+                zorder=2)
+
+
+    '''
+    plot the lines between the x axis and u DOF
+    '''
+
+    start_p = list(zip(data_u[':0'][u_dofs_to_plot], data_u['f'][u_dofs_to_plot]))
+    end_p = list(zip(data_u[':0'][u_dofs_to_plot], data_u[':1'][u_dofs_to_plot]))
+
+    start_end_segments = np.stack([start_p, end_p], axis=1) 
+
+    line_collection = LineCollection(start_end_segments,
+                        linewidths=parameters['u_dof_line_width'],
+                        color=parameters['u_dof_color'],
+                        clip_on=False,
+                        zorder=1
+            )
+    ax.add_collection(line_collection)
 
     if(n < len(data_u)):
-        dofs_to_plot.append(n)
+        u_dofs_to_plot.append(n)
 
-    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['x_r']-mesh_parameters['x_l'], h],
+    
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['x_r'] - mesh_parameters['x_l'], h],
                     tick_length=parameters['axis_tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
@@ -247,7 +322,9 @@ def plot_snapshot(n, fig):
                     n_minor_ticks=parameters['axis_n_minor_ticks'],
                     minor_tick_length=parameters['axis_minor_tick_length'],
                     tick_label_angle=parameters['axis_tick_label_angle'],
-                    axis_label_angle=parameters['axis_label_angle']
+                    axis_label_angle=parameters['axis_label_angle'],
+                    colorbar_axis=colorbar_axis,
+                    colorbar_axis_offset=parameters['colorbar_position']
                     )
     
    
