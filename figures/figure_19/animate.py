@@ -14,7 +14,7 @@ animation_path = os.path.join(os.path.dirname(os.path.abspath(
 
 
 print(
-    f"number of frames: {len(plot.data_edges) - len(plot.edges_to_plot)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.parameters['number_of_frames']/plot.parameters['frame_stride'])}",
+    f"number of frames: {plot.parameters['number_of_frames']} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.parameters['number_of_frames']/plot.parameters['frame_stride'])}",
     flush=True)
 
 
