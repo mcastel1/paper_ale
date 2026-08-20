@@ -268,14 +268,14 @@ def plot_snapshot(n, fig):
     plot u DOFs
     '''
 
-
     dof_u_x_coord = data_u[':0'][u_dofs_to_plot]
     dof_u_y_coord = data_u['f'][u_dofs_to_plot]
 
+    # build colors in order to color the points cooredponding to u DOF
     colors = data_u['f'][u_dofs_to_plot]
+
     cbar_vmin, cbar_vmax = colorbar.mappable.get_clim()
-
-
+    # plot the points corresponding to u DOF
     ax.scatter(dof_u_x_coord, dof_u_y_coord,
                 c=colors, 
                 cmap=gr.cb.color_map_type,
@@ -286,6 +286,9 @@ def plot_snapshot(n, fig):
                 zorder=2)
 
 
+    '''
+    plot the lines between the x axis and u DOF
+    '''
 
     start_p = list(zip(data_u[':0'][u_dofs_to_plot], data_u['f'][u_dofs_to_plot]))
     end_p = list(zip(data_u[':0'][u_dofs_to_plot], data_u[':1'][u_dofs_to_plot]))
