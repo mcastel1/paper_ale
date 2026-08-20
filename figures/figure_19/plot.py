@@ -6,14 +6,11 @@ this animation plots
 
 
 import matplotlib
-from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
-import more_itertools 
 import numpy as np
 import os
 import pandas as pd
 import proplot as pplt
-from scipy.interpolate import lagrange as lag
 import shutil
 import warnings
 
@@ -80,15 +77,12 @@ data_edges = pd.read_csv(os.path.join(mesh_path, "edges.csv"))
 # load data for the field f
 data_u = pd.read_csv(os.path.join(solution_path, "u.csv"))
 
-
-min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
 h = np.max(data_u['f'])
 
-print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]]}')
 
-# function to be plotted on the 3d surface with color code
-def f(x, y, z):
-    return np.sqrt(x**2) * np.cos(2.0*np.pi*x/(min_max[0][1] - min_max[0][0])) 
+min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
+
+print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]]}')
 
 '''
 edge_coordinates = [
@@ -111,8 +105,6 @@ for i in range(len(data_edges)):
         ])
 
 edge_coordinates = np.array(edge_coordinates)
-
-
 
 
 '''
@@ -152,6 +144,32 @@ edge_data_frame = pd.DataFrame({
 })
 
 
+
+'''
+collect the x and y coordinates of the start and end mesh nodes of the edges in `edge_rows` and store them in `mesh_nodes_x_coord`, `mesh_nodes_y_coord`
+
+mesh_nodes_x_coord = [
+    x_coord_start_vertex_of_plotted_edge_0, 
+    x_coord_start_vertex_of_plotted_edge_1,
+    ..., 
+    x_coord_end_vertex_of_plotted_edge_0, 
+    x_coord_end_vertex_of_plotted_edge_1,
+    ..., 
+]
+
+mesh_nodes_y_coord = [
+    y_coord_start_vertex_of_plotted_edge_0, 
+    y_coord_start_vertex_of_plotted_edge_1,
+    ..., 
+    y_coord_end_vertex_of_plotted_edge_0, 
+    y_coord_end_vertex_of_plotted_edge_1,
+    ..., 
+]
+'''
+mesh_nodes_x_coord = pd.concat([edge_data_frame["start:0"], edge_data_frame["end:0"]])
+mesh_nodes_y_coord = pd.concat([edge_data_frame["start:1"], edge_data_frame["end:1"]])
+
+
 fig = pplt.figure(figsize=np.array(parameters['figure_size']),
                   left=parameters['figure_margin'][0][0],
                   right=parameters['figure_margin'][0][1],
@@ -165,21 +183,23 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # create axes
 fig.add_subplot(1, 1, 1)
 
+'''
+plot the a list of DOFs
+'''
+def plot_dof(list, ax):
 
+    dof_x_coord = data_u[':0'][list]
+    dof_y_coord = data_u[':1'][list]
 
-all_edges = [i for i in range(len(data_edges))]
-all_edge_rows = [t for t in range(len(data_edges))]
+    ax.scatter(dof_x_coord, dof_y_coord,
+                color=parameters['dof_color'], 
+                s=parameters['dof_size'],
+                clip_on=False,
+                zorder=1)
 
-# edges_to_plot=[i for i in range(len(data_edges))]
-edges_to_plot = []
+dofs_to_plot = []
 
-
-
-
-
-def plot_snapshot(n, fig, azimuth_altitude):
-
-    global edges_to_plot
+def plot_snapshot(n, fig):
 
 
     # =============
@@ -189,62 +209,10 @@ def plot_snapshot(n, fig, azimuth_altitude):
     ax = fig.axes[0]  # Use the existing axis
     ax.set_box_aspect(1)
     ax.set_axis_off()
-
-
-
-    if (n == 0) or (n == parameters['number_of_frames']):
-        # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames'] (beginnning of color draw) -> set `edges_to_plot` to an empty list
-        edges_to_plot = []
-        edge_rows = []
-
-
-    if n < parameters['number_of_frames']:
-
-        # construct the list of rows to pick into `edge_data_frame` by converting `edges_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `edges_to_plot`)
-        edge_rows = [t for t in edges_to_plot]
-
-    else: 
-
-        if n <  parameters['number_of_frames']:
-
-            # n > parameters['number_of_frames']: I want to plot the full mesh -> same as the case above, with `edges_to_plot` replaced by `all_edges`
-            edge_rows = all_edge_rows
-
-            plot_dof(ax)
             
-
-
     # plot the mesh 
-    gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], 
-                    line_width=parameters['mesh_line_width'], 
-                    color='black', 
-                    alpha=parameters['alpha_mesh'], 
-                    zorder=0)
-
-
-    '''
-    collect the x and y coordinates of the start and end mesh nodes of the edges in `edge_rows` and store them in `mesh_nodes_x_coord`, `mesh_nodes_y_coord`
-    
-    mesh_nodes_x_coord = [
-        x_coord_start_vertex_of_plotted_edge_0, 
-        x_coord_start_vertex_of_plotted_edge_1,
-        ..., 
-        x_coord_end_vertex_of_plotted_edge_0, 
-        x_coord_end_vertex_of_plotted_edge_1,
-        ..., 
-    ]
-    
-    mesh_nodes_y_coord = [
-        y_coord_start_vertex_of_plotted_edge_0, 
-        y_coord_start_vertex_of_plotted_edge_1,
-        ..., 
-        y_coord_end_vertex_of_plotted_edge_0, 
-        y_coord_end_vertex_of_plotted_edge_1,
-        ..., 
-    ]
-    '''
-    mesh_nodes_x_coord = pd.concat([edge_data_frame.iloc[edge_rows]["start:0"], edge_data_frame.iloc[edge_rows]["end:0"]])
-    mesh_nodes_y_coord = pd.concat([edge_data_frame.iloc[edge_rows]["start:1"], edge_data_frame.iloc[edge_rows]["end:1"]])
+    gr.plot_2d_mesh(ax, edge_data_frame, parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
+                zorder=0)
 
     '''
     plot the mesh nodes
@@ -256,10 +224,14 @@ def plot_snapshot(n, fig, azimuth_altitude):
                 zorder=0)
 
 
+    '''
+    plot DOFs
+    ''' 
+    if(n < len(data_u)):
+        dofs_to_plot.append(n)
+    plot_dof(dofs_to_plot, ax)
 
-
-    
-    gr.plot_2d_axes(ax, [0, 0], [(mesh_parameters['x_r']-mesh_parameters['x_l']), h],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], h],
                     tick_length=parameters['axis_tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
@@ -274,71 +246,16 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     n_minor_ticks=parameters['axis_n_minor_ticks'],
                     minor_tick_length=parameters['axis_minor_tick_length'],
                     tick_label_angle=parameters['axis_tick_label_angle'],
-                    axis_label_angle=parameters['axis_label_angle'],
+                    axis_label_angle=parameters['axis_label_angle']
                     )
     
    
-    # update `edges_to_plot`
-    if len(edges_to_plot) > 1:
-
-        match = pd.Series(False, index=data_edges.index)
-
-        for i in range(len(edges_to_plot)):
-
-            plotted_edge = data_edges.iloc[edges_to_plot[i]]
-
-            '''
-            tags of the vertices in the last edge in `edges_to_plot`
-            '''
-            p_1_vertex = plotted_edge[['p_1']].values[0]
-            p_2_vertex = plotted_edge[['p_2']].values[0]
-
-            '''
-            find other tetrahedra that have `p_1_vertex` or `p_2_vertex` equal to either `p_1` or `p_2`: match[i] = True if the i-th edge contains either of these, and False otherwise
-            '''
-            match = match | ( 
-
-                data_edges['p_1'].eq(p_1_vertex) 
-                | data_edges['p_1'].eq(p_2_vertex)
-
-                | data_edges['p_2'].eq(p_1_vertex)
-                | data_edges['p_2'].eq(p_2_vertex)
-
-                )
-
-        # don't reuse rows already in the path
-        match.iloc[edges_to_plot] = False
-
-    else: 
-
-        match = np.bool_(False)
-
-
-    if match.any():
-
-        next_edge = []
-        for i in range(len(match)):
-            if match[i]:
-                next_edge.append(i)
-
-    else:
-        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new edge not in `edges_to_plot`
-
-        remaining_edges = [i for i in range(len(data_edges)) if i not in edges_to_plot]
-        next_edge = remaining_edges[-1] if remaining_edges else None
-
-    if next_edge != None:
-
-        edges_to_plot.append(next_edge)
-        # flatten `edges_to_plot`
-        edges_to_plot = list(more_itertools.collapse(edges_to_plot))
-
-        pass
+   
 
 
 
     
-plot_snapshot(parameters['number_of_frames'], fig, [120, 45])
+plot_snapshot(parameters['number_of_frames'], fig)
 plt.savefig(figure_path + "_large.pdf")
 os.system(
     f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'
