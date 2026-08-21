@@ -232,7 +232,7 @@ def plot_snapshot(n, fig):
     if(n < len(data_u)):
         dofs_to_plot.append(n)
 
-    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], h],
+    gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['x_r']-mesh_parameters['x_l'], h],
                     tick_length=parameters['axis_tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
