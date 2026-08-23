@@ -14,7 +14,7 @@ animation_path = os.path.join(os.path.dirname(os.path.abspath(
 
 
 print(
-    f"number of frames: {len(plot.data_triangles) - len(plot.triangles_to_plot)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.number_of_frames/plot.parameters['frame_stride'])}",
+    f"number of frames: {len(plot.data_triangles) - len(plot.mesh_triangles_to_plot)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.number_of_frames/plot.parameters['frame_stride'])}",
     flush=True)
 
 
@@ -25,6 +25,8 @@ writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(
 def init_animation():
     plot.dofs_to_plot = []
     plot.colorbar = None
+    plot.mesh_triangles_to_plot = []
+    plot.colored_triangles_to_plot = []
 
 def update_animation(n):
     print("Calling update_animation with n = ", n, " ... ", flush=True)
@@ -55,7 +57,7 @@ def update_animation(n):
 
 
 
-plot.triangles_to_plot = []     
+plot.mesh_triangles_to_plot = []     
 
 animation = ani.FuncAnimation(
     fig=plot.fig,

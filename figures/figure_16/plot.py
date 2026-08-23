@@ -208,7 +208,8 @@ colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
 all_triangles = [i for i in range(len(data_triangles))]
 
 # triangles_to_plot=[i for i in range(len(data_triangles))]
-triangles_to_plot = []
+mesh_triangles_to_plot = []
+colored_triangles_to_plot = []
 
 colorbar = None
 dofs_to_plot = []
@@ -216,7 +217,7 @@ dofs_to_plot = []
 
 def plot_snapshot(n, fig, azimuth_altitude):
 
-    global triangles_to_plot, colorbar
+    global mesh_triangles_to_plot, colored_triangles_to_plot, colorbar
 
 
     # =============
@@ -244,41 +245,36 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
 
 
-    if (n == 0) or (n == parameters['number_of_frames_1']):
+    if (n == 0) :
         # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames_1'] (beginnning of color draw) -> set `triangles_to_plot` to an empty list
-        triangles_to_plot = []
+
+        mesh_triangles_to_plot = []
+        colored_triangles_to_plot = []
+
+    edge_rows = [3 * t + k for t in mesh_triangles_to_plot for k in range(3)]
 
 
-    if n < parameters['number_of_frames_1']:
-
-        # construct the list of rows to pick into `edge_data_frame` by converting `triangles_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `triangles_to_plot`)
-        edge_rows = [3 * t + k for t in triangles_to_plot for k in range(3)]
-
-    else:
 
 
-        # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `triangles_to_plot` replaced by `all_trianges`
-        edge_rows = [3 * t + k for t in all_triangles for k in range(3)]
-
-        # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
-        faces = triangle_coordinates[triangles_to_plot]    # (M, 3, 3)
-        faces = [[vertex[:2] for vertex in triangle] for triangle in faces]
-
-        colors = gr.cb.color_map_type(norm_f_values(grid_f_values[triangles_to_plot]))
-        poly = PolyCollection(faces, 
-                                facecolors=colors,
-                                edgecolors='black',   
-                                linewidths=parameters['mesh_line_width'],                    
-                                alpha=parameters['alpha_faces'], 
-                                zorder=0)
-        ax.add_collection(poly)
 
 
     # plot the mesh 
     gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
                  zorder=1)
 
+    # plot the colored triangles
+    # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
+    faces = triangle_coordinates[colored_triangles_to_plot]    # (M, 3, 3)
+    faces = [[vertex[:2] for vertex in triangle] for triangle in faces]
 
+    colors = gr.cb.color_map_type(norm_f_values(grid_f_values[colored_triangles_to_plot]))
+    poly = PolyCollection(faces, 
+                            facecolors=colors,
+                            edgecolors='black',   
+                            linewidths=parameters['mesh_line_width'],                    
+                            alpha=parameters['alpha_faces'], 
+                            zorder=0)
+    ax.add_collection(poly)
 
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
@@ -302,16 +298,14 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     )
     
    
-    # update `triangles_to_plot`
-    if len(triangles_to_plot) > 1:
-
-
+    # update `mesh_triangles_to_plot`
+    if len(mesh_triangles_to_plot) > 1:
 
         match = pd.Series(False, index=data_triangles.index)
 
-        for i in range(len(triangles_to_plot)):
+        for i in range(len(mesh_triangles_to_plot)):
 
-            plotted_triangle = data_triangles.iloc[triangles_to_plot[i]]
+            plotted_triangle = data_triangles.iloc[mesh_triangles_to_plot[i]]
 
             '''
             tags of the vertices in the last triangle in `triangles_to_plot`
@@ -340,7 +334,7 @@ def plot_snapshot(n, fig, azimuth_altitude):
                 )
 
         # don't reuse rows already in the path
-        match.iloc[triangles_to_plot] = False
+        match.iloc[mesh_triangles_to_plot] = False
 
     else: 
 
@@ -349,22 +343,92 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
     if match.any():
 
-        next_triangle = []
+        next_mesh_triangle = []
         for i in range(len(match)):
+
             if match[i]:
-                next_triangle.append(i)
+
+                next_mesh_triangle.append(i)
 
     else:
         # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
-        remaining_triangles = [i for i in range(len(data_triangles)) if i not in triangles_to_plot]
-        next_triangle = remaining_triangles[-1] if remaining_triangles else None
 
-    if next_triangle != None:
-        triangles_to_plot.append(next_triangle)
+        remaining_colored_triangles = [i for i in range(len(data_triangles)) if i not in mesh_triangles_to_plot]
+        next_mesh_triangle = remaining_colored_triangles[-1] if remaining_colored_triangles else None
+
+    if next_mesh_triangle != None:
+
+        mesh_triangles_to_plot.append(next_mesh_triangle)
         # flatten `triangles_to_plot`
-        triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
+        mesh_triangles_to_plot = list(more_itertools.collapse(mesh_triangles_to_plot))
 
-        pass
+
+    # update `colored_triangles_to_plot`
+    if (n > parameters['number_of_frames_1']):
+
+        if len(colored_triangles_to_plot) > 1:
+
+            match = pd.Series(False, index=data_triangles.index)
+
+            for i in range(len(colored_triangles_to_plot)):
+
+                plotted_triangle = data_triangles.iloc[colored_triangles_to_plot[i]]
+
+                '''
+                tags of the vertices in the last triangle in `triangles_to_plot`
+                '''
+                p_1_vertex = plotted_triangle[['p_1']].values[0]
+                p_2_vertex = plotted_triangle[['p_2']].values[0]
+                p_3_vertex = plotted_triangle[['p_3']].values[0]
+
+                '''
+                find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
+                '''
+                match = match | ( 
+
+                    data_triangles['p_1'].eq(p_1_vertex) 
+                    | data_triangles['p_1'].eq(p_2_vertex)
+                    | data_triangles['p_1'].eq(p_3_vertex)
+
+                    | data_triangles['p_2'].eq(p_1_vertex)
+                    | data_triangles['p_2'].eq(p_2_vertex)
+                    | data_triangles['p_2'].eq(p_3_vertex)
+
+                    | data_triangles['p_3'].eq(p_1_vertex)
+                    | data_triangles['p_3'].eq(p_2_vertex)
+                    | data_triangles['p_3'].eq(p_3_vertex)
+
+                    )
+
+            # don't reuse rows already in the path
+            match.iloc[colored_triangles_to_plot] = False
+
+        else: 
+
+            match = np.bool_(False)
+
+
+        if match.any():
+
+            next_colored_triangle = []
+            for i in range(len(match)):
+                if match[i]:
+                    next_colored_triangle.append(i)
+
+        else:
+            # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
+
+            remaining_colored_triangles = [i for i in range(len(data_triangles)) if i not in colored_triangles_to_plot]
+            next_colored_triangle = remaining_colored_triangles[-1] if remaining_colored_triangles else None
+
+        if next_colored_triangle != None:
+
+            colored_triangles_to_plot.append(next_colored_triangle)
+            # flatten `triangles_to_plot`
+            colored_triangles_to_plot = list(more_itertools.collapse(colored_triangles_to_plot))
+
+
+
 
     '''
     plot DOFs
