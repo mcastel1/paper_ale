@@ -63,8 +63,8 @@ print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 # mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/1d/line', "solution")
 
-# solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
-solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/poisson_equation/solve_u', "solution")
+solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+# solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/poisson_equation/solve_u', "solution")
 
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 

@@ -63,8 +63,11 @@ number_of_frames = parameters['number_of_frames_1'] + parameters['number_of_fram
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
-# mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square', "solution")
+mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+# mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square', "solution")/
+
+solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+# solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/poisson_equation/solve_u', "solution")
 
 figure_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), parameters['figure_name'])
@@ -76,6 +79,11 @@ data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('
 
 # load the data on the triangles of the mesh: each triangle is a list of three vertex labels, labelled as in `data_vertices`: these vertices delimit the triangle
 data_triangles = pd.read_csv(os.path.join(mesh_path, "triangles.csv"))
+
+# load data for the field f
+data_u = pd.read_csv(os.path.join(solution_path, "u.csv"))
+
+
 
 min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
 
@@ -178,6 +186,20 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # create axes
 fig.add_subplot(1, 1, 1)
 
+'''
+plot the a list of DOFs
+'''
+def plot_dof(list, ax):
+
+    dof_x_coord = data_u[':0'][list]
+    dof_y_coord = data_u[':1'][list]
+
+    ax.scatter(dof_x_coord, dof_y_coord,
+                color=parameters['dof_color'], 
+                s=parameters['dof_size'],
+                clip_on=False,
+                zorder=1)
+
 colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
                                     parameters['colorbar_position'][1],
                                     parameters['colorbar_size'][0],
@@ -189,6 +211,7 @@ all_triangles = [i for i in range(len(data_triangles))]
 triangles_to_plot = []
 
 colorbar = None
+dofs_to_plot = []
 
 
 def plot_snapshot(n, fig, azimuth_altitude):
@@ -343,6 +366,13 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
         pass
 
+    '''
+    plot DOFs
+    ''' 
+    plot_dof(dofs_to_plot, ax)
+
+    if(n < len(data_u)):
+        dofs_to_plot.append(n)
 
 
         
