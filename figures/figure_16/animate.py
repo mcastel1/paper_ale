@@ -24,6 +24,7 @@ writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(
 
 def init_animation():
     plot.dofs_to_plot = []
+    plot.vertices_to_plot_to_plot = []
     plot.colorbar = None
     plot.mesh_triangles_to_plot = []
     plot.colored_triangles_to_plot = []
@@ -44,9 +45,7 @@ def update_animation(n):
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    plot.plot_snapshot(n, plot.fig, gr.azimuth_altitude(n, plot.number_of_frames, 
-                                                     [plot.parameters['azimuth_min'], plot.parameters['azimuth_max']],
-                                                     [plot.parameters['altitude_min'], plot.parameters['altitude_max']]))
+    plot.plot_snapshot(n, plot.fig)
 
     # plot.plot_snapshot(plot.fig,    [plot.parameters['azimuth_min'], plot.parameters['altitude_min']])
 
