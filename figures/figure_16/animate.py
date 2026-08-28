@@ -24,7 +24,7 @@ writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(
 
 def init_animation():
     plot.dofs_to_plot = []
-    plot.vertices_to_plot_to_plot = []
+    plot.vertices_to_plot = []
     plot.colorbar = None
     plot.mesh_triangles_to_plot = []
     plot.colored_triangles_to_plot = []
