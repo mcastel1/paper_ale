@@ -7,8 +7,7 @@ this animation plots
 
 import matplotlib
 import matplotlib.pyplot as plt
-import more_itertools 
-from matplotlib.collections import PolyCollection
+import matplotlib.tri as mtri
 import numpy as np
 import os
 import pandas as pd
@@ -16,9 +15,11 @@ import proplot as pplt
 import shutil
 import warnings
 
+
 import list.column_labels as clab
 import input_output.utils as io
 import graphics.utils as gr
+import graphics.animation as ani
 import system.paths as paths
 
 
@@ -57,14 +58,16 @@ mesh_parameters = io.read_parameters_from_csv_file(
 )
 
 
-number_of_frames = parameters['number_of_frames_1'] + parameters['number_of_frames_2']
 
 # define the folder where to read the data
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
-# mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square', "solution")
+mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+# mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square', "solution")/
+
+solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+# solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/poisson_equation/solve_u', "solution")
 
 figure_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), parameters['figure_name'])
@@ -77,13 +80,29 @@ data_vertices = pd.read_csv(os.path.join(mesh_path, "vertices.csv")).set_index('
 # load the data on the triangles of the mesh: each triangle is a list of three vertex labels, labelled as in `data_vertices`: these vertices delimit the triangle
 data_triangles = pd.read_csv(os.path.join(mesh_path, "triangles.csv"))
 
+# load data for the field f
+data_u = pd.read_csv(os.path.join(solution_path, "u.csv"))
+
+'''
+chose `number_of_frames_mesh` equal to a custom value (every time more than one triangle is added to the animation, so `number_of_frames_mesh` needs to be chosen manually rather than set equal to len(data_triangles))
+chose `number_of_frames_vertices` equal to the number of vertices because at every step one vertex is added at a time, and similarly for `number_of_frames_dofs` and `number_of_frames_colored_triangles`
+
+'''
+number_of_frames_mesh = parameters['number_of_frames_mesh']
+number_of_frames_vertices = len(data_vertices)
+number_of_frames_dofs = len(data_u)
+number_of_frames_colored_triangles = len(data_triangles)
+
+number_of_frames = number_of_frames_mesh + number_of_frames_vertices + number_of_frames_dofs + number_of_frames_colored_triangles
+
+
 min_max = [[min(data_vertices[":0"]),max(data_vertices[":0"])],[min(data_vertices[":1"]),max(data_vertices[":1"])],[min(data_vertices[":2"]),max(data_vertices[":2"])]]
 
 print(f'L = {[min_max[0][1] - min_max[0][0], min_max[1][1]-min_max[1][0], min_max[2][1]-min_max[2][0]]}')
 
 # function to be plotted on the 3d surface with color code
 def f(x, y, z):
-    return np.sqrt(y**2) * np.cos(2.0*np.pi*x/(min_max[0][1] - min_max[0][0])) 
+    return 1 + x**2 + 2*y**2
 
 '''
 triangle_coordinates = [
@@ -119,8 +138,21 @@ norm_f_values = plt.Normalize(vmin=grid_f_values.min(), vmax=grid_f_values.max()
 # the color map
 # cmap = plt.get_cmap('viridis')
 
+# 
+vertex_coordinates_x = data_vertices[':0'].to_numpy()
+vertex_coordinates_y = data_vertices[':1'].to_numpy()
+vertex_f_values = f(
+    data_vertices[':0'].to_numpy(),
+    data_vertices[':1'].to_numpy(),
+    data_vertices[':2'].to_numpy()
+)
 
 
+triangles = np.array([
+    [p1-1, p2-1, p3-1]
+    for p1, p2, p3 in data_triangles[['p_1', 'p_2', 'p_3']].itertuples(index=False)
+])
+# 
 
 # the 3 edges of a triangle, as index pairs into the 3 vertices
 edge_pairs = [(0,1),(0,2),(1,2)]
@@ -178,6 +210,41 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 # create axes
 fig.add_subplot(1, 1, 1)
 
+'''
+plot the a list of vertices
+'''
+def plot_vertices(list, ax):
+
+    vertex_x_coordinates = data_vertices[':0'][list]
+    vertex_y_coordinates = data_vertices[':1'][list]
+
+    ax.scatter(vertex_x_coordinates, vertex_y_coordinates,
+                color=parameters['vertex_color'], 
+                s=parameters['vertex_size'],
+                clip_on=False,
+                zorder=0)
+
+'''
+plot the a list of DOFs
+'''
+def plot_dof(list, ax):
+
+    dof_x_coordinates = data_u[':0'][list]
+    dof_y_coordinates = data_u[':1'][list]
+
+    color = gr.cb.color_map_type(norm_f_values(f(dof_x_coordinates, dof_y_coordinates, np.zeros(len(dof_x_coordinates)))))
+    color = np.asarray(color).reshape(-1, 4)
+
+    if len(color) == 1:
+        color = color[0]
+
+    ax.scatter(dof_x_coordinates, dof_y_coordinates,
+                color=color, 
+                s=parameters['dof_size'],
+                edgecolors='black',
+                clip_on=False,
+                zorder=1)
+
 colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
                                     parameters['colorbar_position'][1],
                                     parameters['colorbar_size'][0],
@@ -186,14 +253,18 @@ colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
 all_triangles = [i for i in range(len(data_triangles))]
 
 # triangles_to_plot=[i for i in range(len(data_triangles))]
-triangles_to_plot = []
+mesh_triangles_to_plot = []
+colored_triangles_to_plot = []
 
 colorbar = None
+dofs_to_plot = []
+vertices_to_plot = []
 
 
-def plot_snapshot(n, fig, azimuth_altitude):
 
-    global triangles_to_plot, colorbar
+def plot_snapshot(n, fig):
+
+    global mesh_triangles_to_plot, colored_triangles_to_plot, colorbar
 
 
     # =============
@@ -220,42 +291,47 @@ def plot_snapshot(n, fig, azimuth_altitude):
 
 
 
+    edge_rows = [3 * t + k for t in mesh_triangles_to_plot for k in range(3)]
 
-    if (n == 0) or (n == parameters['number_of_frames_1']):
-        # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames_1'] (beginnning of color draw) -> set `triangles_to_plot` to an empty list
-        triangles_to_plot = []
-
-
-    if n < parameters['number_of_frames_1']:
-
-        # construct the list of rows to pick into `edge_data_frame` by converting `triangles_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `triangles_to_plot`)
-        edge_rows = [3 * t + k for t in triangles_to_plot for k in range(3)]
-
-    else:
-
-
-        # n > parameters['number_of_frames_1']: I want to plot the full mesh -> same as the case above, with `triangles_to_plot` replaced by `all_trianges`
-        edge_rows = [3 * t + k for t in all_triangles for k in range(3)]
-
-        # build a list of `faces` from `triangles` to plot -> I will draw colors on triangles which correspond to `triangles to plot`
-        faces = triangle_coordinates[triangles_to_plot]    # (M, 3, 3)
-        faces = [[vertex[:2] for vertex in triangle] for triangle in faces]
-
-        colors = gr.cb.color_map_type(norm_f_values(grid_f_values[triangles_to_plot]))
-        poly = PolyCollection(faces, 
-                                facecolors=colors,
-                                edgecolors='black',   
-                                linewidths=parameters['mesh_line_width'],                    
-                                alpha=parameters['alpha_faces'], 
-                                zorder=0)
-        ax.add_collection(poly)
-
-
-    # plot the mesh 
+    #1. plot the mesh 
     gr.plot_2d_mesh(ax, edge_data_frame.iloc[edge_rows], parameters['mesh_line_width'], 'black', parameters['alpha_mesh'], 
                  zorder=1)
 
+    
+    #2. plot the contour plot of `u` in `colored_triangles_to_plot`
+    if len(colored_triangles_to_plot) > 0:
 
+        # build a list of the triangles in which the contour plot of `f` will be made
+        triangles_to_color = triangles[colored_triangles_to_plot]
+
+        # build a triangulation based on `triangles_to_color`
+        triangulation_colored = mtri.Triangulation(
+            vertex_coordinates_x,
+            vertex_coordinates_y,
+            triangles_to_color
+        )
+
+
+        # make a contour plot of `f` within the region delimited by triangulation_colored
+        matplotlib.axes.Axes.tripcolor(
+            ax,
+            triangulation_colored,
+            vertex_f_values,
+            cmap=gr.cb.color_map_type,
+            vmin=grid_f_values.min(),
+            vmax=grid_f_values.max(),
+            shading='gouraud',
+            alpha=parameters['alpha_u'],
+            zorder=0
+        )
+
+
+
+    #3. plot DOFs
+    plot_vertices(vertices_to_plot, ax)
+
+    #4. plot DOFs
+    plot_dof(dofs_to_plot, ax)
 
 
     gr.plot_2d_axes(ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
@@ -267,9 +343,6 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     tick_label_offset=parameters['axis_tick_label_offset'],
                     axis_label_offset=parameters['axis_label_offset'],
                     axis_origin=parameters['axis_origin'],
-                    # plot_label=parameters["v_plot_panel_label"],
-                    # plot_label_offset=parameters['panel_label_position'],
-                    # plot_label_font_size=parameters['panel_label_font_size'],
                     n_minor_ticks=parameters['axis_n_minor_ticks'],
                     minor_tick_length=parameters['axis_minor_tick_length'],
                     tick_label_angle=parameters['axis_tick_label_angle'],
@@ -277,77 +350,44 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     colorbar_axis=colorbar_axis,
                     colorbar_axis_offset=parameters['colorbar_position']
                     )
-    
-   
-    # update `triangles_to_plot`
-    if len(triangles_to_plot) > 1:
+
+    # update `mesh_triangles to plot`
+    if n < number_of_frames_mesh: 
+
+        ani.add_triangle(mesh_triangles_to_plot, data_triangles)
+
+    # update `colored_triangles_to_plot`
+    if (n >= number_of_frames_mesh) and (n < number_of_frames_mesh + number_of_frames_vertices):
+
+        m = n - number_of_frames_mesh + 1
+        if (m not in vertices_to_plot) and (m < len(data_vertices)):
+                vertices_to_plot.append(m)
+
+
+    elif (n >= number_of_frames_mesh + number_of_frames_vertices) and (n < number_of_frames_mesh + number_of_frames_vertices + number_of_frames_dofs):
+
+        m = n - (number_of_frames_mesh + number_of_frames_vertices) + 1
+        
+        if (m not in dofs_to_plot) and (m < len(data_u)):
+            dofs_to_plot.append(m)
+
+    elif (n >= number_of_frames_mesh + number_of_frames_vertices + number_of_frames_dofs):
+
+        ani.add_triangle(colored_triangles_to_plot, data_triangles)
 
 
 
-        match = pd.Series(False, index=data_triangles.index)
-
-        for i in range(len(triangles_to_plot)):
-
-            plotted_triangle = data_triangles.iloc[triangles_to_plot[i]]
-
-            '''
-            tags of the vertices in the last triangle in `triangles_to_plot`
-            '''
-            p_1_vertex = plotted_triangle[['p_1']].values[0]
-            p_2_vertex = plotted_triangle[['p_2']].values[0]
-            p_3_vertex = plotted_triangle[['p_3']].values[0]
-
-            '''
-            find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
-            '''
-            match = match | ( 
-
-                data_triangles['p_1'].eq(p_1_vertex) 
-                | data_triangles['p_1'].eq(p_2_vertex)
-                | data_triangles['p_1'].eq(p_3_vertex)
-
-                | data_triangles['p_2'].eq(p_1_vertex)
-                | data_triangles['p_2'].eq(p_2_vertex)
-                | data_triangles['p_2'].eq(p_3_vertex)
-
-                | data_triangles['p_3'].eq(p_1_vertex)
-                | data_triangles['p_3'].eq(p_2_vertex)
-                | data_triangles['p_3'].eq(p_3_vertex)
-
-                )
-
-        # don't reuse rows already in the path
-        match.iloc[triangles_to_plot] = False
-
-    else: 
-
-        match = np.bool_(False)
 
 
-    if match.any():
 
-        next_triangle = []
-        for i in range(len(match)):
-            if match[i]:
-                next_triangle.append(i)
 
-    else:
-        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
-        remaining_triangles = [i for i in range(len(data_triangles)) if i not in triangles_to_plot]
-        next_triangle = remaining_triangles[-1] if remaining_triangles else None
 
-    if next_triangle != None:
-        triangles_to_plot.append(next_triangle)
-        # flatten `triangles_to_plot`
-        triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
-
-        pass
 
 
 
         
 
-plot_snapshot(parameters['number_of_frames_2'], fig, [120, 45])
+plot_snapshot(number_of_frames_vertices, fig)
 plt.savefig(figure_path + "_large.pdf")
 os.system(
     f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf'

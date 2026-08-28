@@ -14,7 +14,7 @@ animation_path = os.path.join(os.path.dirname(os.path.abspath(
 
 
 print(
-    f"number of frames: {len(plot.data_triangles) - len(plot.triangles_to_plot)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.number_of_frames/plot.parameters['frame_stride'])}",
+    f"number of frames: {len(plot.data_triangles) - len(plot.mesh_triangles_to_plot)} \n frames per second: {plot.parameters['frames_per_second']} \n animation duration : {animation_duration_in_sec} [s]\n frame stride = {plot.parameters['frame_stride']}\n number of frames to draw ~ {int(plot.number_of_frames/plot.parameters['frame_stride'])}",
     flush=True)
 
 
@@ -22,7 +22,12 @@ Writer = ani.writers['ffmpeg']
 writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(
     artist='Michele'), bitrate=(int)(plot.parameters['bit_rate']))
 
-
+def init_animation():
+    plot.dofs_to_plot = []
+    plot.vertices_to_plot_to_plot = []
+    plot.colorbar = None
+    plot.mesh_triangles_to_plot = []
+    plot.colored_triangles_to_plot = []
 
 def update_animation(n):
     print("Calling update_animation with n = ", n, " ... ", flush=True)
@@ -40,9 +45,7 @@ def update_animation(n):
     text.clear_labels_with_patterns(
         plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
 
-    plot.plot_snapshot(n, plot.fig, gr.azimuth_altitude(n, plot.number_of_frames, 
-                                                     [plot.parameters['azimuth_min'], plot.parameters['azimuth_max']],
-                                                     [plot.parameters['altitude_min'], plot.parameters['altitude_max']]))
+    plot.plot_snapshot(n, plot.fig)
 
     # plot.plot_snapshot(plot.fig,    [plot.parameters['azimuth_min'], plot.parameters['altitude_min']])
 
@@ -53,10 +56,11 @@ def update_animation(n):
 
 
 
-plot.triangles_to_plot = []     
+plot.mesh_triangles_to_plot = []     
 
 animation = ani.FuncAnimation(
     fig=plot.fig,
+    init_func=init_animation,
     func=update_animation,
     frames=range(0, plot.number_of_frames), 
     interval=30
