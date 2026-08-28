@@ -7,7 +7,6 @@ this animation plots
 
 import matplotlib
 import matplotlib.pyplot as plt
-import more_itertools 
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 import os
@@ -16,6 +15,7 @@ import proplot as pplt
 import shutil
 import warnings
 
+import graphics.animation as ani
 import list.column_labels as clab
 import input_output.utils as io
 import graphics.utils as gr
@@ -226,11 +226,6 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     axis=colorbar_axis
         )
 
-    if (n == 0) or (n == parameters['number_of_frames_1']):
-        # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames_1'] (beginnning of color draw) -> set `triangles_to_plot` to an empty list
-        triangles_to_plot = []
-
-
     if n < parameters['number_of_frames_1']:
 
         # construct the list of rows to pick into `edge_data_frame` by converting `triangles_to_plot` into the format of `edge_data_frame` (fill in 6 consecutive entries in edge_data_frame and select blocks of 6 consecutive entries according to `triangles_to_plot`)
@@ -277,71 +272,70 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     plot_label_position=parameters['plot_label_offset_3d'],
                     plot_label_font_size=parameters['plot_label_font_size'])
     
-   
-    # update `triangles_to_plot`
-    if len(triangles_to_plot) > 1:
 
-        match = pd.Series(False, index=data_triangles.index)
+    ani.add_element(triangles_to_plot, data_triangles)
 
-        for i in range(len(triangles_to_plot)):
+    # # update `triangles_to_plot`
+    # if len(triangles_to_plot) > 1:
 
-            plotted_triangle = data_triangles.iloc[triangles_to_plot[i]]
+    #     match = pd.Series(False, index=data_triangles.index)
 
-            '''
-            tags of the vertices in the last triangle in `triangles_to_plot`
-            '''
-            p_1_vertex = plotted_triangle[['p_1']].values[0]
-            p_2_vertex = plotted_triangle[['p_2']].values[0]
-            p_3_vertex = plotted_triangle[['p_3']].values[0]
+    #     for i in range(len(triangles_to_plot)):
 
-            '''
-            find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
-            '''
-            match = match | ( 
+    #         plotted_triangle = data_triangles.iloc[triangles_to_plot[i]]
 
-                data_triangles['p_1'].eq(p_1_vertex) 
-                | data_triangles['p_1'].eq(p_2_vertex)
-                | data_triangles['p_1'].eq(p_3_vertex)
+    #         '''
+    #         tags of the vertices in the last triangle in `triangles_to_plot`
+    #         '''
+    #         p_1_vertex = plotted_triangle[['p_1']].values[0]
+    #         p_2_vertex = plotted_triangle[['p_2']].values[0]
+    #         p_3_vertex = plotted_triangle[['p_3']].values[0]
 
-                | data_triangles['p_2'].eq(p_1_vertex)
-                | data_triangles['p_2'].eq(p_2_vertex)
-                | data_triangles['p_2'].eq(p_3_vertex)
+    #         '''
+    #         find other tetrahedra that have `p_1_vertex` or ... `p_4_vertex` equal to either `p_1` or `p_2` or `p_3` or `p_4`: match[i] = True if the i-th tetrahedron contains either of these, and False otherwise
+    #         '''
+    #         match = match | ( 
 
-                | data_triangles['p_3'].eq(p_1_vertex)
-                | data_triangles['p_3'].eq(p_2_vertex)
-                | data_triangles['p_3'].eq(p_3_vertex)
+    #             data_triangles['p_1'].eq(p_1_vertex) 
+    #             | data_triangles['p_1'].eq(p_2_vertex)
+    #             | data_triangles['p_1'].eq(p_3_vertex)
 
-                )
+    #             | data_triangles['p_2'].eq(p_1_vertex)
+    #             | data_triangles['p_2'].eq(p_2_vertex)
+    #             | data_triangles['p_2'].eq(p_3_vertex)
 
-        # don't reuse rows already in the path
-        match.iloc[triangles_to_plot] = False
+    #             | data_triangles['p_3'].eq(p_1_vertex)
+    #             | data_triangles['p_3'].eq(p_2_vertex)
+    #             | data_triangles['p_3'].eq(p_3_vertex)
 
-    else: 
+    #             )
 
-        match = np.bool_(False)
+    #     # don't reuse rows already in the path
+    #     match.iloc[triangles_to_plot] = False
 
+    # else: 
 
-    if match.any():
-
-        next_triangle = []
-        for i in range(len(match)):
-            if match[i]:
-                next_triangle.append(i)
-
-    else:
-        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
-        remaining_triangles = [i for i in range(len(data_triangles)) if i not in triangles_to_plot]
-        next_triangle = remaining_triangles[-1] if remaining_triangles else None
-
-    if next_triangle != None:
-        triangles_to_plot.append(next_triangle)
-        # flatten `triangles_to_plot`
-        triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
-
-        pass
+    #     match = np.bool_(False)
 
 
-    # print(f'vertices_to_plot = {edges_to_plot}')
+    # if match.any():
+
+    #     next_triangle = []
+    #     for i in range(len(match)):
+    #         if match[i]:
+    #             next_triangle.append(i)
+
+    # else:
+    #     # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new tetrahedron not in `tetrahedra_to_plot`
+    #     remaining_triangles = [i for i in range(len(data_triangles)) if i not in triangles_to_plot]
+    #     next_triangle = remaining_triangles[-1] if remaining_triangles else None
+
+    # if next_triangle != None:
+    #     triangles_to_plot.append(next_triangle)
+    #     # flatten `triangles_to_plot`
+    #     triangles_to_plot = list(more_itertools.collapse(triangles_to_plot))
+
+    #     pass
 
         
 

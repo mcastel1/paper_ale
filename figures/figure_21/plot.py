@@ -429,11 +429,7 @@ def plot_snapshot(n, fig):
                     )
     
    
-   
 
-
-
-    
 plot_snapshot(parameters['number_of_frames'], fig)
 plt.savefig(figure_path + "_large.pdf")
 os.system(

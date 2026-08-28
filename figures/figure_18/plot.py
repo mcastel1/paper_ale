@@ -6,9 +6,7 @@ this animation plots
 
 
 import matplotlib
-from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
-import more_itertools 
 import numpy as np
 import os
 import pandas as pd
@@ -17,6 +15,7 @@ from scipy.interpolate import lagrange as lag
 import shutil
 import warnings
 
+import graphics.animation as ani
 import list.column_labels as clab
 import input_output.utils as io
 import graphics.utils as gr
@@ -172,14 +171,12 @@ all_edge_rows = [t for t in range(len(data_edges))]
 
 # edges_to_plot=[i for i in range(len(data_edges))]
 edges_to_plot = []
-
-
-
+edge_rows = []
 
 
 def plot_snapshot(n, fig, azimuth_altitude):
 
-    global edges_to_plot
+    global edges_to_plot, edge_rows
 
 
     # =============
@@ -189,14 +186,6 @@ def plot_snapshot(n, fig, azimuth_altitude):
     ax = fig.axes[0]  # Use the existing axis
     ax.set_box_aspect(1)
     ax.set_axis_off()
-
-
-
-    if (n == 0) or (n == parameters['number_of_frames']):
-        # `plot_snapshot` has been called with n = 0 (first call) or n = parameters['number_of_frames'] (beginnning of color draw) -> set `edges_to_plot` to an empty list
-        edges_to_plot = []
-        edge_rows = []
-
 
     if n < parameters['number_of_frames']:
 
@@ -277,64 +266,9 @@ def plot_snapshot(n, fig, azimuth_altitude):
                     axis_label_angle=parameters['axis_label_angle'],
                     )
     
-   
-    # update `edges_to_plot`
-    if len(edges_to_plot) > 1:
 
-        match = pd.Series(False, index=data_edges.index)
-
-        for i in range(len(edges_to_plot)):
-
-            plotted_edge = data_edges.iloc[edges_to_plot[i]]
-
-            '''
-            tags of the vertices in the last edge in `edges_to_plot`
-            '''
-            p_1_vertex = plotted_edge[['p_1']].values[0]
-            p_2_vertex = plotted_edge[['p_2']].values[0]
-
-            '''
-            find other tetrahedra that have `p_1_vertex` or `p_2_vertex` equal to either `p_1` or `p_2`: match[i] = True if the i-th edge contains either of these, and False otherwise
-            '''
-            match = match | ( 
-
-                data_edges['p_1'].eq(p_1_vertex) 
-                | data_edges['p_1'].eq(p_2_vertex)
-
-                | data_edges['p_2'].eq(p_1_vertex)
-                | data_edges['p_2'].eq(p_2_vertex)
-
-                )
-
-        # don't reuse rows already in the path
-        match.iloc[edges_to_plot] = False
-
-    else: 
-
-        match = np.bool_(False)
-
-
-    if match.any():
-
-        next_edge = []
-        for i in range(len(match)):
-            if match[i]:
-                next_edge.append(i)
-
-    else:
-        # match contains no Trues -> the search algorithm is stuch -> look for a new "connected component" by picking a new edge not in `edges_to_plot`
-
-        remaining_edges = [i for i in range(len(data_edges)) if i not in edges_to_plot]
-        next_edge = remaining_edges[-1] if remaining_edges else None
-
-    if next_edge != None:
-
-        edges_to_plot.append(next_edge)
-        # flatten `edges_to_plot`
-        edges_to_plot = list(more_itertools.collapse(edges_to_plot))
-
-        pass
-
+    ani.add_element(edges_to_plot, data_edges)
+    
 
 
     

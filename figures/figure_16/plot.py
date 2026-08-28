@@ -354,7 +354,7 @@ def plot_snapshot(n, fig):
     # update `mesh_triangles to plot`
     if n < number_of_frames_mesh: 
 
-        ani.add_triangle(mesh_triangles_to_plot, data_triangles)
+        ani.add_element(mesh_triangles_to_plot, data_triangles)
 
     # update `colored_triangles_to_plot`
     if (n >= number_of_frames_mesh) and (n < number_of_frames_mesh + number_of_frames_vertices):
@@ -373,7 +373,7 @@ def plot_snapshot(n, fig):
 
     elif (n >= number_of_frames_mesh + number_of_frames_vertices + number_of_frames_dofs):
 
-        ani.add_triangle(colored_triangles_to_plot, data_triangles)
+        ani.add_element(colored_triangles_to_plot, data_triangles)
 
 
 

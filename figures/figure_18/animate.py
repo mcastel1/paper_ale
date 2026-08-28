@@ -23,6 +23,10 @@ writer = Writer(fps=plot.parameters['frames_per_second'], metadata=dict(
     artist='Michele'), bitrate=(int)(plot.parameters['bit_rate']))
 
 
+def init_animation():
+    plot.edges_to_plot = []
+    plot.edge_rows = []
+
 
 def update_animation(n):
     print("Calling update_animation with n = ", n, " ... ", flush=True)
@@ -57,7 +61,8 @@ plot.edges_to_plot = []
 
 animation = ani.FuncAnimation(
     fig=plot.fig,
-    func=update_animation,
+    func=update_animation,  
+    init_func=init_animation,
     frames=range(0, plot.parameters['number_of_frames']), 
     interval=30
 )
