@@ -19,7 +19,7 @@ print(f'snapshot_path = {plot.snapshot_path}')
 
 
 # compute absolute minima and maxima across snapshots
-norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
+norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'], scalar=True)
 
 # axis_min_max_abs = [[np.inf,-np.inf],[np.inf,-np.inf]]
 
@@ -99,7 +99,7 @@ def update_animation(n):
     text.clear_labels_with_patterns(plot.fig, ["\second", "\msecond", "\minute", "\hour", "\met"])
 
     plot.plot_snapshot(plot.fig, n, 
-                    snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.parameters['T'] / plot.number_of_frames, 'min_s', plot.parameters['n_decimals_snapshot_label']),
+                    snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.solution_parameters['T'] / plot.solution_parameters['N'], 'min_s', plot.parameters['n_decimals_snapshot_label']),
                     axis_min_max=axis_min_max_abs,
                     norm_v_min_max=norm_v_min_max_abs,
                     norm_v_fl_min_max=norm_v_fl_min_max_abs,

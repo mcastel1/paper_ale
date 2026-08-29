@@ -73,22 +73,23 @@ plt.rcParams.update({
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
-'''
+
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+
+
 '''
-
-
 # 2 read solutio from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
+'''
+
 
 
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
-
 
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
@@ -858,10 +859,10 @@ def plot_snapshot(fig, n_file,
      
 
 
-plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / number_of_frames, 's', 1))
-# plot_snapshot(fig, parameters['snapshot_to_plot'],
-#               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / number_of_frames, 'min_s', 0))
+# plot_snapshot(fig, snapshot_max,
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 1))
+plot_snapshot(fig, parameters['snapshot_to_plot'],
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
