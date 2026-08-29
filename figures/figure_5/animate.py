@@ -19,7 +19,7 @@ print(f'snapshot_path = {plot.snapshot_path}')
 
 
 # compute absolute minima and maxima across snapshots
-norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
+norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'], scalar=True)
 
 # axis_min_max_abs = [[np.inf,-np.inf],[np.inf,-np.inf]]
 
