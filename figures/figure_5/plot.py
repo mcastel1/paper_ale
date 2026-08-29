@@ -68,13 +68,19 @@ plt.rcParams.update({
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
+'''
+# 1. read solution from local folder
+solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+'''
 
-solution_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), "solution/")
-mesh_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), "mesh/solution/")
-figure_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), parameters['figure_name'])
+
+# 2 read solutio from external folder
+solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
+
+
+figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
 
@@ -272,20 +278,15 @@ def plot_snapshot(fig, n_file,
         #
 
     if nu_min_max == None:
-        nu_min_max = cal.min_max_file(os.path.join(
-            snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
+        nu_min_max = cal.min_max_file(os.path.join(snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
     if psi_min_max == None:
-        psi_min_max = cal.min_max_file(os.path.join(
-            snapshot_path, 'psi_n_12_' + str(n_file) + '.csv'))
+        psi_min_max = cal.min_max_file(os.path.join(snapshot_path, 'psi_n_12_' + str(n_file) + '.csv'))
     if norm_v_min_max == None:
-        norm_v_min_max = cal.norm_min_max_file(os.path.join(
-            snapshot_path, 'v_n_' + str(n_file) + '.csv'))
+        norm_v_min_max = cal.norm_min_max_file(os.path.join(snapshot_path, 'v_n_' + str(n_file) + '.csv'), scalar=True)
     if sigma_min_max == None:
-        sigma_min_max = cal.min_max_file(os.path.join(
-            snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
+        sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
     if w_min_max == None:
-        w_min_max = cal.min_max_file(os.path.join(
-            snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+        w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
 
     X_curr, t = gr.interpolate_curve(
         data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
@@ -852,10 +853,10 @@ def plot_snapshot(fig, n_file,
      
 
 
-# plot_snapshot(fig, snapshot_max,
-#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / number_of_frames, 's', 1))
-plot_snapshot(fig, parameters['snapshot_to_plot'],
-              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / number_of_frames, 'min_s', 0))
+plot_snapshot(fig, snapshot_max,
+              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / number_of_frames, 's', 1))
+# plot_snapshot(fig, parameters['snapshot_to_plot'],
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / number_of_frames, 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
