@@ -27,6 +27,11 @@ import graphics.vector_plot as vec
 '''
 you can copy the data from abacus with
 ./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_5 1 1000000 30000
+
+
+to copy the parameters to finite_elements:
+cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
+cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
