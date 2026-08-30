@@ -27,6 +27,11 @@ import graphics.vector_plot as vec
 '''
 you can copy the data from abacus with
 ./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_5 1 1000000 30000
+
+
+to copy the parameters to finite_elements:
+cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
+cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -69,15 +74,22 @@ print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
 
-solution_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), "solution/")
-mesh_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), "mesh/solution/")
-figure_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), parameters['figure_name'])
+# 1. read solution from local folder
+solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
+mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+
+
+'''
+# 2 read solutio from external folder
+solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
+'''
+
+
+
+figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
-
 
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
@@ -272,20 +284,15 @@ def plot_snapshot(fig, n_file,
         #
 
     if nu_min_max == None:
-        nu_min_max = cal.min_max_file(os.path.join(
-            snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
+        nu_min_max = cal.min_max_file(os.path.join(snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
     if psi_min_max == None:
-        psi_min_max = cal.min_max_file(os.path.join(
-            snapshot_path, 'psi_n_12_' + str(n_file) + '.csv'))
+        psi_min_max = cal.min_max_file(os.path.join(snapshot_path, 'psi_n_12_' + str(n_file) + '.csv'))
     if norm_v_min_max == None:
-        norm_v_min_max = cal.norm_min_max_file(os.path.join(
-            snapshot_path, 'v_n_' + str(n_file) + '.csv'))
+        norm_v_min_max = cal.norm_min_max_file(os.path.join(snapshot_path, 'v_n_' + str(n_file) + '.csv'), scalar=True)
     if sigma_min_max == None:
-        sigma_min_max = cal.min_max_file(os.path.join(
-            snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
+        sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
     if w_min_max == None:
-        w_min_max = cal.min_max_file(os.path.join(
-            snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+        w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
 
     X_curr, t = gr.interpolate_curve(
         data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
@@ -853,9 +860,9 @@ def plot_snapshot(fig, n_file,
 
 
 # plot_snapshot(fig, snapshot_max,
-#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / number_of_frames, 's', 1))
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 1))
 plot_snapshot(fig, parameters['snapshot_to_plot'],
-              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / number_of_frames, 'min_s', 0))
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
