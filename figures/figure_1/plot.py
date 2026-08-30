@@ -1,7 +1,4 @@
 import matplotlib
-from matplotlib.font_manager import FontProperties
-from matplotlib.patches import Polygon
-from matplotlib.path import Path
 import matplotlib.pyplot as plt
 import os
 
@@ -13,7 +10,6 @@ import warnings
 
 import calculus.utils as cal
 import constants.utils as const
-import calculus.geometry as geo
 import graphics.color_bar as cb
 import list.column_labels as clab
 import graphics.utils as gr

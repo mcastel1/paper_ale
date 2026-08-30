@@ -102,19 +102,18 @@ We refer to \cite{desernoFluidLipidMembranes2015,worthmullerIRENEFluIdLayeR2025,
 \Cref{eq-dyn-continuity} enforces mass conservation \cite{landauFluidMechanics1987}.
 \Cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively.
 The first term in the \ac{rhs} of \cref{eq-dyn-v} represents the force on membrane elements induced by gradients of line tension, while the first term in the \ac{rhs} of \cref{eq-dyn-w} constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004,landauFluidMechanics1987}. The other terms read
+\bw
 \begin{align}
         \label{eq_def_f_kap}
-        f_\kap (\nu, \psi)                                                                                                       & \equiv                                                                                                  \newlinenn
-        -2\kap [ \nab_i \nab^i H + 2 H (H^2-K)],                                                                                 &                                                                                                                                 \\
+        f_\kap (\nu,\psi)                                   & \equiv  -2\kap [ \nab_i \nab^i H + 2 H (H^2-K)],                                                             \\
         \label{eq_def_f_eta_t}
-        f_{\etam\, \text{t}}^i(\vmem, \wmem,
-        \nu, \psi)                                                                                                               & \equiv                                                                                                             & \newlinenn
-        \etam [ - \nablb \vmem^i - \newlinenn
-        2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j \wmem + 2 K \vmem^i  ]                                                & ,                                                                                                                  &            \\
+        f_{\etam\, \text{t}}^i(\vmem, \wmem,\nu,\psi)       & \equiv  \etam [ - \nablb \vmem^i - 2 \left( b^{ij} - 2 \, H \, g^{ij}  \right) \nab_j \wmem + 2 K \vmem^i  ] \\ \nn
+                                                            & =       2 \etam \nab_j d^{ij}(\vmem, \wmem,\nu,\psi),                                                        \\
         \label{eq_def_f_eta_n}
-        f_{\etam\, \text{n}}      (\vmem, \wmem, \nu, \psi)                                                                      & \equiv                                                                                                             & \newlinenn
-        2 \etam [ (\nab^i \vmem^j)b_{ij} - 2 \wmem (2 H^2 - K)                                                                 ] & .
+        f_{\etam\, \text{n}}      (\vmem, \wmem, \nu, \psi) & \equiv
+        2 \etam [ (\nab^i \vmem^j)b_{ij} - 2 \wmem (2 H^2 - K)                                                                 ]  .
 \end{align}
+\ew
 In \cref{eq_def_f_kap}, $f_\kappa$ is represents the resistance of \ac{mem} to bending, and it is derived from Helfrich model \cite{helfrichElasticPropertiesLipid1973}, while $f_{\etam\, t}$ and $f_{\etam\, \text{n}}$ in \cref{eq_def_f_eta_t,eq_def_f_eta_n} are, respectively, the tangential and normal component of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i}.
 %
 \Cref{eq-dyn-dX} is the time-evolution equation for the \ac{mem} shape, which evolves according to the normal $\normalc{}$, and it has been obtained from  \cref{eq_u_mem,eq_def_x_ref}.
@@ -222,7 +221,7 @@ We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \
 
 \begin{figure*}
         \centering
-        % \includegraphics[width=\textwidth]{figures/figure_5/figure_5.pdf}
+        \includegraphics[width=\textwidth]{figures/figure_5/figure_5.pdf}
         \caption{
                 Interaction between a \acf{bflu}  and a \acf{mem}. Here, \ac{bflu} is air, and \ac{mem} an elastomer, and the \ac{bflu} Reynolds number is $R \sim 200$.
                 \plab{A}  \Acf{ref} and \acf{cur} configuration of \ac{mem} (red and green curve, respectively), and \ac{mem} displacement field $\bumem$ (black arrows).
