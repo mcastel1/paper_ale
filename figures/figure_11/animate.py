@@ -1,6 +1,5 @@
 import matplotlib.animation as ani
 import os
-import time
 
 import calculus.utils as cal
 import text.utils as text
@@ -22,19 +21,19 @@ compute absolute mins and maxs across multiple files
 '''
 norm_v_min_max_abs = cal.min_max_vector_field(
     plot.snapshot_min, plot.snapshot_max, plot.parameters['animation_frame_stride'],
-    os.path.join(plot.solution_path + 'snapshots/csv/nodal_values'),
+    os.path.join(plot.solution_path, 'snapshots/csv/nodal_values'),
     'def_v_n_',
     plot.parameters['n_bins_v'],
     [[0, 0], [plot.mesh_parameters['L'], plot.mesh_parameters['h']]]
 )
 
-sigma_min_max_abs = cal.min_max_files(
-                'def_sigma_n_12_',
-                os.path.join(plot.solution_path + 'snapshots/csv/nodal_values'),
-                plot.snapshot_min + plot.parameters['colorbar_sigma_snapshot_min_offset'],
-                plot.snapshot_max,
-                plot.parameters['animation_frame_stride']
-                 )
+# sigma_min_max_abs = cal.min_max_files(
+#                 'def_sigma_n_12_',
+#                 os.path.join(plot.solution_path + 'snapshots/csv/nodal_values'),
+#                 plot.snapshot_min + plot.parameters['colorbar_sigma_snapshot_min_offset'],
+#                 plot.snapshot_max,
+#                 plot.parameters['animation_frame_stride']
+#                  )
 
 
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1

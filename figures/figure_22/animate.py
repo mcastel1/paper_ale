@@ -1,15 +1,10 @@
 import gc
 import matplotlib.animation as ani
 import os
-import numpy as np
-import pandas as pd
-import system.utils as sys_utils
 import time
 
 import calculus.utils as cal
-import graphics.vector_plot as vp
 import input_output.utils as io
-import list.utils as lis
 import plot
 import text.utils as text
 

@@ -10,14 +10,11 @@ import proplot as pplt
 import sys
 import warnings
 
-import calculus.geometry as geo
-import calculus.utils as cal
 import constants.utils as const
 import graphics.utils as gr
 import graphics.vector_plot as vp
 import input_output.utils as io
 import list.column_labels as clab
-import list.utils as lis
 import system.paths as paths
 import system.utils as sys_utils
 
@@ -39,7 +36,7 @@ cp -r /Users/michelecastellana/Documents/finite_elements/fluid_structure_interac
 
 - to copy from abacus
 
-INPUT_PATH="fluid_rigid_remesh_1"
+INPUT_PATH="rigid_obstacle_remesh_1"
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
 STRIDE="100"
 cd $OUTPUT_PATH/../
@@ -81,22 +78,30 @@ plt.rcParams.update({
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
-parameters = io.read_parameters_from_csv_file(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
-mesh_parameters = io.read_parameters_from_csv_file(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'mesh_parameters.csv'))
-solution_parameters = io.read_parameters_from_csv_file(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'solution', 'solution_metadata.csv'))
+parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+
+
+# 1. read data from local folder
+mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'solution')
+
+'''
+# 2. read data from external folder
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/polygon')
+solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh', 'solution_new')
+
+'''
+mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_parameters.csv'))
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
+
 
 
 if parameters['animation_frame_stride'] % solution_parameters['print_out_stride'] != 0:
     raise RuntimeError(f'Error: Animation frame stride is not a multiple of print out stride ! \n animation frame stride = {parameters["animation_frame_stride"]} \n print out stride = {solution_parameters["print_out_stride"]} \nAborting...')
 
-solution_path = os.path.join(os.path.dirname(
-    os.path.abspath(__file__)), "solution/")
 figure_path = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), parameters['figure_name'])
-snapshot_path = os.path.join(solution_path, "snapshots/csv/")
+snapshot_path = os.path.join(solution_path, "snapshots/csv")
 
 snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
@@ -104,7 +109,6 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 # labels of columns to read
 data_theta_omega = pd.read_csv(os.path.join(solution_path, 'theta_omega.csv'))
-data_remesh = pd.read_csv(os.path.join(solution_path, 'remesh.csv'))
 
 fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_margin_l'],
                   bottom=parameters['figure_margin_b'], right=parameters['figure_margin_r'],
@@ -122,10 +126,10 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
                                 parameters['v_colorbar_size'][0],
                                 parameters['v_colorbar_size'][1]])
 
-sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
-                                    parameters['sigma_colorbar_position'][1],
-                                    parameters['sigma_colorbar_size'][0],
-                                    parameters['sigma_colorbar_size'][1]])
+# sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
+#                                     parameters['sigma_colorbar_position'][1],
+#                                     parameters['sigma_colorbar_size'][0],
+#                                     parameters['sigma_colorbar_size'][1]])
 
 
 def plot_snapshot(fig, n_file,
@@ -139,7 +143,7 @@ def plot_snapshot(fig, n_file,
     n_snapshot = str(n_file)
 
 
-    data_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv')
+    data_line_vertices = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/line_mesh_n_' + n_snapshot + '.csv'))
     data_boundary_vertices_polygon = pd.read_csv(os.path.join(
     snapshot_path, 'boundary_points_id_' + str(parameters['polygon_loop_id']) + f'_n_{n_snapshot}.csv'))
 
