@@ -73,17 +73,17 @@ plt.rcParams.update({
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
-
+'''
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 
-
 '''
+ 
 # 2 read solutio from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
-'''
+ 
 
 
 
@@ -233,27 +233,16 @@ def plot_snapshot(fig, n_file,
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv')
     data_msh_line_vertices = pd.read_csv(os.path.join(
         snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
-    data_X = pd.read_csv(os.path.join(
-        snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
-    data_v_fl = pd.read_csv(os.path.join(
-        snapshot_nodal_values_path, 'def_v_fl_n_' + n_file_string + '.csv'))
+    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
+    data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_file_string + '.csv'))
     
-
-
-    data_sigma_fl = pd.read_csv(
-        solution_path + 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv')
-    data_w = pd.read_csv(os.path.join(
-        snapshot_path, 'w_n_' + n_file_string + '.csv'))
-    data_sigma = pd.read_csv(os.path.join(
-        snapshot_path, 'sigma_n_12_' + n_file_string + '.csv'))
-    data_v = pd.read_csv(os.path.join(
-        snapshot_path, 'v_n_' + n_file_string + '.csv'))
-    data_nu = pd.read_csv(os.path.join(
-        snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
-    data_psi = pd.read_csv(os.path.join(
-        snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
-    data_u_msh = pd.read_csv(os.path.join(
-        snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
+    data_sigma_fl = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv')
+    data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + n_file_string + '.csv'))
+    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_file_string + '.csv'))
+    data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_file_string + '.csv'))
+    data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
+    data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
+    data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
 
     # data_omega contains de values of \partial_1 X^alpha
     data_omega = lis.data_omega(data_nu, data_psi)
@@ -859,10 +848,10 @@ def plot_snapshot(fig, n_file,
      
 
 
-# plot_snapshot(fig, snapshot_max,
-#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 1))
-plot_snapshot(fig, parameters['snapshot_to_plot'],
-              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
+plot_snapshot(fig, snapshot_max,
+              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 1))
+# plot_snapshot(fig, parameters['snapshot_to_plot'],
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
