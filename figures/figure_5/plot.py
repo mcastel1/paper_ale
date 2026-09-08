@@ -97,7 +97,7 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 
 data_ref_boundary_vertices_sub_mesh_1 = pd.read_csv(os.path.join(
-    mesh_path, 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))
+    mesh_path, 'mesh_0', 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))
 
 
 fig = pplt.figure(

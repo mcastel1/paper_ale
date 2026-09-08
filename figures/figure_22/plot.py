@@ -11,8 +11,6 @@ import warnings
 
 import calculus.utils as cal
 import constants.utils as const
-import calculus.geometry as geo
-import graphics.color_bar as cb
 import list.column_labels as clab
 import graphics.utils as gr
 import graphics.vector_plot as vp
@@ -24,12 +22,12 @@ import graphics.vector_plot as vec
 
 '''
 you can copy the data from abacus with
-./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_5 1 1000000 30000
+./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_22 1 1000000 10
 
 
 to copy the parameters to finite_elements:
-cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
-cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
+cp ~/Documents/work/manuscripts/paper_ale/figures/figure_22/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
+cp ~/Documents/work/manuscripts/paper_ale/figures/figure_22/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -71,18 +69,18 @@ plt.rcParams.update({
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
-'''
+
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 
+
 '''
- 
 # 2 read solutio from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
  
-
+'''
 
 
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
@@ -95,7 +93,7 @@ number_of_frames = snapshot_max - snapshot_min + 1
 
 
 data_ref_boundary_vertices_sub_mesh_1 = pd.read_csv(os.path.join(
-    mesh_path, 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))
+    mesh_path, 'mesh_0', 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))
 
 
 fig = pplt.figure(
