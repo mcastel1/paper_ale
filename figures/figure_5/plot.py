@@ -97,8 +97,8 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
 
 
-data_ref_boundary_vertices_sub_mesh_1 = pd.read_csv(os.path.join(
-    mesh_path, 'mesh_0', 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))
+data_ref_boundary_vertices_mesh_1 = pd.read_csv(os.path.join(
+    mesh_path, 'mesh_0', 'boundary_points_id_' + str(mesh_parameters['mesh_1_id']) + '.csv'))
 
 
 fig = pplt.figure(
@@ -163,9 +163,9 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
     U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(
         data_u_msh)
 
-    data_def_boundary_vertices_sub_mesh_1 = []
-    for _, row in data_ref_boundary_vertices_sub_mesh_1.iterrows():
-        data_def_boundary_vertices_sub_mesh_1.append(
+    data_def_boundary_vertices_mesh_1 = []
+    for _, row in data_ref_boundary_vertices_mesh_1.iterrows():
+        data_def_boundary_vertices_mesh_1.append(
             np.add(
                 [row[':0'], row[':1']],
                 [U_interp_x(row[':0'], row[':1']),
@@ -175,12 +175,12 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
 
     # 2) add to the sequence of lines above the top-left and top-right and bottom-right extremal points of the region to cover
     # two points at the bottom-right corner
-    data_def_boundary_vertices_sub_mesh_1.insert(0, (
+    data_def_boundary_vertices_mesh_1.insert(0, (
         parameters['L'] + U_interp_x(parameters['L'], parameters['h']),
         parameters['h'] + U_interp_y(parameters['L'], parameters['h'])
     )
     )
-    data_def_boundary_vertices_sub_mesh_1.insert(0, (
+    data_def_boundary_vertices_mesh_1.insert(0, (
         parameters['L'] + U_interp_x(parameters['L'], parameters['h']) +
         margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
         parameters['h'] + U_interp_y(parameters['L'], parameters['h'])
@@ -188,21 +188,21 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
     )
 
     # bottom-left point
-    data_def_boundary_vertices_sub_mesh_1.append(np.subtract(
-        data_def_boundary_vertices_sub_mesh_1[-1],
+    data_def_boundary_vertices_mesh_1.append(np.subtract(
+        data_def_boundary_vertices_mesh_1[-1],
         (margin[0] * (axis_min_max[0]
                       [1] - axis_min_max[0][0]), 0)
     )
     )
 
     # top-left point
-    data_def_boundary_vertices_sub_mesh_1.append((
+    data_def_boundary_vertices_mesh_1.append((
         -margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
         axis_min_max[1][1] + margin[1] *
         (axis_min_max[1][1] - axis_min_max[1][0])
     ))
     # top-right point
-    data_def_boundary_vertices_sub_mesh_1.append((
+    data_def_boundary_vertices_mesh_1.append((
         axis_min_max[0][1] + margin[0] *
         (axis_min_max[0][1] - axis_min_max[0][0]),
         axis_min_max[1][1] + margin[1] *
@@ -210,11 +210,11 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
     ))
 
     # 3) plot the  polygon in order to hide the arrows
-    poly = Polygon(data_def_boundary_vertices_sub_mesh_1, fill=True,
+    poly = Polygon(data_def_boundary_vertices_mesh_1, fill=True,
                    linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
     ax.add_patch(poly)
 
-    return data_def_boundary_vertices_sub_mesh_1
+    return data_def_boundary_vertices_mesh_1
     #
 
 
@@ -253,7 +253,13 @@ def plot_snapshot(fig, n_file,
     # build `data_X_cur` from `data_X_ref` and `data_U`
     data_X_cur = data_X_ref.copy()
     data_X_cur[['f:0', 'f:1']] += data_U[['f:0', 'f:1']]
+    data_X_cur = data_X_cur.sort_values(by=[":0"]).copy()
 
+    print(f'max = {np.max(data_X_ref["f:0"])}')
+
+
+    print(data_X_ref[['f:0','f:1']].describe())
+    print(data_ref_boundary_vertices_mesh_1[[':0',':1']].describe())
 
 
     # plot snapshot label
@@ -295,7 +301,7 @@ def plot_snapshot(fig, n_file,
 
 
     X_cur, _ = gr.interpolate_curve(
-        data_X_cur, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
+        data_X_cur, data_X_cur[':0'].min(), data_X_cur[':0'].max(), parameters['n_bins_X'])
 
 
     
@@ -323,8 +329,9 @@ def plot_snapshot(fig, n_file,
     X_U, Y_U, U_x, U_y = geo.u_1d(data_X_ref, data_U)
 
     # coordinates of the curve in the reference configuration
-    X_ref = np.array(list(zip(X_U, Y_U)))
+    X_ref, _ = gr.interpolate_curve(data_X_ref, data_X_ref[':0'].min(), data_X_ref[':0'].max(), parameters['n_bins_X'])
 
+    '''    
     # plot the vector field U
     vp.plot_1d_vector_field(ax, [X_U, Y_U], [U_x, U_y],
                             shaft_length=None,
@@ -341,6 +348,7 @@ def plot_snapshot(fig, n_file,
                             legend_position=parameters['u_legend_position'],
                             stride=parameters['u_stride'],
                             z_order=0)
+    '''
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -357,6 +365,8 @@ def plot_snapshot(fig, n_file,
                        z_order=1
                        )
 
+ 
+    '''
     # plot X_ref
     gr.plot_curve_grid(ax, X_ref,
                        line_color='red',
@@ -364,6 +374,7 @@ def plot_snapshot(fig, n_file,
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
+    '''
 
     # Create custom legend handles
     handles, labels = ax.get_legend_handles_labels()

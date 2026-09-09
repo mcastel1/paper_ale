@@ -123,7 +123,7 @@ def plot_snapshot(fig, n_file,
 
     # load data
     data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
-    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
+    # data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
     
     data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
     data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
@@ -165,8 +165,8 @@ def plot_snapshot(fig, n_file,
     if w_min_max == None:
         w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
 
-    X_curr, t = gr.interpolate_curve(
-        data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
+    # X_curr, t = gr.interpolate_curve(
+    #     data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
     X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                                              [0, 0],
