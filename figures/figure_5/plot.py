@@ -110,7 +110,8 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(3, 3, 1)
+fig.add_subplot(1, 1, 1)
+'''
 fig.add_subplot(3, 3, 2)
 fig.add_subplot(3, 3, 3)
 fig.add_subplot(3, 3, 4)
@@ -118,7 +119,8 @@ fig.add_subplot(3, 3, 5)
 fig.add_subplot(3, 3, 7)
 fig.add_subplot(3, 3, 8)
 fig.add_subplot(3, 3, 9)
-
+'''
+'''
 nu_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(nu_colorbar_axis, parameters['colorbar_size'])
 
@@ -139,8 +141,7 @@ cb.set_size(w_colorbar_axis, parameters['colorbar_size'])
 
 sigma_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(sigma_colorbar_axis, parameters['colorbar_size'])
-
-
+'''
 '''
 plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration
 Input values:
@@ -385,7 +386,7 @@ def plot_snapshot(fig, n_file,
         minor_tick_length=parameters['minor_tick_length'],
         z_order=const.high_z_order)
 
-    
+    '''
     # =============
     # nu subplot
     # =============
@@ -845,6 +846,8 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=sigma_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
+
+    '''
      
 
 
