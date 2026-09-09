@@ -80,7 +80,7 @@ mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solut
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
  
-    
+
 
 
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
@@ -186,9 +186,7 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']]
-                       )
+    gr.set_axes_limits(ax,[0, 0], [parameters['L'], parameters['h']])
 
  
 

@@ -42,8 +42,6 @@ pd.set_option('display.max_columns', None)
 
 parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
-solution_parameters = io.read_parameters_from_csv_file(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'solution_parameters.csv'))
 
 
 # add the path where to find the shared modules
@@ -81,9 +79,12 @@ mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solut
 '''
  
 # 2 read solutio from external folder
-solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
-mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
+solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane', "solution")
+mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line', "solution")
  
+
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
+mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 
 
 
@@ -234,10 +235,11 @@ def plot_snapshot(fig, n_file,
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv')
     data_msh_line_vertices = pd.read_csv(os.path.join(
         snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
-    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
+    data_X_ref = pd.read_csv(os.path.join(snapshot_path, 'X_ref_n_' + n_file_string + '.csv'))
+    data_U = pd.read_csv(os.path.join(snapshot_path, 'U_n_12_' + n_file_string + '.csv'))
     data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_file_string + '.csv'))
-    
-    data_sigma_fl = pd.read_csv(solution_path + 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv')
+
+    data_sigma_fl = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv'))
     data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + n_file_string + '.csv'))
     data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_file_string + '.csv'))
     data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_file_string + '.csv'))
@@ -247,6 +249,12 @@ def plot_snapshot(fig, n_file,
 
     # data_omega contains de values of \partial_1 X^alpha
     data_omega = lis.data_omega(data_nu, data_psi)
+
+    # build `data_X_cur` from `data_X_ref` and `data_U`
+    data_X_cur = data_X_ref.copy()
+    data_X_cur[['f:0', 'f:1']] += data_U[['f:0', 'f:1']]
+
+
 
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
@@ -261,8 +269,8 @@ def plot_snapshot(fig, n_file,
 
         X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
                                                                                                 [0, 0],
-                                                                                                [parameters['L'],
-                                                                                                    parameters['h']],
+                                                                                                [mesh_parameters['L'],
+                                                                                                    np.max(data_u_msh[':1'])],
                                                                                                 parameters['n_bins_v_fl'])
 
         # X, Y are the positions of the mesh nodes in the current configuration
@@ -284,13 +292,17 @@ def plot_snapshot(fig, n_file,
     if w_min_max == None:
         w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
 
-    X_curr, t = gr.interpolate_curve(
-        data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
+
+    X_cur, _ = gr.interpolate_curve(
+        data_X_cur, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
+
+
+    
     X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                                              [0, 0],
-                                                                                             [parameters['L'],
-                                                                                                 parameters['h']],
+                                                                                             [mesh_parameters['L'],
+                                                                                                 np.max(data_u_msh[':1'])],
                                                                                              parameters['n_bins_v_fl'],
                                                                                              clab.label_x_column,
                                                                                              clab.label_y_column,
@@ -305,12 +317,10 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']]
-                       )
+    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], mesh_parameters['L']])
 
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
-    X_U, Y_U, U_x, U_y = geo.u_1d(data_X, parameters['h'])
+    X_U, Y_U, U_x, U_y = geo.u_1d(data_X_ref, data_U)
 
     # coordinates of the curve in the reference configuration
     X_ref = np.array(list(zip(X_U, Y_U)))
@@ -340,7 +350,7 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     # plot X_curr
-    gr.plot_curve_grid(ax, X_curr,
+    gr.plot_curve_grid(ax, X_cur,
                        line_color='green',
                        legend='\\text{Current}',
                        line_width=parameters['X_line_width'],
@@ -369,7 +379,7 @@ def plot_snapshot(fig, n_file,
     )
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], mesh_parameters['L']],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label'],
