@@ -68,19 +68,19 @@ plt.rcParams.update({
 
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
-
+'''
 
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 
-
 '''
+
 # 2 read solutio from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
  
-'''
+    
 
 
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
