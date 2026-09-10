@@ -97,6 +97,7 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
 
 
+#ERROR:  this should be reloaded at every time step because it changes with remeshing
 data_ref_boundary_vertices_mesh_1 = pd.read_csv(os.path.join(
     mesh_path, 'mesh_0', 'boundary_points_id_' + str(mesh_parameters['mesh_1_id']) + '.csv'))
 
@@ -111,11 +112,11 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(1, 3, 1)
-fig.add_subplot(1, 3, 2)
-fig.add_subplot(1, 3, 3)
+fig.add_subplot(2, 2, 1)
+fig.add_subplot(2, 2, 2)
+fig.add_subplot(2, 2, 3)
+fig.add_subplot(2, 2, 4)
 '''
-fig.add_subplot(3, 3, 4)
 fig.add_subplot(3, 3, 5)
 fig.add_subplot(3, 3, 7)
 fig.add_subplot(3, 3, 8)
@@ -128,10 +129,10 @@ cb.set_size(nu_colorbar_axis, parameters['colorbar_size'])
 psi_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(psi_colorbar_axis, parameters['colorbar_size'])
 
-'''
 v_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(v_fl_colorbar_axis, parameters['colorbar_size'])
 
+'''
 sigma_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(sigma_fl_colorbar_axis, parameters['colorbar_size'])
 
@@ -156,13 +157,31 @@ Input values:
 '''
 
 
+# 
+# compute the min and max of the axes
+#
+data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(snapshot_max) + '.csv'))
+
+_, Y_msh_ref, _, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
+                                                                                        [0, 0],
+                                                                                        [mesh_parameters['L'],
+                                                                                            np.max(data_u_msh[':1'])],
+                                                                                        parameters['n_bins_v_fl'])
+
+# Y are the positions of the mesh nodes in the current configuration
+Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
+
+h = lis.min_max(Y)[1]
+
+# 
+
 def draw_masking_area(ax, axis_min_max, data_u_msh,
                       margin=[0]*2):
 
-    # 1)interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field
+    # 1. interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field
 
-    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(
-        data_u_msh)
+    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u_msh)
+    h_step = axis_min_max[1][1]
 
     data_def_boundary_vertices_mesh_1 = []
     for _, row in data_ref_boundary_vertices_mesh_1.iterrows():
@@ -174,21 +193,21 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
             )
         )
 
-    # 2) add to the sequence of lines above the top-left and top-right and bottom-right extremal points of the region to cover
-    # two points at the bottom-right corner
+    # 2.  add to the sequence of lines above the top-left and top-right and bottom-right extremal points of the region to cover
+    # 2.1 two points at the bottom-right corner
     data_def_boundary_vertices_mesh_1.insert(0, (
-        parameters['L'] + U_interp_x(parameters['L'], parameters['h']),
-        parameters['h'] + U_interp_y(parameters['L'], parameters['h'])
+        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step),
+        h_step + U_interp_y(mesh_parameters['L'], h_step)
     )
     )
     data_def_boundary_vertices_mesh_1.insert(0, (
-        parameters['L'] + U_interp_x(parameters['L'], parameters['h']) +
+        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step) +
         margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
-        parameters['h'] + U_interp_y(parameters['L'], parameters['h'])
+        h_step + U_interp_y(mesh_parameters['L'], h_step)
     )
     )
 
-    # bottom-left point
+    # 2.2 bottom-left point
     data_def_boundary_vertices_mesh_1.append(np.subtract(
         data_def_boundary_vertices_mesh_1[-1],
         (margin[0] * (axis_min_max[0]
@@ -196,13 +215,13 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
     )
     )
 
-    # top-left point
+    # 2.3 top-left point
     data_def_boundary_vertices_mesh_1.append((
         -margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
         axis_min_max[1][1] + margin[1] *
         (axis_min_max[1][1] - axis_min_max[1][0])
     ))
-    # top-right point
+    # 2.4 top-right point
     data_def_boundary_vertices_mesh_1.append((
         axis_min_max[0][1] + margin[0] *
         (axis_min_max[0][1] - axis_min_max[0][0]),
@@ -210,7 +229,7 @@ def draw_masking_area(ax, axis_min_max, data_u_msh,
         (axis_min_max[1][1] - axis_min_max[1][0])
     ))
 
-    # 3) plot the  polygon in order to hide the arrows
+    # 3. plot the  polygon in order to hide the arrows
     poly = Polygon(data_def_boundary_vertices_mesh_1, fill=True,
                    linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
     ax.add_patch(poly)
@@ -266,8 +285,7 @@ def plot_snapshot(fig, n_file,
 
         # compute the min and max of the axes
         #
-        data_u_msh = pd.read_csv(os.path.join(
-            snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
+        data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
 
         X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
                                                                                                 [0, 0],
@@ -282,6 +300,8 @@ def plot_snapshot(fig, n_file,
         # compute the min-max of the snapshot
         axis_min_max = [lis.min_max(X), lis.min_max(Y)]
         #
+
+
 
     if nu_min_max == None:
         nu_min_max = cal.min_max_file(os.path.join(snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
@@ -319,7 +339,7 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], mesh_parameters['L']])
+    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], h])
 
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
     # X_U, Y_U, U_x, U_y = geo.u_1d(data_X_ref, data_U)
@@ -348,7 +368,7 @@ def plot_snapshot(fig, n_file,
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
-                    line_width=parameters['plot_line_width'],
+                    line_width=parameters['mesh_line_width'],
                     color='black',
                     alpha=parameters['alpha_mesh'],
                     zorder=parameters['mesh_zorder'])
@@ -386,7 +406,7 @@ def plot_snapshot(fig, n_file,
     )
 
     gr.plot_2d_axes(
-        ax, [0, 0], [mesh_parameters['L'], mesh_parameters['L']],
+        ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label'],
@@ -413,7 +433,7 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], mesh_parameters['L']])
+    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], h])
 
     # construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted
     data_nu_minus_1 = data_nu.copy()
@@ -446,7 +466,7 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
-        ax, [0, 0], [mesh_parameters['L'], mesh_parameters['L']],
+        ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
@@ -475,7 +495,7 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], mesh_parameters['L']])
+    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], h])
 
     color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi,
                                               min_max=psi_min_max,
@@ -490,7 +510,7 @@ def plot_snapshot(fig, n_file,
                                               axis=psi_colorbar_axis)
 
     # plot X and psi
-    gr.plot_curve_grid(ax, X_curr,
+    gr.plot_curve_grid(ax, X_cur,
                        color_map=color_map_psi,
                        line_color='black',
                        line_width=parameters['psi_line_width'])
@@ -503,7 +523,7 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
@@ -522,7 +542,7 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=psi_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
-    '''
+
     # =============
     # v_fl subplot
     # =============
@@ -532,8 +552,7 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']])
+    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], h])
 
     # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
     # here I use interpolate_2d_vector_field_layer because the values of the vector field vary very suddenly close to the bottom and right edge of the mesh, so I treat them with one-dimensional interpolation
@@ -542,7 +561,7 @@ def plot_snapshot(fig, n_file,
         [axis_min_max[0][0], axis_min_max[1][0]],
         [axis_min_max[0][1], axis_min_max[1][1]],
         parameters['n_bins_v_fl'],
-        right_edge_x=parameters['L'])
+        right_edge_x=mesh_parameters['L'])
     
     # print(f'X: {X}')
     # print(f'Y: {Y}')
@@ -558,8 +577,9 @@ def plot_snapshot(fig, n_file,
                     alpha=parameters['alpha_mesh'],
                     zorder=parameters['mesh_zorder'])
 
+    
     # plot the area that masks arrows which lie outside the mesh in the current configuration
-    data_def_boundary_vertices_sub_mesh_1 = draw_masking_area(ax, 
+    data_def_boundary_vertices_mesh_1 = draw_masking_area(ax, 
                       axis_min_max, 
                       data_u_msh,
                       parameters['masking_area_margin']
@@ -567,12 +587,13 @@ def plot_snapshot(fig, n_file,
     
 
     # set to nan the values of V_x and V_y which lie inside the masking region 
-    vp.set_in_polygon(data_def_boundary_vertices_sub_mesh_1,
+    vp.set_in_polygon(data_def_boundary_vertices_mesh_1,
                       [X, Y],
                       [V_x, V_y])
+    
 
 
-    # plot velocity of F
+    # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [
                              V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
 
@@ -588,7 +609,7 @@ def plot_snapshot(fig, n_file,
                         axis=v_fl_colorbar_axis)
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
@@ -606,7 +627,9 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=v_fl_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
+
     
+    '''
     # =============
     # sigma_fl subplot
     # =============

@@ -54,7 +54,7 @@ axis_min_max_abs = cal.X_curr_min_max_abs(
                                             plot.snapshot_max, 
                                             plot.parameters['frame_stride'],
                                             plot.snapshot_nodal_values_path,
-                                            [[0, plot.parameters['L']], [0, plot.parameters['h']]],
+                                            [[0, plot.mesh_parameters['L']], [0, plot.h]],
                                             plot.parameters['n_bins_v_fl']
                                         )
 
@@ -100,7 +100,6 @@ def update_animation(n):
 
     plot.plot_snapshot(plot.fig, n, 
                     snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.solution_parameters['T'] / plot.solution_parameters['N'], 'min_s', plot.parameters['n_decimals_snapshot_label']),
-                    axis_min_max=axis_min_max_abs,
                     norm_v_min_max=norm_v_min_max_abs,
                     norm_v_fl_min_max=norm_v_fl_min_max_abs,
                     w_min_max=w_min_max_abs
