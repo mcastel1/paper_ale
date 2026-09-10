@@ -63,6 +63,8 @@ plt.rcParams.update({
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
         r"\usepackage{glossaries} "
+        r"\usepackage{graphicx} "
+        r"\usepackage{tikz} "
         rf"\input{{{paths.definitions_path}}}"
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )

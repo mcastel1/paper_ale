@@ -1,14 +1,11 @@
 \acsetup{
     make-links = true,
     format/short = \color{acronym_link_color},    % color for the short form
-    format/long = \color{acronym_link_color}     % color for the long form
+    format/long = \color{acronym_link_color},     % color for the long form
+    list/template=description,
+    pages/display=none
 }
 \allowdisplaybreaks
 
 \crefname{paragraph}{Section}{paragraphs}
 \Crefname{paragraph}{Sections}{Paragraphs}
-
-\acsetup{
-    list/template=description,
-    pages/display=none
-}

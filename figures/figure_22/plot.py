@@ -61,6 +61,8 @@ plt.rcParams.update({
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
         r"\usepackage{glossaries} "
+        r"\usepackage{graphicx} "
+        r"\usepackage{tikz} "
         rf"\input{{{paths.definitions_path}}}"
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
@@ -68,12 +70,11 @@ plt.rcParams.update({
 
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
-'''
 
+'''
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-
 '''
 
 # 2 read solutio from external folder
@@ -92,8 +93,7 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
 
 
-data_ref_boundary_vertices_sub_mesh_1 = pd.read_csv(os.path.join(
-    mesh_path, 'mesh_0', 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))
+
 
 
 fig = pplt.figure(
