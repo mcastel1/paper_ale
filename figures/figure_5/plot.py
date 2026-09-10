@@ -111,19 +111,22 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(1, 1, 1)
+fig.add_subplot(1, 2, 1)
+fig.add_subplot(1, 2, 2)
 '''
-fig.add_subplot(3, 3, 2)
-fig.add_subplot(3, 3, 3)
+ffig.add_subplot(3, 3, 3)
 fig.add_subplot(3, 3, 4)
 fig.add_subplot(3, 3, 5)
 fig.add_subplot(3, 3, 7)
 fig.add_subplot(3, 3, 8)
 fig.add_subplot(3, 3, 9)
 '''
-'''
+
 nu_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(nu_colorbar_axis, parameters['colorbar_size'])
+
+
+'''
 
 psi_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(psi_colorbar_axis, parameters['colorbar_size'])
@@ -255,11 +258,6 @@ def plot_snapshot(fig, n_file,
     data_X_cur[['f:0', 'f:1']] += data_U[['f:0', 'f:1']]
     data_X_cur = data_X_cur.sort_values(by=[":0"]).copy()
 
-    print(f'max = {np.max(data_X_ref["f:0"])}')
-
-
-    print(data_X_ref[['f:0','f:1']].describe())
-    print(data_ref_boundary_vertices_mesh_1[[':0',':1']].describe())
 
 
     # plot snapshot label
@@ -300,7 +298,7 @@ def plot_snapshot(fig, n_file,
 
 
 
-    X_cur, _ = gr.interpolate_curve(
+    X_cur, t = gr.interpolate_curve(
         data_X_cur, data_X_cur[':0'].min(), data_X_cur[':0'].max(), parameters['n_bins_X'])
 
 
@@ -407,7 +405,7 @@ def plot_snapshot(fig, n_file,
         minor_tick_length=parameters['minor_tick_length'],
         z_order=const.high_z_order)
 
-    '''
+    
     # =============
     # nu subplot
     # =============
@@ -417,8 +415,7 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']])
+    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], mesh_parameters['L']])
 
     # construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted
     data_nu_minus_1 = data_nu.copy()
@@ -438,7 +435,7 @@ def plot_snapshot(fig, n_file,
                                              axis=nu_colorbar_axis)
 
     # plot X and nu
-    gr.plot_curve_grid(ax, X_curr,
+    gr.plot_curve_grid(ax, X_cur,
                        color_map=color_map_nu,
                        line_color='black',
                        line_width=parameters['nu_line_width'])
@@ -451,7 +448,7 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], mesh_parameters['L']],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
@@ -470,6 +467,7 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=nu_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
+    '''
     # =============
     # psi subplot
     # =============
