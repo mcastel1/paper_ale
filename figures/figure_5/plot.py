@@ -111,10 +111,10 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(1, 2, 1)
-fig.add_subplot(1, 2, 2)
+fig.add_subplot(1, 3, 1)
+fig.add_subplot(1, 3, 2)
+fig.add_subplot(1, 3, 3)
 '''
-ffig.add_subplot(3, 3, 3)
 fig.add_subplot(3, 3, 4)
 fig.add_subplot(3, 3, 5)
 fig.add_subplot(3, 3, 7)
@@ -125,12 +125,10 @@ fig.add_subplot(3, 3, 9)
 nu_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(nu_colorbar_axis, parameters['colorbar_size'])
 
-
-'''
-
 psi_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(psi_colorbar_axis, parameters['colorbar_size'])
 
+'''
 v_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(v_fl_colorbar_axis, parameters['colorbar_size'])
 
@@ -324,7 +322,7 @@ def plot_snapshot(fig, n_file,
     gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], mesh_parameters['L']])
 
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
-    X_U, Y_U, U_x, U_y = geo.u_1d(data_X_ref, data_U)
+    # X_U, Y_U, U_x, U_y = geo.u_1d(data_X_ref, data_U)
 
     # coordinates of the curve in the reference configuration
     X_ref, _ = gr.interpolate_curve(data_X_ref, data_X_ref[':0'].min(), data_X_ref[':0'].max(), parameters['n_bins_X'])
@@ -467,7 +465,7 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=nu_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
-    '''
+    
     # =============
     # psi subplot
     # =============
@@ -477,8 +475,7 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']])
+    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], mesh_parameters['L']])
 
     color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi,
                                               min_max=psi_min_max,
@@ -524,7 +521,8 @@ def plot_snapshot(fig, n_file,
         z_order=const.high_z_order,
         colorbar_axis=psi_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
-    
+
+    '''
     # =============
     # v_fl subplot
     # =============
