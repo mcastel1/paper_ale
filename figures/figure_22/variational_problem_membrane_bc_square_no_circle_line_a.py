@@ -27,6 +27,12 @@ dt = rpam.parameters['T'] / rpam.parameters['N']
 
 
 # expressions for the initial conditions
+class v_n_0_Expression( UserExpression ):
+    def eval(self, values, x):
+        values[0] = 0
+
+    def value_shape(self):
+        return (1,)
 
 class sigma_n_32_0_Expression( UserExpression ):
     def eval(self, values, x):
@@ -52,6 +58,8 @@ class U_n_12_0_Expression( UserExpression ):
     
     
 # expressions for the boundary conditions
+
+
 class v_bar_l_Expression( UserExpression ):
     def eval(self, values, x):
         values[0] = rpam.parameters['v_bar_l'][0]
