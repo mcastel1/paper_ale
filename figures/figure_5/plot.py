@@ -28,10 +28,12 @@ import graphics.vector_plot as vec
 you can copy the data from abacus with
 ./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_5 1 1000000 30000
 
-
 to copy the parameters to finite_elements:
-cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
-cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
+
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/membrane/parameters_bc_square_no_circle_line_a.csv
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv 
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/variational_problem_membrane_bc_square_no_circle_line_a.py ~/Documents/finite_elements/fluid_structure_interaction/membrane
+
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -73,6 +75,7 @@ plt.rcParams.update({
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
+
 '''
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
@@ -80,10 +83,11 @@ mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solut
 
 '''
  
-# 2 read solutio from external folder
+# 2 read solution from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane', "solution")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line', "solution")
  
+
 
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
@@ -99,9 +103,6 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
 
 
-#ERROR:  this should be reloaded at every time step because it changes with remeshing
-data_ref_boundary_vertices_mesh_1 = pd.read_csv(os.path.join(
-    mesh_path, 'mesh_0', 'boundary_points_id_' + str(mesh_parameters['mesh_1_id']) + '.csv'))
 
 
 fig = pplt.figure(
@@ -177,8 +178,8 @@ h = lis.min_max(Y)[1]
 
 # 
 
-def draw_masking_area(ax, axis_min_max, data_u_msh,
-                      margin=[0]*2):
+def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_mesh_1,
+                    margin=[0]*2):
 
     # 1. interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field
 
@@ -268,6 +269,8 @@ def plot_snapshot(fig, n_file,
     data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
     data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
+
+    data_ref_boundary_vertices_mesh_1 = pd.read_csv(os.path.join(snapshot_path, 'boundary_points_id_' + str(mesh_parameters['mesh_1_id']) + f'_n_{n_file_string}.csv'))
 
     # data_omega contains de values of \partial_1 X^alpha
     data_omega = lis.data_omega(data_nu, data_psi)
@@ -579,11 +582,12 @@ def plot_snapshot(fig, n_file,
                     alpha=parameters['alpha_mesh'],
                     zorder=parameters['mesh_zorder'])
 
-    
+     
     # plot the area that masks arrows which lie outside the mesh in the current configuration
     data_def_boundary_vertices_mesh_1 = draw_masking_area(ax, 
                       axis_min_max, 
                       data_u_msh,
+                      data_ref_boundary_vertices_mesh_1,
                       parameters['masking_area_margin']
                       )
     
@@ -593,7 +597,7 @@ def plot_snapshot(fig, n_file,
                       [X, Y],
                       [V_x, V_y])
     
-
+    
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [
