@@ -234,7 +234,7 @@ def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_m
 
     # 3. plot the  polygon in order to hide the arrows
     poly = Polygon(data_def_boundary_vertices_mesh_1, fill=True,
-                   linewidth=parameters['plot_line_width'], edgecolor='white', facecolor='white', zorder=1)
+                   linewidth=parameters['plot_line_width'], edgecolor='black', facecolor='white', zorder=const.high_z_order)
     ax.add_patch(poly)
 
     return data_def_boundary_vertices_mesh_1
