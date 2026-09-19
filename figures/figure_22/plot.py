@@ -22,7 +22,14 @@ import graphics.vector_plot as vec
 
 '''
 you can copy the data from abacus with
-./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_22 1 1000000 10
+    REMOTE_PATH="membrane_phi_2"
+    FIGURE_NAME="figure_22"
+    cd /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME
+    rm -rf solution
+    mkdir solution
+    ../copy_from_abacus.sh $REMOTE_PATH/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_22 1 1000000 100
+    mv $REMOTE_PATH/solution .
+    rm -rf $REMOTE_PATH
 
 
 to copy the parameters to finite_elements:
@@ -75,17 +82,17 @@ plt.rcParams.update({
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
-'''
+
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-'''
 
+'''
 # 2 read solutio from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
  
-
+'''
 
 
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
@@ -114,23 +121,13 @@ fig.add_subplot(1, 1, 1)
 
 def plot_snapshot(fig, n_file,
                   snapshot_label='',
-                  axis_min_max=None,
-                  nu_min_max=None,
-                  psi_min_max=None,
-                  norm_v_fl_min_max=None,
-                  sigma_fl_min_max=None,
-                  norm_v_min_max=None,
-                  w_min_max=None,
-                  sigma_min_max=None):
+                  axis_min_max=None):
 
     n_file_string = str(n_file)
 
     # load data
     data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
-    # data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
     
-    data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
-    data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
 
     # plot snapshot label
@@ -158,16 +155,7 @@ def plot_snapshot(fig, n_file,
         axis_min_max = [lis.min_max(X), lis.min_max(Y)]
         #
 
-    if nu_min_max == None:
-        nu_min_max = cal.min_max_file(os.path.join(snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
-    if psi_min_max == None:
-        psi_min_max = cal.min_max_file(os.path.join(snapshot_path, 'psi_n_12_' + str(n_file) + '.csv'))
-    if norm_v_min_max == None:
-        norm_v_min_max = cal.norm_min_max_file(os.path.join(snapshot_path, 'v_n_' + str(n_file) + '.csv'), scalar=True)
-    if sigma_min_max == None:
-        sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
-    if w_min_max == None:
-        w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+    
 
     # X_curr, t = gr.interpolate_curve(
     #     data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
