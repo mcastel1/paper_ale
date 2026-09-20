@@ -13,7 +13,6 @@ import warnings
 
 import calculus.utils as cal
 import constants.utils as const
-import calculus.geometry as geo
 import graphics.color_bar as cb
 import list.column_labels as clab
 import graphics.utils as gr
@@ -45,7 +44,6 @@ to copy the parameters to finite_elements:
     cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/variational_problem_membrane_bc_square_no_circle_line_a.py ~/Documents/finite_elements/fluid_structure_interaction/membrane
 
 '''
-
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
 # Show all rows and columns when printing a Pandas array
@@ -102,7 +100,6 @@ solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_pat
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 
 
-
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
 snapshot_path = os.path.join(solution_path, "snapshots/csv/")
 snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
@@ -124,10 +121,12 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(2, 2, 1)
-fig.add_subplot(2, 2, 2)
-fig.add_subplot(2, 2, 3)
-fig.add_subplot(2, 2, 4)
+fig.add_subplot(2, 3, 1)
+fig.add_subplot(2, 3, 2)
+fig.add_subplot(2, 3, 3)
+fig.add_subplot(2, 3, 4)
+fig.add_subplot(2, 3, 5)
+fig.add_subplot(2, 3, 6)
 '''
 fig.add_subplot(3, 3, 5)
 fig.add_subplot(3, 3, 7)
@@ -141,13 +140,6 @@ cb.set_size(nu_colorbar_axis, parameters['colorbar_size'])
 psi_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(psi_colorbar_axis, parameters['colorbar_size'])
 
-v_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
-cb.set_size(v_fl_colorbar_axis, parameters['colorbar_size'])
-
-'''
-sigma_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
-cb.set_size(sigma_fl_colorbar_axis, parameters['colorbar_size'])
-
 v_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(v_colorbar_axis, parameters['colorbar_size'])
 
@@ -156,6 +148,15 @@ cb.set_size(w_colorbar_axis, parameters['colorbar_size'])
 
 sigma_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(sigma_colorbar_axis, parameters['colorbar_size'])
+
+'''
+v_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(v_fl_colorbar_axis, parameters['colorbar_size'])
+
+sigma_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(sigma_fl_colorbar_axis, parameters['colorbar_size'])
+
+
 '''
 '''
 plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration
@@ -267,22 +268,39 @@ def plot_snapshot(fig, n_file,
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv')
     data_msh_line_vertices = pd.read_csv(os.path.join(
         snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
+    
     data_X_ref = pd.read_csv(os.path.join(snapshot_path, 'X_ref_n_' + n_file_string + '.csv'))
-    data_U = pd.read_csv(os.path.join(snapshot_path, 'U_n_12_' + n_file_string + '.csv'))
-    data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_file_string + '.csv'))
+    data_X_ref = data_X_ref.sort_values(by=[":0"]).copy()
 
-    data_sigma_fl = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv'))
+    data_U = pd.read_csv(os.path.join(snapshot_path, 'U_n_12_' + n_file_string + '.csv'))
+    data_U = data_U.sort_values(by=[":0"]).copy()
+
     data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + n_file_string + '.csv'))
-    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_file_string + '.csv'))
+    data_w = data_w.sort_values(by=[":0"]).copy()
+
     data_v = pd.read_csv(os.path.join(snapshot_path, 'v_n_' + n_file_string + '.csv'))
+    data_v = data_v.sort_values(by=[":0"]).copy()
+
+    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_file_string + '.csv'))
+    data_sigma = data_sigma.sort_values(by=[":0"]).copy()
+
     data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
+    data_nu = data_nu.sort_values(by=[":0"]).copy()
+
     data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
+    data_psi = data_psi.sort_values(by=[":0"]).copy()
+
+    data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_file_string + '.csv'))
+    data_sigma_fl = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv'))
+
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
 
     data_ref_boundary_vertices_mesh_1 = pd.read_csv(os.path.join(snapshot_path, 'boundary_points_id_' + str(mesh_parameters['mesh_1_id']) + f'_n_{n_file_string}.csv'))
 
     # data_omega contains de values of \partial_1 X^alpha
     data_omega = lis.data_omega(data_nu, data_psi)
+    data_omega = data_omega.sort_values(by=[":0"]).copy()
+
 
     # build `data_X_cur` from `data_X_ref` and `data_U`
     data_X_cur = data_X_ref.copy()
@@ -387,10 +405,10 @@ def plot_snapshot(fig, n_file,
                     alpha=parameters['alpha_mesh'],
                     zorder=parameters['mesh_zorder'])
 
-    # plot X_curr
+    # plot X_cur
     gr.plot_curve_grid(ax, X_cur,
-                       line_color='green',
-                       legend='\\text{Current}',
+                       line_color=parameters['X_cur_color'],
+                       legend=parameters['X_cur_legend'],
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
@@ -413,7 +431,7 @@ def plot_snapshot(fig, n_file,
         handles=handles,
         labels=labels,
         loc='center',
-        bbox_to_anchor=np.array(parameters['ref_cur_legend_position']),
+        bbox_to_anchor=np.array(parameters['X_cur_legend_position']),
         frameon=False,
         handlelength=parameters['legend_line_length'],
         prop=FontProperties(size=parameters['legend_font_size'])
@@ -423,7 +441,7 @@ def plot_snapshot(fig, n_file,
         ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
-        axis_label=parameters['axis_label'],
+        axis_label=parameters['axis_label_cur'],
         axis_label_angle=parameters['axis_label_angle'],
         axis_label_offset=parameters['axis_label_offset'],
         tick_label_offset=parameters['tick_label_offset'],
@@ -556,7 +574,7 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=psi_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
-
+    '''
     # =============
     # v_fl subplot
     # =============
@@ -644,7 +662,6 @@ def plot_snapshot(fig, n_file,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
     
-    '''
     # =============
     # sigma_fl subplot
     # =============
@@ -655,7 +672,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']])
+                       [0, 0], [parameters['L'], h])
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -703,7 +720,7 @@ def plot_snapshot(fig, n_file,
     )
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
@@ -723,18 +740,17 @@ def plot_snapshot(fig, n_file,
         colorbar_axis_offset=parameters['colorbar_offset']
     )
     
-
+    '''
     # =============
     # v subplot
     # =============
 
-    ax = fig.axes[5]
+    ax = fig.axes[3]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']])
+    gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -743,9 +759,10 @@ def plot_snapshot(fig, n_file,
                     alpha=parameters['alpha_mesh'],
                     zorder=parameters['mesh_zorder'])
 
-    # plot v
+    # plot v 
     X_v, Y_v, V_x, V_y, grid_norm_v, _, _, _ = vp.interpolate_t_vector_field_2d_arc_length_gauge(
-        data_X, data_omega, data_v, parameters['n_bins_v'])
+    data_X_cur, data_omega, data_v, parameters['n_bins_v'])
+
 
     vp.plot_1d_vector_field(ax, [X_v, Y_v], [V_x, V_y],
                             shaft_length=parameters['shaft_length'],
@@ -769,7 +786,7 @@ def plot_snapshot(fig, n_file,
                         tick_label_format=parameters['v_colorbar_tick_label_format'])
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
@@ -793,13 +810,12 @@ def plot_snapshot(fig, n_file,
     # w subplot
     # =============
 
-    ax = fig.axes[6]
+    ax = fig.axes[4]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']])
+    gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
 
     color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w,
                                             min_max=w_min_max,
@@ -814,7 +830,7 @@ def plot_snapshot(fig, n_file,
                                             axis=w_colorbar_axis)
 
     # plot X and w
-    gr.plot_curve_grid(ax, X_curr,
+    gr.plot_curve_grid(ax, X_cur,
                        color_map=color_map_w,
                        line_color='black',
                        line_width=parameters['w_line_width'])
@@ -827,7 +843,7 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
@@ -846,17 +862,17 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=w_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
+    
     # =============
     # sigma subplot
     # =============
 
-    ax = fig.axes[7]
+    ax = fig.axes[5]
 
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']])
+    gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
 
     color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
                                                 min_max=sigma_min_max,
@@ -864,13 +880,14 @@ def plot_snapshot(fig, n_file,
                                                 label=parameters['sigma_colorbar_axis_label'],
                                                 font_size=parameters['colorbar_font_size'],
                                                 tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
+                                                tick_label_format=parameters['sigma_colorbar_tick_label_format'],
                                                 label_angle=parameters['sigma_colorbar_label_angle'],
                                                 tick_length=parameters['colorbar_tick_length'],
                                                 label_offset=parameters['colorbar_axis_label_offset'],
                                                 axis=sigma_colorbar_axis)
 
     # plot X and sigma
-    gr.plot_curve_grid(ax, X_curr,
+    gr.plot_curve_grid(ax, X_cur,
                        color_map=color_map_sigma,
                        line_color='black',
                        line_width=parameters['sigma_line_width'])
@@ -883,7 +900,7 @@ def plot_snapshot(fig, n_file,
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
@@ -902,7 +919,7 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=sigma_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
-    '''
+    
      
 
 
