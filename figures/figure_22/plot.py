@@ -22,12 +22,23 @@ import graphics.vector_plot as vec
 
 '''
 you can copy the data from abacus with
-./copy_from_abacus.sh membrane_1/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_22 1 1000000 10
+    REMOTE_PATH="membrane_phi_2"
+    FIGURE_NAME="figure_22"
+    cd /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME
+    rm -rf solution
+    mkdir solution
+    ../copy_from_abacus.sh $REMOTE_PATH/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'X_n_12_*'  ~/Documents/work/manuscripts/paper_ale/figures/figure_22 1 1000000 100
+    mv $REMOTE_PATH/solution .
+    rm -rf $REMOTE_PATH
 
 
 to copy the parameters to finite_elements:
-cp ~/Documents/work/manuscripts/paper_ale/figures/figure_22/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
-cp ~/Documents/work/manuscripts/paper_ale/figures/figure_22/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv
+
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_22/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/membrane/parameters_bc_square_no_circle_line_a.csv
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_22/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv 
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_22/variational_problem_membrane_bc_square_no_circle_line_a.py ~/Documents/finite_elements/fluid_structure_interaction/membrane
+
+
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -61,6 +72,8 @@ plt.rcParams.update({
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
         r"\usepackage{glossaries} "
+        r"\usepackage{graphicx} "
+        r"\usepackage{tikz} "
         rf"\input{{{paths.definitions_path}}}"
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
@@ -68,19 +81,17 @@ plt.rcParams.update({
 
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
-'''
+
 
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 
 '''
-
-# 2 read solutio from external folder
+# 2 read solution from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane/', "solution/")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/', "solution/")
- 
-    
+'''
 
 
 figure_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), parameters['figure_name'])
@@ -92,8 +103,8 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
 
 
-data_ref_boundary_vertices_sub_mesh_1 = pd.read_csv(os.path.join(
-    mesh_path, 'mesh_0', 'boundary_points_id_' + str(parameters['sub_mesh_1_id']) + '.csv'))
+sys_utils.check_strides(parameters['frame_stride'], solution_parameters['print_out_stride'])
+
 
 
 fig = pplt.figure(
@@ -110,23 +121,13 @@ fig.add_subplot(1, 1, 1)
 
 def plot_snapshot(fig, n_file,
                   snapshot_label='',
-                  axis_min_max=None,
-                  nu_min_max=None,
-                  psi_min_max=None,
-                  norm_v_fl_min_max=None,
-                  sigma_fl_min_max=None,
-                  norm_v_min_max=None,
-                  w_min_max=None,
-                  sigma_min_max=None):
+                  axis_min_max=None):
 
     n_file_string = str(n_file)
 
     # load data
     data_msh_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
-    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
     
-    data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
-    data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
 
     # plot snapshot label
@@ -154,19 +155,10 @@ def plot_snapshot(fig, n_file,
         axis_min_max = [lis.min_max(X), lis.min_max(Y)]
         #
 
-    if nu_min_max == None:
-        nu_min_max = cal.min_max_file(os.path.join(snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
-    if psi_min_max == None:
-        psi_min_max = cal.min_max_file(os.path.join(snapshot_path, 'psi_n_12_' + str(n_file) + '.csv'))
-    if norm_v_min_max == None:
-        norm_v_min_max = cal.norm_min_max_file(os.path.join(snapshot_path, 'v_n_' + str(n_file) + '.csv'), scalar=True)
-    if sigma_min_max == None:
-        sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
-    if w_min_max == None:
-        w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+    
 
-    X_curr, t = gr.interpolate_curve(
-        data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
+    # X_curr, t = gr.interpolate_curve(
+    #     data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
 
     X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                                              [0, 0],
@@ -186,9 +178,7 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']]
-                       )
+    gr.set_axes_limits(ax,[0, 0], [parameters['L'], parameters['h']])
 
  
 

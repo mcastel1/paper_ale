@@ -67,6 +67,8 @@ plt.rcParams.update({
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
         r"\usepackage{glossaries} "
+        r"\usepackage{graphicx} "
+        r"\usepackage{tikz} "
         rf"\input{{{paths.definitions_path}}}"
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
@@ -80,17 +82,18 @@ print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
 parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
 
-
+'''
 # 1. read data from local folder
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'solution')
 
 '''
+
 # 2. read data from external folder
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/polygon')
-solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh', 'solution_new')
+solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh', 'solution')
 
-'''
+
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_parameters.csv'))
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
 
