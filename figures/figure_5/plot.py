@@ -409,6 +409,7 @@ def plot_snapshot(fig, n_file,
         bbox_to_anchor=np.array(parameters['X_cur_legend_position']),
         frameon=False,
         handlelength=parameters['legend_line_length'],
+        handletextpad=parameters['legend_text_horizontal_pad'],
         prop=FontProperties(size=parameters['legend_font_size'])
     )
 

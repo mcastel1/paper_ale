@@ -19,8 +19,6 @@ print(f'snapshot_path = {plot.snapshot_path}')
 
 
 # compute absolute minima and maxima across snapshots
-norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'], scalar=True)
-
 # axis_min_max_abs = [[np.inf,-np.inf],[np.inf,-np.inf]]
 
 # # run through all snapshots
@@ -100,9 +98,7 @@ def update_animation(n):
 
     plot.plot_snapshot(plot.fig, n, 
                     snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.solution_parameters['T'] / plot.solution_parameters['N'], 'min_s', plot.parameters['n_decimals_snapshot_label']),
-                    norm_v_min_max=norm_v_min_max_abs,
-                    norm_v_fl_min_max=norm_v_fl_min_max_abs,
-                    w_min_max=w_min_max_abs
+                    norm_v_fl_min_max=norm_v_fl_min_max_abs
                     )
 
     # garbace collection to avoid memory leaks
