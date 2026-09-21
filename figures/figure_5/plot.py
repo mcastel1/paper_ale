@@ -1,7 +1,6 @@
 import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Polygon
-from matplotlib.path import Path
 import matplotlib.pyplot as plt
 import os
 
@@ -30,7 +29,7 @@ you can copy the data from abacus with
     cd /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME
     rm -rf solution
     mkdir solution
-    ../copy_from_abacus.sh $REMOTE_PATH/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'U_n_12_*' 'X_n_12_*' 'X_ref_n_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*' 'boundary_points_id_2_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME 1 1000000 100
+    ../copy_from_abacus.sh $REMOTE_PATH/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'U_n_12_*' 'X_n_12_*' 'X_ref_n_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*' 'boundary_points_id_2_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME 1 14000 100
     mv $REMOTE_PATH/solution .
     rm -rf $REMOTE_PATH
     rsync -avr mcastel1@abacus:membrane_phi_2/solution/solution_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/solution
@@ -84,17 +83,16 @@ print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
 
 
-
+'''
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
+'''
 
-
-''' 
 # 2 read solution from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane', "solution")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line', "solution") 
-'''
+
 
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
@@ -127,12 +125,7 @@ fig.add_subplot(2, 3, 3)
 fig.add_subplot(2, 3, 4)
 fig.add_subplot(2, 3, 5)
 fig.add_subplot(2, 3, 6)
-'''
-fig.add_subplot(3, 3, 5)
-fig.add_subplot(3, 3, 7)
-fig.add_subplot(3, 3, 8)
-fig.add_subplot(3, 3, 9)
-'''
+
 
 nu_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(nu_colorbar_axis, parameters['colorbar_size'])
@@ -149,15 +142,6 @@ cb.set_size(w_colorbar_axis, parameters['colorbar_size'])
 sigma_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(sigma_colorbar_axis, parameters['colorbar_size'])
 
-'''
-v_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
-cb.set_size(v_fl_colorbar_axis, parameters['colorbar_size'])
-
-sigma_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
-cb.set_size(sigma_fl_colorbar_axis, parameters['colorbar_size'])
-
-
-'''
 '''
 plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration
 Input values:
@@ -290,17 +274,12 @@ def plot_snapshot(fig, n_file,
     data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
     data_psi = data_psi.sort_values(by=[":0"]).copy()
 
-    data_v_fl = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'def_v_fl_n_' + n_file_string + '.csv'))
-    data_sigma_fl = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_fl_n_12_' + n_file_string + '.csv'))
-
+  
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
-
-    data_ref_boundary_vertices_mesh_1 = pd.read_csv(os.path.join(snapshot_path, 'boundary_points_id_' + str(mesh_parameters['mesh_1_id']) + f'_n_{n_file_string}.csv'))
 
     # data_omega contains de values of \partial_1 X^alpha
     data_omega = lis.data_omega(data_nu, data_psi)
     data_omega = data_omega.sort_values(by=[":0"]).copy()
-
 
     # build `data_X_cur` from `data_X_ref` and `data_U`
     data_X_cur = data_X_ref.copy()
@@ -574,173 +553,6 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=psi_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
-    '''
-    # =============
-    # v_fl subplot
-    # =============
-
-    ax = fig.axes[3]
-
-    ax.set_axis_off()
-    ax.set_aspect('equal')
-    ax.grid(False)
-    gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], h])
-
-    # here X, Y are the coordinates of the points in the current configuration of the mesh: I interpolate def_v_fl in the rectangle delimited by axis_min_max. In some parts of this rectangle, def_v_fl is not defined and the interpolated points will be set to nan -> This is good because these points are the points outside \Omega and the vector field of v_fl will not be plotted there because its value is nan
-    # here I use interpolate_2d_vector_field_layer because the values of the vector field vary very suddenly close to the bottom and right edge of the mesh, so I treat them with one-dimensional interpolation
-    X, Y, V_x, V_y, grid_norm_v, norm_v_fl_min, norm_v_fl_max, _ = vec.interpolate_2d_vector_field_layer(
-        data_v_fl,
-        [axis_min_max[0][0], axis_min_max[1][0]],
-        [axis_min_max[0][1], axis_min_max[1][1]],
-        parameters['n_bins_v_fl'],
-        right_edge_x=mesh_parameters['L'])
-    
-    # print(f'X: {X}')
-    # print(f'Y: {Y}')
-    # print(f'interpolated V_x: {V_x}')
-
-    if norm_v_fl_min_max == None:
-        norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
-
-    # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_line_vertices,
-                    line_width=parameters['plot_line_width'],
-                    color='black',
-                    alpha=parameters['alpha_mesh'],
-                    zorder=parameters['mesh_zorder'])
-
-     
-    # plot the area that masks arrows which lie outside the mesh in the current configuration
-    data_def_boundary_vertices_mesh_1 = draw_masking_area(ax, 
-                      axis_min_max, 
-                      data_u_msh,
-                      data_ref_boundary_vertices_mesh_1,
-                      parameters['masking_area_margin']
-                      )
-    
-
-    # set to nan the values of V_x and V_y which lie inside the masking region 
-    vp.set_in_polygon(data_def_boundary_vertices_mesh_1,
-                      [X, Y],
-                      [V_x, V_y])
-    
-    
-
-    # plot velocity of fluid
-    vec.plot_2d_vector_field(ax, [X, Y], [
-                             V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
-
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_fl_min_max[0], norm_v_fl_min_max[1],
-                        label_pad=parameters['colorbar_axis_label_offset'],
-                        label_angle=parameters['v_fl_colorbar_label_angle'],
-                        label=parameters['v_fl_colorbar_axis_label'],
-                        font_size=parameters['colorbar_font_size'],
-                        tick_label_angle=parameters['v_fl_colorbar_tick_label_angle'],
-                        tick_label_offset=parameters['v_fl_colorbar_tick_label_offset'],
-                        line_width=parameters['v_fl_colorbar_tick_line_width'],
-                        tick_length=parameters['colorbar_tick_length'],
-                        axis=v_fl_colorbar_axis)
-
-    gr.plot_2d_axes(
-        ax, [0, 0], [mesh_parameters['L'], h],
-        tick_length=parameters['tick_length'],
-        line_width=parameters['axis_line_width'],
-        axis_label=parameters['axis_label_cur'],
-        axis_label_angle=parameters['axis_label_angle'],
-        axis_label_offset=parameters['axis_label_offset'],
-        tick_label_offset=parameters['tick_label_offset'],
-        tick_label_format=['f', 'f'],
-        font_size=parameters['axis_font_size'],
-        plot_label=parameters["v_fl_panel_label"],
-        plot_label_offset=parameters['panel_label_offset'],
-        axis_origin=parameters['axis_origin'],
-        margin=parameters['axis_margin'],
-        n_minor_ticks=parameters['n_minor_ticks'],
-        minor_tick_length=parameters['minor_tick_length'],
-        z_order=const.high_z_order,
-        colorbar_axis=v_fl_colorbar_axis,
-        colorbar_axis_offset=parameters['colorbar_offset'])
-
-    
-    # =============
-    # sigma_fl subplot
-    # =============
-
-    ax = fig.axes[4]
-
-    ax.set_axis_off()
-    ax.set_aspect('equal')
-    ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], h])
-
-    # plot mesh under the membrane
-    gr.plot_2d_mesh(ax, data_msh_line_vertices,
-                    line_width=parameters['plot_line_width'],
-                    color='black',
-                    alpha=parameters['alpha_mesh'],
-                    zorder=parameters['mesh_zorder'])
-
-    _, _, Z_sigma_fl, _, _, _ = gr.interpolate_surface(data_sigma_fl, [axis_min_max[0][0], axis_min_max[1][0]], [
-                                                       axis_min_max[0][1], axis_min_max[1][1]], parameters['n_bins_sigma_fl'])
-
-    if sigma_fl_min_max == None:
-        sigma_fl_min, sigma_fl_max, _ = cal.min_max_scalar_field(Z_sigma_fl)
-        sigma_fl_min_max = [sigma_fl_min, sigma_fl_max]
-
-    # plot the area that masks arrows which lie outside the mesh in the current configuration
-    draw_masking_area(ax, axis_min_max, data_u_msh,
-                      parameters['masking_area_margin'])
-
-    contour_plot = ax.imshow(Z_sigma_fl.T,
-                             origin='lower',
-                             cmap=gr.cb.color_map_type,
-                             aspect='equal',
-                             extent=[axis_min_max[0][0], axis_min_max[0]
-                                     [1], axis_min_max[1][0], axis_min_max[1][1]],
-                             vmin=sigma_fl_min_max[0], vmax=sigma_fl_min_max[1],
-                             interpolation='bilinear',
-                             zorder=0
-                             )
-
-    gr.cb.make_colorbar(
-        figure=fig,
-        grid_values=Z_sigma_fl,
-        min_value=sigma_fl_min_max[0],
-        max_value=sigma_fl_min_max[1],
-        label_pad=parameters['colorbar_axis_label_offset'],
-        tick_label_offset=parameters['sigma_fl_colorbar_tick_label_offset'],
-        line_width=parameters['sigma_fl_colorbar_tick_line_width'],
-        tick_length=parameters['colorbar_tick_length'],
-        tick_label_angle=parameters['sigma_fl_colorbar_tick_label_angle'],
-        label=parameters['sigma_fl_colorbar_axis_label'],
-        font_size=parameters['colorbar_font_size'],
-        mappable=contour_plot,
-        axis=sigma_fl_colorbar_axis
-    )
-
-    gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], h],
-        tick_length=parameters['tick_length'],
-        line_width=parameters['axis_line_width'],
-        axis_label=parameters['axis_label_cur'],
-        axis_label_angle=parameters['axis_label_angle'],
-        axis_label_offset=parameters['axis_label_offset'],
-        tick_label_offset=parameters['tick_label_offset'],
-        tick_label_format=['f', 'f'],
-        font_size=parameters['axis_font_size'],
-        plot_label=parameters["sigma_fl_panel_label"],
-        plot_label_offset=parameters['panel_label_offset'],
-        axis_origin=parameters['axis_origin'],
-        margin=parameters['axis_margin'],
-        n_minor_ticks=parameters['n_minor_ticks'],
-        minor_tick_length=parameters['minor_tick_length'],
-        z_order=const.high_z_order,
-        colorbar_axis=sigma_fl_colorbar_axis,
-        colorbar_axis_offset=parameters['colorbar_offset']
-    )
-    
-    '''
     # =============
     # v subplot
     # =============
