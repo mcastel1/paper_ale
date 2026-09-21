@@ -163,7 +163,7 @@ _, Y_msh_ref, _, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_m
                                                                                         [0, 0],
                                                                                         [mesh_parameters['L'],
                                                                                             np.max(data_u_msh[':1'])],
-                                                                                        parameters['n_bins_v_fl'])
+                                                                                        parameters['n_bins_u'])
 
 # Y are the positions of the mesh nodes in the current configuration
 Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
@@ -302,7 +302,7 @@ def plot_snapshot(fig, n_file,
                                                                                                 [0, 0],
                                                                                                 [mesh_parameters['L'],
                                                                                                     np.max(data_u_msh[':1'])],
-                                                                                                parameters['n_bins_v_fl'])
+                                                                                                parameters['n_bins_u'])
 
         # X, Y are the positions of the mesh nodes in the current configuration
         X = np.array(lis.add_lists_of_lists(X_msh_ref, u_msh_n_X))
@@ -336,7 +336,7 @@ def plot_snapshot(fig, n_file,
                                                                                              [0, 0],
                                                                                              [mesh_parameters['L'],
                                                                                                  np.max(data_u_msh[':1'])],
-                                                                                             parameters['n_bins_v_fl'],
+                                                                                             parameters['n_bins_u'],
                                                                                              clab.label_x_column,
                                                                                              clab.label_y_column,
                                                                                              clab.label_v_column)
