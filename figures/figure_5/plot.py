@@ -282,6 +282,12 @@ def plot_snapshot(fig, n_file,
     data_X_cur[['f:0', 'f:1']] += data_U[['f:0', 'f:1']]
     data_X_cur = data_X_cur.sort_values(by=[":0"]).copy()
 
+    # build `data_X_0` (initial shape of the membrane) from `data_X_ref` 
+    data_X_0 = data_X_ref.copy()
+    data_X_0['f:1'] = mesh_parameters['shape_coordinates'][0][1]
+    data_X_0 = data_X_0.sort_values(by=[":0"]).copy()
+
+
 
 
     # plot snapshot label
@@ -325,6 +331,9 @@ def plot_snapshot(fig, n_file,
 
     X_cur, t = gr.interpolate_curve(
         data_X_cur, data_X_cur[':0'].min(), data_X_cur[':0'].max(), parameters['n_bins_X'])
+    
+    X_0, _ = gr.interpolate_curve(
+        data_X_0, data_X_0[':0'].min(), data_X_0[':0'].max(), parameters['n_bins_X'])
 
 
     
@@ -377,7 +386,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     line_width=parameters['mesh_line_width'],
                     color='black',
-                    alpha=parameters['alpha_mesh'],
+                    alpha=parameters['alpha_mesh_high'],
                     zorder=parameters['mesh_zorder'])
 
     # plot X_cur
@@ -385,33 +394,37 @@ def plot_snapshot(fig, n_file,
                        line_color=parameters['X_cur_color'],
                        legend=parameters['X_cur_legend'],
                        line_width=parameters['X_line_width'],
+                       line_style=parameters['X_cur_line_style'],
                        z_order=1
                        )
 
  
-    '''
-    # plot X_ref
-    gr.plot_curve_grid(ax, X_ref,
-                       line_color='red',
-                       legend='\\text{Reference}',
+
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
-    '''
+    
 
     # Create custom legend handles
     handles, labels = ax.get_legend_handles_labels()
 
-    ax.legend(
-        handles=handles,
-        labels=labels,
-        loc='center',
-        bbox_to_anchor=np.array(parameters['X_cur_legend_position']),
-        frameon=False,
-        handlelength=parameters['legend_line_length'],
-        handletextpad=parameters['legend_text_horizontal_pad'],
-        prop=FontProperties(size=parameters['legend_font_size'])
-    )
+    with plt.rc_context({'text.usetex': False}):
+        # disable tex otherwise the legend and the line sample will be displayed far from each other
+
+        ax.legend(
+            handles=handles,
+            labels=labels,
+            loc='center',
+            bbox_to_anchor=np.array(parameters['X_legend_position']),
+            frameon=False,
+            handlelength=parameters['legend_line_length'],
+            handletextpad=parameters['legend_text_horizontal_pad'],
+            prop=FontProperties(size=parameters['legend_font_size'])
+        )
 
     gr.plot_2d_axes(
         ax, [0, 0], [mesh_parameters['L'], h],
@@ -470,7 +483,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     line_width=parameters['plot_line_width'],
                     color='black',
-                    alpha=parameters['alpha_mesh'],
+                    alpha=parameters['alpha_mesh_low'],
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
@@ -527,7 +540,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     line_width=parameters['plot_line_width'],
                     color='black',
-                    alpha=parameters['alpha_mesh'],
+                    alpha=parameters['alpha_mesh_low'],
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
@@ -565,7 +578,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     line_width=parameters['plot_line_width'],
                     color='black',
-                    alpha=parameters['alpha_mesh'],
+                    alpha=parameters['alpha_mesh_low'],
                     zorder=parameters['mesh_zorder'])
 
     # plot v 
@@ -648,7 +661,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     line_width=parameters['plot_line_width'],
                     color='black',
-                    alpha=parameters['alpha_mesh'],
+                    alpha=parameters['alpha_mesh_low'],
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
@@ -705,7 +718,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     line_width=parameters['plot_line_width'],
                     color='black',
-                    alpha=parameters['alpha_mesh'],
+                    alpha=parameters['alpha_mesh_low'],
                     zorder=parameters['mesh_zorder'])
 
     gr.plot_2d_axes(
