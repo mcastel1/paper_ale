@@ -1,15 +1,10 @@
 import gc
 import matplotlib.animation as ani
 import os
-import numpy as np
-import pandas as pd
-import system.utils as sys_utils
 import time
 
 import calculus.utils as cal
-import graphics.vector_plot as vp
 import input_output.utils as io
-import list.utils as lis
 import plot
 import text.utils as text
 
@@ -55,7 +50,7 @@ axis_min_max_abs = cal.X_curr_min_max_abs(
                                             plot.parameters['frame_stride'],
                                             plot.snapshot_nodal_values_path,
                                             [[0, plot.mesh_parameters['L']], [0, plot.h]],
-                                            plot.parameters['n_bins_v_fl']
+                                            plot.parameters['n_bins_u']
                                         )
 
 

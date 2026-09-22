@@ -26,13 +26,14 @@ you can copy the data from abacus with
     REMOTE_PATH="membrane_rho_1e0"
     FIGURE_NAME="figure_5"
     cd /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME
-    rm -rf solution
+    rm -rf solution mesh
     mkdir solution
+    mkdir -p mesh/solution
     ../copy_from_abacus.sh $REMOTE_PATH/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'U_n_12_*' 'X_n_12_*' 'X_ref_n_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*' 'boundary_points_id_2_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME 1 14000 100
     mv $REMOTE_PATH/solution .
     rm -rf $REMOTE_PATH
-    rsync -avr mcastel1@abacus:$MEMBRANE_PATH/solution/solution_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/solution
-    rsync -avr mcastel1@abacus:$MEMBRANE_PATH/mesh/solution/mesh_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/mesh/solution
+    rsync -avr mcastel1@abacus:$REMOTE_PATH/solution/solution_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/solution
+    rsync -avr mcastel1@abacus:$REMOTE_PATH/mesh/solution/mesh_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/mesh/solution
 
 
 to copy the parameters to finite_elements:
@@ -78,17 +79,17 @@ plt.rcParams.update({
     )
 })
 
-'''
+
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
-'''
 
+'''
 # 2 read solution from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane', "solution")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line', "solution") 
 
-
+'''
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 
@@ -300,18 +301,10 @@ def plot_snapshot(fig, n_file,
         #
         data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
 
-        X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
-                                                                                                [0, 0],
-                                                                                                [mesh_parameters['L'],
-                                                                                                    np.max(data_u_msh[':1'])],
-                                                                                                parameters['n_bins_u'])
+        
+        
+        axis_min_max = [[0, mesh_parameters['L']], [0, np.max(data_u_msh[':1'] + data_u_msh['f:1'])]]
 
-        # X, Y are the positions of the mesh nodes in the current configuration
-        X = np.array(lis.add_lists_of_lists(X_msh_ref, u_msh_n_X))
-        Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
-
-        # compute the min-max of the snapshot
-        axis_min_max = [lis.min_max(X), lis.min_max(Y)]
         #
 
 

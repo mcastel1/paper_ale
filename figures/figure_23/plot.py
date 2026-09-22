@@ -23,7 +23,7 @@ import graphics.vector_plot as vec
 
 '''
 you can copy the data from abacus with
-    REMOTE_PATH="membrane_rho_1e0"
+    REMOTE_PATH="membrane_remesh_threshold"
     FIGURE_NAME="figure_23"
     cd /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME
     rm -rf solution mesh
@@ -78,7 +78,6 @@ plt.rcParams.update({
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
 })
-
 
 
 
@@ -192,12 +191,14 @@ def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_m
     )
     )
 
-    # 2.2 bottom-left point
-    data_def_boundary_vertices_mesh_1.append(np.subtract(
-        data_def_boundary_vertices_mesh_1[-1],
-        (margin[0] * (axis_min_max[0]
-                      [1] - axis_min_max[0][0]), 0)
+    # 2.2 two points at bottom-left corner
+    data_def_boundary_vertices_mesh_1.append(
+        [data_def_boundary_vertices_mesh_1[-1][0], 0]
     )
+
+    data_def_boundary_vertices_mesh_1.append(
+        [data_def_boundary_vertices_mesh_1[-1][0] - (margin[0] * (axis_min_max[0]
+                      [1] - axis_min_max[0][0])), 0]
     )
 
     # 2.3 top-left point
@@ -217,7 +218,7 @@ def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_m
     # 3. plot the  polygon in order to hide the arrows
     poly = Polygon(data_def_boundary_vertices_mesh_1, fill=True,
                    linewidth=parameters['plot_line_width'], 
-                   edgecolor='white', 
+                   edgecolor='red', 
                    facecolor='white', 
                    zorder=const.high_z_order)
     ax.add_patch(poly)
@@ -280,30 +281,13 @@ def plot_snapshot(fig, n_file,
         #
         data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + str(n_file) + '.csv'))
 
-        X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
-                                                                                                [0, 0],
-                                                                                                [mesh_parameters['L'],
-                                                                                                    np.max(data_u_msh[':1'])],
-                                                                                                parameters['n_bins_v_fl'])
+        
+        
+        axis_min_max = [[0, mesh_parameters['L']], [0, np.max(data_u_msh[':1'] + data_u_msh['f:1'])]]
 
-        # X, Y are the positions of the mesh nodes in the current configuration
-        X = np.array(lis.add_lists_of_lists(X_msh_ref, u_msh_n_X))
-        Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
-
-        # compute the min-max of the snapshot
-        axis_min_max = [lis.min_max(X), lis.min_max(Y)]
         #
 
-
-    X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
-                                                                                             [0, 0],
-                                                                                             [mesh_parameters['L'],
-                                                                                                 np.max(data_u_msh[':1'])],
-                                                                                             parameters['n_bins_v_fl'],
-                                                                                             clab.label_x_column,
-                                                                                             clab.label_y_column,
-                                                                                             clab.label_v_column)
-    
+   
   
     
     # =============
