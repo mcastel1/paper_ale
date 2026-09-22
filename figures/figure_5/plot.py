@@ -23,7 +23,7 @@ import system.utils as sys_utils
 
 '''
 you can copy the data from abacus with
-    REMOTE_PATH="membrane_phi_2"
+    REMOTE_PATH="membrane_rho_1e0"
     FIGURE_NAME="figure_5"
     cd /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME
     rm -rf solution
@@ -31,8 +31,8 @@ you can copy the data from abacus with
     ../copy_from_abacus.sh $REMOTE_PATH/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'U_n_12_*' 'X_n_12_*' 'X_ref_n_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*' 'boundary_points_id_2_n_*'  ~/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME 1 14000 100
     mv $REMOTE_PATH/solution .
     rm -rf $REMOTE_PATH
-    rsync -avr mcastel1@abacus:membrane_phi_2/solution/solution_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/solution
-    rsync -avr mcastel1@abacus:membrane_phi_2/mesh/solution/mesh_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/mesh/solution
+    rsync -avr mcastel1@abacus:$MEMBRANE_PATH/solution/solution_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/solution
+    rsync -avr mcastel1@abacus:$MEMBRANE_PATH/mesh/solution/mesh_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/mesh/solution
 
 
 to copy the parameters to finite_elements:
