@@ -11,7 +11,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 import numpy as np
 import os
 import pandas as pd
-import proplot as pplt
+import ultraplot as pplt
 import shutil
 import warnings
 

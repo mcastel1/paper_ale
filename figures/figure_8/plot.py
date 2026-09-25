@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
-import proplot as pplt
+import ultraplot as pplt
 import warnings
 
 import input_output.utils as io

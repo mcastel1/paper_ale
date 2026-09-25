@@ -2,11 +2,12 @@ import matplotlib
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
+from scipy.interpolate import NearestNDInterpolator
 import os
 
 import numpy as np
 import pandas as pd
-import proplot as pplt
+import ultraplot as pplt
 import sys
 import warnings
 
@@ -167,15 +168,16 @@ Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
 
 h = lis.min_max(Y)[1]
 
-# 
 
 def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_mesh_1,
                     margin=[0]*2):
 
     # 1. interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field
 
-    U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(data_u_msh)
-    h_step = axis_min_max[1][1]
+    U_interp_x = NearestNDInterpolator(data_u_msh[[':0', ':1']].values, data_u_msh['f:0'].values)
+    U_interp_y = NearestNDInterpolator(data_u_msh[[':0', ':1']].values, data_u_msh['f:1'].values)
+
+    h_step = np.max(data_u_msh[':1'])
 
     data_def_boundary_vertices_mesh_1 = []
     for _, row in data_ref_boundary_vertices_mesh_1.iterrows():
@@ -186,6 +188,7 @@ def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_m
                  U_interp_y(row[':0'], row[':1'])]
             )
         )
+
 
     # 2.  add to the sequence of lines above the top-left and top-right and bottom-right extremal points of the region to cover
     # 2.1 two points at the bottom-right corner
@@ -201,36 +204,42 @@ def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_m
     )
     )
 
-    # 2.2 bottom-left point
-    data_def_boundary_vertices_mesh_1.append(np.subtract(
-        data_def_boundary_vertices_mesh_1[-1],
-        (margin[0] * (axis_min_max[0]
-                      [1] - axis_min_max[0][0]), 0)
+    # 2.2 two points at bottom-left corner
+    data_def_boundary_vertices_mesh_1.append(
+        [data_def_boundary_vertices_mesh_1[-1][0], 0]
     )
+
+    data_def_boundary_vertices_mesh_1.append(
+        [data_def_boundary_vertices_mesh_1[-1][0] - (margin[0] * (axis_min_max[0]
+                      [1] - axis_min_max[0][0])), 0]
     )
 
     # 2.3 top-left point
     data_def_boundary_vertices_mesh_1.append((
-        -margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
+        data_def_boundary_vertices_mesh_1[-1][0],
         axis_min_max[1][1] + margin[1] *
         (axis_min_max[1][1] - axis_min_max[1][0])
     ))
     # 2.4 top-right point
     data_def_boundary_vertices_mesh_1.append((
-        axis_min_max[0][1] + margin[0] *
-        (axis_min_max[0][1] - axis_min_max[0][0]),
+        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step) +  margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
         axis_min_max[1][1] + margin[1] *
         (axis_min_max[1][1] - axis_min_max[1][0])
     ))
 
+
+
     # 3. plot the  polygon in order to hide the arrows
     poly = Polygon(data_def_boundary_vertices_mesh_1, fill=True,
-                   linewidth=parameters['plot_line_width'], edgecolor='black', facecolor='white', zorder=const.high_z_order)
+                   linewidth=parameters['plot_line_width'], 
+                   edgecolor='white', 
+                   facecolor='white', 
+                   clip_on=False,
+                   zorder=const.high_z_order)
     ax.add_patch(poly)
 
     return data_def_boundary_vertices_mesh_1
-    #
-
+    
 
 def plot_snapshot(fig, n_file,
                   snapshot_label='',

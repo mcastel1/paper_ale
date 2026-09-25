@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
-import proplot as pplt
+import ultraplot as pplt
 from scipy.interpolate import lagrange as lag
 import shutil
 import warnings

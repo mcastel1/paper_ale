@@ -6,7 +6,7 @@ import os
 
 import numpy as np
 import pandas as pd
-import proplot as pplt
+import ultraplot as pplt
 import warnings
 
 import calculus.utils as cal

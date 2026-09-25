@@ -69,9 +69,9 @@
 \newcommand{\xc}[1][]{{\xcartesian_{\current\ifx\empty#1\empty\else\, #1\fi}}}
 \newcommand{\xr}[1][]{{\xcartesian_{\reference\ifx\empty#1\empty\else\, #1\fi}}}
 \providecommand{\xmemc}{{\xcartesian_\current^\mem}}
-\providecommand{\xmemr}{{\xcartesian_\reference^\mem}}
-\providecommand{\bxmemc}{{\bm{\xmemc}}}
-\providecommand{\bxmemr}{{\bm{\xmemr}}}
+\providecommand{\xmemr}[1]{{\xcartesian_\reference^{\mem\, #1}}}
+\providecommand{\bxmemc}{{\bm{\xmemc{}}}}
+\providecommand{\bxmemr}{{\bm{\xmemr{}}}}
 \providecommand{\bxc}{{\bm{\xcartesian}_{\current}}}
 \providecommand{\bxr}{{\bm{\xcartesian}_{\reference}}}
 \providecommand{\bnormalr}{\hat{\bm n}^\reference}
