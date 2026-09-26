@@ -24,7 +24,11 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
- ./copy_from_abacus.sh monolithic_2/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*'  ~/Desktop 0 100000 10
+    ./copy_from_abacus.sh monolithic_2/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*'  ~/Desktop 0 100000 10
+
+ to copy the parameter files to repdroduce this figure
+
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_13/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic/parameters_bc_square_shape_line_b.csv; cp ~/Documents/work/manuscripts/paper_ale/figures/figure_13/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square/shape_line 
 
 '''
 
