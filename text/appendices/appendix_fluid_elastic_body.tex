@@ -7,7 +7,7 @@
 
 The equations of motion for the dynamics of \ac{bflu} and \ac{ela} are the following.
 
-First, the dynamics of \ac{bflu} is governed by the  \ac{ns} and mass-conservation equations \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}, respectively. Their \acp{bc} are \cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current}, which stay unchanged with respect to \cref{sec_fl_rigid}. On the other hand,  \ac{bc} \crefs{bc_fl_rigid_4_current}, which ensures that the \ac{bflu} velocity matches the \ac{bod} velocity at the interface between \ac{bflu} and \ac{bod}, now reads
+First, the dynamics of \ac{bflu} is governed by the  \ac{ns} and mass-conservation equations \crefs{\eqsbfluc}, respectively. Their \acp{bc} are \cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current}, which stay unchanged with respect to \cref{sec_fl_rigid}. On the other hand,  \ac{bc} \crefs{bc_fl_rigid_4_current}, which ensures that the \ac{bflu} velocity matches the \ac{bod} velocity at the interface between \ac{bflu} and \ac{bod}, now reads
 \be
 \label{bc_fl_ela_4_current}
 \bvfc(\bxc) = \left. \der{\buela(\bxr)}{t} \right|_{\bxr = \psi^t(\bxc)} \text{ on }  \pomcircouteqc
@@ -43,7 +43,7 @@ The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
 In the \ac{lhs} of \cref{bc_fl_ela_2_current}, the quantity $\epsilon_{\beta \gamma} \der{\xi^\gamma}{s}$ represents the unit normal to $\pomcircouteqr$, and similarly for the \ac{rhs}.
 
 
-Finally, the equations of motion for \ac{dom} are \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot}, with \acp{bc} \crefs{bc_ela_1,bc_ela_1_dot} and
+Finally, the equations of motion for \ac{dom} are \crefs{\eqsdom}, with \acp{bc} \crefs{bc_ela_1,bc_ela_1_dot} and
 \begin{align}
     \label{bc_ela_3}
     \budom^t(\bxr)    & = \buela^t(\bxr) \text{ on } \pomcircouteqr,    \\

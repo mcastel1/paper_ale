@@ -202,7 +202,7 @@ The equation of motion for $\budomdot$ is obtained by deriving \cref{eq_mesh_flu
 \label{eq_mesh_fluid_rigid_dot}
 \pder{}{\xr[\beta]}\der{\Sdom_{\alpha \beta}(\budom)}{t}  = 0 \text{ in } \omr.
 \ee
-We impose the following \acp{bc} for  \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot}:
+We impose the following \acp{bc} for  \cref{\eqsdom}:
 \begin{align}
     \label{bc_fl_mem_dom_1}
     \budom                    & = \bzero \text{ on }\pomineqr \cup \pombottomeqr, \\
@@ -225,7 +225,7 @@ We impose the following \acp{bc} for  \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_ri
 \Cref{bc_fl_mem_dom_4} derives from the requirement that \ac{dom} and \ac{mem} deformations are conforming \cite{kamenskyLectureNotesMAE}: In \cref{bc_fl_mem_dom_4}, $\budom$ is evaluated at a reference coordinate $\bxr \in \pomtopeqr$, and $\bumem$ is evaluated at the curvilinear coordinate $\xcoord^1$ such that $\bxmemr(\xcoord^1) = \bxr$. Finally, the  \acp{bc} for $\budomdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
 
 
-% We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} contain up to second derivatives of $\budom$ and $\budomdot$. As a result, the \acp{bc} \crefs{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8} uniquely determine the solution of the \ac{bvp} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} \cite{evansPartialDifferentialEquations2010}.
+% We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \cref{\eqsdom} contain up to second derivatives of $\budom$ and $\budomdot$. As a result, the \acp{bc} \crefs{\bcsdom} uniquely determine the solution of the \ac{bvp} \crefs{\eqsdom} \cite{evansPartialDifferentialEquations2010}.
 
 \begin{figure}
     \centering
@@ -235,7 +235,7 @@ We impose the following \acp{bc} for  \cref{eq_mesh_fluid_rigid,eq_mesh_fluid_ri
         \Ac{ref} and \ac{cur} configuration for the interaction between a  \acf{bflu} and a \acf{mem}.
         The Figure follows the same notation as \cref{fig_ref_curr_rigid}, and it represents a vertical channel with mirror symmetry about its mid axis, which coincides with \pomout; the right, mirrored part of the channel is not shown.
         The top edge of the \ac{bflu} mesh, $\pomtopeqr$, coincides with the one-dimensional  manifold $\omlineeqr$ of \ac{mem}.
-        The bottom-left vertex of the \ac{bflu} domain $\pomleftbottomeqc$ (brown cross), is  marked in both the \ac{ref} and \ac{cur} configuration.
+        The bottom-left point of the \ac{bflu} domain $\pomleftbottomeqc$ (brown cross), is  marked in both the \ac{ref} and \ac{cur} configuration.
     }
 \end{figure}
 
@@ -283,11 +283,11 @@ In \ac{cur} coordinates, the \ac{bflu} equations of motion are the \ac{ns} and c
     \pderc{ \vfc^\alpha }{\alpha}                                                             & =                                                              0                               ,
 \end{align}
 and they hold for $\bxc \in \omc$.
-\Cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} describe the \ac{bflu} motion in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}---an example of the corresponding  \ac{ns} equations on a curved geometry is given by \cref{eq-dyn-v}.
+\Cref{\eqsbfluc} describe the \ac{bflu} motion in a flat, two-dimensional geometry \cite{landauFluidMechanics1987}---an example of the corresponding  \ac{ns} equations on a curved geometry is given by \cref{eq-dyn-v}.
 
 
 
-We enforce the following \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current}:
+We enforce the following \acp{bc} for \cref{\eqsbfluc}:
 \begin{align}
     \label{bc_fl_membrane_1_current}
     \bvfc             & =  \vfbottom  \text{ on } \pombottomeqc,            \\
@@ -299,39 +299,52 @@ We enforce the following \acp{bc} for \cref{eq_fl_rigid_fl_1_current,eq_fl_rigid
     \pderc{\vfc^2}{1} & =  0 \; \text{ on } \pomouteqc ,                    \\
     \label{bc_fl_membrane_5_current}
     \bvfc             & = \budomdot  \text{ on } \pomtopeqc,                \\
-    % sign
     \label{bc_fl_membrane_6_current}
-    \sigmafc          & = \sigmafleftbottomc \text{ on } \pomleftbottomeqc.
+    \sigmafc          & = \sigmafleftbottomc \text{ on } \pomleftbottomeqc,
 \end{align}
+where $\sigmafleftbottomc$ is chosen such that
+\be\label{bc_fl_membrane_7_current}
+\rhof \left[ \int \dint{\xcoord^1}  \wmem \left| \der{\bxc}{\xcoord^1}\right| + \int_{\pombottomeqc} \dint{\xc} \, \vfbottom \cdot \bnormalc \right] = 0.
+\ee
 
 
 
-According to \cref{bc_fl_membrane_1_current}, \ac{bflu} is injected from the bottom edge of $\omc$, \pombottomc, while \cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left wall \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} result from symmetry.
-\Cref{bc_fl_membrane_5_current} ensures that the motion of \ac{bflu} is conforming to that of \ac{mem}   \cite{kamenskyLectureNotesMAE}: In fact,   \cref{eq-dyn-dX} ensures that \ac{mem}  only moves normally to its profile, and \cref{bc_fl_membrane_5_current} thus ensures that \ac{bflu} stays in contact with \ac{mem} throughout its motion.
+\Cref{bc_fl_membrane_1_current} implies that \ac{bflu} is injected at constant velocity from the bottom edge \pombottomc.  \Cref{bc_fl_membrane_2_current} is a no-slip \ac{bc} on the left edge \pominc, and \cref{bc_fl_membrane_3_current,bc_fl_membrane_4_current} follow from axial symmetry, cf., for example, \cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3}.
+\Cref{bc_fl_membrane_5_current} implies that the motion of \ac{bflu} is geometrically conforming to that of \ac{mem}   \cite{kamenskyLectureNotesMAE}, while allowing for a slip between the tangential flow of \ac{mem} and \ac{bflu} material elements---see \cref{sec_fl_mem_mem}. Also, in \cref{bc_fl_membrane_5_current}, $\bvfc$ is evaluated at a \ac{cur} location $\bxc$, and $\budomdot$ at the corresponding \ac{ref} location $\bxr$ related to $\bxc$ by $\budom$ through \cref{eq_def_u}.
 %
-\Cref{bc_fl_membrane_5_current} ensures that the velocity of \ac{bflu} and of the \ac{mem} shape coincide, allowing for a slip between the tangential flow of \ac{mem}  elements and \ac{bflu} material elements, see \cref{sec_fl_mem_mem} and \cref{eq-dyn-dX} in there.
-%
-Finally,  \cref{bc_fl_membrane_6_current} stems from the presence of the reservoir, in which the \ac{bflu}  tension is equal to $\sigmafleftbottomc$: At the boundary $\pombottomeqc$ between the channel and the reservoir, the \ac{bflu} tension  matches the reservoir's.
 
+Finally, we discuss \cref{bc_fl_membrane_6_current}. Let us consider the overall \ac{bvp} for the three sectors---\ac{mem}, \ac{dom} and \ac{bflu}---given by \cref{\eqsmembrane,\eqsdom,\eqsbfluc} and the \acp{bc}, \cref{\bcsmembrane,\bcsdom,{bc_fl_membrane_1_current,bc_fl_membrane_2_current,bc_fl_membrane_3_current,bc_fl_membrane_4_current,bc_fl_membrane_5_current}}. Let us consider a translation of the \ac{bflu} pressure field
+\be \label{eq_translation_sigma}
+\sigmafc \rightarrow \sigmafc + C,
+\ee
+where $C$ is independent of $\bxc$. The only components of the \ac{bvp} which break its invariance with respect to \cref{eq_translation_sigma} are the \acp{rhs} of \cref{eq-dyn-v,eq-dyn-w}, where $f_{\fluid\, \text{t}}$ and $f_{\fluid\, \text{n}}$ depend on the absolute value of $\sigmafc$, see \cref{def_force_tan,def_force_norm,def_f_fluid_mem,eq_strees_tensor_fluid}. All the remaining equations in the \ac{bvp} depend on $\sigmafc$ through its derivatives only, and are thus invariant with respect to  \cref{eq_translation_sigma}.
+
+By pinning the \ac{bflu} pressure to the point $\pomleftbottomeqc$, we  thus tune the force exerted by \ac{bflu} on \ac{mem}. We chose the pinned value, $\sigmafleftbottomc$, in such a way that the amount of \ac{bflu} matter  per unit time which flows into $\omc$ through \pombottomc{} is equal to the amount of \ac{bflu} matter per unit time which flows through \pomtopc. This condition is expressed by \cref{bc_fl_membrane_7_current}, and it physically reflects of the known role of pressure as Lagrange multiplier enforcing mass conservation.
+
+Overall, we will thus consider \cref{\bcbflu} as \acp{bc} for \ac{bflu}.
 
 \paragraph{Equations of motion in  \acl{ref} configuration coordinates}
 \label{sec_fl_mem_flu_ref}
 
-We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem_flu_cur} in terms of $\bvfr$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{eq_fl_rigid_fl_1_current,eq_fl_rigid_fl_2_current} yield, respectively,
+We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem_flu_cur} in terms of $\bvfr$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{\eqsbfluc} yield, respectively,
+
+
 \bw
 \begin{align}
     \label{eq_fl_rigid_fl_1_reference}
-    \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr[\beta]} \right\}                                                      & =              \newlinenn
-    G_{\beta \alpha}(\budom^t(\bxr))  \,          \pderr{ \sigmafr(\bxr, t)   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^t(\bxr))           \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^t(\bxr)) \pderr{ \vfr(\bxr, t)}{\gamma}   \right], &                           \\
+    \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr[\beta]} \right\} & =
+    G_{\gamma \beta}(\budom^t(\bxr))  \pderr{\sigmastressr_{\alpha \beta}}{\gamma},                                                                                                                                                        \\
     \label{eq_fl_rigid_fl_2_reference}
-    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                                                                                & = 0,
+    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                           & = 0,
 \end{align}
 \ew
+
 which hold in $\omr$. In \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} the tensor $G$ is given by the inverse of $F$ \cite{kamenskyLectureNotesMAE}:
 \be
 \label{eq_def_G}
 G_{\alpha \beta}(\bu) \equiv [F(\bu)]^{-1}_{\alpha \beta}.
-\ee\vspace{5mm}\\
+\ee\vspace{5mm}
+
 
 
 
@@ -341,6 +354,9 @@ To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discr
 
 We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for \ac{mem}, \ac{dom} and \ac{bflu}.
 The  dynamics of the system is obtained as follows.\\ \vspace{5mm}
+
+% sign
+
 
 
 Following the \ac{cn} temporal-discretization scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  \cite{loggAutomatedSolutionDifferential2012}: For example, we set
@@ -387,13 +403,13 @@ We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-
 \end{align}
 In \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, $\sigmastressr$ denotes the \ac{bflu} stress tensor in the \ac{ref} configuration:
 \begin{align}
-    \label{eq_def_sigma_current}
+    \label{eq_def_sigma_ref}
     \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
-    =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfc^\alpha}{\gamma} + \newlinenn
-                                                 & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfc^\beta}{\gamma}\Big].
+    =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfr^\alpha}{\gamma} + \newlinenn
+                                                 & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfr^\beta}{\gamma}\Big].
 \end{align}
 
-Proceeding along the same lines, the discrete form of the \acp{bc} \crefs{bc_fl_mem_mem_1,bc_fl_mem_mem_2,bc_fl_mem_mem_3,bc_fl_mem_mem_4,bc_fl_mem_mem_5,bc_fl_mem_mem_6,bc_fl_mem_mem_7,bc_fl_mem_mem_8} reads, respectively,
+Proceeding along the same lines, the discrete form of the \acp{bc} \crefs{\bcsmembrane} reads, respectively,
 \begin{align}
     \label{bc_fl_mem_mem_1_disc_bis}
     \vmem^{n, \,i}                          & = 0 \text{ on } \pomlineineqr,        \\
@@ -502,7 +518,7 @@ In \cref{bc_fl_mem_mem_6_disc}, $\bm \normalmem$ is the unit normal to \pomline{
 
 \paragraph{\Acl{dom}}\label{sec_temp_discretization_mem_dom}
 
-The discretization of the equations of motion for  \ac{dom} proceeds along the same lines as in \cref{sec_fl_rigid}, see \cref{sec_splitting_scheme_fl_rig_dom}. The discrete version of the \acp{pde} \crefs{eq_mesh_fluid_rigid,eq_mesh_fluid_rigid_dot} is
+The discretization of the equations of motion for  \ac{dom} proceeds along the same lines as in \cref{sec_fl_rigid}, see \cref{sec_splitting_scheme_fl_rig_dom}. The discrete version of the \acp{pde} \crefs{\eqsdom} is
 
 \begin{align}
     \label{eq_domain_fluid_rigid_disc}
@@ -510,7 +526,7 @@ The discretization of the equations of motion for  \ac{dom} proceeds along the s
     \label{eq_domain_fluid_rigid_disc_dot}
     \pder{}{\xr[\beta]}\der{\Sdom_{\alpha \beta}(\budom^n)}{t} & = 0 \text{ in } \omr,
 \end{align}
-with \acp{bc} given by the discrete version of \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}:
+with \acp{bc} given by the discrete version of \cref{\bcsdom}:
 \begin{align}
     \label{bc_fl_mem_dom_1_disc}
     \budom^n                          & = \bzero \text{ on } \pomineqr \cup \pombottomeqr, \\
