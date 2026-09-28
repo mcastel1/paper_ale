@@ -155,10 +155,7 @@ def plot_snapshot(fig, n_file,
                        [0, 0], [parameters['L'], parameters['h']]
                        )
 
-    # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
-    X_U, Y_U, _, _ = geo.u_1d(data_X, parameters['h'])
-    # coordinates of the curve in the reference configuration
-    X_ref = np.array(list(zip(X_U, Y_U)))
+
 
     # plot \partial Omega_in
     start = [0, 0]
@@ -215,6 +212,16 @@ def plot_snapshot(fig, n_file,
         zorder=const.high_z_order,
         clip_on=False
     )
+
+    # plot partial_Omega_left_bottom
+    ax.plot([0], [0], 'x',
+            s=parameters['partial_omega_line_point_size'],
+            color=parameters['partial_omega_left_bottom_color'],
+            linewidth=parameters['X_line_width'],
+            label=r'$\pomleftbottomeqr$',
+            zorder=const.high_z_order,
+            clip_on=False
+            )
 
     # plot partial_Omega_line_in
     ax.plot([0], [parameters['h']], 'o',
@@ -300,8 +307,6 @@ def plot_snapshot(fig, n_file,
                        [0, 0], [parameters['L'], parameters['h']]
                        )
 
-    # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
-    X_U, Y_U, _, _ = geo.u_1d(data_X, parameters['h'])
 
     # store the interpolating field for the displacement into U_interp
     U_interp_x, U_interp_y = vp.interpolating_function_2d_vector_field(
@@ -371,6 +376,17 @@ def plot_snapshot(fig, n_file,
         zorder=const.high_z_order,
         clip_on=False
     )
+
+    # plot partial_Omega_left_bottom
+    point = msh.reference_to_current([0, 0], U_interp)
+    ax.plot([point[0]], [point[1]], 'x',
+            s=parameters['partial_omega_line_point_size'],
+            color=parameters['partial_omega_left_bottom_color'],
+            linewidth=parameters['X_line_width'],
+            label=r'$\pomleftbottomeqc$',
+            zorder=const.high_z_order,
+            clip_on=False
+            )
 
     # plot partial_Omega_line_in
     point = msh.reference_to_current(
