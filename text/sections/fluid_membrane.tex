@@ -326,16 +326,16 @@ Overall, we will thus consider \cref{\bcbflu} as \acp{bc} for \ac{bflu}.
 \paragraph{Equations of motion in  \acl{ref} configuration coordinates}
 \label{sec_fl_mem_flu_ref}
 
-We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem_flu_cur} in terms of $\bvfr$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{\eqsbfluc} yield, respectively,
+We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem_flu_cur} in terms of $\bvfr{}$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{\eqsbfluc} yield, respectively,
 
 
 \bw
 \begin{align}
     \label{eq_fl_rigid_fl_1_reference}
-    \rhof \left\{ \pder{ \vfr{alpha}(\bxr, t)}{t} + \left[ \vfr{gamma}(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr{alpha}(\bxr, t)}{\partial \xr[\beta]} \right\} & =
-    G_{\gamma \beta}(\budom^t(\bxr))  \pderr{\sigmastressr_{\alpha \beta}}{\gamma},                                                                                                                                                        \\
+    \rhof \left\{ \pder{ \vfr{\alpha}(\bxr, t)}{t} + \left[ \vfr{\gamma}(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr{\alpha}(\bxr, t)}{\partial \xr[\beta]} \right\} & =
+    G_{\gamma \beta}(\budom^t(\bxr))  \pderr{\sigmastressr_{\alpha \beta}}{\gamma},                                                                                                                                                           \\
     \label{eq_fl_rigid_fl_2_reference}
-    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr{alpha}(\bxr, t)}{\beta}                                                                                                                                                           & = 0,
+    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr{\alpha}(\bxr, t)}{\beta}                                                                                                                                                             & = 0,
 \end{align}
 \ew
 
@@ -362,7 +362,7 @@ The  dynamics of the system is obtained as follows.\\ \vspace{5mm}
 Following the \ac{cn} temporal-discretization scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  \cite{loggAutomatedSolutionDifferential2012}: For example, we set
 \begin{align}
     \label{eq_time_step_1}
-    \bvfr^n(\bxr)          & \equiv \bvfr(\bxr, t_n)  ,                               \\
+    \bvfr{n}(\bxr)         & \equiv \bvfr{}(\bxr, t_n)  ,                             \\
     \label{eq_time_step_2}
     \sigmafr^{n-1/2}(\bxr) & \equiv \sigmafr\left(\bxr, \frac{t_n+t_{n-1}}{2}\right),
 \end{align}
@@ -384,12 +384,12 @@ We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-
     \rhom \Big(  \frac{\vmem^{n,\, i} - \vmem^{n-1,\, i}}{\deltat} +   \frac{3}{2}\vmem^{n-1,\, j}  \nab^{\nmhalf}_j \vmem^{n-1,\, i} -   \frac{1}{2}\vmem^{n-2,\, j}  \nab^{\nmhalf}_j \vmem^{n-2,\, i} - 2 \vmem^{n-1,\, j} \wmem^{n-1} \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
     \wmem^{n-1} \nab^{\nmhalf, \, i} \wmem^{n-1} \Big)                                                                                                                                                                                                              & =              \newlinenn
     - \nab^\nmhalf_j \Pi^{ij} \left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2},\sigmam^\nmhalf,\nu^\nmhalf,\psi^\nmhalf \right)+ \newlinenn
-    f_{\fluid\, \text{t}}^i({\bm \sigmastressr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                          &
+    f_{\fluid\, \text{t}}^i({\bm \sigmastressr}(\bvfr{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                           &
     \\
     \label{eq_mem_flu_disc_2}
     \rhom \left( \frac{\wmem^n - \wmem^{n-1}}{\deltat} + \vmem^{n-1,\, i} \vmem^{n-1,\, j} b^\nmhalf_{ji} + \frac{3}{2} \vmem^{n-1, \, i}  \nab^\nmhalf_i \wmem^{n-1}  - \frac{1}{2} \vmem^{n-2, \, i}  \nab^\nmhalf_i \wmem^{n-2} \right)                          & =\newlinenn
     f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmam^\nmhalf H^\nmhalf + f^\eta_{\mem\, \text{t}}     \left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
-    f_{\fluid\, \text{n}} ({\bm \sigmastressr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                            &\end{align}
+    f_{\fluid\, \text{n}} ({\bm \sigmastressr}(\bvfr{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                             &\end{align}
 \ew
 \begin{align}
     \label{eq_mem_flu_disc_4}
@@ -405,8 +405,8 @@ In \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, $\sigmastressr$ denotes the \ac{b
 \begin{align}
     \label{eq_def_sigma_ref}
     \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
-    =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfr{alpha}}{\gamma} + \newlinenn
-                                                 & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfr{beta}}{\gamma}\Big].
+    =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfr{\alpha}}{\gamma} + \newlinenn
+                                                 & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfr{\beta}}{\gamma}\Big].
 \end{align}
 
 Proceeding along the same lines, the discrete form of the \acp{bc} \crefs{\bcsmembrane} reads, respectively,
@@ -440,11 +440,11 @@ In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomated
             \label{eq_fl_mem_mem_disc_1}
             \rhom \Big[  \frac{\vbarmem^i - \vmem^{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem^{n-1,\, j} - \frac{1}{2} \vmem^{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} -    \Wmem \nab^{\nmhalf, \, i} \Wmem \Big] & =              \newlinenn
             - \nab^\nmhalf_j \Pi^{ij}(\Vmem, \Wmem,\sigmamast,\nu^\nmhalf,\psi^\nmhalf) + \newlinenn
-            f_{\fluid\, \text{t}}^i({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                          &                           \\
+            f_{\fluid\, \text{t}}^i({\bm \sigmafr}(\bvfr{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                           &                           \\
             \label{eq_fl_mem_mem_disc_2}
             \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j b^\nmhalf_{ji} + \left( \frac{3}{2} \vmem^{n-1, \, i} - \frac{1}{2}\vmem^{n-3/2,\,i}\right) \nab^\nmhalf_i \Wmem \right]                                                             & =\newlinenn
             f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f^\eta_{\mem\, \text{t}}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
-            f_{\fluid\, \text{n}} ({\bm \sigmafr}(\bvfr^{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf)                                                                                                                                             & ,
+            f_{\fluid\, \text{n}} ({\bm \sigmafr}(\bvfr{n-1}, \sigmafr^{n-3/2}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf)                                                                                                                                              & ,
         \end{align}
         \ew
         where we have set
@@ -569,9 +569,9 @@ The resulting \acp{pde} for $\bvbarf$ and $\sigmafr$ are
 where we have set
 \begin{align}
     \label{eq_def_Vf}
-    \bVf          & \equiv\frac{ \bvbarf + {\bvfr}^{n-1}}{2}, \\
+    \bVf          & \equiv\frac{ \bvbarf + \bvfr{n-1}}{2},   \\
     \label{eq_def_sigmarast}
-    \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                  \\
+    \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                 \\
     \label{eq_def_phi_pressure}
     \phif         & \equiv \sigmafr^\ast - \sigmafr^{n-1/2}.
 \end{align}
@@ -605,7 +605,7 @@ The \acp{bc} for \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} ar
 \end{align}
 
 
-Finally, $\bvfr^n$ is determined from $\bvbarf $ and $\sigmafr^\nmhalf$ by means of the relation
+Finally, $\bvfr{n}$ is determined from $\bvbarf $ and $\sigmafr^\nmhalf$ by means of the relation
 
 \be
 \label{eq_phi_1}
@@ -617,7 +617,7 @@ Finally, $\bvfr^n$ is determined from $\bvbarf $ and $\sigmafr^\nmhalf$ by means
 
 
 
-Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr^{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
+Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr{n-1}$, $\sigmafr^{n-3/2}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
 
 
 \begin{itemize}
