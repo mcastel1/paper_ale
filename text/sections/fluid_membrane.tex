@@ -332,10 +332,10 @@ We will now rewrite the equations of motion and the \acp{bc} of \cref{sec_fl_mem
 \bw
 \begin{align}
     \label{eq_fl_rigid_fl_1_reference}
-    \rhof \left\{ \pder{ \vfr^\alpha(\bxr, t)}{t} + \left[ \vfr^\gamma(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr^\alpha(\bxr, t)}{\partial \xr[\beta]} \right\} & =
+    \rhof \left\{ \pder{ \vfr{alpha}(\bxr, t)}{t} + \left[ \vfr{gamma}(\bxr, t)  - \der{\varphi^{\gamma\, t}(\bxr)}{t}\right]  G_{\beta \gamma}(\budom^t(\bxr)) \frac{\partial  \vfr{alpha}(\bxr, t)}{\partial \xr[\beta]} \right\} & =
     G_{\gamma \beta}(\budom^t(\bxr))  \pderr{\sigmastressr_{\alpha \beta}}{\gamma},                                                                                                                                                        \\
     \label{eq_fl_rigid_fl_2_reference}
-    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr^\alpha(\bxr, t)}{\beta}                                                                                                                                                           & = 0,
+    G_{\beta \alpha}(\budom^t(\bxr)) \pderr{ \vfr{alpha}(\bxr, t)}{\beta}                                                                                                                                                           & = 0,
 \end{align}
 \ew
 
@@ -405,8 +405,8 @@ In \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, $\sigmastressr$ denotes the \ac{b
 \begin{align}
     \label{eq_def_sigma_ref}
     \sigmastressr^t_{\alpha \beta}(\bxr)  \equiv & \sigmastressc_{\alpha \beta}({\bm \varphi}^t(\bxr)) \newlinenn
-    =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfr^\alpha}{\gamma} + \newlinenn
-                                                 & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfr^\beta}{\gamma}\Big].
+    =                                            & \sigmafr(\bxr, t) \delta_{\alpha \beta} + \etaf \Big[ G_{\gamma \beta}(\budom^t(\bxr)) \pderr{\vfr{alpha}}{\gamma} + \newlinenn
+                                                 & G_{\gamma \alpha}(\budom^t(\bxr)) \pderr{\vfr{beta}}{\gamma}\Big].
 \end{align}
 
 Proceeding along the same lines, the discrete form of the \acp{bc} \crefs{\bcsmembrane} reads, respectively,
@@ -559,19 +559,19 @@ The resulting \acp{pde} for $\bvbarf$ and $\sigmafr$ are
 \bw
 \begin{align}
     \label{eq_fl_rigid_fl_1_reference_disc_aux}
-    \rhof \left\{  \frac{\vbarf^\alpha - \vfr^{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr^{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr^{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr[\beta]}\right\} & =              \newlinenn
-    G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                           \\
+    \rhof \left\{  \frac{\vbarf^\alpha - \vfr{n-1,\, \alpha}}{\deltat} + \left[ \frac{3}{2} ( \vfr{n-1,\, \gamma}  -  \udomdot^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1})  - \frac{1}{2} ( \vfr{n-2,\, \gamma}  -  \udomdot^{n-2,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-2})  \right] \frac{\partial  \Vf^\alpha}{\partial \xr[\beta]}\right\} & =              \newlinenn
+    G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^\ast   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left(  G_{\gamma \beta}(\budom^{n-1}) \pderr{\Vf^\alpha }{\gamma}    \right),                                                                                                        \\
     \label{eq_poiss_like_phi}
-    \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                    & = \newlinenn
-    G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                    & ,
+    \frac{\rhof}{\deltat} G_{\gamma \alpha}(\budom^{n-1}) \pderr{\vbarf^\alpha }{\gamma}                                                                                                                                                                                                                                                                 & = \newlinenn
+    G_{\gamma \alpha}(\budom^{n-1}) \pderr{}{\gamma}\left( G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \phif   }{\beta } \right)                                                                                                                                                                                                                 & ,
 \end{align}
 \ew
 where we have set
 \begin{align}
     \label{eq_def_Vf}
-    \bVf          & \equiv\frac{ \bvbarf + {\bm \vfr}^{n-1}}{2}, \\
+    \bVf          & \equiv\frac{ \bvbarf + {\bvfr}^{n-1}}{2}, \\
     \label{eq_def_sigmarast}
-    \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                     \\
+    \sigmafr^\ast & \equiv \sigmafr^{n-3/2},                  \\
     \label{eq_def_phi_pressure}
     \phif         & \equiv \sigmafr^\ast - \sigmafr^{n-1/2}.
 \end{align}
@@ -609,7 +609,7 @@ Finally, $\bvfr^n$ is determined from $\bvbarf $ and $\sigmafr^\nmhalf$ by means
 
 \be
 \label{eq_phi_1}
-\rhof \frac{\vbarf^\alpha - \vfr^{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phif   }{\beta } \text{ in } \omr.
+\rhof \frac{\vbarf^\alpha - \vfr{n, \, \alpha}}{\deltat}  = G_{\beta \alpha}(\budom^{n-1})         \pderr{ \phif   }{\beta } \text{ in } \omr.
 \ee\vspace{1cm}\\
 
 
