@@ -125,7 +125,7 @@ We will now discuss each line in \cref{\eqsmembrane}, and we set
 In \cref{eq_def_Pi} $\Pi$, is the momentum-flux density tensor \cite{landauFluidMechanics1987}, which is given by a line-tension term and by a viscous term, where the latter is expressed in terms of the rate-of-deformation tensor $d$ \cite{al-izziShearDrivenInstabilitiesMembrane2020}. Finally, in \cref{eq_def_d}, $b$ is  the second fundamental form \cite{marchiafavaAppuntiDiGeometria2005,desernoNotesDifferentialGeometry2004}.
 % 
 
-In \cref{\eqsmembrane}, $\rhom$, $\sigmam$, $\etam$ and $\kappa$ are, respectively, the density, line tension, viscosity, and bending rigidity of \ac{mem}.
+In \cref{\eqsmembrane}, $\rhom$, $\sigmam{}$, $\etam$ and $\kappa$ are, respectively, the density, line tension, viscosity, and bending rigidity of \ac{mem}.
 \Cref{eq-dyn-continuity} enforces mass conservation \cite{landauFluidMechanics1987}.
 \Cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively.
 The term $\fmemt$ in \cref{eq-dyn-v} represents the force on \ac{mem} elements induced by gradients of line tension and viscous effects, cf. \cref{eq_def_fmemt}, while $f_{\fluid\, \text{t}}$ is the force exerted on \ac{mem} elements by \ac{bflu}.
@@ -456,7 +456,7 @@ In what follows, we will split the \ac{bvp} into three steps \cite{loggAutomated
             \label{eq_def_Wmem}
             \Wmem      & \equiv \frac{\wbarmem + \wmem^{n-1}}{2},       \\
             \label{eq_def_sigmamasst}
-            \sigmamast & \equiv \sigmam^{n-3/2},
+            \sigmamast & \equiv \sigmam{n-3/2},
         \end{align}
         \Cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the analog of \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, respectively,  with a fixed pressure field $\sigmamast$ from the preceding step---in what follows, we will synonymously use the terms `pressure' and `tension'  for conciseness \cite{worthmullerIRENEFluIdLayeR2025}.
 
@@ -619,12 +619,12 @@ Finally, $\bvfr{n}$ is determined from $\bvbarf $ and $\sigmafr{\nmhalf}$ by mea
 
 
 
-Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam^{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr{n-1}$, $\sigmafr{n-3/2}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
+Given the \ac{mem} fields $\vmem^{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr{n-1}$, $\sigmafr{n-3/2}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
 
 
 \begin{itemize}
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
-        The \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam^{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$ are determined by solving the \ac{bvp} given by  \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem,bc_fl_mem_mem_1_disc,bc_fl_mem_mem_2_disc,bc_fl_mem_mem_3_disc,bc_fl_mem_mem_4_disc,bc_fl_mem_mem_5_disc,bc_fl_mem_mem_6_disc,bc_fl_mem_mem_7_disc,bc_fl_mem_mem_8_disc,bc_fl_mem_mem_9_disc}.
+        The \ac{mem} fields $\vmem^{n, i}$, $\wmem^{n, \, i}$, $\sigmam{n-1/2}$, $\bumem^{n-1/2}$, $\nu^{n-1/2}$, $\psi^{n-1/2}$ are determined by solving the \ac{bvp} given by  \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem,bc_fl_mem_mem_1_disc,bc_fl_mem_mem_2_disc,bc_fl_mem_mem_3_disc,bc_fl_mem_mem_4_disc,bc_fl_mem_mem_5_disc,bc_fl_mem_mem_6_disc,bc_fl_mem_mem_7_disc,bc_fl_mem_mem_8_disc,bc_fl_mem_mem_9_disc}.
     }
 
     \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
