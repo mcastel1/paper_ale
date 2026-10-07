@@ -89,7 +89,7 @@ Finally, \cref{bc_fl_rigid_5_current,bc_fl_rigid_6_current} ensure, respectively
 \subsubsection{Equations of motion in the \acl{ref}-configuration coordinates}\label{sec_rigid_body_fl_ref}
 
 
-We will now rewrite the equations of motion and the \acp{bc}   in terms of $\bvfr{}$, $\sigmafr$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{\eqsbfluc} yield, respectively, \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference}, see \cref{sec_fl_mem_flu_ref}.
+We will now rewrite the equations of motion and the \acp{bc}   in terms of $\bvfr{}$, $\sigmafr{}$, and the \ac{ref} coordinate $\bxr$. The equations of motion \crefs{\eqsbfluc} yield, respectively, \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference}, see \cref{sec_fl_mem_flu_ref}.
 The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_4_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current} yield as
 
 \begin{align}
@@ -104,7 +104,7 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
     \label{bc_fl_rigid_5_reference}
     \etaf G_{\beta 1}(\budom^t(\bxr)) \pderr{ \vfr{\alpha}}{\beta} & = 0  \; \text{ on } \pomouteqr ,                                                                        \\
     \label{bc_fl_rigid_6_reference}
-    \sigmafr (\bxr)                                                & = 0 \; \text{ on } \pomouteqr.
+    \sigmafr{} (\bxr)                                              & = 0 \; \text{ on } \pomouteqr.
 \end{align}
 
 
@@ -141,12 +141,12 @@ From  the \ac{bvp} above, we obtain a \ac{bvp} for $\dot{\budom}$, which will be
 where in \cref{bc_ela_1_dot,bc_ela_2_dot} we used the fact that $\bxr$ is independent of time, and in \cref{bc_ela_2_dot} we substituted \cref{eq_fl_rigid_rigid_current_2}. The \ac{lhs} of \cref{eq_mesh_fluid_rigid_dot} depends on the second partial derivatives of $\budom$ and $\budomdot$---see \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4}. As a result, given $\theta$, $\omega$, and $\budom$ from \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, the \ac{bvp} \crefs{eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}  determines $\budomdot$.\vspace{0.5cm}\\
 
 Overall \cref{eq_fl_rigid_rigid_current_2,eq_fl_rigid_rigid_reference,eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference,eq_mesh_fluid_rigid,eq_mesh_fluid_rigid,bc_fl_rigid_1_reference,bc_fl_rigid_2_reference,bc_fl_rigid_3_reference,bc_fl_rigid_4_reference,bc_fl_rigid_5_reference,bc_fl_rigid_6_reference,bc_ela_1,bc_ela_2,eq_mesh_fluid_rigid_dot,bc_ela_1_dot,bc_ela_2_dot}
-constitute a \ac{bvp} for $\theta, \omega, \bvfr{}, \sigmafr$, $\budom$ and $\budomdot$ which, combined with the temporal \acp{bc}
+constitute a \ac{bvp} for $\theta, \omega, \bvfr{}, \sigmafr{}$, $\budom$ and $\budomdot$ which, combined with the temporal \acp{bc}
 \begin{align}
-    \theta(t=0)               & = \theta_0                \\
-    \omega(t=0)               & = \omega_0                \\
-    {\bvfr{}}(\bxr, t=0)      & = {\bvfr{}}_0(\bxr),      \\
-    {\bm \sigmafr}(\bxr, t=0) & = {\bm \sigmafr}_0(\bxr),
+    \theta(t=0)             & = \theta_0              \\
+    \omega(t=0)             & = \omega_0              \\
+    {\bvfr{}}(\bxr, t=0)    & = {\bvfr{}}_0(\bxr),    \\
+    {\sigmafr{}}(\bxr, t=0) & = {\sigmafr{}}_0(\bxr),
 \end{align}
 determine the dynamics of the system.
 
@@ -162,7 +162,7 @@ We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAut
 \subsubsection{Rigid \acl{bod}}
 
 
-Proceeding along the lines of the \ac{cn} scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  \cite{loggAutomatedSolutionDifferential2012}---see for example \cref{eq_time_step_1,eq_time_step_2} for $\bvfr{}$ and $\sigmafr$---and similarly for other quantities.
+Proceeding along the lines of the \ac{cn} scheme \cite{crankPracticalMethodNumerical1947}, we define fields at staggered,  integer and semi-integer time steps  \cite{loggAutomatedSolutionDifferential2012}---see for example \cref{eq_time_step_1,eq_time_step_2} for $\bvfr{}$ and $\sigmafr{}$---and similarly for other quantities.
 We discretize \cref{eq_fl_rigid_rigid_reference,eq_fl_rigid_rigid_current_2} and, neglecting $\odeltat$, we obtain
 \bw
 \begin{align}
@@ -170,7 +170,7 @@ We discretize \cref{eq_fl_rigid_rigid_reference,eq_fl_rigid_rigid_current_2} and
     \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                         \\
     \label{eq_fl_rigid_rigid_reference_disc}
     \frac{\omega^n - \omega^{n-1}}{\deltat}  =    &
-    I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right]                                                                             \sigmastressr^{n-1}_{\beta \gamma}(\bxi{s}; {\bvfr{n-1}, \sigmafr^{n-3/2}}) \times \newlinenn
+    I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right]                                                                             \sigmastressr^{n-1}_{\beta \gamma}(\bxi{s}; {\bvfr{n-1}, \sigmafr{n-3/2}}) \times \newlinenn
                                                   & \epsilon_{\gamma \lambda} F_{\lambda \mu}(\budom^{n-1}(\bxi{s})) \der{\xi^\mu(s)} {s}  ,
 \end{align}
 \ew
@@ -189,11 +189,11 @@ The discrete form of the \acp{pde} \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_
 \begin{align}
     \label{eq_fl_rigid_fl_1_reference_disc}
     \rhof \Bigg[  \frac{\vfr{n, \, \alpha} - \vfr{n-1,\, \alpha}}{\deltat} + \frac{3}{2} ( \vfr{n-1,\, \gamma}  -  \dot{u}^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1}) \frac{\partial  \vfr{n-1, \, \alpha}}{\partial \xr[\beta]} -
-    \frac{1}{2} ( \vfr{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \times                                                                                                                                                                                                                                                             & \newlinenn
-    G_{\beta \gamma}(\budom^{n-2}) \frac{\partial  \vfr{n-2, \, \alpha}}{\partial \xr[\beta]} \Bigg]                                                                                                                                                                                                                                  & =              \newlinenn
-    G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr^{n-1/2}   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^{n-1}) \pderr{ }{\gamma}\left(\frac{\vfr{n, \, \alpha} + \vfr{n-1, \, \alpha}}{2}\right)   \right], &                           \\
+    \frac{1}{2} ( \vfr{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \times                                                                                                                                                                                                                                                            & \newlinenn
+    G_{\beta \gamma}(\budom^{n-2}) \frac{\partial  \vfr{n-2, \, \alpha}}{\partial \xr[\beta]} \Bigg]                                                                                                                                                                                                                                 & =              \newlinenn
+    G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr{n-1/2}   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^{n-1}) \pderr{ }{\gamma}\left(\frac{\vfr{n, \, \alpha} + \vfr{n-1, \, \alpha}}{2}\right)   \right], &                           \\
     \label{eq_fl_rigid_fl_2_reference_disc}
-    G_{\beta \alpha}(\budom^{n-1}) \pderr{ \vfr{n,\, \alpha}}{\beta}                                                                                                                                                                                                                                                                  & = 0,
+    G_{\beta \alpha}(\budom^{n-1}) \pderr{ \vfr{n,\, \alpha}}{\beta}                                                                                                                                                                                                                                                                 & = 0,
 \end{align}
 \ew
 where we omitted the dependence on $\bxr$ for clarity. Also, in  the \ac{lhs} of \cref{eq_fl_rigid_fl_1_reference_disc} we rewrote the convective term  according to the Adams-Bashforth  discretization scheme \cite{SolvingOrdinaryDifferential1993,loggAutomatedSolutionDifferential2012}, and we used \cref{eq_def_u,eq_def_phi} to rewrite the time derivative of $\bm \varphi$ in terms of $\budomdot$.
@@ -213,7 +213,7 @@ The discrete form of the \acp{bc} \crefs{bc_fl_rigid_1_reference,bc_fl_rigid_2_r
     \label{bc_fl_rigid_5_reference_disc}
     \etaf \, G_{\beta 1}(\budom^{n-1}) \pderr{}{\beta}\left( \frac{\vfr{n, \, \alpha} + \vfr{n-1, \, \alpha}}{2}\right) & = 0                                                                                                           \; \text{ on } \pomouteqr , \\
     \label{bc_fl_rigid_6_reference_disc}
-    \sigmafr^{n-1/2}                                                                                                    & = 0 \; \text{ on } \pomouteqr.
+    \sigmafr{n-1/2}                                                                                                     & = 0 \; \text{ on } \pomouteqr.
 \end{align}
 \ew
 
@@ -238,7 +238,7 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
             \etaf \, G_{\beta 1}(\budom^{n-1}) \pderr{\Vf^\alpha}{\beta} & = 0                                                                                                           \; \text{ on } \pomouteqr.
         \end{align}
         \ew
-        where $\bVf$ and $\sigmafr^\ast$ are given by  \cref{eq_def_Vf,eq_def_sigmarast}.
+        where $\bVf$ and $\sigmafr{\ast}$ are given by  \cref{eq_def_Vf,eq_def_sigmarast}.
 
     }
     \titleditem{Pressure correction}{
@@ -295,7 +295,7 @@ The discrete version of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_
 \end{align}\\
 
 We can now iterate in time for the ensemble of fields  of the \ac{bflu}-\ac{rig} system as follows.
-At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr^{n-3/2}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
+At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{n-3/2}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
 \begin{enumerate}
     \titleditem{Update \ac{rig}}{ \label{fl_rigid_step_1}
         Solve the algebraic equations \cref{eq_def_omega_disc,eq_fl_rigid_rigid_reference_disc} for $\theta^n$ and $\omega^n$.
@@ -305,7 +305,7 @@ At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr^
     }
     \titleditem{Update \ac{bflu}}{
         \label{fl_rigid_step_3}
-        Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbarf$ and $\sigmafr^{n-1/2}$, and obtain $\bvfr{n}$ from \cref{eq_phi_1}.
+        Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbarf$ and $\sigmafr{n-1/2}$, and obtain $\bvfr{n}$ from \cref{eq_phi_1}.
     }
 \end{enumerate}
 
