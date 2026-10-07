@@ -189,11 +189,11 @@ The discrete form of the \acp{pde} \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_
 \begin{align}
     \label{eq_fl_rigid_fl_1_reference_disc}
     \rhof \Bigg[  \frac{\vfr{n, \, \alpha} - \vfr{n-1,\, \alpha}}{\deltat} + \frac{3}{2} ( \vfr{n-1,\, \gamma}  -  \dot{u}^{n-1,\, \gamma}) \, G_{\beta \gamma}(\budom^{n-1}) \frac{\partial  \vfr{n-1, \, \alpha}}{\partial \xr[\beta]} -
-    \frac{1}{2} ( \vfr{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \times                                                                                                                                                                                                                                                            & \newlinenn
-    G_{\beta \gamma}(\budom^{n-2}) \frac{\partial  \vfr{n-2, \, \alpha}}{\partial \xr[\beta]} \Bigg]                                                                                                                                                                                                                                 & =              \newlinenn
-    G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr{n-1/2}   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^{n-1}) \pderr{ }{\gamma}\left(\frac{\vfr{n, \, \alpha} + \vfr{n-1, \, \alpha}}{2}\right)   \right], &                           \\
+    \frac{1}{2} ( \vfr{n-2,\, \gamma}  -  \dot{u}^{n-2,\, \gamma}) \times                                                                                                                                                                                                                                                              & \newlinenn
+    G_{\beta \gamma}(\budom^{n-2}) \frac{\partial  \vfr{n-2, \, \alpha}}{\partial \xr[\beta]} \Bigg]                                                                                                                                                                                                                                   & =              \newlinenn
+    G_{\beta \alpha}(\budom^{n-1})  \,          \pderr{ \sigmafr{\nmhalf}   }{\beta }                + \etaf \,              G_{\delta \beta}(\budom^{n-1})            \,         \pderr{}{\delta} \left[  G_{\gamma \beta}(\budom^{n-1}) \pderr{ }{\gamma}\left(\frac{\vfr{n, \, \alpha} + \vfr{n-1, \, \alpha}}{2}\right)   \right], &                           \\
     \label{eq_fl_rigid_fl_2_reference_disc}
-    G_{\beta \alpha}(\budom^{n-1}) \pderr{ \vfr{n,\, \alpha}}{\beta}                                                                                                                                                                                                                                                                 & = 0,
+    G_{\beta \alpha}(\budom^{n-1}) \pderr{ \vfr{n,\, \alpha}}{\beta}                                                                                                                                                                                                                                                                   & = 0,
 \end{align}
 \ew
 where we omitted the dependence on $\bxr$ for clarity. Also, in  the \ac{lhs} of \cref{eq_fl_rigid_fl_1_reference_disc} we rewrote the convective term  according to the Adams-Bashforth  discretization scheme \cite{SolvingOrdinaryDifferential1993,loggAutomatedSolutionDifferential2012}, and we used \cref{eq_def_u,eq_def_phi} to rewrite the time derivative of $\bm \varphi$ in terms of $\budomdot$.
@@ -213,7 +213,7 @@ The discrete form of the \acp{bc} \crefs{bc_fl_rigid_1_reference,bc_fl_rigid_2_r
     \label{bc_fl_rigid_5_reference_disc}
     \etaf \, G_{\beta 1}(\budom^{n-1}) \pderr{}{\beta}\left( \frac{\vfr{n, \, \alpha} + \vfr{n-1, \, \alpha}}{2}\right) & = 0                                                                                                           \; \text{ on } \pomouteqr , \\
     \label{bc_fl_rigid_6_reference_disc}
-    \sigmafr{n-1/2}                                                                                                     & = 0 \; \text{ on } \pomouteqr.
+    \sigmafr{\nmhalf}                                                                                                   & = 0 \; \text{ on } \pomouteqr.
 \end{align}
 \ew
 
@@ -266,7 +266,7 @@ We will now split the \ac{bvp} into three steps \cite{loggAutomatedSolutionDiffe
             \normalr{\gamma}  G_{\gamma \alpha}(\budom^{n-1})  G_{\beta \alpha}(\budom^{n-1}) \,          \pderr{ \phif   }{\beta } & = \newlinenn 0
             \text{ on } \pomineqr \cup \pomweqr \cup \pomellipseeqr                                                                 & .
         \end{align}
-        The \ac{bvp} \crefs{eq_poiss_like_phi,bc_phi_1,bc_phi_2} determines $\phif$ and, through the definition \crefs{eq_def_phi_pressure}, the surface tension $\sigmac^{n-1/2}$.
+        The \ac{bvp} \crefs{eq_poiss_like_phi,bc_phi_1,bc_phi_2} determines $\phif$ and, through the definition \crefs{eq_def_phi_pressure}, the surface tension $\sigmac^\nmhalf$.
     }
     \titleditem{Velocity correction}{
         \label{item_split_3}
@@ -305,7 +305,7 @@ At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{
     }
     \titleditem{Update \ac{bflu}}{
         \label{fl_rigid_step_3}
-        Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbarf$ and $\sigmafr{n-1/2}$, and obtain $\bvfr{n}$ from \cref{eq_phi_1}.
+        Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbarf$ and $\sigmafr{\nmhalf}$, and obtain $\bvfr{n}$ from \cref{eq_phi_1}.
     }
 \end{enumerate}
 

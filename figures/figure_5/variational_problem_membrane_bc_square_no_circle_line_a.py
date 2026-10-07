@@ -97,7 +97,7 @@ bcs_mem = [bc_v_bar_r, bc_w_bar_l, bc_phi_l, bc_U_n_12_l, bc_U_n_12_0_r]
 
 
 
-# Define variational problem : F_vbar, F_wbar .... F_mu_n_12 are related to the PDEs for v_bar, ..., mu^{n-1/2} respectively .
+# Define variational problem : F_vbar, F_wbar .... F_mu_n_12 are related to the PDEs for v_bar, ..., mu^\nmhalf respectively .
 # natural BC imposed here
 F_v_bar = ( \
                       rpam.parameters['rho'] * (( \
