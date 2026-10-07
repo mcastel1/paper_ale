@@ -1,10 +1,10 @@
 % definitions for equations and  symbols
 \providecommand{\mtitle}{Interaction between  fluids and Helfrich membranes}
-\providecommand{\fluid}{\textrm{F}}
-\providecommand{\bod}{\textrm{B}}
-\providecommand{\ela}{\textrm{E}}
-\providecommand{\mem}{\textrm{M}}
-\providecommand{\dom}{\textrm{D}}
+\providecommand{\fluid}{\mathrm{\scalebox{0.6}{F}}}
+\providecommand{\bod}{\mathrm{\scalebox{0.6}{B}}}
+\providecommand{\ela}{\mathrm{\scalebox{0.6}{E}}}
+\providecommand{\mem}{\mathrm{\scalebox{0.6}{M}}}
+\providecommand{\dom}{\mathrm{\scalebox{0.6}{D}}}
 \providecommand{\vf}{{v_\fluid}}
 \providecommand{\vfbottom}{\bm v_{\fluid \, \mbottomeqcap}}
 \providecommand{\vfin}{\bm v_{\fluid \, \myineqcap}}
@@ -85,8 +85,8 @@
 
 
 %stress tensor
-\providecommand{\sigmastressr}{{\sigma_\fluid^\reference}}
-\providecommand{\sigmastressc}{{\sigma_\fluid^\current}}
+\providecommand{\sigmastressr}[2]{\sigma_{\fluid\, \reference\, #1#2}}
+\providecommand{\sigmastressc}[2]{\sigma_{\fluid\, \current\, #1#2}}
 
 
 % equations of motion for membrane, domain and fluid

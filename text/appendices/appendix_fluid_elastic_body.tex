@@ -38,7 +38,7 @@ The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
     \buela(\bxr)                                                                                                              & =0               \text{ on }\pomcircineqr,   \\
     \label{bc_fl_ela_2_current}
     \left. \Sela_{\alpha \beta}(\buela^t)\right|_{\bxr = \bxi{s}} \epsilon_{\beta \gamma} \der{\xi^\gamma}{s}\                & =    \newlinenn
-    \sigmastressc_{\alpha \beta}(\bm{\varphi}^t(\bxi{s})) \epsilon_{\beta \gamma} \der{{\varphi}^{t, \, \gamma} (\bxi{s})}{s} & \text{ on } \pomcircouteqr.                &
+    \sigmastressc{\alpha}{\beta}(\bm{\varphi}^t(\bxi{s})) \epsilon_{\beta \gamma} \der{{\varphi}^{t, \, \gamma} (\bxi{s})}{s} & \text{ on } \pomcircouteqr.                &
 \end{align}
 In the \ac{lhs} of \cref{bc_fl_ela_2_current}, the quantity $\epsilon_{\beta \gamma} \der{\xi^\gamma}{s}$ represents the unit normal to $\pomcircouteqr$, and similarly for the \ac{rhs}.
 
@@ -74,7 +74,7 @@ The system dynamics is obtained as follows: given $\bvfr{n-1}$, $\sigmafr{n-3/2}
             \buela^n                                                                                                                                                                                                             & =  0          \text{ on }\pomcircineqr, \\
             \label{bc_fl_ela_2_current_disc}
             \epsilon_{\beta \gamma} \, \left. \Sela_{\alpha \beta}(\buela^n)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\                                                                                                         & =  \newlinenn
-            \sigmastressr_{\alpha \beta}(\bxi{s};\bvfr{n-1}, \sigmafr{n-3/2}, \buela^n) \epsilon_{\beta \gamma} \left. F_{\gamma \delta}(\bu_\ela^{n-1})\right|_{\bxr = \bxi{s}}\der{ \xi^\delta}{s}  \text{ on } \pomcircouteqr & .
+            \sigmastressr{\alpha}{\beta}(\bxi{s};\bvfr{n-1}, \sigmafr{n-3/2}, \buela^n) \epsilon_{\beta \gamma} \left. F_{\gamma \delta}(\bu_\ela^{n-1})\right|_{\bxr = \bxi{s}}\der{ \xi^\delta}{s}  \text{ on } \pomcircouteqr & .
         \end{align}
         \ew
         In \cref{bc_fl_ela_2_current_disc}, we have used \cref{eq_def_phi,eq_def_F} to rewrite the derivative of ${\bm \phi}(\bxi{s})$.
