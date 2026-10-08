@@ -381,12 +381,12 @@ We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-
         \label{eq_mem_flu_disc_1}
         \rhom \Big(  \frac{\vmem{n,\, i} - \vmem{n-1,\, i}}{\deltat} +   \frac{3}{2}\vmem{n-1,\, j}  \nab^{\nmhalf}_j \vmem{n-1,\, i} -   \frac{1}{2}\vmem{n-2,\, j}  \nab^{\nmhalf}_j \vmem{n-2,\, i} - 2 \vmem{n-1,\, j} \wmem^{n-1} \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
         \wmem^{n-1} \nab^{\nmhalf, \, i} \wmem^{n-1} \Big)                                                                                                                                                                                                       & =              \newlinenn
-        - \nab^\nmhalf_j \Pi^{ij} \left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2},\sigmam{\nmhalf},\nu^\nmhalf,\psi^\nmhalf \right)+ \newlinenn
+        - \nab^\nmhalf_j \Pi^{ij} \left( \frac{\bvmem^n + \bvmem{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2},\sigmam{\nmhalf},\nu^\nmhalf,\psi^\nmhalf \right)+ \newlinenn
         f_{\fluid\, \text{t}}^i({\sigmastressr{}{}}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                     &
         \\
         \label{eq_mem_flu_disc_2}
         \rhom \left( \frac{\wmem^n - \wmem^{n-1}}{\deltat} + \vmem{n-1,\, i} \vmem{n-1,\, j} b^\nmhalf_{ji} + \frac{3}{2} \vmem{n-1, \, i}  \nab^\nmhalf_i \wmem^{n-1}  - \frac{1}{2} \vmem{n-2, \, i}  \nab^\nmhalf_i \wmem^{n-2} \right)                       & =\newlinenn
-        f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmam{\nmhalf} H^\nmhalf + f^\eta_{\mem\, \text{n}}     \left( \frac{\bvmem^n + \bvmem^{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
+        f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmam{\nmhalf} H^\nmhalf + f^\eta_{\mem\, \text{n}}     \left( \frac{\bvmem^n + \bvmem{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
         f_{\fluid\, \text{n}} ({\sigmastressr{}{}}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                       &\end{align}
 \ew
 
@@ -415,7 +415,7 @@ Proceeding along the same lines, the discrete forms of the \acp{bc} \crefs{\bcsm
 \bw
 \begin{align}
         \label{bc_fl_mem_mem_1_disc_bis}
-        \normalmem^\nmhalf_j \Pi^{ij}\left( \frac{\bvmem^n + \bvmem^{n-1}}{2},\frac{\wmem^n + \wmem^{n-1}}{2}, \sigmam{\nmhalf}, \nu^\nmhalf, \psi^\nmhalf \right) & = 0 \text{ on } \pomlineineqr         \\
+        \normalmem^\nmhalf_j \Pi^{ij}\left( \frac{\bvmem^n + \bvmem{n-1}}{2},\frac{\wmem^n + \wmem^{n-1}}{2}, \sigmam{\nmhalf}, \nu^\nmhalf, \psi^\nmhalf \right) & = 0 \text{ on } \pomlineineqr         \\
         \label{bc_fl_mem_mem_2_disc_bis}
         \vmem{n, \, i}                                                                                                                                             & = 0 \text{ on } \pomlineouteqr,       \\
         \label{bc_fl_mem_mem_3_disc_bis}
