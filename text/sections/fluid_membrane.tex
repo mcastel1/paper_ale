@@ -373,11 +373,11 @@ and similarly for other \ac{bflu} and \ac{mem} fields.
 \paragraph{\Acl{bflu}}\label{sec_temp_discretization_mem_bflu}
 
 
-The discretization of the equations of motion for  \ac{bflu} proceeds along the same lines as in \cref{sec_fl_rigid}, and is split into three steps: Approximated velocity, pressure correction and velocity correction, see \cref{sec_splitting_scheme_fl_rig_fl}.
+The discretization of the equations of motion for  \ac{bflu} proceeds along the same lines as in \cref{sec_fl_rigid}, and it is split into three steps according to the \ac{ipcs} scheme \cite{loggAutomatedSolutionDifferential2012,chorinNumericalSolutionNavierStokes1968}: Approximated velocity, pressure correction and velocity correction, see \cref{sec_splitting_scheme_fl_rig_fl}. We will show only the main steps of the \ac{ipcs} scheme here, see \cref{sec_fl_rigid,sec_temp_discretization_mem_mem} for details.
 
 
 
-The resulting \acp{pde} for $\bvbarf$ and $\sigmafr{}$ are
+The \acp{pde} for $\bvbarf$ and $\sigmafr{}$ are
 \bw
 \begin{align}
     \label{eq_fl_rigid_fl_1_reference_disc_aux}
@@ -429,7 +429,6 @@ where in \cref{bc_fl_membrane_9_current_disc}, $\phifleftbottomc$ is chosen so a
 \ee
 and $\lr$ is the boundary length-element in the \ac{ref} configuration \cite{kamenskyLectureNotesMAE}.
 \Cref{bc_fl_membrane_7_reference} is \cref{bc_fl_membrane_7_current} expressed in terms of \ac{ref} quantities.
-%sign
 
 Finally, $\bvfr{n}$ is determined from $\bvbarf $ and $\sigmafr{\nmhalf}$ by means of the relation
 
@@ -462,10 +461,10 @@ We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-
 
 \begin{align}
     \label{eq_mem_flu_disc_4}
-    \frac {\bumem^\nmhalf-\bumem^\nmthreehalf}{\deltat}                                                                                 = & \wmem^{n} \normalc{\nmhalf},  \\
+    \frac {\bumem^\nmhalf-\bumem^\nmthreehalf}{\deltat}                                                                                 = & \wmem^{n} \, \normalc{\nmhalf}, \\
     \label{eq_mem_flu_disc_5}
     \pder {\umem^{\nmhalf, \, 1}}{x^1}                                                                                            =       &
-    - \pder{\xmemr{1}}{\xcoord^1} + \nu^\nmhalf \cos \psi^\nmhalf,                                                                                                        \\
+    - \pder{\xmemr{1}}{\xcoord^1} + \nu^\nmhalf \cos \psi^\nmhalf,                                                                                                          \\
     \label{eq_mem_flu_disc_6}
     \pder {\umem^{\nmhalf, \, 2}}{x^1}                                                                                               =    & - \pder{\xmemr{2}}{\xcoord^1}
     -\nu^\nmhalf \sin \psi^\nmhalf.
@@ -485,19 +484,19 @@ Proceeding along the same lines, the discrete forms of the \acp{bc} \crefs{\bcsm
 \bw
 \begin{align}
     \label{bc_fl_mem_mem_1_disc_bis}
-    \normalmem^\nmhalf_j \Pi^{ij}\left( \frac{\bvmem{n} + \bvmem{n-1}}{2},\frac{\wmem^n + \wmem^{n-1}}{2}, \sigmam{\nmhalf}, \nu^\nmhalf, \psi^\nmhalf \right) & = 0 \text{ on } \pomlineineqr         \\
+    \normalmem^\nmhalf_j \Pi^{ij}\left( \frac{\bvmem{n} + \bvmem{n-1}}{2},\frac{\wmem^n + \wmem^{n-1}}{2}, \sigmam{\nmhalf}, \nu^\nmhalf, \psi^\nmhalf \right) & = 0 \text{ on } \pomlineineqr        \\
     \label{bc_fl_mem_mem_2_disc_bis}
-    \vmem{n, \, i}                                                                                                                                             & = 0 \text{ on } \pomlineouteqr,       \\
+    \vmem{n, \, i}                                                                                                                                             & = 0 \text{ on } \pomlineouteqr,      \\
     \label{bc_fl_mem_mem_3_disc_bis}
-    \wmem^n                                                                                                                                                    & = 0 \text{ on } \pomlineineqr,        \\
+    \wmem^n                                                                                                                                                    & = 0 \text{ on } \pomlineineqr,       \\
     \label{bc_fl_mem_mem_4_disc_bis}
-    \nab^\nmhalf_i \wmem^n                                                                                                                                     & = 0 \text{ on } \pomlineouteqr,       \\
+    \nab^\nmhalf_i \wmem^n                                                                                                                                     & = 0 \text{ on } \pomlineouteqr,      \\
     \label{bc_fl_mem_mem_5_disc_bis}
-    \sigmam{\nmhalf}                                                                                                                                           & = \sigmaml \text{ on } \pomlineineqr, \\
+    \sigmam{\nmhalf}                                                                                                                                           & = 0 \text{ on } \pomlineineqr,       \\
     \label{bc_fl_mem_mem_6_disc_bis}
-    \bumem^\nmhalf                                                                                                                                             & = {\bm 0} \text{ on } \pomlineineqr,  \\
+    \bumem^\nmhalf                                                                                                                                             & = {\bm 0} \text{ on } \pomlineineqr, \\
     \label{bc_fl_mem_mem_7_disc_bis}
-    \umem^{\nmhalf, \, 1}                                                                                                                                      & = 0 \text{ on } \pomlineouteqr,       \\
+    \umem^{\nmhalf, \, 1}                                                                                                                                      & = 0 \text{ on } \pomlineouteqr,      \\
     \label{bc_fl_mem_mem_8_disc_bis}
     \pder{\umem^{\nmhalf, \, 2}}{\xcoord^1}                                                                                                                    & = 0 \text{ on } \pomlineouteqr.
 \end{align}
@@ -511,7 +510,7 @@ Following the \ac{ipcs} scheme,  in what follows we will split the \ac{bvp} abov
 \begin{enumerate}[label=\currentsec.\arabic*]
     \titleditem{Approximated velocities}{
         \label{item_mem_split_1}
-        Proceeding along the lines of the splitting scheme for  \ac{bflu} of \cref{sec_splitting_scheme_fl_rig_fl}, we introduce the auxiliary  velocities $\bvbarmem$ and $\wbarmem$, which approximate, respectively, $\bvmem{n}$ and $\wmem^n$ \cite{chorinNumericalSolutionNavierStokes1968}. We define $\bvbarmem$ and $\wbarmem$ as solutions of the \acp{pde}
+        Proceeding along the lines of the splitting scheme for  \ac{bflu}, we introduce the auxiliary  velocities $\bvbarmem$ and $\wbarmem$, which approximate, respectively, $\bvmem{n}$ and $\wmem^n$ \cite{chorinNumericalSolutionNavierStokes1968}. We define $\bvbarmem$ and $\wbarmem$ as solutions of the \acp{pde}
 
         \bw
         \begin{align}
@@ -632,16 +631,18 @@ with \acp{bc} given by the discrete version of \cref{\bcsdom}:
 \end{align}
 In \cref{bc_fl_mem_dom_4_disc,bc_fl_mem_dom_8_disc} the \ac{lhs} is evaluated at a \ac{ref} coordinate $\bxr$, and the \ac{rhs} at the corresponding \ac{mem} curvilinear coordinate $\xcoord^1$ such that $\bxmemr(\xcoord^1) = \bxr$.
 
-
-
-
-
 Given the \ac{mem} fields $\vmem{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam{\nmthalf}$, $\bumem^{\nmthalf}$, $\nu^{\nmthalf}$, $\psi^{\nmthalf}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
 
 
+
 \begin{itemize}
+    \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
+        We determine the \ac{bflu} fields $\bvmem{n} $ and $\sigmafr{\nmhalf}$ by solving the \ac{bvp} given by  \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi,eq_phi_1,bc_fl_membrane_1_current_disc,bc_fl_membrane_2_current_disc,bc_fl_membrane_3_current_disc,bc_fl_membrane_4_current_disc,bc_fl_membrane_5_current_disc,bc_fl_membrane_7_current_disc,bc_fl_membrane_8_current_disc,bc_fl_membrane_9_current_disc,bc_fl_membrane_7_reference},
+    }
+
     \titleditem{Update \ac{mem}}{ \label{fl_mem_step_1}
-        The \ac{mem} fields $\vmem{n, i}$, $\wmem^{n, \, i}$, $\sigmam{\nmhalf}$, $\bumem^{\nmhalf}$, $\nu^{\nmhalf}$, $\psi^{\nmhalf}$ are determined by solving the \ac{bvp} given by  \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem,bc_fl_mem_mem_1_disc,bc_fl_mem_mem_2_disc,bc_fl_mem_mem_3_disc,bc_fl_mem_mem_4_disc,bc_fl_mem_mem_5_disc,bc_fl_mem_mem_6_disc,bc_fl_mem_mem_7_disc,bc_fl_mem_mem_8_disc,bc_fl_mem_mem_9_disc}.
+        The \ac{mem} fields $\vmem{n, i}$, $\wmem^{n, \, i}$, $\sigmam{\nmhalf}$, $\bumem^{\nmhalf}$, $\nu^{\nmhalf}$, $\psi^{\nmhalf}$ are determined by solving the \ac{bvp} given by
+        \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem,bc_fl_mem_mem_1_disc,bc_fl_mem_mem_2_disc,bc_fl_mem_mem_3_disc,bc_fl_mem_mem_4_disc,bc_fl_mem_mem_5_disc,bc_fl_mem_mem_6_disc,bc_fl_mem_mem_6_disc_bis,bc_fl_mem_mem_7_disc_bis,bc_fl_mem_mem_8_disc_bis}.
     }
 
     \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
@@ -649,18 +650,19 @@ Given the \ac{mem} fields $\vmem{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam{\nmthal
 
     }
 
-    \titleditem{Update \ac{bflu}}{ \label{fl_mem_step_3}
-        We determine the \ac{bflu} fields $\bvmem{n} $ and $\sigmafr{\nmhalf}$ by solving the \ac{bvp} given by  \cref{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi,bc_fl_membrane_1_current_disc,bc_fl_membrane_2_current_disc,bc_fl_membrane_3_current_disc,bc_fl_membrane_4_current_disc,bc_fl_membrane_5_current_disc,bc_fl_membrane_6_current_disc,bc_fl_membrane_7_current_disc,bc_fl_membrane_8_current_disc}, and by solving  \cref{eq_phi_1}.
 
-    }
 \end{itemize}
 
 The fields ${\bm \vfc}^n$, $\sigmafc^{\nmhalf}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.\\ \vspace{5mm}
 
 
 An example of this dynamics is shown in \cref{fig_fluid_mem_mem}, where we show the interaction between air (\ac{bflu}) and an elastomer (\ac{mem}).
-The  channel has dimensions $L = 1 \, \met$, $h = 0.2 \, \met$. Proceeding along the lines of \cref{sec_fl_rigid},   \ac{mem} parameters have been estimated by considering the parameters for a three-dimensional material, multiplying them by a unit length corresponding to the out-of-plane depth, and by the \ac{mem} thickness, chosen to be $\Delta = 10^{-3}\, \met$. The \ac{mem} bending rigidity $\kap$ has been estimated from the relation $\kap = E \Delta^3/[12(1-\poissonratio^2)]$, which expresses $\kap$ as a function of the Young modulus $E$, the Poisson ratio $\poissonratio$, and  $\Delta$ \cite{landauTheoryElasticity1986}. Typical values for an elastomer   are $E \sim 10^7 \, \pas$ \cite{fengPreparationCharacterizationSilicone2017} and $\poissonratio \sim 0.5$ \cite{mullerQuickAccurateMethod2019}, yielding $\kap = 10^{-3} \, \kg \, \met^3/\sec^2$.
-We chose $\rhom = 1 \, \kg /  \met$ and $\etam = 1 \, \kg\, \met /\sec $ as the density and viscosity of an elastomer, respectively \cite{caiSoftPolydimethylsiloxaneElastomers2015,pochivalovDevelopmentVibrationDamping2021},  and we take $\sigmaml = 1 \, \newt$.
+The  channel has dimensions $L = 1 \, \met$, $h = 0.2 \, \met$. Proceeding along the lines of \cref{sec_fl_rigid},   \ac{mem} parameters have been estimated by considering a three-dimensional material, multiplying its parameters by a unit length corresponding to the out-of-plane depth, and by the \ac{mem} thickness, chosen to be $\delta = 10^{-3}\, \met$.
+
+The \ac{mem} bending rigidity $\kap$ has been estimated from the relation $\kap = E \delta^3/[12(1-\poissonratio^2)]$, which expresses $\kap$ as a function of the Young modulus $E$, the Poisson ratio $\poissonratio$, and  $\delta$ \cite{landauTheoryElasticity1986}.
+%sign
+Typical values for an elastomer   are $E \sim 10^7 \, \pas$ \cite{fengPreparationCharacterizationSilicone2017} and $\poissonratio \sim 0.5$ \cite{mullerQuickAccurateMethod2019}, yielding $\kap = 10^{-3} \, \kg \, \met^3/\sec^2$.
+We chose $\rhom = 1 \, \kg /  \met$ and $\etam = 1 \, \kg\, \met /\sec $ as the density and viscosity of an elastomer, respectively \cite{caiSoftPolydimethylsiloxaneElastomers2015,pochivalovDevelopmentVibrationDamping2021}.
 The \ac{bflu} parameters have been estimated from the air parameters:  $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-5} \, \kg / \sec$ \cite{hilsenrath1955tables}.
 Also, we take $\sigmafleftbottomc = - 1 \, \newt / \met^2$,
 and $\vfbottom^1 =0$, $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc[1] (2 L -\xc[1]) v_0$, where $v_0 = 10^{-2}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.

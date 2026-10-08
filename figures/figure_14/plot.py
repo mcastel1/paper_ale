@@ -63,6 +63,7 @@ plt.rcParams.update({
     "text.latex.preamble": (
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
+        r"\usepackage{tikz} "
         r"\usepackage{bm} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
