@@ -19,7 +19,7 @@ The dynamics of  \ac{rig} is given by the equations of motion for a rigid body w
 \Cref{eq_fl_rigid_rigid_current_1} relates the angular acceleration of \ac{rig} to the torque of external forces.
 The moment of inertia of \ac{rig} is denoted by $I$. The \ac{rhs} of \cref{eq_fl_rigid_rigid_current_1} contains the line integral along the boundary of \ac{rig}, of the torque of the local force exerted by  \ac{bflu} on  \ac{rig} with respect to the left focal point $\bfocalpoint$ of \ac{rig} \cite{landauFluidMechanics1987}, and   $\normalc{}$ is the normal to \pomellipsec pointing towards $\omc$.
 
-This force is expressed in terms of the \ac{bflu} stress tensor \cite{landauFluidMechanics1987} in \ac{cur} coordinates $\sigmastressc{}{}$, given by \cref{eq_strees_tensor_fluid}, where $\etaf$ and $\rhof$ are the two-dimensional viscosity and density of \ac{bflu}, respectively.
+This force is expressed in terms of the \ac{bflu} stress tensor \cite{landauFluidMechanics1987} in \ac{cur} coordinates $\bsigmastressc$, given by \cref{eq_strees_tensor_fluid}, where $\etaf$ and $\rhof$ are the two-dimensional viscosity and density of \ac{bflu}, respectively.
 Also, $\epsilon_{\alpha \beta \gamma}$ is the three-dimensional Levi-Civita symbol.
 Finally,   $\dint{l_\current}$ is the line element of \pomellipsec in the \ac{cur} configuration, and $\bnormalc$ the unit boundary normal to \pomellipsec pointing outside $\omc$.
 
@@ -32,12 +32,11 @@ In  \ac{ref} coordinates, \cref{eq_fl_rigid_rigid_current_1} reads
 \bw
 \begin{align}
     \label{eq_fl_rigid_rigid_reference}
-    I \der{\omega}{t} & =                                               \newlinenn
-    \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \varphi^{\alpha, \, t}(\bxi{s}) - \focalpoint^\alpha \right] \sigmastressr{\beta}{\gamma}(\bxi{s}) \epsilon_{\gamma \lambda} F_{\lambda \mu}(\budom^t(\bxi{s})) \der{\xi^\mu(s)}{s}.
+    I \der{\omega}{t} & = \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \varphi^{\alpha, \, t}(\bxi{s}) - \focalpoint^\alpha \right] \sigmastressr{\beta}{\gamma}(\bxi{s}) \epsilon_{\gamma \lambda} F_{\lambda \mu}(\budom^t(\bxi{s})) \der{\xi^\mu(s)}{s}.
 \end{align}
 \ew
 
-In \cref{eq_fl_rigid_rigid_reference}, the integral in the \ac{rhs} is over the curvilinear boundary \pomellipser, which is parametrized as $\bxr = \bxi{s}$, where $s$ is the curvilinear coordinate. Also, $\epsilon_{\alpha \beta}$ is the two-dimensional Levi-Civita symbol \cite{marchiafavaAppuntiDiGeometria2005}, and $\sigmastressr{}{}$ denotes the stress tensor in the \ac{ref} configuration, which is given by \cref{eq_def_sigma_ref}, where $G$ is given by \cref{eq_def_G}.
+In \cref{eq_fl_rigid_rigid_reference}, the integral in the \ac{rhs} is over the curvilinear boundary \pomellipser, which is parametrized as $\bxr = \bxi{s}$, where $s$ is the curvilinear coordinate. Also, $\epsilon_{\alpha \beta}$ is the two-dimensional Levi-Civita symbol \cite{marchiafavaAppuntiDiGeometria2005}, and $\bsigmastressr$ denotes the stress tensor in the \ac{ref} configuration, which is given by \cref{eq_def_sigma_ref}, where $G$ is given by \cref{eq_def_G}.
 
 
 
@@ -170,7 +169,7 @@ We discretize \cref{eq_fl_rigid_rigid_reference,eq_fl_rigid_rigid_current_2} and
     \frac{\theta^n - \theta^{n-1}}{\deltat}     = & \omega^n       ,                                                                         \\
     \label{eq_fl_rigid_rigid_reference_disc}
     \frac{\omega^n - \omega^{n-1}}{\deltat}  =    &
-    I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right]                                                                             \sigmastressr{\beta}{\gamma}^{n-1}(\bxi{s}; {\bvfr{n-1}, \sigmafr{n-3/2}}) \times \newlinenn
+    I  \int_\pomellipseeqr \dint{s} \, \epsilon_{\alpha \beta} \left[ \xi^\alpha(s) + u^{n-1,\, \alpha}(\bxi{s})- \focalpoint^\alpha \right]                                                                             \sigmastressr{\beta}{\gamma}^{n-1}(\bxi{s}; {\bvfr{n-1}, \sigmafr{\nmthalf}}) \times \newlinenn
                                                   & \epsilon_{\gamma \lambda} F_{\lambda \mu}(\budom^{n-1}(\bxi{s})) \der{\xi^\mu(s)} {s}  ,
 \end{align}
 \ew
@@ -295,7 +294,7 @@ The discrete version of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_
 \end{align}\\
 
 We can now iterate in time for the ensemble of fields  of the \ac{bflu}-\ac{rig} system as follows.
-At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{n-3/2}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
+At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
 \begin{enumerate}
     \titleditem{Update \ac{rig}}{ \label{fl_rigid_step_1}
         Solve the algebraic equations \cref{eq_def_omega_disc,eq_fl_rigid_rigid_reference_disc} for $\theta^n$ and $\omega^n$.
@@ -309,7 +308,7 @@ At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{
     }
 \end{enumerate}
 
-The fields ${\bm \vfc}^{n-1}$, $\sigmafc^{n-3/2}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.
+The fields ${\bm \vfc}^{n-1}$, $\sigmafc^{\nmthalf}$ in the \ac{cur} configuration are then obtained from the respective fields in the \ac{ref} configuration through \cref{eq_vf_ref,eq_sigmaf_ref}.
 
 
 

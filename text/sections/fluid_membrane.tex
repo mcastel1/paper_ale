@@ -64,21 +64,21 @@ In what follows, latin indices $i, j, k, \cdots$ will be used to denote vectors 
 In order to work out the  dynamical equations for \ac{mem}, let us derive the force exerted by \ac{bflu} on \ac{mem}. The force exerted on a line element $\dint{l_\current}$ of \ac{mem}  is \cite{landauFluidMechanics1987}
 \be
 \label{def_f_fluid_mem}
-f_{\fluid\, \alpha}(\sigmastressc{}{}, \nu, \psi) = - \sigmastressc{\alpha}{\beta} \normalc{\beta}(\nu, \psi),
+f_{\fluid\, \alpha}(\bsigmastressc, \nu, \psi) = - \sigmastressc{\alpha}{\beta} \normalc{\beta}(\nu, \psi),
 \ee
 where
 \be
 \label{eq_strees_tensor_fluid}
 \sigmastressc{\alpha}{\beta} \equiv \sigmafc \delta_{\alpha \beta}+ \eta_\fluid\left( \pderc{ \vfc^\alpha}{\beta} +\pderc{ \vfc^\beta}{\alpha}\right)
 \ee
-is the \ac{bflu} stress tensor \cite{landauFluidMechanics1987} and $\normalc{}$ the unit normal to $\pomtopeqc$ pointing outside $\omc$, see \cref{fig_ref_cur_mem}.  In \cref{def_f_fluid_mem}, $\sigmastressc{}{}$ is evaluated at the \ac{cur} coordinate $\bxmemc \in \pomtopeqc$ corresponding to $\xcoord^1$.
+is the \ac{bflu} stress tensor \cite{landauFluidMechanics1987} and $\normalc{}$ the unit normal to $\pomtopeqc$ pointing outside $\omc$, see \cref{fig_ref_cur_mem}.  In \cref{def_f_fluid_mem}, $\bsigmastressc$ is evaluated at the \ac{cur} coordinate $\bxmemc \in \pomtopeqc$ corresponding to $\xcoord^1$.
 %
 The components of the force \crefs{def_f_fluid_mem} tangential and normal to \ac{mem} are \cite{desernoFluidLipidMembranes2015}
 \begin{align}
     \label{def_force_tan}
-    f_{\fluid\, \text{t}}^i(\sigmastressc{}{}, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\sigmastressc{}{}, \nu, \psi) \\
+    f_{\fluid\, \text{t}}^i(\bsigmastressc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\bsigmastressc, \nu, \psi) \\
     \label{def_force_norm}
-    f_{\fluid\, \text{n}} (\sigmastressc{}{}, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\sigmastressc{}{}, \nu, \psi),
+    f_{\fluid\, \text{n}} (\bsigmastressc, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\bsigmastressc, \nu, \psi),
 \end{align}
 where in \cref{def_force_tan} we used the feature that the metric tensor depends on $\nu$ only, see \cref{eq_def_g,eq_intro_nu}.
 
@@ -394,7 +394,7 @@ where we have set
     \label{eq_def_Vf}
     \bVf           & \equiv\frac{ \bvbarf + \bvfr{n-1}}{2},     \\
     \label{eq_def_sigmarast}
-    \sigmafr{\ast} & \equiv \sigmafr{n-3/2},                    \\
+    \sigmafr{\ast} & \equiv \sigmafr{\nmthalf},                 \\
     \label{eq_def_phi_pressure}
     \phif          & \equiv \sigmafr{\ast} - \sigmafr{\nmhalf}.
 \end{align}
@@ -452,12 +452,12 @@ We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-
     \rhom \Big(  \frac{\vmem{n,\, i} - \vmem{n-1,\, i}}{\deltat} +   \frac{3}{2}\vmem{n-1,\, j}  \nab^{\nmhalf}_j \vmem{n-1,\, i} -   \frac{1}{2}\vmem{n-2,\, j}  \nab^{\nmhalf}_j \vmem{n-2,\, i} - 2 \vmem{n-1,\, j} \wmem^{n-1} \fnij{b}{\nmhalf}{i}{j} - & \newlinenn
     \wmem^{n-1} \nab^{\nmhalf, \, i} \wmem^{n-1} \Big)                                                                                                                                                                                                       & =              \newlinenn
     - \nab^\nmhalf_j \Pi^{ij} \left( \frac{\bvmem{n} + \bvmem{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2},\sigmam{\nmhalf},\nu^\nmhalf,\psi^\nmhalf \right)+ \newlinenn
-    f_{\fluid\, \text{t}}^i({\sigmastressr{}{}}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                     &
+    f_{\fluid\, \text{t}}^i({\bsigmastressr}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,                                                                                                                                        &
     \\
     \label{eq_mem_flu_disc_2}
     \rhom \left( \frac{\wmem^n - \wmem^{n-1}}{\deltat} + \vmem{n-1,\, i} \vmem{n-1,\, j} b^\nmhalf_{ji} + \frac{3}{2} \vmem{n-1, \, i}  \nab^\nmhalf_i \wmem^{n-1}  - \frac{1}{2} \vmem{n-2, \, i}  \nab^\nmhalf_i \wmem^{n-2} \right)                       & =\newlinenn
     f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmam{\nmhalf} H^\nmhalf + f^\eta_{\mem\, \text{n}}     \left( \frac{\bvmem{n} + \bvmem{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
-    f_{\fluid\, \text{n}} ({\sigmastressr{}{}}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                       &\end{align}
+    f_{\fluid\, \text{n}} ({\bsigmastressr}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                          &\end{align}
 \ew
 
 \begin{align}
@@ -471,7 +471,7 @@ We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-
     -\nu^\nmhalf \sin \psi^\nmhalf.
 \end{align}
 
-In \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, $\sigmastressr{}{}$ denotes the \ac{bflu} stress tensor in the \ac{ref} configuration:
+In \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, $\bsigmastressr$ denotes the \ac{bflu} stress tensor in the \ac{ref} configuration:
 \begin{align}
     \label{eq_def_sigma_ref}
     \sigmastressr{\alpha}{\beta}^t(\bxr)  \equiv & \sigmastressc{\alpha}{\beta}({\bm \varphi}^t(\bxr)) \newlinenn
@@ -518,12 +518,12 @@ Following the \ac{ipcs} scheme,  in what follows we will split the \ac{bvp} abov
             \label{eq_fl_mem_mem_disc_1}
             \rhom \Big[  \frac{\vbarmem^i - \vmem{n-1,\, i}}{\deltat} +  \left( \frac{3}{2}\vmem{n-1,\, j} - \frac{1}{2} \vmem{n-2,\, j} \right)     \nab^{\nmhalf}_j \Vmem^i - 2 \Vmem^j \Wmem \fnij{b}{\nmhalf}{i}{j} -    \Wmem \nab^{\nmhalf, \, i} \Wmem \Big] & =              \newlinenn
             - \nab^\nmhalf_j \Pi^{ij}(\bVmem, \Wmem,\sigmamast,\nu^\nmhalf,\psi^\nmhalf) + \newlinenn
-            f_{\fluid\, \text{t}}^i({\sigmastressr{}{}}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,
+            f_{\fluid\, \text{t}}^i({\bsigmastressr}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf) ,
                                                                                                                                                                                                                                                                     &                           \\
             \label{eq_fl_mem_mem_disc_2}
             \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j b^\nmhalf_{ji} + \left( \frac{3}{2} \vmem{n-1, \, i} - \frac{1}{2}\vmem{n-2,\,i}\right) \nab^\nmhalf_i \Wmem \right]                                                              & =\newlinenn
             f_\kap(\nu^\nmhalf,\psi^\nmhalf) + 2 \sigmamast H^\nmhalf + f^\eta_{\mem\, \text{n}}      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
-            f_{\fluid\, \text{n}} ({\sigmastressr{}{}}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf)                                                                                                                                       & ,
+            f_{\fluid\, \text{n}} ({\bsigmastressr}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf)                                                                                                                                          & ,
         \end{align}
         \ew
         where we have set
@@ -533,7 +533,7 @@ Following the \ac{ipcs} scheme,  in what follows we will split the \ac{bvp} abov
             \label{eq_def_Wmem}
             \Wmem      & \equiv \frac{\wbarmem + \wmem^{n-1}}{2},      \\
             \label{eq_def_sigmamasst}
-            \sigmamast & \equiv \sigmam{n-3/2},
+            \sigmamast & \equiv \sigmam{\nmthalf},
         \end{align}
         \Cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2} are the analog of \cref{eq_mem_flu_disc_1,eq_mem_flu_disc_2}, respectively,  with a fixed pressure field $\sigmamast$ obtained from the preceding step. In what follows, we will synonymously use the terms `pressure' and `tension'  for conciseness \cite{worthmullerIRENEFluIdLayeR2025}.
 
@@ -636,7 +636,7 @@ In \cref{bc_fl_mem_dom_4_disc,bc_fl_mem_dom_8_disc} the \ac{lhs} is evaluated at
 
 
 
-Given the \ac{mem} fields $\vmem{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam{n-3/2}$, $\bumem^{n-3/2}$, $\nu^{n-3/2}$, $\psi^{n-3/2}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr{n-1}$, $\sigmafr{n-3/2}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
+Given the \ac{mem} fields $\vmem{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam{\nmthalf}$, $\bumem^{\nmthalf}$, $\nu^{\nmthalf}$, $\psi^{\nmthalf}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the \ac{bflu} fields $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
 
 
 \begin{itemize}

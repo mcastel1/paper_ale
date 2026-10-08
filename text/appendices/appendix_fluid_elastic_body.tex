@@ -57,7 +57,7 @@ Finally, the equations of motion for \ac{dom} are \crefs{\eqsdom}, with \acp{bc}
 \subsection{Dynamics}
 \label{app_sec_fl_elastic_dynamics}
 
-The system dynamics is obtained as follows: given $\bvfr{n-1}$, $\sigmafr{n-3/2}$, $\buela^{n-1}$, $\bueladot^{n-1}$, $\budomdot^{n-1}$ and $\budomdot^{n-1}$  from the preceding step, we
+The system dynamics is obtained as follows: given $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, $\buela^{n-1}$, $\bueladot^{n-1}$, $\budomdot^{n-1}$ and $\budomdot^{n-1}$  from the preceding step, we
 \begin{itemize}
     \titleditem{Update \ac{ela}}{ \label{fl_ela_step_1}
         Solve for $\buela^n$ and $\bueladot^n$ the discrete version of \cref{eq_fl_elastic_ela_current}
@@ -71,10 +71,10 @@ The system dynamics is obtained as follows: given $\bvfr{n-1}$, $\sigmafr{n-3/2}
         \bw
         \begin{align}
             \label{bc_fl_ela_1_current_disc}
-            \buela^n                                                                                                                                                                                                             & =  0          \text{ on }\pomcircineqr, \\
+            \buela^n                                                                                                                                                                                                                & =  0          \text{ on }\pomcircineqr, \\
             \label{bc_fl_ela_2_current_disc}
-            \epsilon_{\beta \gamma} \, \left. \Sela_{\alpha \beta}(\buela^n)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\                                                                                                         & =  \newlinenn
-            \sigmastressr{\alpha}{\beta}(\bxi{s};\bvfr{n-1}, \sigmafr{n-3/2}, \buela^n) \epsilon_{\beta \gamma} \left. F_{\gamma \delta}(\bu_\ela^{n-1})\right|_{\bxr = \bxi{s}}\der{ \xi^\delta}{s}  \text{ on } \pomcircouteqr & .
+            \epsilon_{\beta \gamma} \, \left. \Sela_{\alpha \beta}(\buela^n)\right|_{\bxr = \bxi{s}}\der{\xi^\gamma}{s}\                                                                                                            & =  \newlinenn
+            \sigmastressr{\alpha}{\beta}(\bxi{s};\bvfr{n-1}, \sigmafr{\nmthalf}, \buela^n) \epsilon_{\beta \gamma} \left. F_{\gamma \delta}(\bu_\ela^{n-1})\right|_{\bxr = \bxi{s}}\der{ \xi^\delta}{s}  \text{ on } \pomcircouteqr & .
         \end{align}
         \ew
         In \cref{bc_fl_ela_2_current_disc}, we have used \cref{eq_def_phi,eq_def_F} to rewrite the derivative of ${\bm \phi}(\bxi{s})$.

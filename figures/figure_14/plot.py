@@ -24,7 +24,17 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
- ./copy_from_abacus.sh monolithic_2/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*'  ~/Desktop 0 100000 10
+INPUT_PATH="paper_ale_fig_14_elastic_monolithic_b"
+OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_14/"
+STRIDE="10"
+SNAPSHOT_MAX="760"
+cd $OUTPUT_PATH/../
+rm -rf $OUTPUT_PATH/solution $OUTPUT_PATH/mesh/solution
+mkdir -p $OUTPUT_PATH/solution $OUTPUT_PATH/mesh/solution
+./copy_from_abacus.sh $INPUT_PATH/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*' $OUTPUT_PATH 0 $SNAPSHOT_MAX $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
+rsync -avr mcastel1@abacus:$INPUT_PATH/mesh $OUTPUT_PATH
+rsync -avr mcastel1@abacus:$INPUT_PATH/solution/solution_metadata.csv $OUTPUT_PATH/solution
+rsync -avr mcastel1@abacus:$INPUT_PATH/mesh/solution/mesh_metadata.csv $OUTPUT_PATH/mesh/solution
 
 to copy the parameter files to repdroduce this figure
 
@@ -61,11 +71,12 @@ plt.rcParams.update({
 })
 
 # define the folder where to read the data
-'''# 1. read data from local folder 
+# 1. read data from local folder 
 solution_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/")
 sub_mesh_1_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/sub_meshes/out/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
+
 '''
 # 2 read data from external folder
 path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic'
@@ -74,8 +85,8 @@ mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d
 sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
-
-solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_line_b.csv'))
+'''
+solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 mesh_0_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
 

@@ -27,8 +27,8 @@
 \providecommand{\Wf}{W_\fluid}
 \providecommand{\vfc}{\vf_\current}
 \providecommand{\bvfc}{{\bm \vfc}}
-\providecommand{\bvfr}[1]{{\bm{\vf}_\reference^{#1}}}
-\providecommand{\vfr}[1]{\vf_\reference^{#1}}
+\providecommand{\bvfr}[1]{{\bm{v}_{\fluid \,\reference}^{#1}}}
+\providecommand{\vfr}[1]{v_{\fluid \, \reference}^{#1}}
 \providecommand{\rhof}{\rho_\fluid}
 \providecommand{\rhoela}{\rho_\ela}
 \providecommand{\rhom}{\rho_\mem}
@@ -86,7 +86,9 @@
 
 %stress tensor
 \providecommand{\sigmastressr}[2]{\sigma_{\fluid\, \reference\, #1#2}}
+\providecommand{\bsigmastressr}{{\bm \sigma}_{\fluid\, \reference}}
 \providecommand{\sigmastressc}[2]{\sigma_{\fluid\, \current\, #1#2}}
+\providecommand{\bsigmastressc}{{\bm \sigma}_{\fluid\, \current}}
 
 
 % equations of motion for membrane, domain and fluid

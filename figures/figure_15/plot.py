@@ -24,10 +24,14 @@ import graphics.vector_plot as vec
 
 
 '''
-to copy files for this figure from abacus do :
+- to copy files for this figure from abacus do :
 
  ./copy_from_abacus.sh surface_tension_1/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*' 'def_mu_n_*'  ~/Desktop 0 100000 10
 
+- to copy files to reproduce this figure to remote folder do: 
+
+    cp figures/figure_15/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square/shape_line/mesh_parameters.csv
+    cp figures/figure_15/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic/surface_tension/parameters_bc_square_shape_line_a.csv
 '''
 
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
