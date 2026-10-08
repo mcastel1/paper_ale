@@ -24,7 +24,16 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
-    ./copy_from_abacus.sh monolithic_2/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*'  ~/Desktop 0 100000 10
+INPUT_PATH="paper_ale_fig_13_elastic_monolithic_b"
+OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_13/"
+STRIDE="10"
+cd $OUTPUT_PATH/../
+rm -rf $OUTPUT_PATH/solution
+./copy_from_abacus.sh $INPUT_PATH/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*'   'line_mesh_0_n_*'  'def_v_n_*' 'u_n_*' 'u_0_n_*' 'def_sigma_n_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
+rsync -avr mcastel1@abacus:$INPUT_PATH/mesh/mesh_parameters.csv $OUTPUT_PATH
+rsync -avr mcastel1@abacus:$INPUT_PATH/solution/solution_metadata.csv $OUTPUT_PATH/solution
+rsync -avr mcastel1@abacus:$INPUT_PATH/solution/theta_omega.csv $OUTPUT_PATH/solution
+rsync -avr mcastel1@abacus:$INPUT_PATH/solution/remesh.csv $OUTPUT_PATH/solution
 
  to copy the parameter files to repdroduce this figure
 
@@ -52,6 +61,7 @@ plt.rcParams.update({
     "text.latex.preamble": (
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
+        r"\usepackage{tikz} "
         r"\usepackage{bm} "
         r"\usepackage{glossaries} "
         rf"\input{{{paths.definitions_path}}}"
