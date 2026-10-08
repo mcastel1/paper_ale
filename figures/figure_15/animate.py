@@ -38,7 +38,7 @@ def update_animation(n):
     # plot.gr.delete_all_axes(plot.fig)
 
     text.clear_labels_with_patterns(
-        plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
+        plot.fig, ["\\second", "\\msecond", "\\minute", "\\hour", "\\pas"])
 
     plot.plot_snapshot(plot.fig, n, rf'$n = \,$' + io.time_to_string(n, 's', 2))
 

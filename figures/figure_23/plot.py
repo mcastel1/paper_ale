@@ -38,9 +38,9 @@ you can copy the data from abacus with
 
 to copy the parameters to finite_elements:
 
-    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/membrane/parameters_bc_square_no_circle_line_a.csv
-    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv 
-    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/variational_problem_membrane_bc_square_no_circle_line_a.py ~/Documents/finite_elements/fluid_structure_interaction/membrane
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_23/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/membrane/parameters_bc_square_no_circle_line_a.csv
+    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_23/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv 
+
 
 '''
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
@@ -74,6 +74,8 @@ plt.rcParams.update({
         r"\usepackage{glossaries} "
         r"\usepackage{graphicx} "
         r"\usepackage{tikz} "
+        r"\usepackage{relsize} "
+        r"\renewcommand{\scalebox}[2]{\mbox{\textscale{#1}{#2}}} "
         rf"\input{{{paths.definitions_path}}}"
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
@@ -345,7 +347,7 @@ def plot_snapshot(fig, n_file,
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [
-                             V_x, V_y], parameters['arrow_length'], 0.3, 30, 0.5, 1, 'color_from_map', 0)
+                             V_x, V_y], parameters['shaft_length'], parameters['head_over_shaft_length'], 30, 0.5, 1, 'color_from_map', 0)
 
     gr.cb.make_colorbar(fig, grid_norm_v, norm_v_fl_min_max[0], norm_v_fl_min_max[1],
                         label_pad=parameters['colorbar_axis_label_offset'],
@@ -353,7 +355,7 @@ def plot_snapshot(fig, n_file,
                         label=parameters['v_fl_colorbar_axis_label'],
                         font_size=parameters['colorbar_font_size'],
                         tick_label_angle=parameters['v_fl_colorbar_tick_label_angle'],
-                        tick_label_offset=parameters['v_fl_colorbar_tick_label_offset'],
+                        tick_label_offset=parameters['colorbar_tick_label_offset'],
                         line_width=parameters['v_fl_colorbar_tick_line_width'],
                         tick_length=parameters['colorbar_tick_length'],
                         axis=v_fl_colorbar_axis)
@@ -364,6 +366,7 @@ def plot_snapshot(fig, n_file,
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
         axis_label_angle=parameters['axis_label_angle'],
+        tick_label_angle=parameters['tick_label_angle'],
         axis_label_offset=parameters['axis_label_offset'],
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
@@ -430,7 +433,7 @@ def plot_snapshot(fig, n_file,
         min_value=sigma_fl_min_max[0],
         max_value=sigma_fl_min_max[1],
         label_pad=parameters['colorbar_axis_label_offset'],
-        tick_label_offset=parameters['sigma_fl_colorbar_tick_label_offset'],
+        tick_label_offset=parameters['colorbar_tick_label_offset'],
         line_width=parameters['sigma_fl_colorbar_tick_line_width'],
         tick_length=parameters['colorbar_tick_length'],
         tick_label_angle=parameters['sigma_fl_colorbar_tick_label_angle'],
@@ -447,6 +450,7 @@ def plot_snapshot(fig, n_file,
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
         axis_label_angle=parameters['axis_label_angle'],
+        tick_label_angle=parameters['tick_label_angle'],
         axis_label_offset=parameters['axis_label_offset'],
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
