@@ -125,12 +125,12 @@ We will now discuss each line in \cref{\eqsmembrane}, and we set
 In \cref{eq_def_Pi} $\Pi$, is the momentum-flux density tensor \cite{landauFluidMechanics1987}, which is given by a line-tension term and by a viscous term, where the latter is expressed in terms of the rate-of-deformation tensor $d$ \cite{al-izziShearDrivenInstabilitiesMembrane2020}. Finally, in \cref{eq_def_d}, $b$ is  the second fundamental form \cite{marchiafavaAppuntiDiGeometria2005,desernoNotesDifferentialGeometry2004}.
 % 
 
-In \cref{\eqsmembrane}, $\rhom$, $\sigmam{}$, $\etam$ and $\kappa$ are, respectively, the density, line tension, viscosity, and bending rigidity of \ac{mem}.
+In \cref{\eqsmembrane}, $\rhom$, $\sigmam{}$, $\etam$ and $\kap$ are, respectively, the density, line tension, viscosity, and bending rigidity of \ac{mem}.
 \Cref{eq-dyn-continuity} enforces mass conservation \cite{landauFluidMechanics1987}.
 \Cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively.
 The term $\fmemt$ in \cref{eq-dyn-v} represents the force on \ac{mem} elements induced by gradients of line tension and viscous effects, cf. \cref{eq_def_fmemt}, while $f_{\fluid\, \text{t}}$ is the force exerted on \ac{mem} elements by \ac{bflu}.
 %
-The first term in the \ac{rhs} of \cref{eq-dyn-w} constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004,landauFluidMechanics1987},  $f_\kappa$ represents the resistance of \ac{mem} to bending \cite{helfrichElasticPropertiesLipid1973}, cf. \cref{eq_def_f_kap},  while $f^\eta_{\mem\, \text{n}}$ and $f_{\fluid\, \text{n}}$ are  the  normal components of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i} and of the force exerted by \ac{bflu} on \ac{mem}, respectively.
+The first term in the \ac{rhs} of \cref{eq-dyn-w} constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004,landauFluidMechanics1987},  $f_\kap$ represents the resistance of \ac{mem} to bending \cite{helfrichElasticPropertiesLipid1973}, cf. \cref{eq_def_f_kap},  while $f^\eta_{\mem\, \text{n}}$ and $f_{\fluid\, \text{n}}$ are  the  normal components of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i} and of the force exerted by \ac{bflu} on \ac{mem}, respectively.
 %
 \Cref{eq-dyn-dX} is the time-evolution equation for the \ac{mem} shape, which moves according to the normal $\normalc{}$, and it has been obtained from  \cref{eq_u_mem}.
 We observe that the \ac{mem} shape velocity, $\partial \bumem / \partial t$, coincides with the normal displacement velocity of \ac{mem}, but  it is independent of the tangential flow velocity $\bvmem{}$ of \ac{mem} elements along the \ac{mem} shape.
@@ -243,12 +243,11 @@ We impose the following \acp{bc} for  \cref{\eqsdom}:
     \centering
     \includegraphics[width=0.95\textwidth]{figures/figure_5/figure_5.pdf}
     \caption{
-        Interaction between a \acf{bflu}  and a \ac{mem}: \ac{mem} fields. Here, \ac{bflu} is air, and \ac{mem} an elastomer, and the \ac{bflu} Reynolds number is $R \sim 200$.
-        \plab{A}  Initial and \acf{cur} configuration of \ac{mem} (solid blue and dashed red curve, respectively).
-        \plab{B} Stretch field of \ac{mem}.
-        \plab{C} Tangent angle of \ac{mem}.
-        \plab{D}, \plab{E} and \plab{F}: \ac{mem} angential velocity, normal velocity and tension, respectively.
-        All panels refer to the same instant of time, shown on top, and they display also the mesh.
+        Interaction between a \acf{bflu}  and a \ac{mem}. Here we show the \ac{mem} fields, and \ac{bflu} is air and \ac{mem} an elastomer.
+        \plab{A}  Initial and \acf{cur} configuration of \ac{mem} (solid blue and dashed red curve, respectively). Only the \acl{le} half of the system is shown, the \acl{ri} half is obtained by mirror symmetry from the \acl{le} half through the symmetry axis (green dotted and dashed line).
+        \plab{B} and \plab{C} Stretch field and tangent angle of \ac{mem}, respectively.
+        \plab{D}, \plab{E} and \plab{F}: \ac{mem} tangential velocity, normal velocity and tension, respectively.
+        All panels refer to the same instant of time, shown on top, and they display the mesh. In panels \textbf{B}-\textbf{F}, the initial  \ac{mem} configuration is also shown (dim blue line).
         \label{fig_fluid_mem_mem}
     }
 \end{figure*}
@@ -257,8 +256,8 @@ We impose the following \acp{bc} for  \cref{\eqsdom}:
     \centering
     \includegraphics[width=0.7\textwidth]{figures/figure_23/figure_23.pdf}
     \caption{
-        Interaction between a \acf{bflu}  and a \ac{mem}: \ac{bflu} fields. The solution and notation is the same as  \cref{fig_fluid_mem_mem}.
-        \plab{A} and \plab{B}: \ac{bflu} velocity and surface tension, respectively.
+        Interaction between a \acf{bflu}  and a \acf{mem}: \ac{bflu} fields. The solution and notation is the same as  \cref{fig_fluid_mem_mem}.
+        \plab{A} and \plab{B}: \ac{bflu} velocity and surface tension, respectively. The initial \ac{mem} configuration (blue line) is also shown.
         \label{fig_fluid_mem_bflu}
     }
 \end{figure*}
@@ -659,14 +658,14 @@ The fields ${\bm \vfc}^n$, $\sigmafc^{\nmhalf}$ in the \ac{cur} configuration ar
 An example of this dynamics is shown in \cref{fig_fluid_mem_mem}, where we show the interaction between air (\ac{bflu}) and an elastomer (\ac{mem}).
 The  channel has dimensions $L = 1 \, \met$, $h = 0.2 \, \met$. Proceeding along the lines of \cref{sec_fl_rigid},   \ac{mem} parameters have been estimated by considering a three-dimensional material, multiplying its parameters by a unit length corresponding to the out-of-plane depth, and by the \ac{mem} thickness, chosen to be $\delta = 10^{-3}\, \met$.
 
-The \ac{mem} bending rigidity $\kap$ has been estimated from the relation $\kap = E \delta^3/[12(1-\poissonratio^2)]$, which expresses $\kap$ as a function of the Young modulus $E$, the Poisson ratio $\poissonratio$, and  $\delta$ \cite{landauTheoryElasticity1986}.
-%sign
-Typical values for an elastomer   are $E \sim 10^7 \, \pas$ \cite{fengPreparationCharacterizationSilicone2017} and $\poissonratio \sim 0.5$ \cite{mullerQuickAccurateMethod2019}, yielding $\kap = 10^{-3} \, \kg \, \met^3/\sec^2$.
-We chose $\rhom = 1 \, \kg /  \met$ and $\etam = 1 \, \kg\, \met /\sec $ as the density and viscosity of an elastomer, respectively \cite{caiSoftPolydimethylsiloxaneElastomers2015,pochivalovDevelopmentVibrationDamping2021}.
+The \ac{mem} bending rigidity $\kapthreed$ for a three-dimensional plate  has been estimated from the relation $\kapthreed = E \delta^3/[12(1-\poissonratio^2)]$, which expresses $\kapthreed$ as a function of the Young modulus $E$, the Poisson ratio $\poissonratio$, and  $\delta$ \cite{landauTheoryElasticity1986}.
+Typical values for an elastomer   are $E \sim 10^7 \, \pas$ \cite{fengPreparationCharacterizationSilicone2017} and $\poissonratio \sim 0.5$ \cite{mullerQuickAccurateMethod2019}, yielding $\kapthreed = 10^{-3} \, \kg \, \met^3/\sec^2$, and thus $\kap =  10^{-3} \, \kg \, \met^2/\sec^2$.
+We chose $\rhom = 1 \, \kg /  \met$ and $\etam = 1 \, \kg\, \met /\sec $ as the density \cite{caiSoftPolydimethylsiloxaneElastomers2015} and viscosity \cite{pochivalovDevelopmentVibrationDamping2021} of an elastomer, respectively.
 The \ac{bflu} parameters have been estimated from the air parameters:  $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-5} \, \kg / \sec$ \cite{hilsenrath1955tables}.
-Also, we take $\sigmafleftbottomc = - 1 \, \newt / \met^2$,
-and $\vfbottom^1 =0$, $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc[1] (2 L -\xc[1]) v_0$, where $v_0 = 10^{-2}  \, \met / \sec$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
+Also, we take $\vfbottom^1 =0$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}, i.e.,  $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc[1] (2 L -\xc[1]) v_0$, where $v_0 = 10^{-1}  \, \met / \sec$.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
 
+
+%sign
 
 
 \begin{figure}

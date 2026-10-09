@@ -1,4 +1,5 @@
 import matplotlib
+from matplotlib.axes import Axes as MplAxes
 from matplotlib.font_manager import FontProperties
 from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
@@ -333,7 +334,7 @@ def plot_snapshot(fig, n_file,
 
 
 
-    X_cur, t = gr.interpolate_curve(
+    X_cur, text = gr.interpolate_curve(
         data_X_cur, data_X_cur[':0'].min(), data_X_cur[':0'].max(), parameters['n_bins_X'])
     
     X_0, _ = gr.interpolate_curve(
@@ -391,7 +392,14 @@ def plot_snapshot(fig, n_file,
                     color='black',
                     alpha=parameters['alpha_mesh_high'],
                     zorder=parameters['mesh_zorder'])
-
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
+                       line_width=parameters['X_line_width'],
+                       z_order=1
+                       )
+    
     # plot X_cur
     gr.plot_curve_grid(ax, X_cur,
                        line_color=parameters['X_cur_color'],
@@ -401,15 +409,6 @@ def plot_snapshot(fig, n_file,
                        z_order=1
                        )
 
- 
-
-    # plot X_0
-    gr.plot_curve_grid(ax, X_0,
-                       line_color=parameters['X_0_color'],
-                       legend=parameters['X_0_legend'],
-                       line_width=parameters['X_line_width'],
-                       z_order=1
-                       )
 
     # plot symmetry axis
     gr.plot_curve_grid(ax, X_sym,
@@ -418,7 +417,7 @@ def plot_snapshot(fig, n_file,
                        line_width=parameters['X_line_width'],
                        line_style=parameters['X_sym_line_style'],
                        alpha=parameters['X_sym_alpha'],
-                       z_order=1
+                       z_order=0
                        )
 
 
@@ -430,7 +429,8 @@ def plot_snapshot(fig, n_file,
     with plt.rc_context({'text.usetex': False}):
         # disable tex otherwise the legend and the line sample will be displayed far from each other
 
-        ax.legend(
+        MplAxes.legend(
+            ax,
             handles=handles,
             labels=labels,
             loc='center',
@@ -438,8 +438,12 @@ def plot_snapshot(fig, n_file,
             frameon=False,
             handlelength=parameters['legend_line_length'],
             handletextpad=parameters['legend_text_horizontal_pad'],
-            prop=FontProperties(size=parameters['legend_font_size'])
+            prop=FontProperties(size=parameters['legend_font_size']),
+            labelspacing=parameters['label_spacing'],
+            columnspacing=parameters['column_spacing'],
+            ncols=2
         )
+
 
     gr.plot_2d_axes(
         ax, [0, 0], [mesh_parameters['L'], h],
@@ -476,7 +480,7 @@ def plot_snapshot(fig, n_file,
     data_nu_minus_1 = data_nu.copy()
     data_nu_minus_1['f'] = data_nu['f'] - 1
 
-    color_map_nu = gr.cb.make_curve_colorbar(fig, t, data_nu_minus_1,
+    color_map_nu = gr.cb.make_curve_colorbar(fig, text, data_nu_minus_1,
                                              min_max=np.subtract(
                                                  nu_min_max, [1]*2),
                                              tick_label_angle=parameters['nu_colorbar_tick_label_angle'],
@@ -544,7 +548,7 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)
     gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], h])
 
-    color_map_psi = gr.cb.make_curve_colorbar(fig, t, data_psi,
+    color_map_psi = gr.cb.make_curve_colorbar(fig, text, data_psi,
                                               min_max=psi_min_max,
                                               tick_label_angle=parameters['psi_colorbar_tick_label_angle'],
                                               label=parameters['psi_colorbar_axis_label'],
@@ -685,7 +689,7 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)
     gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
 
-    color_map_w = gr.cb.make_curve_colorbar(fig, t, data_w,
+    color_map_w = gr.cb.make_curve_colorbar(fig, text, data_w,
                                             min_max=w_min_max,
                                             tick_label_angle=parameters['w_colorbar_tick_label_angle'],
                                             label=parameters['w_colorbar_axis_label'],
@@ -752,7 +756,7 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)
     gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
 
-    color_map_sigma = gr.cb.make_curve_colorbar(fig, t, data_sigma,
+    color_map_sigma = gr.cb.make_curve_colorbar(fig, text, data_sigma,
                                                 min_max=sigma_min_max,
                                                 tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
                                                 label=parameters['sigma_colorbar_axis_label'],
@@ -812,7 +816,7 @@ def plot_snapshot(fig, n_file,
 
 
 plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 1))
+              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 0))
 # plot_snapshot(fig, parameters['snapshot_to_plot'],
 #               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
 

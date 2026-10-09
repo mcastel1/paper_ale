@@ -45,6 +45,16 @@ to copy the parameters to finite_elements:
 '''
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
+# MaxNLocator start
+from matplotlib.ticker import MaxNLocator
+x_min = -0.1
+x_max = 1200.0
+list = MaxNLocator(nbins=10, 
+                   steps=[1,5,10],
+                   prune='both').tick_values(x_min, x_max)
+
+# MaxNLocator end
+
 # Show all rows and columns when printing a Pandas array
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
@@ -276,6 +286,11 @@ def plot_snapshot(fig, n_file,
     data_X_cur[['f:0', 'f:1']] += data_U[['f:0', 'f:1']]
     data_X_cur = data_X_cur.sort_values(by=[":0"]).copy()
 
+    # build `data_X_0` (initial shape of the membrane) from `data_X_ref` 
+    data_X_0 = data_X_ref.copy()
+    data_X_0['f:1'] = mesh_parameters['shape_coordinates'][0][1]
+    data_X_0 = data_X_0.sort_values(by=[":0"]).copy()
+
 
 
     # plot snapshot label
@@ -295,7 +310,8 @@ def plot_snapshot(fig, n_file,
         #
 
    
-  
+    X_0, _ = gr.interpolate_curve(
+        data_X_0, data_X_0[':0'].min(), data_X_0[':0'].max(), parameters['n_bins_X'])
     
     # =============
     # v_fl subplot
@@ -320,6 +336,15 @@ def plot_snapshot(fig, n_file,
 
     if norm_v_fl_min_max == None:
         norm_v_fl_min_max = [norm_v_fl_min, norm_v_fl_max]
+
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
+                       line_width=parameters['X_line_width'],
+                       alpha=parameters['X_0_alpha'],
+                       z_order=1
+                       )
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -363,6 +388,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_axes(
         ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
+        tick_n_bins=parameters['tick_n_bins'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
         axis_label_angle=parameters['axis_label_angle'],
@@ -391,8 +417,16 @@ def plot_snapshot(fig, n_file,
     ax.set_axis_off()
     ax.set_aspect('equal')
     ax.grid(False)
-    gr.set_axes_limits(ax,
-                       [0, 0], [mesh_parameters['L'], h])
+    gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
+
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
+                       line_width=parameters['X_line_width'],
+                       alpha=parameters['X_0_alpha'],  
+                       z_order=1
+                       )
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -447,6 +481,7 @@ def plot_snapshot(fig, n_file,
     gr.plot_2d_axes(
         ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
+        tick_n_bins=parameters['tick_n_bins'],
         line_width=parameters['axis_line_width'],
         axis_label=parameters['axis_label_cur'],
         axis_label_angle=parameters['axis_label_angle'],
@@ -474,7 +509,7 @@ def plot_snapshot(fig, n_file,
 
 
 plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 1))
+              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 0))
 # plot_snapshot(fig, parameters['snapshot_to_plot'],
 #               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
 
