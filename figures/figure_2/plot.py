@@ -10,7 +10,6 @@ import ultraplot as pplt
 import sys
 import warnings
 
-import calculus.geometry as geo
 import calculus.utils as cal
 import constants.utils as const
 import graphics.utils as gr
@@ -52,6 +51,7 @@ plt.rcParams.update({
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
         r"\usepackage{glossaries} "
+        r"\usepackage{tikz} "
         rf"\input{{{paths.definitions_path}}}"
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
@@ -101,15 +101,15 @@ fig = pplt.figure(figsize=parameters['figure_size'], left=parameters['figure_mar
 fig.add_subplot(2, 1, 1)
 fig.add_subplot(2, 1, 2)
 
-v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
-                                parameters['v_colorbar_position'][1],
-                                parameters['v_colorbar_size'][0],
-                                parameters['v_colorbar_size'][1]])
+v_colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
+                                parameters['colorbar_position'][1],
+                                parameters['colorbar_size'][0],
+                                parameters['colorbar_size'][1]])
 
-sigma_colorbar_axis = fig.add_axes([parameters['sigma_colorbar_position'][0],
-                                    parameters['sigma_colorbar_position'][1],
-                                    parameters['sigma_colorbar_size'][0],
-                                    parameters['sigma_colorbar_size'][1]])
+sigma_colorbar_axis = fig.add_axes([parameters['colorbar_position'][0],
+                                    parameters['colorbar_position'][1],
+                                    parameters['colorbar_size'][0],
+                                    parameters['colorbar_size'][1]])
 
 
 def plot_snapshot(fig, n_file,
@@ -166,8 +166,9 @@ def plot_snapshot(fig, n_file,
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
                             clip_on=False)
 
-    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'],
+    gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['colorbar_position'], parameters['colorbar_size'],
                         label=parameters['v_colorbar_axis_label'],
+                        tick_n_bins=parameters['colorbar_n_bins'],
                         font_size=parameters['v_colorbar_font_size'],
                         tick_length=parameters['v_colorbar_tick_length'],
                         label_pad=parameters['v_colorbar_label_offset'],
@@ -232,6 +233,7 @@ def plot_snapshot(fig, n_file,
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
+                    tick_n_bins=parameters['tick_n_bins'],
                     tick_label_format=['f', 'f'],
                     font_size=[parameters['font_size'],
                                parameters['font_size']],
@@ -308,9 +310,10 @@ def plot_snapshot(fig, n_file,
         grid_values=Z_sigma,
         min_value=sigma_min_max[0],
         max_value=sigma_min_max[1],
-        position=parameters['sigma_colorbar_position'],
-        size=parameters['sigma_colorbar_size'],
+        position=parameters['colorbar_position'],
+        size=parameters['colorbar_size'],
         label_pad=parameters['sigma_colorbar_label_offset'],
+        tick_n_bins=parameters['colorbar_n_bins'],
         tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
         line_width=parameters['sigma_colorbar_tick_line_width'],
         tick_length=parameters['sigma_colorbar_tick_length'],
@@ -325,6 +328,7 @@ def plot_snapshot(fig, n_file,
                     tick_length=parameters['tick_length'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
+                    tick_n_bins=parameters['tick_n_bins'],
                     tick_label_format=['f', 'f'],
                     font_size=[parameters['font_size'],
                                parameters['font_size']],
