@@ -162,7 +162,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pomineqr$',
+        label=r'$\pomineqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -174,7 +174,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle=':',
-        label='$\pomouteqr$',
+        label=r'$\pomouteqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -186,7 +186,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='--',
-        label='$\pomtopeqr$',
+        label=r'$\pomtopeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -198,7 +198,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['partial_omega_line_width'],
         dashes=[5, 2, 2, 2, 2, 2],
-        label='$\pombottomeqr$',
+        label=r'$\pombottomeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -291,7 +291,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pomineqc$',
+        label=r'$\pomineqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -303,7 +303,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle=':',
-        label='$\pomouteqc$',
+        label=r'$\pomouteqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -315,7 +315,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='--',
-        label='$\pomtopeqc$',
+        label=r'$\pomtopeqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -327,7 +327,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['partial_omega_line_width'],
         dashes=[5, 2, 2, 2, 2, 2],
-        label='$\pombottomeqc$',
+        label=r'$\pombottomeqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
