@@ -383,6 +383,7 @@ def plot_snapshot(fig, n_file,
                         tick_label_offset=parameters['colorbar_tick_label_offset'],
                         line_width=parameters['v_fl_colorbar_tick_line_width'],
                         tick_length=parameters['colorbar_tick_length'],
+                        tick_prune=None,
                         axis=v_fl_colorbar_axis)
 
     gr.plot_2d_axes(
