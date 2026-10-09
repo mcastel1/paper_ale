@@ -340,6 +340,7 @@ def plot_snapshot(fig, n_file,
         data_X_0, data_X_0[':0'].min(), data_X_0[':0'].max(), parameters['n_bins_X'])
 
 
+    X_sym = np.array([[mesh_parameters['L'], 0], [mesh_parameters['L'], h]])
     
     X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
                                                                                              [0, 0],
@@ -364,9 +365,7 @@ def plot_snapshot(fig, n_file,
     # compute the vector field u and store it in U_x, U_y and its related coordinates X_U, Y_U in the current configuration
     # X_U, Y_U, U_x, U_y = geo.u_1d(data_X_ref, data_U)
 
-    # coordinates of the curve in the reference configuration
-    X_ref, _ = gr.interpolate_curve(data_X_ref, data_X_ref[':0'].min(), data_X_ref[':0'].max(), parameters['n_bins_X'])
-
+    
     '''    
     # plot the vector field U
     vp.plot_1d_vector_field(ax, [X_U, Y_U], [U_x, U_y],
@@ -411,6 +410,17 @@ def plot_snapshot(fig, n_file,
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
+
+    # plot symmetry axis
+    gr.plot_curve_grid(ax, X_sym,
+                       line_color=parameters['X_sym_color'],
+                       legend=parameters['X_sym_legend'],
+                       line_width=parameters['X_line_width'],
+                       line_style=parameters['X_sym_line_style'],
+                       z_order=1
+                       )
+
+
     
 
     # Create custom legend handles
@@ -484,6 +494,15 @@ def plot_snapshot(fig, n_file,
                        line_color='black',
                        line_width=parameters['nu_line_width'])
 
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
+                       line_width=parameters['X_line_width'],
+                       alpha=parameters['X_0_alpha'],
+                       z_order=0
+                       )
+
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
                     line_width=parameters['plot_line_width'],
@@ -541,6 +560,15 @@ def plot_snapshot(fig, n_file,
                        color_map=color_map_psi,
                        line_color='black',
                        line_width=parameters['psi_line_width'])
+
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
+                       line_width=parameters['X_line_width'],
+                       alpha=parameters['X_0_alpha'],
+                       z_order=0
+                       )
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -614,6 +642,15 @@ def plot_snapshot(fig, n_file,
                         line_width=parameters['v_colorbar_tick_line_width'],
                         tick_label_format=parameters['v_colorbar_tick_label_format'])
 
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
+                       line_width=parameters['X_line_width'],
+                       alpha=parameters['X_0_alpha'],
+                       z_order=0
+                       )
+
     gr.plot_2d_axes(
         ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
@@ -672,6 +709,15 @@ def plot_snapshot(fig, n_file,
                     alpha=parameters['alpha_mesh_low'],
                     zorder=parameters['mesh_zorder'])
 
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
+                       line_width=parameters['X_line_width'],
+                       alpha=parameters['X_0_alpha'],
+                       z_order=0
+                       )
+
     gr.plot_2d_axes(
         ax, [0, 0], [mesh_parameters['L'], h],
         tick_length=parameters['tick_length'],
@@ -729,6 +775,15 @@ def plot_snapshot(fig, n_file,
                     color='black',
                     alpha=parameters['alpha_mesh_low'],
                     zorder=parameters['mesh_zorder'])
+
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                       line_color=parameters['X_0_color'],
+                       legend=parameters['X_0_legend'],
+                       line_width=parameters['X_line_width'],
+                       alpha=parameters['X_0_alpha'],
+                       z_order=0
+                       )
 
     gr.plot_2d_axes(
         ax, [0, 0], [mesh_parameters['L'], h],
