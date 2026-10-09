@@ -340,7 +340,7 @@ def plot_snapshot(fig, n_file,
         data_X_0, data_X_0[':0'].min(), data_X_0[':0'].max(), parameters['n_bins_X'])
 
 
-    X_sym = np.array([[mesh_parameters['L'], 0], [mesh_parameters['L'], h]])
+    X_sym = np.array([[mesh_parameters['L'], - h * parameters['X_sym_margin']], [mesh_parameters['L'], h + h*parameters['X_sym_margin']]])
     
     X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
                                                                                              [0, 0],
@@ -417,6 +417,7 @@ def plot_snapshot(fig, n_file,
                        legend=parameters['X_sym_legend'],
                        line_width=parameters['X_line_width'],
                        line_style=parameters['X_sym_line_style'],
+                       alpha=parameters['X_sym_alpha'],
                        z_order=1
                        )
 
