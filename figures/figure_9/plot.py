@@ -10,14 +10,13 @@ import sys
 import warnings
 
 import constants.utils as const
-import calculus.geometry as geo
-import graphics.color_bar as cb
 import graphics.mesh.utils as msh
 import graphics.utils as gr
 import graphics.vector_plot as vp
 import input_output.utils as io
 import list.column_labels as clab
 import list.utils as lis
+import preambles.utils as pre
 import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
@@ -45,19 +44,16 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
+preamble = pre.figure_preamble([paths.definitions_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')])
+
+
 plt.rcParams.update({
     "pgf.texsystem": "pdflatex",
-    "pgf.preamble": (
-        r"\usepackage{newpxtext,newpxmath} "
-        r"\usepackage{bm} "
-        r"\usepackage{xcolor} "
-        r"\usepackage{tikz} "
-        r"\usetikzlibrary{math} "
-        r"\usepackage{glossaries} "
-        rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
-    )
+    "pgf.preamble": preamble,
+    "text.usetex": True,
+    "text.latex.preamble": preamble,
 })
+
 
 print("Current working directory:", os.getcwd())
 print("root_path:", os.path.dirname(os.path.abspath(__file__)))
@@ -194,7 +190,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['X_line_width'],
         linestyle='-.',
-        label='$\pombottomeqr$',
+        label=r'$\pombottomeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -208,7 +204,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['X_line_width'],
         linestyle='-',
-        label='$\pomtopeqr$',
+        label=r'$\pomtopeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -250,7 +246,7 @@ def plot_snapshot(fig, n_file,
     # plot the label for the region \Omega_reference
     ax.text(0 + parameters['omega_ref_label_position'][0] * parameters['L'],
             0 + parameters['omega_ref_label_position'][1] *
-            parameters['h'], rf'$\omr$',
+            parameters['h'], r'$\omr$',
             fontsize=parameters['omega_label_font_size'],
             ha='center',
             va='center')
@@ -279,6 +275,7 @@ def plot_snapshot(fig, n_file,
         ax, [0, 0], [parameters['L'], parameters['h']],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
+        tick_n_bins=parameters['tick_n_bins'],
         axis_label=parameters['ref_axis_label'],
         axis_label_angle=parameters['axis_label_angle'],
         axis_label_offset=parameters['axis_label_offset'],
@@ -326,7 +323,7 @@ def plot_snapshot(fig, n_file,
     # plot X_curr
     gr.plot_curve_grid(ax, X_curr,
                        line_color=parameters['partial_omega_top_color'],
-                       legend='\pomtopeqc',
+                       legend=r'\pomtopeqc',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
@@ -372,7 +369,7 @@ def plot_snapshot(fig, n_file,
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['X_line_width'],
         linestyle='-.',
-        label='$\pombottomeqc$',
+        label=r'$\pombottomeqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -417,7 +414,7 @@ def plot_snapshot(fig, n_file,
     # plot the label for the region \Omega_current
     ax.text(0 + parameters['omega_cur_label_position'][0] * parameters['L'],
             0 + parameters['omega_cur_label_position'][1] *
-            parameters['h'], rf'$\omc$',
+            parameters['h'], r'$\omc$',
             fontsize=parameters['omega_label_font_size'],
             ha='center',
             va='center')
@@ -439,6 +436,7 @@ def plot_snapshot(fig, n_file,
         ax, [0, 0], [parameters['L'], parameters['h']],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
+        tick_n_bins=parameters['tick_n_bins'],
         axis_label=parameters['cur_axis_label'],
         axis_label_angle=parameters['axis_label_angle'],
         axis_label_offset=parameters['axis_label_offset'],
