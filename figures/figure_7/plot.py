@@ -156,7 +156,7 @@ def plot_snapshot(fig, n_file):
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pomineqr$',
+        label='$\\pomineqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -168,7 +168,7 @@ def plot_snapshot(fig, n_file):
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle=':',
-        label='$\pomouteqr$',
+        label='$\\pomouteqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -180,7 +180,7 @@ def plot_snapshot(fig, n_file):
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='--',
-        label='$\pomtopeqr$',
+        label='$\\pomtopeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -192,7 +192,7 @@ def plot_snapshot(fig, n_file):
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['partial_omega_line_width'],
         dashes=[5, 2, 2, 2, 2, 2],
-        label='$\pombottomeqr$',
+        label='$\\pombottomeqr$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -230,7 +230,7 @@ def plot_snapshot(fig, n_file):
     # plot the label for the region \Omega_reference
     ax.text(0 + parameters['omega_label_position'][0] * parameters['L'],
             0 + parameters['omega_label_position'][1] *
-            parameters['h'], rf'$\omr$',
+            parameters['h'], f'$\omr$',
             fontsize=parameters['omega_label_font_size'],
             ha='center',
             va='center')
@@ -334,7 +334,7 @@ def plot_snapshot(fig, n_file):
         color=parameters['partial_omega_in_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='-.',
-        label='$\pomineqc$',
+        label='$\\pomineqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -346,7 +346,7 @@ def plot_snapshot(fig, n_file):
         color=parameters['partial_omega_out_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle=':',
-        label='$\pomouteqc$',
+        label='$\\pomouteqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -358,7 +358,7 @@ def plot_snapshot(fig, n_file):
         color=parameters['partial_omega_top_color'],
         linewidth=parameters['partial_omega_line_width'],
         linestyle='--',
-        label='$\pomtopeqc$',
+        label='$\\pomtopeqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -370,7 +370,7 @@ def plot_snapshot(fig, n_file):
         color=parameters['partial_omega_bottom_color'],
         linewidth=parameters['partial_omega_line_width'],
         dashes=[5, 2, 2, 2, 2, 2],
-        label='$\pombottomeqc$',
+        label='$\\pombottomeqc$',
         zorder=const.high_z_order,
         clip_on=False
     )
@@ -410,7 +410,7 @@ def plot_snapshot(fig, n_file):
     # plot the label for the region \Omega_current
     ax.text(0 + parameters['omega_label_position'][0] * parameters['L'],
             0 + parameters['omega_label_position'][1] *
-            parameters['h'], rf'$\omc',
+            parameters['h'], f'$\omc$',
             fontsize=parameters['omega_label_font_size'],
             ha='center',
             va='center')
