@@ -43,17 +43,23 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
+
 plt.rcParams.update({
     "text.usetex": True,
     "text.latex.preamble": (
+        r"\usepackage{bm} "
         r"\usepackage{newpxtext,newpxmath} "
         r"\usepackage{xcolor} "
-        r"\usepackage{bm} "
         r"\usepackage{glossaries} "
+        r"\usepackage{graphicx} "
+        r"\usepackage{tikz} "
+        r"\usepackage{relsize} "
+        r"\renewcommand{\scalebox}[2]{\mbox{\textscale{#1}{#2}}} "
         rf"\input{{{paths.definitions_path}}}"
         rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
     )
 })
+
 
 # define the folder where to read the data
 solution_path = os.path.join(os.path.dirname(
@@ -247,6 +253,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
+                    tick_n_bins=parameters['tick_n_bins'],
                     axis_label_offset=parameters['axis_label_offset'],
                     tick_label_offset=parameters['tick_label_offset'],
                     tick_label_format=parameters['tick_label_format'],
@@ -345,6 +352,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
                     axis_label=parameters['axis_label'],
                     axis_label_angle=parameters['axis_label_angle'],
+                    tick_n_bins=parameters['tick_n_bins'],
                     axis_label_offset=parameters['axis_label_offset'],
                     tick_label_offset=parameters['tick_label_offset'],
                     tick_label_format=parameters['tick_label_format'],

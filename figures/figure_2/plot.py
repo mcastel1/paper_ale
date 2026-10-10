@@ -16,7 +16,7 @@ import graphics.utils as gr
 import graphics.vector_plot as vp
 import input_output.utils as io
 import list.column_labels as clab
-import list.utils as lis
+import preambles.utils as pre
 import system.paths as paths
 import system.utils as sys_utils
 
@@ -45,17 +45,15 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
+preamble = pre.figure_preamble([paths.definitions_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')])
+
+
 plt.rcParams.update({
     "text.usetex": True,
-    "text.latex.preamble": (
-        r"\usepackage{newpxtext,newpxmath} "
-        r"\usepackage{xcolor} "
-        r"\usepackage{glossaries} "
-        r"\usepackage{tikz} "
-        rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
-    )
+    "text.latex.preamble": preamble
+
 })
+
 
 print("Current working directory:", os.getcwd())
 print("Script location:", os.path.dirname(os.path.abspath(__file__)))

@@ -7,16 +7,13 @@ import os
 import numpy as np
 import pandas as pd
 import ultraplot as pplt
-import sys
 import warnings
 
-import calculus.utils as cal
-import calculus.geometry as geo
+
 import constants.utils as const
 import graphics.utils as gr
-import list.column_labels as clab
 import input_output.utils as io
-import list.utils as lis
+import preambles.utils as pre
 import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
@@ -37,20 +34,15 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
+preamble = pre.figure_preamble([paths.definitions_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')])
 
 plt.rcParams.update({
     "pgf.texsystem": "pdflatex",
-    "pgf.preamble": (
-        r"\usepackage{newpxtext,newpxmath} "
-        r"\usepackage{bm} "
-        r"\usepackage{xcolor} "
-        r"\usepackage{tikz} "
-        r"\usetikzlibrary{math} "
-        r"\usepackage{glossaries} "
-        rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
-    )
+    "pgf.preamble": preamble,
+    "text.usetex": True,
+    "text.latex.preamble": preamble,
 })
+
 
 # define the folder where to read the data
 solution_path = os.path.join(os.path.dirname(
@@ -230,7 +222,7 @@ def plot_snapshot(fig, n_file):
     # plot the label for the region \Omega_reference
     ax.text(0 + parameters['omega_label_position'][0] * parameters['L'],
             0 + parameters['omega_label_position'][1] *
-            parameters['h'], f'$\omr$',
+            parameters['h'], r'$\omr$',
             fontsize=parameters['omega_label_font_size'],
             ha='center',
             va='center')
@@ -260,6 +252,7 @@ def plot_snapshot(fig, n_file):
     )
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+                    tick_n_bins=parameters['tick_n_bins'],
                     axis_label=parameters['axis_label_reference'],
                     axis_label_angle=parameters['axis_label_angle'],
                     axis_label_offset=parameters['axis_label_offset'],
@@ -410,7 +403,7 @@ def plot_snapshot(fig, n_file):
     # plot the label for the region \Omega_current
     ax.text(0 + parameters['omega_label_position'][0] * parameters['L'],
             0 + parameters['omega_label_position'][1] *
-            parameters['h'], f'$\omc$',
+            parameters['h'], r'$\omc$',
             fontsize=parameters['omega_label_font_size'],
             ha='center',
             va='center')
@@ -440,6 +433,7 @@ def plot_snapshot(fig, n_file):
     )
 
     gr.plot_2d_axes(ax, [0, 0], [parameters['L'], parameters['h']],
+                    tick_n_bins=parameters['tick_n_bins'],
                     axis_label=parameters['axis_label_current'],
                     axis_label_angle=parameters['axis_label_angle'],
                     axis_label_offset=parameters['axis_label_offset'],
