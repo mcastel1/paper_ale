@@ -4,5 +4,25 @@
 \acresetall
 % The \ac{mem} shape shown in \cref{fig_no_circle} has a curvature which varies along the \ac{mem} profile, and thus differs from the classical circle-arc obtained at the interface between two fluids \cite{landauFluidMechanics1987,degennesCapillarityWettingPhenomena2004}.
 
-We developed a numerical study on the interaction between a \ac{bflu} and a \ac{mem}. Our analysis is based on the \ac{fe} method, and it leverages the \ac{fenics} \cite{loggAutomatedSolutionDifferential2012}, combined with the \ac{irene} \cite{worthmullerIRENEFluIdLayeR2025}.
-In order to guide and introduce the reader to the interaction problem between a \acl{bflu} and \acl{mem}, we provided two introductory examples of fluid-structure interaction \cite{kamenskyLectureNotesMAE}, in which the \acl{bflu} interacts with a \acl{rig} and with an \acl{ela}, see \cref{sec_fl_rigid,sec_fl_elastic}. These Sections allow to introduce the necessary physical an mathematical quantities, as well as to demonstrate the  stability of our numerical scheme.
+We developed a numerical study on the interaction between a \ac{flu} and a \ac{mem}. Our analysis is based on the \ac{fe} method, and it leverages the \ac{fenics} \cite{loggAutomatedSolutionDifferential2012}, combined with the \ac{irene} \cite{worthmullerIRENEFluIdLayeR2025}.
+In order to guide and introduce the reader to the interaction problem between a \acl{flu} and \acl{mem}, we provided two introductory examples of fluid-structure interaction \cite{kamenskyLectureNotesMAE}, in which the \acl{flu} interacts with a \acl{bod} and with an \acl{ela}, see \cref{sec_fl_rigid,sec_fl_elastic}. These Sections allow to introduce the necessary physical an mathematical quantities, as well as to assess the  stability of our numerical scheme.
+
+In particular, the time-iteration scheme that we propose implies a partitioned resolution scheme \cite{felippaPartitionedAnalysisCoupled2001} well known in \ac{fsi} problems. In this regard, we denote by   \ac{bod}, \ac{ela} or \ac{mem} the `structure' with which \ac{flu} interacts, respectively, in \cref{sec_fl_rigid,sec_fl_elastic,sec_fl_mem}. In such partitioned scheme one solves---for example---for the structure degrees of freedom in a given, fixed  configuration of \ac{flu} and \ac{dom}, and similarly for \ac{flu} and \ac{dom}, see for example \cref{fl_mem_step_3,fl_mem_step_1,fl_mem_step_2} in \cref{sec_temp_discretization_mem}. On the other hand, in monolithic schemes, the degrees of freedom of the structure, \ac{flu} and \ac{dom} are solved for at the same time \cite{heilEfficientSolverFully2004}.
+
+%sign
+
+
+Partitioned solutions are known to suffer for numerical instabilities \cite{forsterArtificialAddedMass2007}. Qualitatively speaking, as the structure movement displaces
+\ac{flu} elements, for the structure to accelerate with an acceleration $\bm a $,
+an effective \ac{flu} mass $\madded$ needs to be displaced.
+This mass results into an effective force  $\sim \bm{a}\,  \madded$ that \ac{flu} exerts on the structure.
+The partitioned scheme turns out to be stable if such force is significantly smaller than the structure inertia, ${\bm a} \, \mstr$ \cite{causinAddedmassEffectDesign2005}, i.e., if
+\be\label{eq_added_mass}
+\madded \ll\mstr.
+\ee
+
+First, for the motion of \ac{bod} in \ac{flu} of \cref{sec_fl_rigid}, $\madded \sim \rhof A_\structure \sim 2.3 \times 10^{-2}\, \kg$, and $\mstr = \rhob A_\structure = 1.4 \times 10^{-1} \, \kg $, where $A_\structure = \pi a b$ is the area of \ac{bod}; the stability condition \crefs{eq_added_mass} is thus satisfied to a reasonable accuracy. Second, in the analysis of  \cref{sec_fl_elastic}, where \ac{ela} moves in \ac{flu}, $\madded \sim \rhof A_\structure \sim 6.2 \times 10^{-2}\, \kg$, and $\mstr = \rhoela A_\structure = 6.2 \times 10^1 \, \kg $, where $A_\structure \sim \pi (a b - r^2)$ is the area of \ac{ela}; the stability condition \crefs{eq_added_mass} is thus satisfied.
+%sign   
+
+Third, we discuss  the added-mass instability for the interaction between \ac{flu} and \ac{mem} of \cref{sec_fl_mem}. At the  time shown in  \cref{fig_fluid_mem_mem}, we have $\mstr \sim \rhom l \sim 1 \, \kg$, $\madded \sim \rhof  l^2 \sim 1 \, \kg$, where $l \sim 1 \, \met$ is the average \ac{mem} length in the \acl{cur} configuration. As a result,  \cref{eq_added_mass} is  border line; added and structure mass are comparable. More importantly, the longer the system evolves in time, the less \cref{eq_added_mass} will hold. In fact, the \aclp{bc} used in \cref{sec_fl_mem_mem} allow for \ac{mem} elemennts to freely flow in through the \acl{le} extremity: As a result, the \ac{mem} length $l$ grows in time, and  $\mstr$ and $\madded$ scale with $l$ as $\sim l$ and $\sim l^2$, respectively.
+

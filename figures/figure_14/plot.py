@@ -69,14 +69,14 @@ plt.rcParams.update({
 })
 
 # define the folder where to read the data
-'''
+
 # 1. read data from local folder 
 solution_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/")
 sub_mesh_1_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/sub_meshes/out/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
-'''
 
+'''
 # 2 read data from external folder
 path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/elastic_obstacle/monolithic'
 solution_path = os.path.join(path, "solution/")
@@ -84,7 +84,7 @@ mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d
 sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 
-
+'''
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 mesh_0_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
@@ -99,7 +99,7 @@ figure_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), paramete
 snapshot_min, snapshot_max = sys_utils.n_min_max(
     'line_mesh_n_', snapshot_path)
 #cut the animation at a custom snapshot
-# snapshot_max = parameters['custom_snapshot_max']
+snapshot_max = parameters['custom_snapshot_max']
 
 number_of_frames = snapshot_max - snapshot_min + 1
 

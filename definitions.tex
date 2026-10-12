@@ -5,6 +5,7 @@
 \providecommand{\ela}{\mathrm{\scalebox{0.6}{E}}}
 \providecommand{\mem}{\mathrm{\scalebox{0.6}{M}}}
 \providecommand{\dom}{\mathrm{\scalebox{0.6}{D}}}
+\providecommand{\structure}{\mathrm{\scalebox{0.6}{S}}}
 \providecommand{\vf}{{v_\fluid}}
 \providecommand{\vfbottom}{\bm v_{\fluid \, \mbottomeqcap}}
 \providecommand{\vfin}{\bm v_{\fluid \, \myineqcap}}
@@ -30,6 +31,7 @@
 \providecommand{\bvfc}{{\bm \vfc}}
 \providecommand{\bvfr}[1]{{\bm{v}_{\fluid \,\reference}^{#1}}}
 \providecommand{\vfr}[1]{v_{\fluid \, \reference}^{#1}}
+\providecommand{\rhob}{\rho_\bod}
 \providecommand{\rhof}{\rho_\fluid}
 \providecommand{\rhoela}{\rho_\ela}
 \providecommand{\rhom}{\rho_\mem}
@@ -102,7 +104,12 @@
 \providecommand{\bcsdom}{{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4,bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}}
 \providecommand{\bcbflu}{{bc_fl_membrane_1_current,bc_fl_membrane_2_current,bc_fl_membrane_3_current,bc_fl_membrane_4_current,bc_fl_membrane_5_current,bc_fl_membrane_6_current,bc_fl_membrane_7_current}}
 
-\definecolor{acronym_link_color}{RGB}{102,51,0}
+% added mass and fluid mass
+\providecommand{\madded}{m_{\scalebox{0.6}{\text{A}}}}
+\providecommand{\mflu}{m_\fluid}
+\providecommand{\mstr}{m_\structure}
+
+\definecolor{acronym_link_color}{RGB}{51,138,0}
 
 % elastic moduli
 \providecommand{\focalpoint}{f}

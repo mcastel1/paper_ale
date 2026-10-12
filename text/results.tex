@@ -3,8 +3,8 @@
 
 
 In all  systems that we will consider, we will introduce the \ac{ref} and \ac{cur} configuration \cite{kamenskyLectureNotesMAE,landauTheoryElasticity1986,slaughterLinearizedTheoryElasticity2002}, see \cref{fig_ref_curr_rigid}. All quantities relative to the \ac{ref} and \ac{cur} configuration will be denoted by the superscript \ac{ref} and \ac{cur}, respectively.
-In the \ac{ref} configuration, the region occupied by \ac{bflu} is described by Cartesian coordinates $\bxr$.
-In the \ac{cur} configuration, the region occupied by \ac{bflu} is described by Cartesian coordinates $\bxc$.
+In the \ac{ref} configuration, the region occupied by \ac{flu} is described by Cartesian coordinates $\bxr$.
+In the \ac{cur} configuration, the region occupied by \ac{flu} is described by Cartesian coordinates $\bxc$.
 
 The \ac{ref} configuration is related to the \ac{cur} one as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr_rigid}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the \ac{ref} configuration through the deformation field \cite{landauFluidMechanics1987}
 \be\label{eq_def_u}
@@ -19,22 +19,22 @@ In what follows, greek indices $\alpha, \beta, \cdots$ will be used to denote ve
 
 We will characterize  the mapping between $\bxc$ and $\bxr$ configurations in \cref{eq_def_u} with the fields
 \begin{align}\label{eq_def_phi}
-    \bxc & = \bm{\varphi}^t(\bxr), \\
-    \label{eq_def_psi}
-    \bxr & = \bm{\psi}^t(\bxc).
+        \bxc & = \bm{\varphi}^t(\bxr), \\
+        \label{eq_def_psi}
+        \bxr & = \bm{\psi}^t(\bxc).
 \end{align}
 
-We denote the \ac{bflu} velocity and surface tension, the negative of the pressure, by $\vfc(\bxc)$ and $\sigmafc(\bxc)$, respectively, where the subscript \ac{cur} specifies that these fields depend on the coordinate $\bxc$ in the \ac{cur} configuration.
+We denote the \ac{flu} velocity and surface tension, the negative of the pressure, by $\vfc(\bxc)$ and $\sigmafc(\bxc)$, respectively, where the subscript \ac{cur} specifies that these fields depend on the coordinate $\bxc$ in the \ac{cur} configuration.
 
 For each field $\bvfc({\bxc}), \sigmafc(\bxc)$ which depends on the coordinate $\bxc$ in the \ac{cur} configuration, we introduce its counterpart in the \ac{ref} configuration:
 \begin{align}
-    \label{eq_vf_ref}
-    \bvfr{}(\bxr, t)    & \equiv {\bm \vfc}( \bm{\varphi}^t(\bxr), t), \\
-    \label{eq_sigmaf_ref}
-    \sigmafr{}(\bxr, t) & \equiv  \sigmafc( \bm{\varphi}^t(\bxr), t).
+        \label{eq_vf_ref}
+        \bvfr{}(\bxr, t)    & \equiv {\bm \vfc}( \bm{\varphi}^t(\bxr), t), \\
+        \label{eq_sigmaf_ref}
+        \sigmafr{}(\bxr, t) & \equiv  \sigmafc( \bm{\varphi}^t(\bxr), t).
 \end{align}
 
-The solution of the interaction dynamics between \ac{bflu} and \ac{rig}, \ac{ela} or \ac{mem} is  involved because of the presence of a moving boundary, cf. \cref{fig_ref_curr_rigid,fig_ref_curr_ela,fig_ref_cur_mem}, respectively. Following the \ac{ale} procedure, we will  bridge between the Lagrangian   description used to describe \ac{rig}, \ac{ela} or \ac{mem}, and the Eulerian description of \ac{bflu}  \cite{kamenskyLectureNotesMAE}. To achieve this, in what follows we will consider the equations of motion for \ac{rig}, \ac{ela} or \ac{mem} and \ac{bflu}---which are naturally formulated the \ac{cur} configuration---and  rewrite them in the \ac{ref} configuration.
+The solution of the interaction dynamics between \ac{flu} and \ac{bod}, \ac{ela} or \ac{mem} is  involved because of the presence of a moving boundary, cf. \cref{fig_ref_curr_rigid,fig_ref_curr_ela,fig_ref_cur_mem}, respectively. Following the \ac{ale} procedure, we will  bridge between the Lagrangian   description used to describe \ac{bod}, \ac{ela} or \ac{mem}, and the Eulerian description of \ac{flu}  \cite{kamenskyLectureNotesMAE}. To achieve this, in what follows we will consider the equations of motion for \ac{bod}, \ac{ela} or \ac{mem} and \ac{flu}---which are naturally formulated the \ac{cur} configuration---and  rewrite them in the \ac{ref} configuration.
 
 
 \input{text/sections/fluid_rigid_body}
