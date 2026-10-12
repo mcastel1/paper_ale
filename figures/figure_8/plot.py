@@ -7,14 +7,12 @@ import ultraplot as pplt
 import warnings
 
 import input_output.utils as io
-import list.column_labels as clab
 import graphics.utils as gr
-import graphics.images as images
+import preambles.utils as pre
 import system.paths as paths
 
-matplotlib.use(
-    "Agg"
-)  # use a non-interactive backend so that figures do not pop up during run in debug mode
+# use this to show tikz objects in the plot
+matplotlib.use('pgf')
 
 # Suppress the specific warning
 warnings.filterwarnings(
@@ -22,15 +20,16 @@ warnings.filterwarnings(
 # clean the matplotlib cache to load the correct version of definitions.tex
 os.system(" rm -rf ~/.matplotlib/tex.cache")
 
+preamble = pre.figure_preamble([paths.definitions_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')])
+
+
 plt.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": preamble,
     "text.usetex": True,
-    "text.latex.preamble": (
-        r"\usepackage{newpxtext,newpxmath} "
-        r"\usepackage{xcolor} "
-        r"\usepackage{glossaries} "
-        rf"\input{{{paths.definitions_path}}}"
-    )
+    "text.latex.preamble": preamble,
 })
+
 
 
 # READ PARAMETERS FROM CSV
@@ -106,6 +105,7 @@ def plot(fig):
     gr.plot_2d_axes(ax, [0, theta_min], [t_max - 0, theta_max-theta_min],
                     margin=parameters['axis_margin'],
                     tick_length=parameters['tick_length'],
+                    tick_n_bins=parameters['tick_n_bins'],
                     line_width=parameters['axis_line_width'],
                     axis_label=parameters['axis_label'],
                     axis_origin=parameters['axis_origin'],
