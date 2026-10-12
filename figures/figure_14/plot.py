@@ -15,6 +15,7 @@ import graphics.vector_plot as vp
 import list.column_labels as clab
 import input_output.utils as io
 import list.utils as lis
+import preambles.utils as pre
 import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
@@ -43,8 +44,7 @@ to copy the parameter files to repdroduce this figure
 
 '''
 
-matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
-
+matplotlib.use('pgf') 
 
 parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
@@ -58,17 +58,14 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
+preamble = pre.figure_preamble([paths.definitions_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')])
+
+
 plt.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": preamble,
     "text.usetex": True,
-    "text.latex.preamble": (
-        r"\usepackage{newpxtext,newpxmath} "
-        r"\usepackage{xcolor} "
-        r"\usepackage{tikz} "
-        r"\usepackage{bm} "
-        r"\usepackage{glossaries} "
-        rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
-    )
+    "text.latex.preamble": preamble,
 })
 
 # define the folder where to read the data
@@ -102,7 +99,7 @@ figure_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), paramete
 snapshot_min, snapshot_max = sys_utils.n_min_max(
     'line_mesh_n_', snapshot_path)
 #cut the animation at a custom snapshot
-snapshot_max = parameters['custom_snapshot_max']
+# snapshot_max = parameters['custom_snapshot_max']
 
 number_of_frames = snapshot_max - snapshot_min + 1
 
@@ -199,7 +196,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     stop_time = time.time()
-    print(f"Time for block 1 = {stop_time - start_time:.2f} s", flush=True)
+    #print(f"Time for block 1 = {stop_time - start_time:.2f} s", flush=True)
 
     # build two a vector field which interpolates the displacement field in data_u_msh
     U_interp_x, U_interp_y = vec.interpolating_function_2d_vector_field(data_u_cur)
@@ -254,7 +251,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     stop_time = time.time()
-    print(f"Time for block 2 = {stop_time - start_time:.2f} s", flush=True)
+    #print(f"Time for block 2 = {stop_time - start_time:.2f} s", flush=True)
 
     start_time = time.time()
 
@@ -266,7 +263,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     column_labels=[['start:0','start:1','start:2'], ['end:0','end:1','end:2']])
     
     stop_time = time.time()
-    print(f"Time for block 3 = {stop_time - start_time:.2f} s", flush=True)
+    #print(f"Time for block 3 = {stop_time - start_time:.2f} s", flush=True)
 
     start_time = time.time()
 
@@ -293,7 +290,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     )
 
     stop_time = time.time()
-    print(f"Time for block 4 = {stop_time - start_time:.2f} s", flush=True)
+    #print(f"Time for block 4 = {stop_time - start_time:.2f} s", flush=True)
 
     start_time = time.time()
 
@@ -310,6 +307,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
             position=parameters['sigma_colorbar_position'],
             size=parameters['sigma_colorbar_size'],
             label_pad=parameters['sigma_colorbar_label_offset'],
+            tick_n_bins=parameters['colorbar_n_bins'],
             tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
             line_width=parameters['sigma_colorbar_tick_line_width'],
             tick_length=parameters['sigma_colorbar_tick_length'],
@@ -320,7 +318,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     
 
     stop_time = time.time()
-    print(f"Time for block 5 = {stop_time - start_time:.2f} s", flush=True)
+    #print(f"Time for block 5 = {stop_time - start_time:.2f} s", flush=True)
 
     start_time = time.time()
 
@@ -332,6 +330,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     tick_label_offset=parameters['tick_label_offset'],
                     tick_label_format=parameters['tick_label_format'],
                     tick_label_angle=parameters['tick_label_angle'],
+                    tick_n_bins=parameters['tick_n_bins'],
                     font_size=parameters['font_size'],
                     line_width=parameters['axis_line_width'],
                     axis_origin=parameters['axis_origin'],
@@ -346,10 +345,10 @@ def plot_snapshot(fig, n_file, snapshot_label):
 
 
     stop_time = time.time()
-    print(f"Time for block 6 = {stop_time - start_time:.2f} s", flush=True)
+    #print(f"Time for block 6 = {stop_time - start_time:.2f} s", flush=True)
 
     stop_time_plot_snapshot = time.time()
-    print(f"Time for plot_snapshot = {stop_time_plot_snapshot- start_time_plot_snapshot:.2f} s", flush=True)
+    #print(f"Time for plot_snapshot = {stop_time_plot_snapshot- start_time_plot_snapshot:.2f} s", flush=True)
 
 
     
@@ -447,6 +446,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
         v_colorbar, _ = gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
                         label_pad=parameters['v_colorbar_label_offset'],
+                        tick_n_bins=parameters['colorbar_n_bins'],
                         label=parameters['v_colorbar_axis_label'],
                         font_size=parameters['color_map_font_size'],
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
@@ -467,6 +467,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     tick_label_offset=parameters['tick_label_offset'],
                     tick_label_format=parameters['tick_label_format'],
                     tick_label_angle=parameters['tick_label_angle'],
+                    tick_n_bins=parameters['tick_n_bins'],
                     font_size=parameters['font_size'],
                     line_width=parameters['axis_line_width'],
                     axis_origin=parameters['axis_origin'],
@@ -565,6 +566,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     tick_label_offset=parameters['tick_label_offset'],
                     tick_label_format=parameters['tick_label_format'],
                     tick_label_angle=parameters['tick_label_angle'],
+                    tick_n_bins=parameters['tick_n_bins'],
                     font_size=parameters['font_size'],
                     line_width=parameters['axis_line_width'],
                     axis_origin=parameters['axis_origin'],

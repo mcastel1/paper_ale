@@ -1,0 +1,36 @@
+import colorama as col
+from fenics import *
+import importlib
+
+import calculus as cal
+import input_output as io
+import mesh.test_function as tf
+import mesh.utils as msh
+import runtime_arguments as rarg
+import runtime_arguments as rarg
+
+rmsh = importlib.import_module('mesh.read.disk')
+
+print(f'Module {__file__} called {rmsh.__file__}', flush=True)
+
+
+integral_exact_dx = cal.surface_integral_disk(tf.function_test_integrals, rmsh.parameters["r"], rmsh.parameters["c_r"][:2])
+
+integral_exact_ds = cal.curve_integral_circle(tf.function_test_integrals, rmsh.parameters["r"], rmsh.parameters["c_r"][:2])
+
+integral_exact_dS = cal.curve_integral_dS(rmsh.lmsh.mesh, tf.function_test_integrals)
+
+
+test_mesh_integral_errors = dict([])
+
+test_mesh_integral_errors['\int f dx'] = msh.test_mesh_integral(integral_exact_dx, tf.function_test_integrals_fenics, rmsh.dx, '\int f dx')
+
+test_mesh_integral_errors['\int f ds'] = msh.test_mesh_integral(integral_exact_ds, tf.function_test_integrals_fenics, rmsh.ds, '\int f ds')
+
+test_mesh_integral_errors['\int dS f'] = msh.test_mesh_integral(integral_exact_dS, tf.function_test_integrals_fenics, rmsh.dS, '\int f dS')
+
+
+# print to file the residuals of the tests of the mesh integrals
+io.write_parameters_to_csv_file(io.add_trailing_slash(rarg.args.output_directory) + 'test_integral_errors.csv', test_mesh_integral_errors)
+
+print(f'Maximum relative error of mesh integrals = {col.Fore.RED}{io.max_dictionary(test_mesh_integral_errors):.{io.number_of_decimals}e}{col.Fore.RESET}')
