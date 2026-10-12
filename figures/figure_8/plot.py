@@ -23,12 +23,6 @@ os.system(" rm -rf ~/.matplotlib/tex.cache")
 preamble = pre.figure_preamble([paths.definitions_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')])
 
 
-plt.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    "pgf.preamble": preamble,
-    "text.usetex": True,
-    "text.latex.preamble": preamble,
-})
 
 
 
@@ -43,8 +37,6 @@ solution_parameters = io.read_parameters_from_csv_file(
 
 
 # define the folder where to read the data
-print("Current working directory:", os.getcwd())
-print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 solution_path = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "solution/"
 )
@@ -71,6 +63,14 @@ fig = pplt.figure(figsize=np.array(parameters['figure_size']),
 
 # create axes
 fig.add_subplot(1, 1, 1)
+
+plt.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": preamble,
+    "text.usetex": True,
+    "text.latex.preamble": preamble,
+})
+
 
 
 def plot(fig):
