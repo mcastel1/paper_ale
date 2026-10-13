@@ -40,8 +40,9 @@ you can copy the data from abacus with
 
 to copy the parameters to finite_elements:
 
-    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/membrane/parameters_bc_square_no_circle_line_a.csv
-    cp ~/Documents/work/manuscripts/paper_ale/figures/figure_5/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv 
+    FIGURE_NAME="figure_5"
+    cp ~/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/membrane/parameters_bc_square_no_circle_line_a.csv
+    cp ~/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square_no_circle/line/mesh_parameters.csv 
     
 
 '''
