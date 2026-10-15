@@ -20,6 +20,7 @@ import graphics.utils as gr
 import graphics.vector_plot as vp
 import input_output.utils as io
 import list.utils as lis
+import preambles.utils as pre
 import system.paths as paths
 import system.utils as sys_utils
 
@@ -56,6 +57,14 @@ parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
 
 
+
+preamble = pre.figure_preamble([
+            paths.definitions_path, 
+            paths.latex_module_definitions_path,
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), 
+            '../../definitions.tex')
+        ])
+
 # add the path where to find the shared modules
 module_path = paths.root_path + "/figures/modules/"
 sys.path.append(module_path)
@@ -68,22 +77,14 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
-plt.rcParams.update({
-    "text.usetex": True,
-    "text.latex.preamble": (
-        r"\usepackage{bm} "
-        r"\usepackage{newpxtext,newpxmath} "
-        r"\usepackage{xcolor} "
-        r"\usepackage{glossaries} "
-        r"\usepackage{graphicx} "
-        r"\usepackage{tikz} "
-        r"\usepackage{relsize} "
-        r"\renewcommand{\scalebox}[2]{\mbox{\textscale{#1}{#2}}} "
-        rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
-    )
-})
 
+
+plt.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": preamble,
+    "text.usetex": True,
+    "text.latex.preamble": preamble,
+})
 
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")

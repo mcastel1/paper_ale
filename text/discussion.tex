@@ -18,11 +18,12 @@ an effective \ac{flu} mass $\madded$ needs to be displaced.
 This mass results into an effective force  $\sim \bm{a}\,  \madded$ that \ac{flu} exerts on the structure.
 The partitioned scheme turns out to be stable if such force is significantly smaller than the structure inertia, ${\bm a} \, \mstr$ \cite{causinAddedmassEffectDesign2005}, i.e., if
 \be\label{eq_added_mass}
-\madded \ll\mstr.
+\frac{\madded}{\mstr}\ll 1.
 \ee
 
-First, for the motion of \ac{bod} in \ac{flu} of \cref{sec_fl_rigid}, $\madded \sim \rhof A_\structure \sim 2.3 \times 10^{-2}\, \kg$, and $\mstr = \rhob A_\structure = 1.4 \times 10^{-1} \, \kg $, where $A_\structure = \pi a b$ is the area of \ac{bod}; the stability condition \crefs{eq_added_mass} is thus satisfied to a reasonable accuracy. Second, in the analysis of  \cref{sec_fl_elastic}, where \ac{ela} moves in \ac{flu}, $\madded \sim \rhof A_\structure \sim 6.2 \times 10^{-2}\, \kg$, and $\mstr = \rhoela A_\structure = 6.2 \times 10^1 \, \kg $, where $A_\structure \sim \pi (a b - r^2)$ is the area of \ac{ela}; the stability condition \crefs{eq_added_mass} is thus satisfied.
+First, for the motion of \ac{bod} in \ac{flu} of \cref{sec_fl_rigid}, $\madded \sim \rhof A_\structure \sim 2.3 \times 10^{-2}\, \kg$, and $\mstr = \rhob A_\structure = 1.4 \times 10^{-1} \, \kg $, where $A_\structure = \pi a b$ is the area of \ac{bod}. The stability condition \crefs{eq_added_mass} is thus satisfied  with an accuracy of $\madded/\mstr \sim 10^{-2}$.
+% 
+Second, in the analysis of  \cref{sec_fl_elastic}, where \ac{ela} moves in \ac{flu}, $\madded \sim \rhof A_\structure \sim 6.2 \times 10^{-2}\, \kg$, and $\mstr = \rhoela A_\structure = \parameter[6.2][1]{\kg}$, where $A_\structure \sim \pi (a b - r^2)$ is the area of \ac{ela}. The stability condition \crefs{eq_added_mass} is thus satisfied with an accuracy of $\madded/\mstr \sim 0.1$.
+
+Third, we discuss  the added-mass instability for the interaction between \ac{flu} and \ac{mem} of \cref{sec_fl_mem}. At the  time shown in  \cref{fig_fluid_mem_mem}, we have $\mstr \sim \rhom l \sim 1 \, \kg$, $\madded \sim \rhof  l^2 \sim 1 \, \kg$, where $l \sim 1 \, \met$ is the average \ac{mem} length in the \acl{cur} configuration. As a result,  \cref{eq_added_mass} is  border line; added and structure mass are comparable,   $\madded/\mstr \sim 1$. More importantly,   the \aclp{bc} used in \cref{sec_fl_mem_mem} allow for \ac{mem} elements to freely flow in through the \acl{le} extremity: as a result,  $l$ grows in time. Given that  $\mstr$ and $\madded$ scale with $l$ as $\sim l$ and $\sim l^2$, respectively, the longer the system evolves, the more the condition \crefs{eq_added_mass} will be violated.
 %sign   
-
-Third, we discuss  the added-mass instability for the interaction between \ac{flu} and \ac{mem} of \cref{sec_fl_mem}. At the  time shown in  \cref{fig_fluid_mem_mem}, we have $\mstr \sim \rhom l \sim 1 \, \kg$, $\madded \sim \rhof  l^2 \sim 1 \, \kg$, where $l \sim 1 \, \met$ is the average \ac{mem} length in the \acl{cur} configuration. As a result,  \cref{eq_added_mass} is  border line; added and structure mass are comparable. More importantly, the longer the system evolves in time, the less \cref{eq_added_mass} will hold. In fact, the \aclp{bc} used in \cref{sec_fl_mem_mem} allow for \ac{mem} elemennts to freely flow in through the \acl{le} extremity: As a result, the \ac{mem} length $l$ grows in time, and  $\mstr$ and $\madded$ scale with $l$ as $\sim l$ and $\sim l^2$, respectively.
-

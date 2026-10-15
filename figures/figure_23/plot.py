@@ -17,6 +17,7 @@ import graphics.utils as gr
 import graphics.vector_plot as vp
 import input_output.utils as io
 import list.utils as lis
+import preambles.utils as pre
 import system.paths as paths
 import system.utils as sys_utils
 import graphics.vector_plot as vec
@@ -45,15 +46,12 @@ to copy the parameters to finite_elements:
 '''
 matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 
-# MaxNLocator start
-from matplotlib.ticker import MaxNLocator
-x_min = -0.1
-x_max = 1200.0
-list = MaxNLocator(nbins=10, 
-                   steps=[1,5,10],
-                   prune='both').tick_values(x_min, x_max)
-
-# MaxNLocator end
+preamble = pre.figure_preamble([
+            paths.definitions_path, 
+            paths.latex_module_definitions_path,
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), 
+            '../../definitions.tex')
+        ])
 
 # Show all rows and columns when printing a Pandas array
 pd.set_option('display.max_rows', None)
@@ -75,22 +73,13 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
-plt.rcParams.update({
-    "text.usetex": True,
-    "text.latex.preamble": (
-        r"\usepackage{bm} "
-        r"\usepackage{newpxtext,newpxmath} "
-        r"\usepackage{xcolor} "
-        r"\usepackage{glossaries} "
-        r"\usepackage{graphicx} "
-        r"\usepackage{tikz} "
-        r"\usepackage{relsize} "
-        r"\renewcommand{\scalebox}[2]{\mbox{\textscale{#1}{#2}}} "
-        rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
-    )
-})
 
+plt.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": preamble,
+    "text.usetex": True,
+    "text.latex.preamble": preamble,
+})
 
 
 # 1. read solution from local folder
