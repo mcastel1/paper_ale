@@ -133,3 +133,11 @@
 }
 \makeatother
 
+
+\ExplSyntaxOn
+\NewDocumentCommand{\mylist}{mm}
+{
+    $\frac{\clist_map_inline:nn {#1} {  \,##1 }}{\clist_map_inline:nn {#2} {  \,##1 }}$
+}
+\ExplSyntaxOff
+
