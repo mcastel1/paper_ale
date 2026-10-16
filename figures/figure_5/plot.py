@@ -61,6 +61,7 @@ parameters = io.read_parameters_from_csv_file(os.path.join(
 preamble = pre.figure_preamble([
             paths.definitions_path, 
             paths.latex_module_definitions_path,
+            paths.ale_definitions_path,
             os.path.join(os.path.dirname(os.path.abspath(__file__)), 
             '../../definitions.tex')
         ])
@@ -174,77 +175,6 @@ Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
 h = lis.min_max(Y)[1]
 
 
-def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_mesh_1,
-                    margin=[0]*2):
-
-    # 1. interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field
-
-    U_interp_x = NearestNDInterpolator(data_u_msh[[':0', ':1']].values, data_u_msh['f:0'].values)
-    U_interp_y = NearestNDInterpolator(data_u_msh[[':0', ':1']].values, data_u_msh['f:1'].values)
-
-    h_step = np.max(data_u_msh[':1'])
-
-    data_def_boundary_vertices_mesh_1 = []
-    for _, row in data_ref_boundary_vertices_mesh_1.iterrows():
-        data_def_boundary_vertices_mesh_1.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x(row[':0'], row[':1']),
-                 U_interp_y(row[':0'], row[':1'])]
-            )
-        )
-
-
-    # 2.  add to the sequence of lines above the top-left and top-right and bottom-right extremal points of the region to cover
-    # 2.1 two points at the bottom-right corner
-    data_def_boundary_vertices_mesh_1.insert(0, (
-        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step),
-        h_step + U_interp_y(mesh_parameters['L'], h_step)
-    )
-    )
-    data_def_boundary_vertices_mesh_1.insert(0, (
-        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step) +
-        margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
-        h_step + U_interp_y(mesh_parameters['L'], h_step)
-    )
-    )
-
-    # 2.2 two points at bottom-left corner
-    data_def_boundary_vertices_mesh_1.append(
-        [data_def_boundary_vertices_mesh_1[-1][0], 0]
-    )
-
-    data_def_boundary_vertices_mesh_1.append(
-        [data_def_boundary_vertices_mesh_1[-1][0] - (margin[0] * (axis_min_max[0]
-                      [1] - axis_min_max[0][0])), 0]
-    )
-
-    # 2.3 top-left point
-    data_def_boundary_vertices_mesh_1.append((
-        data_def_boundary_vertices_mesh_1[-1][0],
-        axis_min_max[1][1] + margin[1] *
-        (axis_min_max[1][1] - axis_min_max[1][0])
-    ))
-    # 2.4 top-right point
-    data_def_boundary_vertices_mesh_1.append((
-        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step) +  margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
-        axis_min_max[1][1] + margin[1] *
-        (axis_min_max[1][1] - axis_min_max[1][0])
-    ))
-
-
-
-    # 3. plot the  polygon in order to hide the arrows
-    poly = Polygon(data_def_boundary_vertices_mesh_1, fill=True,
-                   linewidth=parameters['plot_line_width'], 
-                   edgecolor='white', 
-                   facecolor='white', 
-                   clip_on=False,
-                   zorder=const.high_z_order)
-    ax.add_patch(poly)
-
-    return data_def_boundary_vertices_mesh_1
-    
 
 def plot_snapshot(fig, n_file,
                   snapshot_label='',
@@ -827,10 +757,10 @@ def plot_snapshot(fig, n_file,
      
 
 
-plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 0))
-# plot_snapshot(fig, parameters['snapshot_to_plot'],
-#               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
+# plot_snapshot(fig, snapshot_max,
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 0))
+plot_snapshot(fig, parameters['snapshot_to_plot'],
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')

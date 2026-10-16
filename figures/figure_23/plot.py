@@ -1,7 +1,5 @@
 import matplotlib
-from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
-from scipy.interpolate import NearestNDInterpolator
 import os
 
 import numpy as np
@@ -24,7 +22,7 @@ import graphics.vector_plot as vec
 
 '''
 you can copy the data from abacus with
-    REMOTE_PATH="membrane_remesh_threshold"
+    REMOTE_PATH="paper_ale_fig_5_membrane_a"
     FIGURE_NAME="figure_23"
     cd /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME
     rm -rf solution mesh
@@ -34,7 +32,7 @@ you can copy the data from abacus with
     mv $REMOTE_PATH/solution .
     rm -rf $REMOTE_PATH
     rsync -avr mcastel1@abacus:$REMOTE_PATH/solution/solution_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/solution
-    rsync -avr mcastel1@abacus:$REMOTE_PATH/mesh/solution/mesh_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/mesh/solution
+    rsync -avr mcastel1@abacus:$REMOTE_PATH/mesh/solution/mesh_0/mesh_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/mesh/solution
 
 
 to copy the parameters to finite_elements:
@@ -49,6 +47,7 @@ matplotlib.use('Agg')  # use a non-interactive backend to avoid the need of
 preamble = pre.figure_preamble([
             paths.definitions_path, 
             paths.latex_module_definitions_path,
+            paths.ale_definitions_path,
             os.path.join(os.path.dirname(os.path.abspath(__file__)), 
             '../../definitions.tex')
         ])
@@ -103,7 +102,7 @@ snapshot_nodal_values_path = os.path.join(snapshot_path, "nodal_values")
 # compute the min and max snapshot present in the solution path
 snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
-
+snapshot_max = parameters['snapshot_to_plot']
 
 sys_utils.check_strides(parameters['frame_stride'], solution_parameters['print_out_stride'])
 
@@ -157,79 +156,6 @@ _, Y_msh_ref, _, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_m
 Y = np.array(lis.add_lists_of_lists(Y_msh_ref, u_msh_n_Y))
 
 h = lis.min_max(Y)[1]
-
-
-def draw_masking_area(ax, axis_min_max, data_u_msh, data_ref_boundary_vertices_mesh_1,
-                    margin=[0]*2):
-
-    # 1. interpolate the mesh displacement field and construct the sequence of segments of the line corresponding to sub_mesh_1 by adding to the line in the reference configuration the displacement field
-
-    U_interp_x = NearestNDInterpolator(data_u_msh[[':0', ':1']].values, data_u_msh['f:0'].values)
-    U_interp_y = NearestNDInterpolator(data_u_msh[[':0', ':1']].values, data_u_msh['f:1'].values)
-
-    h_step = np.max(data_u_msh[':1'])
-
-    data_def_boundary_vertices_mesh_1 = []
-    for _, row in data_ref_boundary_vertices_mesh_1.iterrows():
-        data_def_boundary_vertices_mesh_1.append(
-            np.add(
-                [row[':0'], row[':1']],
-                [U_interp_x(row[':0'], row[':1']),
-                 U_interp_y(row[':0'], row[':1'])]
-            )
-        )
-
-
-    # 2.  add to the sequence of lines above the top-left and top-right and bottom-right extremal points of the region to cover
-    # 2.1 two points at the bottom-right corner
-    data_def_boundary_vertices_mesh_1.insert(0, (
-        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step),
-        h_step + U_interp_y(mesh_parameters['L'], h_step)
-    )
-    )
-    data_def_boundary_vertices_mesh_1.insert(0, (
-        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step) +
-        margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
-        h_step + U_interp_y(mesh_parameters['L'], h_step)
-    )
-    )
-
-    # 2.2 two points at bottom-left corner
-    data_def_boundary_vertices_mesh_1.append(
-        [data_def_boundary_vertices_mesh_1[-1][0], 0]
-    )
-
-    data_def_boundary_vertices_mesh_1.append(
-        [data_def_boundary_vertices_mesh_1[-1][0] - (margin[0] * (axis_min_max[0]
-                      [1] - axis_min_max[0][0])), 0]
-    )
-
-    # 2.3 top-left point
-    data_def_boundary_vertices_mesh_1.append((
-        data_def_boundary_vertices_mesh_1[-1][0],
-        axis_min_max[1][1] + margin[1] *
-        (axis_min_max[1][1] - axis_min_max[1][0])
-    ))
-    # 2.4 top-right point
-    data_def_boundary_vertices_mesh_1.append((
-        mesh_parameters['L'] + U_interp_x(mesh_parameters['L'], h_step) +  margin[0] * (axis_min_max[0][1] - axis_min_max[0][0]),
-        axis_min_max[1][1] + margin[1] *
-        (axis_min_max[1][1] - axis_min_max[1][0])
-    ))
-
-
-
-    # 3. plot the  polygon in order to hide the arrows
-    poly = Polygon(data_def_boundary_vertices_mesh_1, fill=True,
-                   linewidth=parameters['plot_line_width'], 
-                   edgecolor='white', 
-                   facecolor='white', 
-                   clip_on=False,
-                   zorder=const.high_z_order)
-    ax.add_patch(poly)
-
-    return data_def_boundary_vertices_mesh_1
-    
 
 
 
@@ -344,11 +270,13 @@ def plot_snapshot(fig, n_file,
 
      
     # plot the area that masks arrows which lie outside the mesh in the current configuration
-    data_def_boundary_vertices_mesh_1 = draw_masking_area(ax, 
+    data_def_boundary_vertices_mesh_1 = gr.draw_masking_area(ax, 
                       axis_min_max, 
                       data_u_msh,
                       data_ref_boundary_vertices_mesh_1,
-                      parameters['masking_area_margin']
+                      parameters=parameters,
+                      mesh_parameters=mesh_parameters,
+                      margin=parameters['masking_area_margin']
                       )
     
 
@@ -433,12 +361,14 @@ def plot_snapshot(fig, n_file,
         sigma_fl_min_max = [sigma_fl_min, sigma_fl_max]
 
     # plot the area that masks arrows which lie outside the mesh in the current configuration
-    data_def_boundary_vertices_mesh_1 = draw_masking_area(ax, 
+    data_def_boundary_vertices_mesh_1 = gr.draw_masking_area(ax, 
                       axis_min_max, 
                       data_u_msh,
                       data_ref_boundary_vertices_mesh_1,
-                      parameters['masking_area_margin']
-                      )
+                      parameters=parameters,
+                      mesh_parameters=mesh_parameters,
+                      margin=parameters['masking_area_margin']
+                    )
 
     contour_plot = ax.imshow(Z_sigma_fl.T,
                              origin='lower',
