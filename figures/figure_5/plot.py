@@ -1,9 +1,7 @@
 import matplotlib
 from matplotlib.axes import Axes as MplAxes
 from matplotlib.font_manager import FontProperties
-from matplotlib.patches import Polygon
 import matplotlib.pyplot as plt
-from scipy.interpolate import NearestNDInterpolator
 import os
 
 import numpy as np

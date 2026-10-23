@@ -19,7 +19,7 @@ snapshot_min_with_margin = plot.snapshot_min + plot.parameters['snapshot_min_wit
 '''
 compute absolute mins and maxs across multiple files
 '''
-norm_v_min_max_abs = cal.min_max_vector_field(
+norm_v_min_max_abs = cal.min_max_interpolated_vector_field(
     plot.snapshot_min, plot.snapshot_max, plot.parameters['animation_frame_stride'],
     os.path.join(plot.solution_path, 'snapshots/csv/nodal_values'),
     'def_v_n_',
