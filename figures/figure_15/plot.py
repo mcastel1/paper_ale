@@ -123,7 +123,7 @@ mu_min_max = cal.min_max_files(
                  )
 
 
-norm_v_min_max = cal.min_max_vector_field(snapshot_min,
+norm_v_min_max = cal.min_max_interpolated_vector_field(snapshot_min,
                                           snapshot_max, parameters['frame_stride'],
                                           os.path.join(
                                               solution_path + 'snapshots/csv'), 'def_v_n_',
