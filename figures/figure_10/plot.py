@@ -90,7 +90,7 @@ columns_v = [clab.label_x_column, clab.label_y_column, clab.label_v_column + cla
 # fork
 # 2) to plot the animation: compute absolute min and max of norm v across  snapshots
 '''
-norm_v_min_max = cal.min_max_vector_field(snapshot_min,
+norm_v_min_max = cal.min_max_interpolated_vector_field(snapshot_min,
                                           snapshot_max, parameters['frame_stride'],
                                           os.path.join(
                                               solution_path + 'snapshots/csv/nodal_values'), 'def_v_n_',
