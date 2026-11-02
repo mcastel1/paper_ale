@@ -204,10 +204,6 @@ def plot_snapshot(fig, n_file,
   
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
 
-    # data_omega contains de values of \partial_1 X^alpha
-    data_omega = lis.data_omega(data_nu, data_psi)
-    data_omega = data_omega.sort_values(by=[":0"]).copy()
-
     # build `data_X_cur` from `data_X_ref` and `data_U`
     data_X_cur = data_X_ref.copy()
     data_X_cur[['f:0', 'f:1']] += data_U[['f:0', 'f:1']]
