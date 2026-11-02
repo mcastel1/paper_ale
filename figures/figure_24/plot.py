@@ -11,7 +11,6 @@ import warnings
 import calculus.utils as cal
 import constants.utils as const
 import graphics.color_bar as cb
-import list.column_labels as clab
 import graphics.utils as gr
 import graphics.vector_plot as vp
 import input_output.utils as io
@@ -28,7 +27,7 @@ you can copy the data from abacus with
     rm -rf solution mesh
     mkdir solution
     mkdir -p mesh/solution
-    ../copy_from_abacus.sh $REMOTE_PATH/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'U_n_12_*' 'X_n_12_*' 'X_ref_n_*' 'v_n_*' 'w_n_*' 'sigma_n_12_*' 'nu_n_12_*' 'psi_n_12_*' 'def_v_fl_n_*' 'v_fl_n_*'  'sigma_fl_n_*'  'def_sigma_fl_n_*' 'boundary_points_id_2_n_*' 'sigma_n_12_*'  ~/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME 1 14000 100
+    ../copy_from_abacus.sh $REMOTE_PATH/solution/snapshots/csv/  'line_mesh_n_*' 'u_n_*' 'U_n_12_*' 'X_n_12_*' 'X_ref_n_*'  'boundary_points_id_2_n_*' 'f_el_n_12_*' 'f_lap_n_12_*' 'f_vis_n_n_*' 'f_fl_n_12_*' ~/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME 1 14000 100
     mv $REMOTE_PATH/solution .
     rm -rf $REMOTE_PATH
     rsync -avr mcastel1@abacus:$REMOTE_PATH/solution/solution_metadata.csv /Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/$FIGURE_NAME/solution
@@ -125,28 +124,17 @@ fig.add_subplot(2, 2, 3)
 fig.add_subplot(2, 2, 4)
 
 
-nu_colorbar_axis = fig.add_axes(const.default_axis_position_size)
-cb.set_size(nu_colorbar_axis, parameters['colorbar_size'])
+f_el_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(f_el_colorbar_axis, parameters['colorbar_size'])
 
-psi_colorbar_axis = fig.add_axes(const.default_axis_position_size)
-cb.set_size(psi_colorbar_axis, parameters['colorbar_size'])
+f_lap_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(f_lap_colorbar_axis, parameters['colorbar_size'])
 
-w_colorbar_axis = fig.add_axes(const.default_axis_position_size)
-cb.set_size(w_colorbar_axis, parameters['colorbar_size'])
+f_vis_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(f_vis_colorbar_axis, parameters['colorbar_size'])
 
-sigma_colorbar_axis = fig.add_axes(const.default_axis_position_size)
-cb.set_size(sigma_colorbar_axis, parameters['colorbar_size'])
-
-'''
-plot a masking polygon that hides the arrows of v_fl which result from the interpolation and lie outside the mesh in the current configuration
-Input values:
-    * Mandatory:
-        - 'ax': the axis where the polygon will be drawn
-        - 'axis_min_max': the bounds of the X values in the current configuration
-        - 'data_u_msh': the data for the mesh displacement field
-    * Optional:
-        - 'margin': a margin, measured as relative to axis_min_max[1][1] - axis_mim_max[1][0] which is used to expand the region on top
-'''
+f_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(f_fl_colorbar_axis, parameters['colorbar_size'])
 
 
 # 
@@ -170,11 +158,10 @@ h = lis.min_max(Y)[1]
 def plot_snapshot(fig, n_file,
                   snapshot_label='',
                   axis_min_max=None,
-                  nu_min_max=None,
-                  psi_min_max=None,
-                  norm_v_min_max=None,
-                  w_min_max=None,
-                  sigma_min_max=None):
+                  f_el_min_max=None,
+                  f_lap_min_max=None,
+                  f_vis_min_max=None,
+                  f_fl_min_max=None):
 
     n_file_string = str(n_file)
 
@@ -189,17 +176,17 @@ def plot_snapshot(fig, n_file,
     data_U = pd.read_csv(os.path.join(snapshot_path, 'U_n_12_' + n_file_string + '.csv'))
     data_U = data_U.sort_values(by=[":0"]).copy()
 
-    data_w = pd.read_csv(os.path.join(snapshot_path, 'w_n_' + n_file_string + '.csv'))
-    data_w = data_w.sort_values(by=[":0"]).copy()
+    data_f_vis = pd.read_csv(os.path.join(snapshot_path, 'f_vis_n_n_' + n_file_string + '.csv'))
+    data_f_vis = data_f_vis.sort_values(by=[":0"]).copy()
 
-    data_sigma = pd.read_csv(os.path.join(snapshot_path, 'sigma_n_12_' + n_file_string + '.csv'))
-    data_sigma = data_sigma.sort_values(by=[":0"]).copy()
+    data_f_fl = pd.read_csv(os.path.join(snapshot_path, 'f_fl_n_12_' + n_file_string + '.csv'))
+    data_f_fl = data_f_fl.sort_values(by=[":0"]).copy()
 
-    data_nu = pd.read_csv(os.path.join(snapshot_path, 'nu_n_12_' + n_file_string + '.csv'))
-    data_nu = data_nu.sort_values(by=[":0"]).copy()
+    data_f_el = pd.read_csv(os.path.join(snapshot_path, 'f_el_n_12_' + n_file_string + '.csv'))
+    data_f_el = data_f_el.sort_values(by=[":0"]).copy()
 
-    data_psi = pd.read_csv(os.path.join(snapshot_path, 'psi_n_12_' + n_file_string + '.csv'))
-    data_psi = data_psi.sort_values(by=[":0"]).copy()
+    data_f_lap = pd.read_csv(os.path.join(snapshot_path, 'f_lap_n_12_' + n_file_string + '.csv'))
+    data_f_lap = data_f_lap.sort_values(by=[":0"]).copy()
 
   
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
@@ -231,14 +218,19 @@ def plot_snapshot(fig, n_file,
 
 
 
-    if nu_min_max == None:
-        nu_min_max = cal.min_max_file(os.path.join(snapshot_path, 'nu_n_12_' + str(n_file) + '.csv'))
-    if psi_min_max == None:
-        psi_min_max = cal.min_max_file(os.path.join(snapshot_path, 'psi_n_12_' + str(n_file) + '.csv'))
-    if sigma_min_max == None:
-        sigma_min_max = cal.min_max_file(os.path.join(snapshot_path, 'sigma_n_12_' + str(n_file) + '.csv'))
-    if w_min_max == None:
-        w_min_max = cal.min_max_file(os.path.join(snapshot_path, 'w_n_' + str(n_file) + '.csv'))
+    if f_el_min_max == None:
+        # f_el_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_el_n_12_' + str(n_file) + '.csv'))
+        interior = data_f_el.sort_values(':0')['f'].iloc[parameters['f_el_margin']:-parameters['f_el_margin']]
+        f_el_min_max = [interior.min(), interior.max()]
+
+    if f_lap_min_max == None:
+        f_lap_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_lap_n_12_' + str(n_file) + '.csv'))
+
+    if f_fl_min_max == None:
+        f_fl_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_fl_n_12_' + str(n_file) + '.csv'))
+
+    if f_vis_min_max == None:
+        f_vis_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_vis_n_n_' + str(n_file) + '.csv'))
 
 
 
@@ -250,7 +242,7 @@ def plot_snapshot(fig, n_file,
     
 
     # =============
-    # nu subplot
+    # f_el subplot
     # =============
 
     ax = fig.axes[0]
@@ -260,29 +252,26 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)
     gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], h])
 
-    # construct data_nu_minus_1, which contains the field value 'f' of data_nu, to which the constant 1 is subtracted
-    data_nu_minus_1 = data_nu.copy()
-    data_nu_minus_1['f'] = data_nu['f'] - 1
 
-    color_map_nu = gr.cb.make_curve_colorbar(fig, text, data_nu_minus_1,
-                                             min_max=np.subtract(
-                                                 nu_min_max, [1]*2),
-                                             tick_label_angle=parameters['nu_colorbar_tick_label_angle'],
-                                             label=parameters['nu_colorbar_axis_label'],
+
+    color_map_f_el = gr.cb.make_curve_colorbar(fig, text, data_f_el,
+                                             min_max=f_el_min_max,
+                                             tick_label_angle=parameters['f_el_colorbar_tick_label_angle'],
+                                             label=parameters['f_el_colorbar_axis_label'],
                                              font_size=parameters['colorbar_font_size'],
                                              tick_label_offset=parameters['colorbar_tick_label_offset'],
-                                             label_angle=parameters['nu_colorbar_label_angle'],
+                                             label_angle=parameters['f_el_colorbar_label_angle'],
                                              tick_length=parameters['colorbar_tick_length'],
                                              label_offset=parameters['colorbar_axis_label_offset'],
                                              tick_n_bins=parameters['colorbar_tick_n_bins'],
-                                             tick_label_format=parameters['nu_colorbar_tick_label_format'],
-                                             axis=nu_colorbar_axis)
+                                             tick_label_format=parameters['f_el_colorbar_tick_label_format'],
+                                             axis=f_el_colorbar_axis)
 
     # plot X and nu
     gr.plot_curve_grid(ax, X_cur,
-                       color_map=color_map_nu,
+                       color_map=color_map_f_el,
                        line_color='black',
-                       line_width=parameters['nu_line_width'])
+                       line_width=parameters['f_el_line_width'])
 
     # plot X_0
     gr.plot_curve_grid(ax, X_0,
@@ -312,19 +301,19 @@ def plot_snapshot(fig, n_file,
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
-        plot_label=parameters["nu_panel_label"],
+        plot_label=parameters["f_el_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
         z_order=const.high_z_order,
-        colorbar_axis=nu_colorbar_axis,
+        colorbar_axis=f_el_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
     
     # =============
-    # psi subplot
+    # f_lap subplot
     # =============
 
     ax = fig.axes[1]
@@ -334,24 +323,24 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)
     gr.set_axes_limits(ax,[0, 0], [mesh_parameters['L'], h])
 
-    color_map_psi = gr.cb.make_curve_colorbar(fig, text, data_psi,
-                                              min_max=psi_min_max,
-                                              tick_label_angle=parameters['psi_colorbar_tick_label_angle'],
-                                              label=parameters['psi_colorbar_axis_label'],
+    color_map_f_lap = gr.cb.make_curve_colorbar(fig, text, data_f_lap,
+                                              min_max=f_lap_min_max,
+                                              tick_label_angle=parameters['f_lap_colorbar_tick_label_angle'],
+                                              label=parameters['f_lap_colorbar_axis_label'],
                                               font_size=parameters['colorbar_font_size'],
                                               tick_label_offset=parameters['colorbar_tick_label_offset'],
-                                              label_angle=parameters['psi_colorbar_label_angle'],
+                                              label_angle=parameters['f_lap_colorbar_label_angle'],
                                               tick_length=parameters['colorbar_tick_length'],
                                               label_offset=parameters['colorbar_axis_label_offset'],
                                               tick_n_bins=parameters['colorbar_tick_n_bins'],
-                                              tick_label_format=parameters['psi_colorbar_tick_label_format'],
-                                              axis=psi_colorbar_axis)
+                                              tick_label_format=parameters['f_lap_colorbar_tick_label_format'],
+                                              axis=f_lap_colorbar_axis)
 
     # plot X and psi
     gr.plot_curve_grid(ax, X_cur,
-                       color_map=color_map_psi,
+                       color_map=color_map_f_lap,
                        line_color='black',
-                       line_width=parameters['psi_line_width'])
+                       line_width=parameters['f_lap_line_width'])
 
     # plot X_0
     gr.plot_curve_grid(ax, X_0,
@@ -381,20 +370,20 @@ def plot_snapshot(fig, n_file,
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
-        plot_label=parameters["psi_panel_label"],
+        plot_label=parameters["f_lap_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
         z_order=const.high_z_order,
-        colorbar_axis=psi_colorbar_axis,
+        colorbar_axis=f_lap_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
 
     
     # =============
-    # w subplot
+    # f_eta subplot
     # =============
 
     ax = fig.axes[2]
@@ -404,24 +393,24 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)
     gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
 
-    color_map_w = gr.cb.make_curve_colorbar(fig, text, data_w,
-                                            min_max=w_min_max,
-                                            tick_label_angle=parameters['w_colorbar_tick_label_angle'],
-                                            label=parameters['w_colorbar_axis_label'],
+    color_map_w = gr.cb.make_curve_colorbar(fig, text, data_f_vis,
+                                            min_max=f_vis_min_max,
+                                            tick_label_angle=parameters['f_vis_colorbar_tick_label_angle'],
+                                            label=parameters['f_vis_colorbar_axis_label'],
                                             font_size=parameters['colorbar_font_size'],
                                             tick_label_offset=parameters['colorbar_tick_label_offset'],
-                                            label_angle=parameters['w_colorbar_label_angle'],
+                                            label_angle=parameters['f_vis_colorbar_label_angle'],
                                             tick_length=parameters['colorbar_tick_length'],
                                             label_offset=parameters['colorbar_axis_label_offset'],
                                             tick_n_bins=parameters['colorbar_tick_n_bins'],
-                                            tick_label_format=parameters['w_colorbar_tick_label_format'],
-                                            axis=w_colorbar_axis)
+                                            tick_label_format=parameters['f_vis_colorbar_tick_label_format'],
+                                            axis=f_vis_colorbar_axis)
 
     # plot X and w
     gr.plot_curve_grid(ax, X_cur,
                        color_map=color_map_w,
                        line_color='black',
-                       line_width=parameters['w_line_width'])
+                       line_width=parameters['f_vis_line_width'])
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -451,19 +440,19 @@ def plot_snapshot(fig, n_file,
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
-        plot_label=parameters["w_panel_label"],
+        plot_label=parameters["f_vis_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
         z_order=const.high_z_order,
-        colorbar_axis=w_colorbar_axis,
+        colorbar_axis=f_vis_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
     
     # =============
-    # sigma subplot
+    # f_fl subplot
     # =============
 
     ax = fig.axes[3]
@@ -473,24 +462,24 @@ def plot_snapshot(fig, n_file,
     ax.grid(False)
     gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
 
-    color_map_sigma = gr.cb.make_curve_colorbar(fig, text, data_sigma,
-                                                min_max=sigma_min_max,
-                                                tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
-                                                label=parameters['sigma_colorbar_axis_label'],
+    color_map_f_fl = gr.cb.make_curve_colorbar(fig, text, data_f_fl,
+                                                min_max=f_fl_min_max,
+                                                tick_label_angle=parameters['f_fl_colorbar_tick_label_angle'],
+                                                label=parameters['f_fl_colorbar_axis_label'],
                                                 font_size=parameters['colorbar_font_size'],
                                                 tick_label_offset=parameters['colorbar_tick_label_offset'],
-                                                tick_label_format=parameters['sigma_colorbar_tick_label_format'],
-                                                label_angle=parameters['sigma_colorbar_label_angle'],
+                                                tick_label_format=parameters['f_fl_colorbar_tick_label_format'],
+                                                label_angle=parameters['f_fl_colorbar_label_angle'],
                                                 tick_length=parameters['colorbar_tick_length'],
                                                 label_offset=parameters['colorbar_axis_label_offset'],
                                                 tick_n_bins=parameters['colorbar_tick_n_bins'],
-                                                axis=sigma_colorbar_axis)
+                                                axis=f_fl_colorbar_axis)
 
     # plot X and sigma
     gr.plot_curve_grid(ax, X_cur,
-                       color_map=color_map_sigma,
+                       color_map=color_map_f_fl,
                        line_color='black',
-                       line_width=parameters['sigma_line_width'])
+                       line_width=parameters['f_fl_line_width'])
 
     # plot mesh under the membrane
     gr.plot_2d_mesh(ax, data_msh_line_vertices,
@@ -520,14 +509,14 @@ def plot_snapshot(fig, n_file,
         tick_label_offset=parameters['tick_label_offset'],
         tick_label_format=['f', 'f'],
         font_size=parameters['axis_font_size'],
-        plot_label=parameters["sigma_panel_label"],
+        plot_label=parameters["f_fl_panel_label"],
         plot_label_offset=parameters['panel_label_offset'],
         axis_origin=parameters['axis_origin'],
         margin=parameters['axis_margin'],
         n_minor_ticks=parameters['n_minor_ticks'],
         minor_tick_length=parameters['minor_tick_length'],
         z_order=const.high_z_order,
-        colorbar_axis=sigma_colorbar_axis,
+        colorbar_axis=f_fl_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
     
