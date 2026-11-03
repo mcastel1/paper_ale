@@ -81,17 +81,18 @@ plt.rcParams.update({
     "text.usetex": True,
     "text.latex.preamble": preamble,
 })
-
+'''
 # 1. read solution from local folder
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "solution/")
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mesh/solution/")
 
 '''
+
 # 2 read solution from external folder
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/membrane', "solution")
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square_no_circle/line', "solution") 
 
-'''
+
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 
@@ -128,6 +129,16 @@ if parameters['mode'] == 'animation':
     f_vis_min_max = cal.min_max_file(
                        os.path.join(solution_path + f'snapshots/csv/f_vis_n_n_{parameters["colorbar_f_vis_sample_snapshot"]}.csv')
                        )
+    
+    #f_ine_v
+    f_ine_v_min_max = cal.min_max_file(
+                       os.path.join(solution_path + f'snapshots/csv/f_ine_v_n_{parameters["colorbar_f_ine_v_sample_snapshot"]}.csv')
+                       )
+    
+    #f_ine_w
+    f_ine_w_min_max = cal.min_max_file(
+                       os.path.join(solution_path + f'snapshots/csv/f_ine_w_n_{parameters["colorbar_f_ine_w_sample_snapshot"]}.csv')
+                       )
 
 
 
@@ -143,10 +154,12 @@ fig = pplt.figure(
     hspace=parameters['hspace'])
 
 # pre-create subplots and axes
-fig.add_subplot(2, 2, 1)
-fig.add_subplot(2, 2, 2)
-fig.add_subplot(2, 2, 3)
-fig.add_subplot(2, 2, 4)
+fig.add_subplot(2, 3, 1)
+fig.add_subplot(2, 3, 2)
+fig.add_subplot(2, 3, 3)
+fig.add_subplot(2, 3, 4)
+fig.add_subplot(2, 3, 5)
+fig.add_subplot(2, 3, 6)
 
 
 f_el_colorbar_axis = fig.add_axes(const.default_axis_position_size)
@@ -160,6 +173,12 @@ cb.set_size(f_vis_colorbar_axis, parameters['colorbar_size'])
 
 f_fl_colorbar_axis = fig.add_axes(const.default_axis_position_size)
 cb.set_size(f_fl_colorbar_axis, parameters['colorbar_size'])
+
+f_ine_v_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(f_ine_v_colorbar_axis, parameters['colorbar_size'])
+
+f_ine_w_colorbar_axis = fig.add_axes(const.default_axis_position_size)
+cb.set_size(f_ine_w_colorbar_axis, parameters['colorbar_size'])
 
 
 # 
@@ -212,6 +231,11 @@ def plot_snapshot(fig, n_file,
     data_f_lap = pd.read_csv(os.path.join(snapshot_path, 'f_lap_n_12_' + n_file_string + '.csv'))
     data_f_lap = data_f_lap.sort_values(by=[":0"]).copy()
 
+    data_f_ine_v = pd.read_csv(os.path.join(snapshot_path, 'f_ine_v_n_' + n_file_string + '.csv'))
+    data_f_ine_v = data_f_ine_v.sort_values(by=[":0"]).copy()
+
+    data_f_ine_w = pd.read_csv(os.path.join(snapshot_path, 'f_ine_w_n_' + n_file_string + '.csv'))
+    data_f_ine_w = data_f_ine_w.sort_values(by=[":0"]).copy()
   
     data_u_msh = pd.read_csv(os.path.join(snapshot_nodal_values_path, 'u_n_' + n_file_string + '.csv'))
 
@@ -226,8 +250,6 @@ def plot_snapshot(fig, n_file,
     data_X_0 = data_X_0.sort_values(by=[":0"]).copy()
 
 
-
-
     # plot snapshot label
     fig.text(parameters['snapshot_label_position'][0], parameters['snapshot_label_position'][1],
              snapshot_label, fontsize=parameters['snapshot_label_font_size'], ha='center', va='center')
@@ -239,22 +261,6 @@ def plot_snapshot(fig, n_file,
         
         axis_min_max = [[0, mesh_parameters['L']], [0, np.max(data_u_msh[':1'] + data_u_msh['f:1'])]]
 
-
-
-
-    # if f_el_min_max == None:
-    #     # f_el_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_el_n_12_' + str(n_file) + '.csv'))
-    #     interior = data_f_el.sort_values(':0')['f'].iloc[parameters['f_el_margin']:-parameters['f_el_margin']]
-    #     f_el_min_max = [interior.min(), interior.max()]
-
-    # if f_lap_min_max == None:
-    #     f_lap_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_lap_n_12_' + str(n_file) + '.csv'))
-
-    # if f_fl_min_max == None:
-    #     f_fl_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_fl_n_12_' + str(n_file) + '.csv'))
-
-    # if f_vis_min_max == None:
-    #     f_vis_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_vis_n_n_' + str(n_file) + '.csv'))
 
     if parameters['mode'] == 'figure':
     # I am plotting the figure -> select min and max according to the current frame 
@@ -271,12 +277,14 @@ def plot_snapshot(fig, n_file,
 
         # f_vis
         f_vis_min_max = cal.min_max_file(os.path.join(snapshot_path, f'f_vis_n_n_{n_file}.csv'))
+
+        # f_ine_v
+        f_ine_v_min_max = cal.min_max_file(os.path.join(snapshot_path, f'f_ine_v_n_{n_file}.csv'))
+
+        # f_ine_w
+        f_ine_w_min_max = cal.min_max_file(os.path.join(snapshot_path, f'f_ine_w_n_{n_file}.csv'))
+
    
-
-
-
-
-
     X_cur, text = gr.interpolate_curve(
         data_X_cur, data_X_cur[':0'].min(), data_X_cur[':0'].max(), parameters['n_bins_X'])
     
@@ -426,7 +434,7 @@ def plot_snapshot(fig, n_file,
 
     
     # =============
-    # f_eta subplot
+    # f_vis subplot
     # =============
 
     ax = fig.axes[2]
@@ -562,8 +570,147 @@ def plot_snapshot(fig, n_file,
         colorbar_axis=f_fl_colorbar_axis,
         colorbar_axis_offset=parameters['colorbar_offset'])
 
-    
+
      
+    # =============
+    # f_ine_v subplot
+    # =============
+
+    ax = fig.axes[4]
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)
+    gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
+
+    color_map_f_ine_v = gr.cb.make_curve_colorbar(fig, text, data_f_ine_v,
+                                                min_max=f_ine_v_min_max,
+                                                tick_label_angle=parameters['f_ine_v_colorbar_tick_label_angle'],
+                                                label=parameters['f_ine_v_colorbar_axis_label'],
+                                                font_size=parameters['colorbar_font_size'],
+                                                tick_label_offset=parameters['colorbar_tick_label_offset'],
+                                                tick_label_format=parameters['f_ine_v_colorbar_tick_label_format'],
+                                                label_angle=parameters['f_ine_v_colorbar_label_angle'],
+                                                tick_length=parameters['colorbar_tick_length'],
+                                                label_offset=parameters['colorbar_axis_label_offset'],
+                                                tick_n_bins=parameters['colorbar_tick_n_bins'],
+                                                axis=f_ine_v_colorbar_axis)
+
+    # plot X and sigma
+    gr.plot_curve_grid(ax, X_cur,
+                        color_map=color_map_f_ine_v,
+                        line_color='black',
+                        line_width=parameters['f_ine_v_line_width'])
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices,
+                    line_width=parameters['plot_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh_low'],
+                    zorder=parameters['mesh_zorder'])
+
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                        line_color=parameters['X_0_color'],
+                        legend=parameters['X_0_legend'],
+                        line_width=parameters['X_line_width'],
+                        alpha=parameters['X_0_alpha'],
+                        z_order=0
+                        )
+
+    gr.plot_2d_axes(
+        ax, [0, 0], [mesh_parameters['L'], h],
+        tick_length=parameters['tick_length'],
+        tick_n_bins=parameters['tick_n_bins'],
+        line_width=parameters['axis_line_width'],
+        axis_label=parameters['axis_label_cur'],
+        axis_label_angle=parameters['axis_label_angle'],
+        tick_label_angle=parameters['tick_label_angle'],
+        axis_label_offset=parameters['axis_label_offset'],
+        tick_label_offset=parameters['tick_label_offset'],
+        tick_label_format=['f', 'f'],
+        font_size=parameters['axis_font_size'],
+        plot_label=parameters["f_ine_v_panel_label"],
+        plot_label_offset=parameters['panel_label_offset'],
+        axis_origin=parameters['axis_origin'],
+        margin=parameters['axis_margin'],
+        n_minor_ticks=parameters['n_minor_ticks'],
+        minor_tick_length=parameters['minor_tick_length'],
+        z_order=const.high_z_order,
+        colorbar_axis=f_ine_v_colorbar_axis,
+        colorbar_axis_offset=parameters['colorbar_offset'])
+
+    
+    
+    # =============
+    # f_ine_w subplot
+    # =============
+
+    ax = fig.axes[5]
+
+    ax.set_axis_off()
+    ax.set_aspect('equal')
+    ax.grid(False)
+    gr.set_axes_limits(ax, [0, 0], [mesh_parameters['L'], h])
+
+    color_map_f_ine_w = gr.cb.make_curve_colorbar(fig, text, data_f_ine_w,
+                                                min_max=f_ine_w_min_max,
+                                                tick_label_angle=parameters['f_ine_w_colorbar_tick_label_angle'],
+                                                label=parameters['f_ine_w_colorbar_axis_label'],
+                                                font_size=parameters['colorbar_font_size'],
+                                                tick_label_offset=parameters['colorbar_tick_label_offset'],
+                                                tick_label_format=parameters['f_ine_w_colorbar_tick_label_format'],
+                                                label_angle=parameters['f_ine_w_colorbar_label_angle'],
+                                                tick_length=parameters['colorbar_tick_length'],
+                                                label_offset=parameters['colorbar_axis_label_offset'],
+                                                tick_n_bins=parameters['colorbar_tick_n_bins'],
+                                                axis=f_ine_w_colorbar_axis)
+
+    # plot X and sigma
+    gr.plot_curve_grid(ax, X_cur,
+                        color_map=color_map_f_ine_w,
+                        line_color='black',
+                        line_width=parameters['f_ine_w_line_width'])
+
+    # plot mesh under the membrane
+    gr.plot_2d_mesh(ax, data_msh_line_vertices,
+                    line_width=parameters['plot_line_width'],
+                    color='black',
+                    alpha=parameters['alpha_mesh_low'],
+                    zorder=parameters['mesh_zorder'])
+
+    # plot X_0
+    gr.plot_curve_grid(ax, X_0,
+                        line_color=parameters['X_0_color'],
+                        legend=parameters['X_0_legend'],
+                        line_width=parameters['X_line_width'],
+                        alpha=parameters['X_0_alpha'],
+                        z_order=0
+                        )
+
+    gr.plot_2d_axes(
+        ax, [0, 0], [mesh_parameters['L'], h],
+        tick_length=parameters['tick_length'],
+        tick_n_bins=parameters['tick_n_bins'],
+        line_width=parameters['axis_line_width'],
+        axis_label=parameters['axis_label_cur'],
+        axis_label_angle=parameters['axis_label_angle'],
+        tick_label_angle=parameters['tick_label_angle'],
+        axis_label_offset=parameters['axis_label_offset'],
+        tick_label_offset=parameters['tick_label_offset'],
+        tick_label_format=['f', 'f'],
+        font_size=parameters['axis_font_size'],
+        plot_label=parameters["f_ine_w_panel_label"],
+        plot_label_offset=parameters['panel_label_offset'],
+        axis_origin=parameters['axis_origin'],
+        margin=parameters['axis_margin'],
+        n_minor_ticks=parameters['n_minor_ticks'],
+        minor_tick_length=parameters['minor_tick_length'],
+        z_order=const.high_z_order,
+        colorbar_axis=f_ine_w_colorbar_axis,
+        colorbar_axis_offset=parameters['colorbar_offset'])
+
+        
 
 
 plot_snapshot(fig, snapshot_max,
