@@ -117,27 +117,27 @@ if parameters['mode'] == 'animation':
 
     # f_lap
     f_lap_min_max = cal.min_max_file(
-                       os.path.join(solution_path + f'snapshots/csv/f_lap_n_12_{parameters['colorbar_f_lap_sample_snapshot']}.csv')
+                       os.path.join(solution_path, f'snapshots/csv/f_lap_n_12_{parameters['colorbar_f_lap_sample_snapshot']}.csv')
                        )
 
     # f_fl
     f_fl_min_max = cal.min_max_file(
-                       os.path.join(solution_path + f'snapshots/csv/f_fl_n_12_{parameters["colorbar_f_fl_sample_snapshot"]}.csv')
+                       os.path.join(solution_path, f'snapshots/csv/f_fl_n_12_{parameters["colorbar_f_fl_sample_snapshot"]}.csv')
                        )
    
     #f_vis
     f_vis_min_max = cal.min_max_file(
-                       os.path.join(solution_path + f'snapshots/csv/f_vis_n_n_{parameters["colorbar_f_vis_sample_snapshot"]}.csv')
+                       os.path.join(solution_path, f'snapshots/csv/f_vis_n_n_{parameters["colorbar_f_vis_sample_snapshot"]}.csv')
                        )
     
     #f_ine_v
     f_ine_v_min_max = cal.min_max_file(
-                       os.path.join(solution_path + f'snapshots/csv/f_ine_v_n_{parameters["colorbar_f_ine_v_sample_snapshot"]}.csv')
+                       os.path.join(solution_path, f'snapshots/csv/f_ine_v_n_{parameters["colorbar_f_ine_v_sample_snapshot"]}.csv')
                        )
     
     #f_ine_w
     f_ine_w_min_max = cal.min_max_file(
-                       os.path.join(solution_path + f'snapshots/csv/f_ine_w_n_{parameters["colorbar_f_ine_w_sample_snapshot"]}.csv')
+                       os.path.join(solution_path, f'snapshots/csv/f_ine_w_n_{parameters["colorbar_f_ine_w_sample_snapshot"]}.csv')
                        )
 
 
@@ -205,7 +205,7 @@ def plot_snapshot(fig, n_file,
 
     n_file_string = str(n_file)
 
-    global f_el_min_max, f_fl_min_max, f_vis_min_max, f_lap_min_max
+    global f_el_min_max, f_fl_min_max, f_vis_min_max, f_lap_min_max, f_ine_v_min_max, f_ine_w_min_max
 
 
     # load data
@@ -713,10 +713,10 @@ def plot_snapshot(fig, n_file,
         
 
 
-plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 0))
-# plot_snapshot(fig, parameters['snapshot_to_plot'],
-#               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
+# plot_snapshot(fig, snapshot_max,
+#               snapshot_label=rf'$t = \,$' + io.time_to_string(snapshot_max * solution_parameters['T'] / solution_parameters['N'], 's', 0))
+plot_snapshot(fig, parameters['snapshot_to_plot'],
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
 
 
 if parameters['mode'] == 'figure':
