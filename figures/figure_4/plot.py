@@ -5,7 +5,6 @@ copy data for this plot with
 
 '''
 import matplotlib
-from matplotlib.font_manager import FontProperties
 import matplotlib.pyplot as plt
 import os
 

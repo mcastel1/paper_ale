@@ -10,6 +10,7 @@ import sys
 import warnings
 
 import constants.utils as const
+import graphics.arrow as ar
 import graphics.mesh.utils as msh
 import graphics.utils as gr
 import graphics.vector_plot as vp
@@ -28,8 +29,8 @@ matplotlib.use('pgf')  # use a non-interactive backend to avoid the need of
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 
-parameters = io.read_parameters_from_csv_file(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+mesh_parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'mesh_parameters.csv'))
 
 
 # add the path where to find the shared modules
@@ -44,7 +45,7 @@ os.system("rm -rf ~/.matplotlib/tex.cache")
 
 pplt.rc['grid'] = False  # disables default gridlines
 
-preamble = pre.figure_preamble([paths.definitions_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')])
+preamble = pre.figure_preamble([paths.definitions_path,             paths.latex_module_definitions_path, paths.ale_definitions_path, os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')])
 
 
 plt.rcParams.update({
@@ -98,12 +99,9 @@ def plot_snapshot(fig, n_file,
     n_file_string = str(n_file)
 
     # load data
-    data_msh_ref_line_vertices = pd.read_csv(os.path.join(
-        mesh_path, 'line_vertices.csv'))
-    data_msh_curr_line_vertices = pd.read_csv(os.path.join(
-        snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
-    data_X = pd.read_csv(os.path.join(
-        snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
+    data_msh_ref_line_vertices = pd.read_csv(os.path.join(mesh_path, 'line_vertices.csv'))
+    data_msh_curr_line_vertices = pd.read_csv(os.path.join(snapshot_path, 'line_mesh_n_' + n_file_string + '.csv'))
+    data_X = pd.read_csv(os.path.join(snapshot_path, 'X_n_12_' + n_file_string + '.csv'))
 
     if axis_min_max == None:
 
@@ -114,8 +112,8 @@ def plot_snapshot(fig, n_file,
 
         X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vp.interpolate_2d_vector_field(data_u_msh,
                                                                                                 [0, 0],
-                                                                                                [parameters['L'],
-                                                                                                    parameters['h']],
+                                                                                                [mesh_parameters['L'],
+                                                                                                    mesh_parameters['h']],
                                                                                                 parameters['n_bins_v'])
 
         # X, Y are the positions of the mesh nodes in the current configuration
@@ -126,13 +124,26 @@ def plot_snapshot(fig, n_file,
         axis_min_max = [lis.min_max(X), lis.min_max(Y)]
         #
 
-    X_curr, _ = gr.interpolate_curve(
+    X_ref = np.array([[float(data_X[':0'][i]), mesh_parameters['h']] for i in range(len(data_X))])
+    X_cur, _ = gr.interpolate_curve(
         data_X, axis_min_max[0][0], axis_min_max[0][1], parameters['n_bins_X'])
+
+
+    # normal to X_ref normalized to unity
+    n_ref = np.array([[0, 1] for i in range(len(X_ref)-1)])
+
+    # tangent to X_cur normalized to unity
+    t_cur = [(X_cur[i+1] - X_cur[i])/np.linalg.norm(X_cur[i+1]-X_cur[i]) for i in range(len(X_cur)-1)]
+
+    # normal to X_cur normalized to unity
+    n_cur = [[-float(t_cur[i][1]), float(t_cur[i][0])] for i in range(len(t_cur))]
+
+
 
     X_msh_ref, Y_msh_ref, u_msh_n_X, u_msh_n_Y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_msh,
                                                                                              [0, 0],
-                                                                                             [parameters['L'],
-                                                                                                 parameters['h']],
+                                                                                             [mesh_parameters['L'],
+                                                                                                 mesh_parameters['h']],
                                                                                              parameters['n_bins_v'],
                                                                                              clab.label_x_column,
                                                                                              clab.label_y_column,
@@ -148,14 +159,14 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']]
+                       [0, 0], [mesh_parameters['L'], mesh_parameters['h']]
                        )
 
 
 
     # plot \partial Omega_in
     start = [0, 0]
-    end = [0, parameters['h']]
+    end = [0, mesh_parameters['h']]
     ax.plot(
         [start[0], end[0]],
         [start[1], end[1]],
@@ -168,8 +179,8 @@ def plot_snapshot(fig, n_file,
     )
 
     # plot \partial Omega_out
-    start = [parameters['L'], 0]
-    end = [parameters['L'], parameters['h']]
+    start = [mesh_parameters['L'], 0]
+    end = [mesh_parameters['L'], mesh_parameters['h']]
     ax.plot(
         [start[0], end[0]],
         [start[1], end[1]],
@@ -183,7 +194,7 @@ def plot_snapshot(fig, n_file,
 
     # plot \partial Omega_bottom
     start = [0, 0]
-    end = [parameters['L'], 0]
+    end = [mesh_parameters['L'], 0]
     ax.plot(
         [start[0], end[0]],
         [start[1], end[1]],
@@ -196,8 +207,8 @@ def plot_snapshot(fig, n_file,
     )
 
     # plot \partial Omega_top
-    start = [0, parameters['h']]
-    end = [parameters['L'], parameters['h']]
+    start = [0, mesh_parameters['h']]
+    end = [mesh_parameters['L'], mesh_parameters['h']]
     ax.plot(
         [start[0], end[0]],
         [start[1], end[1]],
@@ -220,7 +231,7 @@ def plot_snapshot(fig, n_file,
             )
 
     # plot partial_Omega_line_in
-    ax.plot([0], [parameters['h']], 'o',
+    ax.plot([0], [mesh_parameters['h']], 'o',
             s=parameters['partial_omega_line_point_size'],
             color=parameters['partial_omega_line_in_color'],
             linewidth=parameters['X_line_width'],
@@ -231,7 +242,7 @@ def plot_snapshot(fig, n_file,
 
     # plot partial_Omega_line_out
     ax.plot(
-        [parameters['L']], [parameters['h']],
+        [mesh_parameters['L']], [mesh_parameters['h']],
         marker='o',
         markersize=parameters['partial_omega_line_point_size'],
         markerfacecolor='none',          # empty
@@ -243,10 +254,21 @@ def plot_snapshot(fig, n_file,
         clip_on=False
     )
 
+    # plot the vector field n_ref
+    vp.plot_1d_vector_field(ax, X_ref[:-1:parameters['n_ref_stride']].T, np.array(n_ref[::parameters['n_ref_stride']]).T,
+                            shaft_length=parameters['n_shaft_length'],
+                            head_over_shaft_length=parameters['n_head_over_shaft_length'],
+                            line_width=parameters['n_line_width'],
+                            legend=parameters['n_ref_legend'],
+                            legend_position=parameters['n_ref_legend_position'],
+                            legend_text_arrow_space=parameters['n_legend_text_arrow_space'],
+                            z_order=const.high_z_order
+                            )
+
     # plot the label for the region \Omega_reference
-    ax.text(0 + parameters['omega_ref_label_position'][0] * parameters['L'],
+    ax.text(0 + parameters['omega_ref_label_position'][0] * mesh_parameters['L'],
             0 + parameters['omega_ref_label_position'][1] *
-            parameters['h'], r'$\omr$',
+            mesh_parameters['h'], r'$\omr$',
             fontsize=parameters['omega_label_font_size'],
             ha='center',
             va='center')
@@ -271,8 +293,11 @@ def plot_snapshot(fig, n_file,
         prop=FontProperties(size=parameters['legend_font_size'])
     )
 
+
+
+
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         tick_n_bins=parameters['tick_n_bins'],
@@ -301,7 +326,7 @@ def plot_snapshot(fig, n_file,
     ax.set_aspect('equal')
     ax.grid(False)
     gr.set_axes_limits(ax,
-                       [0, 0], [parameters['L'], parameters['h']]
+                       [0, 0], [mesh_parameters['L'], mesh_parameters['h']]
                        )
 
 
@@ -310,8 +335,17 @@ def plot_snapshot(fig, n_file,
         data_u_msh)
     U_interp = np.array([U_interp_x, U_interp_y], dtype=object)
 
-    # coordinates of the curve in the reference configuration
-    # X_ref = np.array(list(zip(X_U, Y_U)))
+    # plot the vector field n_cur
+    vp.plot_1d_vector_field(ax, X_cur[:-1:parameters['n_cur_stride']].T, np.array(n_cur[::parameters['n_cur_stride']]).T,
+                            shaft_length=parameters['n_shaft_length'],
+                            head_over_shaft_length=parameters['n_head_over_shaft_length'],
+                            line_width=parameters['n_line_width'],
+                            legend=parameters['n_cur_legend'],
+                            legend_position=parameters['n_cur_legend_position'],
+                            legend_text_arrow_space=parameters['n_legend_text_arrow_space'],
+                            z_order=const.high_z_order
+                            )
+
 
     # plot curr mesh
     gr.plot_2d_mesh(ax, data_msh_curr_line_vertices,
@@ -320,18 +354,20 @@ def plot_snapshot(fig, n_file,
                     alpha=parameters['alpha_mesh'],
                     zorder=parameters['mesh_zorder'])
 
-    # plot X_curr
-    gr.plot_curve_grid(ax, X_curr,
+    # plot X_cur
+    gr.plot_curve_grid(ax, X_cur,
                        line_color=parameters['partial_omega_top_color'],
                        legend=r'\pomtopeqc',
                        line_width=parameters['X_line_width'],
                        z_order=1
                        )
 
+    
+
     # plot \partial Omega_in
     start = msh.reference_to_current([0, 0], U_interp)
     end = msh.reference_to_current(
-        [0, parameters['h']], U_interp)
+        [0, mesh_parameters['h']], U_interp)
     ax.plot(
         [start[0], end[0]],
         [start[1], end[1]],
@@ -344,9 +380,9 @@ def plot_snapshot(fig, n_file,
     )
 
     # plot \partial Omega_out
-    start = msh.reference_to_current([parameters['L'], 0], U_interp)
+    start = msh.reference_to_current([mesh_parameters['L'], 0], U_interp)
     end = msh.reference_to_current(
-        [parameters['L'], parameters['h']], U_interp)
+        [mesh_parameters['L'], mesh_parameters['h']], U_interp)
 
     ax.plot(
         [start[0], end[0]],
@@ -362,7 +398,7 @@ def plot_snapshot(fig, n_file,
     # plot \partial Omega_bottom
     start = msh.reference_to_current([0, 0], U_interp)
     end = msh.reference_to_current(
-        [parameters['L'], 0], U_interp)
+        [mesh_parameters['L'], 0], U_interp)
     ax.plot(
         [start[0], end[0]],
         [start[1], end[1]],
@@ -387,7 +423,7 @@ def plot_snapshot(fig, n_file,
 
     # plot partial_Omega_line_in
     point = msh.reference_to_current(
-        [0, parameters['h']], U_interp)
+        [0, mesh_parameters['h']], U_interp)
     ax.plot([point[0]], [point[1]], 'o',
             s=parameters['partial_omega_line_point_size'],
             color=parameters['partial_omega_line_in_color'],
@@ -399,7 +435,7 @@ def plot_snapshot(fig, n_file,
 
     # plot partial_Omega_line_out
     point = msh.reference_to_current(
-        [parameters['L'], parameters['h']], U_interp)
+        [mesh_parameters['L'], mesh_parameters['h']], U_interp)
     ax.plot([point[0]], [point[1]], 'o',
             s=parameters['partial_omega_line_point_size'],
             color=parameters['partial_omega_line_out_color'],
@@ -412,9 +448,9 @@ def plot_snapshot(fig, n_file,
             )
 
     # plot the label for the region \Omega_current
-    ax.text(0 + parameters['omega_cur_label_position'][0] * parameters['L'],
+    ax.text(0 + parameters['omega_cur_label_position'][0] * mesh_parameters['L'],
             0 + parameters['omega_cur_label_position'][1] *
-            parameters['h'], r'$\omc$',
+            mesh_parameters['h'], r'$\omc$',
             fontsize=parameters['omega_label_font_size'],
             ha='center',
             va='center')
@@ -433,7 +469,7 @@ def plot_snapshot(fig, n_file,
     )
 
     gr.plot_2d_axes(
-        ax, [0, 0], [parameters['L'], parameters['h']],
+        ax, [0, 0], [mesh_parameters['L'], mesh_parameters['h']],
         tick_length=parameters['tick_length'],
         line_width=parameters['axis_line_width'],
         tick_n_bins=parameters['tick_n_bins'],

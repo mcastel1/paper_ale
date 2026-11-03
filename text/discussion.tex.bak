@@ -1,0 +1,49 @@
+\section{Discussion}
+\label{sec_discussion}
+
+\acresetall
+% The \ac{mem} shape shown in \cref{fig_no_circle} has a curvature which varies along the \ac{mem} profile, and thus differs from the classical circle-arc obtained at the interface between two fluids \cite{landauFluidMechanics1987,degennesCapillarityWettingPhenomena2004}.
+
+We developed a numerical study on the interaction between a \ac{flu} and a \ac{mem}. Our analysis is based on the \ac{fe} method, and it leverages the \ac{fenics} \cite{loggAutomatedSolutionDifferential2012}, combined with the \ac{irene} \cite{worthmullerIRENEFluIdLayeR2025}.
+In order to guide and introduce the reader to the interaction problem between a \acl{flu} and \acl{mem}, we provided two introductory examples of fluid-structure interaction \cite{kamenskyLectureNotesMAE}, in which the \acl{flu} interacts with a \acl{bod} and with an \acl{ela}, see \cref{sec_fl_rigid,sec_fl_elastic}. These Sections allow to introduce the necessary physical an mathematical quantities, as well as to assess the  stability of our numerical scheme.
+
+In particular, the time-iteration scheme that we propose implies a partitioned resolution scheme \cite{felippaPartitionedAnalysisCoupled2001} well known in \ac{fsi} problems. In this regard, we denote by   \ac{bod}, \ac{ela} or \ac{mem} the `structure' with which \ac{flu} interacts, respectively, in \cref{sec_fl_rigid,sec_fl_elastic,sec_fl_mem}. In such partitioned scheme one solves---for example---for the structure degrees of freedom in a given, fixed  configuration of \ac{flu} and \ac{dom}, and similarly for \ac{flu} and \ac{dom}, see for example \cref{fl_mem_step_3,fl_mem_step_1,fl_mem_step_2} in \cref{sec_temp_discretization_mem}.
+
+
+Partitioned solutions are known to suffer for numerical instabilities \cite{forsterArtificialAddedMass2007}. Qualitatively speaking, as the structure movement displaces
+\ac{flu} elements, for the structure to accelerate with an acceleration $\bm a $,
+an effective \ac{flu} mass $\madded$ needs to be displaced.
+This mass results into an effective force  $\sim \bm{a}\,  \madded$ that \ac{flu} exerts on the structure.
+The partitioned scheme turns out to be stable if such force is significantly smaller than the structure inertia, ${\bm a} \, \mstr$ \cite{causinAddedmassEffectDesign2005}, i.e., if
+\be\label{eq_added_mass}
+\frac{\madded}{\mstr}\ll 1.
+\ee
+
+First, for the motion of \ac{bod} in \ac{flu} of \cref{sec_fl_rigid}, $\madded \sim \rhof A_\structure \sim 2.3 \times 10^{-2}\, \kg$, and $\mstr = \rhob A_\structure = 1.4 \times 10^{-1} \, \kg $, where $A_\structure = \pi a b$ is the area of \ac{bod}. The stability condition \crefs{eq_added_mass} is thus satisfied  with an accuracy of $\madded/\mstr \sim 10^{-2}$.
+% 
+Second, in the analysis of  \cref{sec_fl_elastic}, where \ac{ela} moves in \ac{flu}, $\madded \sim \rhof A_\structure \sim 6.2 \times 10^{-2}\, \kg$, and $\mstr = \rhoela A_\structure = \parameter[6.2][1]{\kg}$, where $A_\structure \sim \pi (a b - r^2)$ is the area of \ac{ela}. The stability condition \crefs{eq_added_mass} is thus satisfied with an accuracy of $\madded/\mstr \sim 0.1$.
+
+Third, we discuss  the added-mass instability for the interaction between \ac{flu} and \ac{mem} of \cref{sec_fl_mem}. At the  time shown in  \cref{fig_fluid_mem_mem}, we have $\mstr \sim \rhom l \sim 1 \, \kg$, $\madded \sim \rhof  l^2 \sim 1 \, \kg$, where $l \sim 1 \, \met$ is the average \ac{mem} length in the \acl{cur} configuration. As a result,  \cref{eq_added_mass} is  border line; added and structure mass are comparable,   $\madded/\mstr \sim 1$. More importantly,   the \aclp{bc} used in \cref{sec_fl_mem_mem} allow for \ac{mem} elements to freely flow in through the \acl{le} extremity: as a result,  $l$ grows in time. Given that  $\mstr$ and $\madded$ scale with $l$ as $\sim l$ and $\sim l^2$, respectively, the longer the system evolves, the more the condition \crefs{eq_added_mass} will be violated.
+
+We will now show how our model allows for understanding  the physics of the bulge formation in \cref{fig_fluid_mem_mem}.
+The \acp{bc} \crefs{\bcsmembrane} are such that the \ac{le} extremity of \ac{mem}, $\pomlineineqr$, is pinnned, but its tangent angle $\psi$ is free. As a result, \ac{mem} tilts upwards under the force exerted by \ac{flu} in the vicinity of $\pomlineineqr$, taking advantage of the free angle. The \ac{mem} shape thus bends in the vicinity of the symmetry axis $\pomlineouteqr$, accumulating an elastic stress.
+The normal acceleration $\partial \wmem/\partial t$, which is referred to the outwards direction of the current normal $\normalc{}$ shown in  \cref{fig_ref_cur_mem}, receives contributions from multiple terms, see \cref{eq-dyn-w}. These are the forces, which appear in the \acl{rhs} of \cref{eq-dyn-w}, and inertial terms in the \acl{lhs}. First, the forces are the Laplace force $f_\lapl$, \cref{eq_def_f_lap}, the elastic force $f_\kap$, \cref{eq_def_f_kap}, the viscous force due to the flow of \ac{mem} elements $\fetamemn$ \cite{al-izziShearDrivenInstabilitiesMembrane2020}, \cref{eq_def_f_eta_n}, and the force $\fflun$ exerted by \ac{flu} on \ac{mem}, \cref{def_force_norm}. Second, the  inertial terms $I_v$, $I_w$ are given in \crefs{eq_def_I_v,eq_def_I_w}.
+\Cref{fig_force_mem} depicts all such terms in an early stage of the bulge formation, showing that the elastic force $f_\kap$ dominates over all terms. Such force releases the accumulated elastic stress above: It pushes \ac{mem} inwards in the vicinity of $\pomlineineqr$ and outwards close to $\pomlineouteqr$---see \cref{fig_force_mem}B. Given that \ac{mem} is pinned at $\pomlineineqr$, the force at $\pomlineineqr$ is neutralized by an equal and opposite force, cf. \cref{bc_fl_mem_mem_6}. On the other hand, at $\pomlineouteqr$, \ac{mem} is free to move upwards driven by the elastic force, cf. \cref{bc_fl_mem_mem_7,bc_fl_mem_mem_7}, resulting into an increase of the \ac{mem} bulge.
+As a result, the inflation mechanism is due to a combination of the free-angle \ac{bc} and elastic forces.
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/figure_24/figure_24.pdf}
+    \caption{
+        \label{fig_force_mem}
+        Forces exerted on the \acf{mem} and \ac{mem} inertial terms, for the dynamics of \cref{fig_fluid_mem_mem}. The Figure follows the same notation as \cref{fig_fluid_mem_mem}. \plab{A}-\plab{D}: Laplace, elastic and viscous force, and force exerted on \ac{mem} by the \acl{flu}, respectively, see \cref{eq_def_f_lap,eq_def_f_kap,eq_def_f_eta_n,def_force_norm}.
+        \plab{E} and \plab{F}: Inertial \ac{mem} terms, see \cref{eq_def_I_v,eq_def_I_w}.
+    }
+\end{figure*}
+
+%sign   
+
+As a future direction of this work, we plan to go beyond the partitioned approach by using a monolithic scheme, where the degrees of freedom of the \ac{mem}, \ac{flu} and \ac{dom} are solved for at the same time \cite{heilEfficientSolverFully2004}. For a monolithic scheme, no added-mass instability exists, allowing for a characterization of a broader range of physical regimes, e.g.,  deformation even larger  than that of \cref{fig_fluid_mem_mem}. This would allow for studying a large variaty of physically sensible scenarios, e.g., the formation of  spikes in lipid membranes \cite{simonActinDynamicsDrive2019}, and  membrane tubes \cite{derenyiFormationInteractionMembrane2002}.
+% 
+Another natural future direction is the extension to three dimensions. Importantly, such extension would require a two-dimensional generalization of the \ac{al} gauge for \ac{mem}, see \cref{sec_fl_mem_mem}. To achieve this, a natural parametrization would be the isothermal gauge \cite{carmoDifferentialGeometryCurves1976,worthmullerIRENEFluIdLayeR2025}. A time-dependent version of the isothermal gauge should then be worked out along the lines of the time-dependent \ac{al} gauge of \cref{sec_fl_mem_mem}.  This extension would allow for studying a large variety of additional phenomena, such non-axisymmetric, three-dimensional vesicle formation.

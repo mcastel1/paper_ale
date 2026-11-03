@@ -12,7 +12,7 @@ The geometry of \cref{fig_ref_cur_mem} may represent \ac{flu} being confined in 
 \label{sec_fl_mem_mem}
 
 Both the physical nature and mathematical description of \ac{mem} is significantly more complex than that of \ac{ela}. First, unlike \ac{ela}, \ac{mem} has a fluid structure: Its material elements can  flow tangentially to the \ac{mem} shape, which also moves subjected to  bending-rigidity forces, and to the force exerted on it by \ac{flu}.
-While the tangential motion is naturally suited to an Eulerian description \cite{landauFluidMechanics1987}, the shape motion---reminescent of that of an elastic body---is best described with a Lagrangian approach \cite{lacarbonaraNonlinearStructuralMechanics2013}.
+While the tangential motion is naturally suited to an Eulerian description \cite{landauFluidMechanics1987}, the shape motion---reminiscent of that of an elastic body---is best described with a Lagrangian approach \cite{lacarbonaraNonlinearStructuralMechanics2013}.
 Also, such shape motion needs to be connected to the Lagrangian approach used to describe \ac{dom}. Second, \ac{mem} is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}. From  the mathematical and numerical point of view, such \acp{pde} are significantly more complex than the second-order \acp{pde} which describe \ac{ela} \cite{worthmullerIRENEFluIdLayeR2025}. On top of this, from the physical standpoint, such fourth-order \acp{pde} require more  \acp{bc} than the second-order ones for \ac{ela}: Such \acp{bc} may specify a number of physical features of the \ac{mem} system, such as forces, positions, torques, or stresses.
 Third, the geometrical description of \ac{mem} requires fixing an appropriate \textit{gauge}.
 In fact, a general parametrization of \ac{mem} is given by two functions---the two Cartesian components of $\bxmemc(\xcoord^1)$. Both of these functions  depend on the curvilinear coordinate $\xcoord^1$ which is defined in the \ac{ref} domain of \ac{mem}, $\pomlineeqr$, see \cref{fig_ref_cur_mem}---note that here $\xcoord^i$ differs from the Cartesian coordinate $\xcartesian^\alpha$.
@@ -57,7 +57,7 @@ Finally, the \ac{mem} metric tensor is defined by  \cite{marchiafavaAppuntiDiGeo
 \be\label{eq_def_g}
 g_{ij} \equiv \bevec{i} \cdot \bevec{j}.
 \ee
-In what follows, latin indices $i, j, k, \cdots$ will be used to denote vectors and tensors related to the \ac{mem} manifold; their position as upper and lower indexes is thus important \cite{marchiafavaAppuntiDiGeometria2005}. Because the differential manifold of \ac{mem} is one dimensional, indexes $i, j, k, \cdots$ may take only one value, i.e., $i=j=k= \cdots=1$. However, in formal relations such as \cref{eq_def_g}, we will use the general notation $i, j, k, \cdots$  for the sake of  generality, and for potential extensions of such relations to two-dimensional manifolds \cite{desernoFluidLipidMembranes2015}.
+In what follows, Latin indices $i, j, k, \cdots$ will be used to denote vectors and tensors related to the \ac{mem} manifold; their position as upper and lower indexes is thus important \cite{marchiafavaAppuntiDiGeometria2005}. Because the differential manifold of \ac{mem} is one dimensional, indexes $i, j, k, \cdots$ may take only one value, i.e., $i=j=k= \cdots=1$. However, in formal relations such as \cref{eq_def_g}, we will use the general notation $i, j, k, \cdots$  for the sake of  generality, and for potential extensions of such relations to two-dimensional manifolds \cite{desernoFluidLipidMembranes2015}.
 \vspace{0.5cm}\\
 
 
@@ -71,14 +71,14 @@ where
 \label{eq_strees_tensor_fluid}
 \sigmastressc{\alpha}{\beta} \equiv \sigmafc \delta_{\alpha \beta}+ \eta_\fluid\left( \pderc{ \vfc^\alpha}{\beta} +\pderc{ \vfc^\beta}{\alpha}\right)
 \ee
-is the \ac{flu} stress tensor \cite{landauFluidMechanics1987} and $\normalc{}$ the unit normal to $\pomtopeqc$ pointing outside $\omc$, see \cref{fig_ref_cur_mem}.  In \cref{def_f_fluid_mem}, $\bsigmastressc$ is evaluated at the \ac{cur} coordinate $\bxmemc \in \pomtopeqc$ corresponding to $\xcoord^1$.
+is the \ac{flu} stress tensor \cite{landauFluidMechanics1987} and $\normalc{}$ the unit normal to $\pomtopeqc$ pointing outside $\omc$, see \cref{fig_ref_cur_mem}B.  In \cref{def_f_fluid_mem}, $\bsigmastressc$ is evaluated at the \ac{cur} coordinate $\bxmemc \in \pomtopeqc$ corresponding to $\xcoord^1$.
 %
 The components of the force \crefs{def_f_fluid_mem} tangential and normal to \ac{mem} are \cite{desernoFluidLipidMembranes2015}
 \begin{align}
     \label{def_force_tan}
     f_{\fluid\, \text{t}}^i(\bsigmastressc, \nu, \psi) & = g^{ij}(\nu) \evec{j}{\alpha}(\nu,\psi) f_\alpha(\bsigmastressc, \nu, \psi) \\
     \label{def_force_norm}
-    f_{\fluid\, \text{n}} (\bsigmastressc, \nu, \psi)  & = \normalc{\alpha}(\nu, \psi) f_\alpha(\bsigmastressc, \nu, \psi),
+    \fflun (\bsigmastressc, \nu, \psi)                 & = \normalc{\alpha}(\nu, \psi) f_\alpha(\bsigmastressc, \nu, \psi),
 \end{align}
 where in \cref{def_force_tan} we used the feature that the metric tensor depends on $\nu$ only, see \cref{eq_def_g,eq_intro_nu}.
 
@@ -89,15 +89,15 @@ The equations of motion for \ac{mem}  are \cite{worthmullerIRENEFluIdLayeR2025,a
 \bw
 \begin{align}
     \label{eq-dyn-continuity}
-    \nab_i \vmem{i} - 2 H \wmem                                                                              =               & 0,                                                                                                                                                                                     \\
+    \nab_i \vmem{i} - 2 H \wmem                                                                              =               & 0,                                                                                                                                                                      \\
     \label{eq-dyn-v}
-    \rhom \left( \pder{\vmem{i}}{t}+ \vmem{j} \nab_j \vmem{i}  - 2 \vmem{j} \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \fmemt^i + f_{\fluid\, \text{t}}^i,                                                                                                                                                    \\
+    \rhom \left( \pder{\vmem{i}}{t}+ \vmem{j} \nab_j \vmem{i}  - 2 \vmem{j} \wmem\, b^i_j - \wmem \nab^i \wmem \right)     = & \fmemt^i + f_{\fluid\, \text{t}}^i,                                                                                                                                     \\
     \label{eq-dyn-w}
-    \rhom \left[ \pder{\wmem}{t} + \vmem{i} ( \vmem{j} b_{ji} + \nabla_i \wmem  ) \right]                               =    & f_\lapl   +  f_\kap +                                                         \fetamemn+ f_{\fluid\, \text{n}}                                                                       , \\
+    \rhom \left[ \pder{\wmem}{t} + \vmem{i} ( \vmem{j} b_{ji} + \nabla_i \wmem  ) \right]                               =    & f_\lapl   +  f_\kap +                                                         \fetamemn+ \fflun                                                                       , \\
     \label{eq-dyn-dX}
-    \pder {\bumem}{t}                                                                                            =           & \wmem \, \normalc{},                                                                                                                                                                   \\
+    \pder {\bumem}{t}                                                                                            =           & \wmem \, \normalc{},                                                                                                                                                    \\
     \label{eq-dyn-dX1}
-    \pder {\umem^1}{x^1}                                                                                            =        & - \pder{\xmemr{1}}{\xcoord^1} + \nu \cos \psi,                                                                                                                                         \\
+    \pder {\umem^1}{x^1}                                                                                            =        & - \pder{\xmemr{1}}{\xcoord^1} + \nu \cos \psi,                                                                                                                          \\
     \label{eq-dyn-dX2}
     \pder {\umem^2}{x^1}                                                                                               =     & - \pder{\xmemr{2}}{\xcoord^1} -\nu \sin \psi,
 \end{align}
@@ -134,7 +134,7 @@ In \cref{\eqsmembrane}, $\rhom$, $\sigmam{}$, $\etam$ and $\kap$ are, respective
 \Cref{eq-dyn-v,eq-dyn-w} are the tangential and normal components of the \ac{ns} equations, respectively.
 The term $\fmemt$ in \cref{eq-dyn-v} represents the force on \ac{mem} elements induced by gradients of line tension and viscous effects, cf. \cref{eq_def_fmemt}, while $f_{\fluid\, \text{t}}$ is the force exerted on \ac{mem} elements by \ac{flu}.
 %
-In \cref{eq-dyn-w}, $f_\lapl$ constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004,landauFluidMechanics1987},  $f_\kap$  the resistance of \ac{mem} to bending \cite{helfrichElasticPropertiesLipid1973}, cf. \cref{eq_def_f_kap},  while $\fetamemn$ and $f_{\fluid\, \text{n}}$ are  the  normal components of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i} and of the force exerted by \ac{flu} on \ac{mem}, respectively.
+In \cref{eq-dyn-w}, $f_\lapl$ constitutes Laplace pressure \cite{degennesCapillarityWettingPhenomena2004,landauFluidMechanics1987},  $f_\kap$  the resistance of \ac{mem} to bending \cite{helfrichElasticPropertiesLipid1973}, cf. \cref{eq_def_f_kap},  while $\fetamemn$ and $\fflun$ are  the  normal components of the viscous force resulting from in-membrane flows \cite{arroyoRelaxationDynamicsFluid2009i} and of the force exerted by \ac{flu} on \ac{mem}, respectively.
 %
 \Cref{eq-dyn-dX} is the time-evolution equation for the \ac{mem} shape, which moves according to the normal $\normalc{}$, and it has been obtained from  \cref{eq_u_mem}.
 We observe that the \ac{mem} shape velocity, $\partial \bumem / \partial t$, coincides with the normal displacement velocity of \ac{mem}, but  it is independent of the tangential flow velocity $\bvmem{}$ of \ac{mem} elements along the \ac{mem} shape.
@@ -143,7 +143,7 @@ This implies that the \ac{mem} shape and \ac{flu} motions allowing for a slip \c
 Finally, \cref{eq-dyn-dX1,eq-dyn-dX2} re-express the definitions of $\nu$ and $\psi$, and  they result from \cref{def_nu_psi_1,def_nu_psi_2,eq_def_e,eq_u_mem}, and from the fact that the \ac{ref} shape $\bxmemr$ is independent of time.
 
 
-For future reference, we define the inertial terms \cite{landauFluidMechanics1987} in \cref{eq-dyn-w} as follows:
+For future reference, we define the inertial terms \cite{landauFluidMechanics1987} in  the \ac{lhs} of \cref{eq-dyn-w} as follows:
 \begin{align}
     \label{eq_def_I_v}
     I_v & \equiv  \rhom \vmem{i}  \vmem{j} b_{ji}, \\
@@ -244,10 +244,12 @@ We impose the following \acp{bc} for  \cref{\eqsdom}:
     \includegraphics[width=\columnwidth,height=0.55\textheight,keepaspectratio]{figures/figure_9/figure_9.pdf}
     \caption{
         \label{fig_ref_cur_mem}
-        \Ac{ref} and \ac{cur} configuration for the interaction between a  \acf{flu} and a \acf{mem}.
-        The Figure follows the same notation as \cref{fig_ref_curr_rigid}, and it represents a vertical channel with mirror symmetry about its mid axis, which coincides with \pomout; the right, mirrored part of the channel is not shown.
+        \Acf{ref} and \acf{cur} configuration for the interaction between a  \acf{flu} and a \acf{mem}.
+        The Figure follows the same notation as \cref{fig_ref_curr_rigid}, and it represents a vertical channel with mirror symmetry about its mid axis, which coincides with \pomout; the right, mirrored part of the channel is not shown, cf. \cref{fig_fluid_mem_mem}A.
         The top edge of the \ac{flu} mesh, $\pomtopeqr$, coincides with the one-dimensional  manifold $\omlineeqr$ of \ac{mem}.
-        The bottom-left point of the \ac{flu} domain $\pomleftbottomeqc$ (brown cross), is  marked in both the \ac{ref} and \ac{cur} configuration. The \ac{mem} profile is purposedly, strongly deformed without remeshing in order to illustrate mesh deformation.
+        The bottom-left point of the \ac{flu} domain $\pomleftbottomeqc$ (brown cross), is  marked in both the \ac{ref} and \ac{cur} configuration.
+        The \ac{mem} profile is purposely, strongly deformed without remeshing in order to illustrate mesh deformation.
+        The unit normals in the \ac{ref} and \ac{cur} configuration, $\normalr{}$ and $\normalc{}$, respectively, are also shown, and  their plotted length has been adjusted for clarity.
     }
 \end{figure}
 
@@ -330,7 +332,7 @@ Finally, we discuss \cref{bc_fl_membrane_6_current}. Let us consider the overall
 \be \label{eq_translation_sigma}
 \sigmafc \rightarrow \sigmafc + C,
 \ee
-where $C$ is independent of $\bxc$. The only components of the \ac{bvp} which break its invariance with respect to \cref{eq_translation_sigma} are the \acp{rhs} of \cref{eq-dyn-v,eq-dyn-w}, where $f_{\fluid\, \text{t}}$ and $f_{\fluid\, \text{n}}$ depend on the absolute value of $\sigmafc$, see \cref{def_force_tan,def_force_norm,def_f_fluid_mem,eq_strees_tensor_fluid}. All the remaining equations in the \ac{bvp} depend on $\sigmafc$ through its derivatives only, and are thus invariant with respect to  \cref{eq_translation_sigma}.
+where $C$ is independent of $\bxc$. The only components of the \ac{bvp} which break its invariance with respect to \cref{eq_translation_sigma} are the \acp{rhs} of \cref{eq-dyn-v,eq-dyn-w}, where $f_{\fluid\, \text{t}}$ and $\fflun$ depend on the absolute value of $\sigmafc$, see \cref{def_force_tan,def_force_norm,def_f_fluid_mem,eq_strees_tensor_fluid}. All the remaining equations in the \ac{bvp} depend on $\sigmafc$ through its derivatives only, and are thus invariant with respect to  \cref{eq_translation_sigma}.
 
 By pinning the \ac{flu} pressure to the point $\pomleftbottomeqc$, we  thus tune the force exerted by \ac{flu} on \ac{mem}. We chose the pinned value, $\sigmafleftbottomc$, in such a way that the amount of \ac{flu} matter  per unit time which flows into $\omc$ through \pombottomc{} is equal to the amount of \ac{flu} matter per unit time which flows through \pomtopc. This condition is expressed by \cref{bc_fl_membrane_7_current}, and it physically reflects of the known role of pressure as Lagrange multiplier enforcing mass conservation.
 
@@ -467,7 +469,7 @@ We discretize \cref{eq-dyn-v,eq-dyn-w,eq-dyn-continuity,eq-dyn-dX,eq-dyn-dX1,eq-
     \label{eq_mem_flu_disc_2}
     \rhom \left( \frac{\wmem^n - \wmem^{n-1}}{\deltat} + \vmem{n-1,\, i} \vmem{n-1,\, j} b^\nmhalf_{ji} + \frac{3}{2} \vmem{n-1, \, i}  \nab^\nmhalf_i \wmem^{n-1}  - \frac{1}{2} \vmem{n-2, \, i}  \nab^\nmhalf_i \wmem^{n-2} \right)                       & =\newlinenn
     f_\lapl(\sigmam{\nmhalf}, \nu^\nmhalf,\psi^\nmhalf) + f_\kap(\nu^\nmhalf,\psi^\nmhalf)  + \fetamemn     \left( \frac{\bvmem{n} + \bvmem{n-1}}{2}, \frac{\wmem^n + \wmem^{n-1}}{2}, \nu^\nmhalf, \psi^\nmhalf\right) + \newlinenn
-    f_{\fluid\, \text{n}} ({\bsigmastressr}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                          &\end{align}
+    \fflun ({\bsigmastressr}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf),                                                                                                                                                         &\end{align}
 \ew
 
 \begin{align}
@@ -533,7 +535,7 @@ Following the \ac{ipcs} scheme,  in what follows we will split the \ac{bvp} abov
             \label{eq_fl_mem_mem_disc_2}
             \rhom \left[ \frac{\wbarmem - \wmem^{n-1}}{\deltat} + \Vmem^i \Vmem^j b^\nmhalf_{ji} + \left( \frac{3}{2} \vmem{n-1, \, i} - \frac{1}{2}\vmem{n-2,\,i}\right) \nab^\nmhalf_i \Wmem \right]                                                              & =\newlinenn
             f_\lapl(\sigmamast, \nu^\nmhalf,\psi^\nmhalf) + f_\kap(\nu^\nmhalf,\psi^\nmhalf)  + \fetamemn      (\bVmem, \Wmem, \nu^\nmhalf, \psi^\nmhalf) + \newlinenn
-            f_{\fluid\, \text{n}} ({\bsigmastressr}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf)                                                                                                                                          & ,
+            \fflun ({\bsigmastressr}(\bvfr{n}, \sigmafr{\nmhalf}, \budom^{n-1}), \nu^\nmhalf, \psi^\nmhalf)                                                                                                                                                         & ,
         \end{align}
         \ew
         where we have set
@@ -590,17 +592,17 @@ The \acp{bc} for \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_d
 \bw
 \begin{align}
     \label{bc_fl_mem_mem_1_disc}
-    \normalmem^\nmhalf_j \Pi^{ij}\left( \bVmem,\Wmem, \sigmamast, \nu^\nmhalf, \psi^\nmhalf \right) & = 0 \text{ on } \pomlineineqr              \\
+    \normalmem^\nmhalf_j \Pi^{ij}( \bVmem,\Wmem, \sigmamast, \nu^\nmhalf, \psi^\nmhalf ) & = 0 \text{ on } \pomlineineqr              \\
     \label{bc_fl_mem_mem_2_disc}
-    \vbarmem^i                                                                                      & = 0 \text{ on } \pomlineouteqr,            \\
+    \vbarmem^i                                                                           & = 0 \text{ on } \pomlineouteqr,            \\
     \label{bc_fl_mem_mem_3_disc}
-    \wbarmem                                                                                        & = 0 \text{ on } \pomlineineqr,             \\
+    \wbarmem                                                                             & = 0 \text{ on } \pomlineineqr,             \\
     \label{bc_fl_mem_mem_4_disc}
-    \nab^\nmhalf_i \wbarmem                                                                         & = 0 \text{ on } \pomlineouteqr,            \\
+    \nab^\nmhalf_i \wbarmem                                                              & = 0 \text{ on } \pomlineouteqr,            \\
     \label{bc_fl_mem_mem_5_disc}
-    \phimem                                                                                         & = 0 \text{ on } \pomlineineqr,             \\
+    \phimem                                                                              & = 0 \text{ on } \pomlineineqr,             \\
     \label{bc_fl_mem_mem_6_disc}
-    \normalmem^\nmhalf_i  \nab^{\nmhalf, \, i} \phimem                                              & = 0 \text{ on } \pomlineouteqr, \newlinenn
+    \normalmem^\nmhalf_i  \nab^{\nmhalf, \, i} \phimem                                   & = 0 \text{ on } \pomlineouteqr, \newlinenn
     \crefineq{bc_fl_mem_mem_6_disc_bis,bc_fl_mem_mem_7_disc_bis,bc_fl_mem_mem_8_disc_bis}.
 \end{align}
 \ew
