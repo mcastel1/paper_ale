@@ -105,6 +105,31 @@ snapshot_min, snapshot_max = sys_utils.n_min_max('line_mesh_n_', snapshot_path)
 number_of_frames = snapshot_max - snapshot_min + 1
 
 
+if parameters['mode'] == 'animation':
+    # I am plotting the animaition -> select min and max as the global min and max across files
+
+    # f_el
+    data_f_el = pd.read_csv(os.path.join(snapshot_path, f'f_el_n_12_{parameters['colorbar_f_el_sample_snapshot']}.csv'))
+    interior = (data_f_el.sort_values(':0'))['f'].iloc[parameters['f_el_margin']:-parameters['f_el_margin']]
+    f_el_min_max = [interior.min(), interior.max()]
+
+
+    # f_lap
+    f_lap_min_max = cal.min_max_file(
+                       os.path.join(solution_path + f'snapshots/csv/f_lap_n_12_{parameters['colorbar_f_lap_sample_snapshot']}.csv')
+                       )
+
+    # f_fl
+    f_fl_min_max = cal.min_max_file(
+                       os.path.join(solution_path + f'snapshots/csv/f_fl_n_12_{parameters["colorbar_f_fl_sample_snapshot"]}.csv')
+                       )
+   
+    #f_vis
+    f_vis_min_max = cal.min_max_file(
+                       os.path.join(solution_path + f'snapshots/csv/f_vis_n_n_{parameters["colorbar_f_vis_sample_snapshot"]}.csv')
+                       )
+
+
 
 sys_utils.check_strides(parameters['frame_stride'], solution_parameters['print_out_stride'])
 
@@ -157,13 +182,12 @@ h = lis.min_max(Y)[1]
 
 def plot_snapshot(fig, n_file,
                   snapshot_label='',
-                  axis_min_max=None,
-                  f_el_min_max=None,
-                  f_lap_min_max=None,
-                  f_vis_min_max=None,
-                  f_fl_min_max=None):
+                  axis_min_max=None):
 
     n_file_string = str(n_file)
+
+    global f_el_min_max, f_fl_min_max, f_vis_min_max, f_lap_min_max
+
 
     # load data
     # data_el_line_vertices = pd.read_csv(solution_path + 'snapshots/csv/line_mesh_el_n_' + str(n_file) + '.csv')
@@ -218,19 +242,38 @@ def plot_snapshot(fig, n_file,
 
 
 
-    if f_el_min_max == None:
-        # f_el_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_el_n_12_' + str(n_file) + '.csv'))
-        interior = data_f_el.sort_values(':0')['f'].iloc[parameters['f_el_margin']:-parameters['f_el_margin']]
+    # if f_el_min_max == None:
+    #     # f_el_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_el_n_12_' + str(n_file) + '.csv'))
+    #     interior = data_f_el.sort_values(':0')['f'].iloc[parameters['f_el_margin']:-parameters['f_el_margin']]
+    #     f_el_min_max = [interior.min(), interior.max()]
+
+    # if f_lap_min_max == None:
+    #     f_lap_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_lap_n_12_' + str(n_file) + '.csv'))
+
+    # if f_fl_min_max == None:
+    #     f_fl_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_fl_n_12_' + str(n_file) + '.csv'))
+
+    # if f_vis_min_max == None:
+    #     f_vis_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_vis_n_n_' + str(n_file) + '.csv'))
+
+    if parameters['mode'] == 'figure':
+    # I am plotting the figure -> select min and max according to the current frame 
+
+        # f_el
+        interior = (data_f_el.sort_values(':0'))['f'].iloc[parameters['f_el_margin']:-parameters['f_el_margin']]
         f_el_min_max = [interior.min(), interior.max()]
 
-    if f_lap_min_max == None:
-        f_lap_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_lap_n_12_' + str(n_file) + '.csv'))
+        # f_lap
+        f_lap_min_max = cal.min_max_file(os.path.join(snapshot_path, f'f_lap_n_12_{n_file}.csv'))
 
-    if f_fl_min_max == None:
-        f_fl_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_fl_n_12_' + str(n_file) + '.csv'))
+        # f_fl
+        f_fl_min_max = cal.min_max_file(os.path.join(snapshot_path, f'f_fl_n_12_{n_file}.csv'))
 
-    if f_vis_min_max == None:
-        f_vis_min_max = cal.min_max_file(os.path.join(snapshot_path, 'f_vis_n_n_' + str(n_file) + '.csv'))
+        # f_vis
+        f_vis_min_max = cal.min_max_file(os.path.join(snapshot_path, f'f_vis_n_n_{n_file}.csv'))
+   
+
+
 
 
 
@@ -528,9 +571,10 @@ plot_snapshot(fig, snapshot_max,
 # plot_snapshot(fig, parameters['snapshot_to_plot'],
 #               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['N'], 'min_s', 0))
 
-# keep this also for the animation: it allows for setting the right dimensions to the animation frame
-plt.savefig(figure_path + '_large.pdf')
-os.system(
-    f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf')
 
-# pplt.show()
+if parameters['mode'] == 'figure':
+
+    plt.savefig(figure_path + '_large.pdf')
+    os.system(
+        f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf')
+

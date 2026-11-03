@@ -13,10 +13,8 @@ animation_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'anima
 print(f'snapshot_path = {plot.snapshot_path}')
 
 
-# compute absolute minima and maxima across snapshots
-norm_v_min_max_abs = cal.norm_min_max_files('v_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'], scalar=True)
 
-axis_min_max_abs = cal.X_curr_min_max_abs(
+axis_min_max_abs = cal.X_cur_min_max_abs(
                                             plot.snapshot_min, 
                                             plot.snapshot_max, 
                                             plot.parameters['frame_stride'],
@@ -24,13 +22,6 @@ axis_min_max_abs = cal.X_curr_min_max_abs(
                                             [[0, plot.mesh_parameters['L']], [0, plot.h]],
                                             plot.parameters['n_bins_u']
                                         )
-
-
-norm_v_fl_min_max_abs = cal.norm_min_max_files('def_v_fl_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
-f_vis_min_max_abs = cal.min_max_files('f_vis_n_', plot.snapshot_path, plot.snapshot_min, plot.snapshot_max, plot.parameters['frame_stride'])
-
- 
-
 
 
 animation_duration_in_sec = (plot.number_of_frames / plot.parameters['frame_stride']) / plot.parameters['frames_per_second']
@@ -66,13 +57,10 @@ def update_animation(n):
     text.clear_labels_with_patterns(plot.fig, ["\\second", "\\msecond", "\\minute", "\\hour", "\\met"])
 
     plot.plot_snapshot(plot.fig, n, 
-                    snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.solution_parameters['T'] / plot.solution_parameters['N'], 'min_s', plot.parameters['n_decimals_snapshot_label']),
-                    norm_v_min_max=norm_v_min_max_abs,
-                    norm_v_fl_min_max=norm_v_fl_min_max_abs,
-                    f_vis_min_max=f_vis_min_max_abs
+                    snapshot_label=rf'$t = \,$' + io.time_to_string(n * plot.solution_parameters['T'] / plot.solution_parameters['N'], 'min_s', plot.parameters['n_decimals_snapshot_label'])
                     )
 
-    # garbace collection to avoid memory leaks
+    # garbage collection to avoid memory leaks
     gc.collect()
 
 
