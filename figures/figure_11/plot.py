@@ -29,23 +29,28 @@ cp ~/Documents/work/manuscripts/paper_ale/figures/figure_11/solution_parameters.
 
 - to copy from local
 
-OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
-rm -rf $OUTPUT_PATH/solution
-cp ~/Documents/finite_elements/generate_mesh/2d/square/polygon/mesh_parameters.csv $OUTPUT_PATH
-cp -r /Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/solution $OUTPUT_PATH
+    OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
+    rm -rf $OUTPUT_PATH/solution
+    cp ~/Documents/finite_elements/generate_mesh/2d/square/polygon/mesh_parameters.csv $OUTPUT_PATH
+    cp -r /Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh/solution $OUTPUT_PATH
 
 - to copy from abacus
 
-INPUT_PATH="rigid_obstacle_remesh_1"
-OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
-STRIDE="100"
-cd $OUTPUT_PATH/../
-rm -rf $OUTPUT_PATH/solution
-./copy_from_abacus.sh $INPUT_PATH/solution/snapshots/csv 'line_mesh_n_*' 'def_v_n_*' 'u_n_*' 'def_sigma_n_12_*' 'boundary_points_id_6_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
-rsync -avr mcastel1@abacus:$INPUT_PATH/mesh/mesh_parameters.csv $OUTPUT_PATH
-rsync -avr mcastel1@abacus:$INPUT_PATH/solution/solution_metadata.csv $OUTPUT_PATH/solution
-rsync -avr mcastel1@abacus:$INPUT_PATH/solution/theta_omega.csv $OUTPUT_PATH/solution
-rsync -avr mcastel1@abacus:$INPUT_PATH/solution/remesh.csv $OUTPUT_PATH/solution
+    INPUT_PATH="rigid_obstacle_remesh_1"
+    OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
+    STRIDE="100"
+    cd $OUTPUT_PATH/../
+    rm -rf $OUTPUT_PATH/solution
+    ./copy_from_abacus.sh $INPUT_PATH/solution/snapshots/csv 'line_mesh_n_*' 'def_v_n_*' 'u_n_*' 'def_sigma_n_12_*' 'boundary_points_id_6_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
+    rsync -avr mcastel1@abacus:$INPUT_PATH/mesh/mesh_parameters.csv $OUTPUT_PATH
+    rsync -avr mcastel1@abacus:$INPUT_PATH/solution/solution_metadata.csv $OUTPUT_PATH/solution
+    rsync -avr mcastel1@abacus:$INPUT_PATH/solution/theta_omega.csv $OUTPUT_PATH/solution
+    rsync -avr mcastel1@abacus:$INPUT_PATH/solution/remesh.csv $OUTPUT_PATH/solution
+
+- to copy data to reproduce this figure
+
+    cp figures/figure_11/solution_parameters.csv ~/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/parameters_bc_square_polygon.csv 
+    cp figures/figure_11/mesh_parameters.csv ~/Documents/finite_elements/generate_mesh/2d/square/polygon/mesh_parameters.csv 
 
 '''
 
