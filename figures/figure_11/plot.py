@@ -85,21 +85,20 @@ plt.rcParams.update({
     "text.latex.preamble": preamble,
 })
 
-'''
+
 # 1. read data from local folder
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'solution')
 
-'''
 
+'''
 # 2. read data from external folder
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/polygon')
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle', 'solution')
-
+'''
 
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_parameters.csv'))
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
-
 
 
 if parameters['animation_frame_stride'] % solution_parameters['print_out_stride'] != 0:
@@ -140,8 +139,7 @@ v_colorbar_axis = fig.add_axes([parameters['v_colorbar_position'][0],
 
 def plot_snapshot(fig, n_file,
                   snapshot_label='',
-                  norm_v_min_max=None,
-                  sigma_min_max=None):
+                  norm_v_min_max=None):
 
 
     global _colorbar_initialized
@@ -154,7 +152,7 @@ def plot_snapshot(fig, n_file,
     snapshot_path, 'boundary_points_id_' + str(parameters['polygon_loop_id']) + f'_n_{n_snapshot}.csv'))
 
     data_v = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_v_n_' + n_snapshot + '.csv'))
-    data_sigma = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv'))
+    # data_sigma = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/def_sigma_n_12_' + n_snapshot + '.csv'))
     data_u = pd.read_csv(os.path.join(solution_path, 'snapshots/csv/nodal_values/u_n_' + n_snapshot + '.csv'))
 
     # plot snapshot label
@@ -263,8 +261,10 @@ def plot_snapshot(fig, n_file,
         color=parameters['polygon_angle_axis_color'],
         linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
-        zorder=const.high_z_order
+        zorder=const.high_z_order,
+        autoreverse=False
     )
+
     # 2) plot moving axis
     delta = np.dot(
         gr.R_2d(data_theta_omega.loc[int(
@@ -278,7 +278,8 @@ def plot_snapshot(fig, n_file,
         color=parameters['polygon_angle_axis_color'],
         linewidth=parameters['mesh_line_width_curr_plot'],
         linestyle='--',
-        zorder=const.high_z_order
+        zorder=const.high_z_order,
+        autoreverse=False
     )
 
     theta_arc = Arc(pivot_point_position,
