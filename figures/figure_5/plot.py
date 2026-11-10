@@ -55,7 +55,6 @@ parameters = io.read_parameters_from_csv_file(os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
 
 
-
 preamble = pre.figure_preamble([
             paths.definitions_path, 
             paths.latex_module_definitions_path,

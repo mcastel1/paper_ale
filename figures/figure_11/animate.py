@@ -27,13 +27,7 @@ norm_v_min_max_abs = cal.min_max_interpolated_vector_field(
     [[0, 0], [plot.mesh_parameters['L'], plot.mesh_parameters['h']]]
 )
 
-# sigma_min_max_abs = cal.min_max_files(
-#                 'def_sigma_n_12_',
-#                 os.path.join(plot.solution_path + 'snapshots/csv/nodal_values'),
-#                 plot.snapshot_min + plot.parameters['colorbar_sigma_snapshot_min_offset'],
-#                 plot.snapshot_max,
-#                 plot.parameters['animation_frame_stride']
-#                  )
+
 
 
 # the first frame may have z == 0 for all bins, which creates problems when plotted (division by zero), thus you may want to start with a frame > 1
@@ -63,7 +57,7 @@ def update_animation(n):
         txt.remove()
 
     text.clear_labels_with_patterns(
-        plot.fig, ["\second", "\msecond", "\minute", "\hour", "\pas"])
+        plot.fig, [r"\second", r"\msecond", r"\minute", r"\hour", r"\pas"])
 
     plot.plot_snapshot(
         plot.fig,

@@ -15,6 +15,7 @@ import graphics.utils as gr
 import graphics.vector_plot as vp
 import input_output.utils as io
 import list.column_labels as clab
+import preambles.utils as pre
 import system.paths as paths
 import system.utils as sys_utils
 
@@ -66,26 +67,23 @@ warnings.filterwarnings(
 
 pplt.rc['grid'] = False  # disables default gridlines
 
-plt.rcParams.update({
-    "text.usetex": True,
-    "text.latex.preamble": (
-        r"\usepackage{newpxtext,newpxmath} "
-        r"\usepackage{xcolor} "
-        r"\usepackage{glossaries} "
-        r"\usepackage{graphicx} "
-        r"\usepackage{tikz} "
-        rf"\input{{{paths.definitions_path}}}"
-        rf"\input{{{os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../definitions.tex')}}}"
-    )
-})
-
-
-
-
-print("Current working directory:", os.getcwd())
-print("Script location:", os.path.dirname(os.path.abspath(__file__)))
 
 parameters = io.read_parameters_from_csv_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'parameters.csv'))
+
+preamble = pre.figure_preamble([
+            paths.definitions_path, 
+            paths.latex_module_definitions_path,
+            paths.ale_definitions_path,
+            os.path.join(os.path.dirname(os.path.abspath(__file__)), 
+            '../../definitions.tex')
+        ])
+
+plt.rcParams.update({
+    "pgf.texsystem": "pdflatex",
+    "pgf.preamble": preamble,
+    "text.usetex": True,
+    "text.latex.preamble": preamble,
+})
 
 '''
 # 1. read data from local folder
@@ -96,7 +94,7 @@ solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'soluti
 
 # 2. read data from external folder
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/polygon')
-solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/remesh', 'solution')
+solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle', 'solution')
 
 
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_parameters.csv'))
@@ -232,6 +230,7 @@ def plot_snapshot(fig, n_file,
         gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1], parameters['v_colorbar_position'], parameters['v_colorbar_size'],
                             label=parameters['v_colorbar_axis_label'],
                             font_size=parameters['v_colorbar_font_size'],
+                            tick_n_bins=parameters['colorbar_n_bins'],
                             tick_length=parameters['v_colorbar_tick_length'],
                             label_pad=parameters['v_colorbar_label_offset'],
                             tick_label_offset=parameters['v_colorbar_tick_label_offset'],
@@ -413,7 +412,7 @@ def plot_snapshot(fig, n_file,
 # plot_snapshot(fig, parameters['snapshot_to_plot'],
 #               snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', 0))
 plot_snapshot(fig, snapshot_max,
-              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', 0))
+              snapshot_label=rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] * solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_digits_snapshoc_label']))
 
 # keep this also for the animation: it allows for setting the right dimensions to the animation frame
 plt.savefig(figure_path + '_large.pdf')
