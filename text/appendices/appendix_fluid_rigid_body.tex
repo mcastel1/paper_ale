@@ -17,9 +17,9 @@ The dynamics of  \ac{bod} is given by the equations of motion for a rigid body w
         \omega & \equiv \der{\theta}{t}.
 \end{align}
 \Cref{eq_fl_rigid_rigid_current_1} relates the angular acceleration of \ac{bod} to the torque of external forces.
-The moment of inertia of \ac{bod} is denoted by $I$. The \ac{rhs} of \cref{eq_fl_rigid_rigid_current_1} contains the line integral along the boundary of \ac{bod}, of the torque of the local force exerted by  \ac{flu} on  \ac{bod} with respect to the left focal point $\bfocalpoint$ of \ac{bod} \cite{landauFluidMechanics1987}, and   $\normalc{}$ is the normal to \pomellipsec pointing towards $\omc$.
+The moment of inertia of \ac{bod} is denoted by $I$. The \ac{rhs} of \cref{eq_fl_rigid_rigid_current_1} contains the line integral along the boundary of \ac{bod}, of the torque of the local force exerted by  the fluid on  \ac{bod} with respect to the left focal point $\bfocalpoint$ of \ac{bod} \cite{landauFluidMechanics1987}, and   $\normalc{}$ is the normal to \pomellipsec pointing towards $\omc$.
 
-This force is expressed in terms of the \ac{flu} stress tensor \cite{landauFluidMechanics1987} in \ac{cur} coordinates $\bsigmastressc$, given by \cref{eq_strees_tensor_fluid}, where $\etaf$ and $\rhof$ are the two-dimensional viscosity and density of \ac{flu}, respectively.
+This force is expressed in terms of the fluid stress tensor \cite{landauFluidMechanics1987} in \ac{cur} coordinates $\bsigmastressc$, given by \cref{eq_strees_tensor_fluid}, where $\etaf$ and $\rhof$ are the two-dimensional viscosity and density of the fluid, respectively.
 Also, $\epsilon_{\alpha \beta \gamma}$ is the three-dimensional Levi-Civita symbol.
 Finally,   $\dint{l_\current}$ is the line element of \pomellipsec in the \ac{cur} configuration, and $\bnormalc$ the unit boundary normal to \pomellipsec pointing outside $\omc$.
 
@@ -43,7 +43,7 @@ In \cref{eq_fl_rigid_rigid_reference}, the integral in the \ac{rhs} is over the 
 
 \subsection{Fluid motion}\label{sec_rigid_body_fl}
 
-In this Section, we will work out the equations of motion for \ac{flu}.
+In this Section, we will work out the equations of motion for the fluid.
 
 \subsubsection{Equations of motion in the \acl{cur}-configuration coordinates}\label{sec_rigid_body_fl_cur}
 
@@ -68,8 +68,8 @@ The \acp{bc} for \cref{\eqsbfluc,eq_fl_rigid_rigid_current_1,eq_fl_rigid_rigid_c
         \label{bc_fl_rigid_6_current}
         \sigmafc (\bxc)               & = 0 \; \text{ on } \pomouteqc.
 \end{align}
-\Cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current} ensure that \ac{flu} is injected on the boundary \pominc{} in a direction parallel to the $\xc[1]$ axis, and \cref{bc_fl_rigid_3_current} is a no-slip \ac{bc} \cite{landauFluidMechanics1987} along the channel walls \pomwc, see \cref{fig_ref_curr_rigid}.
-\Cref{bc_fl_rigid_4_current} ensures that, at the boundary \pomellipsec,  the \ac{flu} velocity matches the rotational velocity of \ac{bod}. Given that \ac{bod} can only rotate about its left focal point $\bfocalpoint$, the \ac{bod} rotational velocity of a point $\bxc \in \pomellipseeqc$ is given by
+\Cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current} ensure that the fluid is injected on the boundary \pominc{} in a direction parallel to the $\xc[1]$ axis, and \cref{bc_fl_rigid_3_current} is a no-slip \ac{bc} \cite{landauFluidMechanics1987} along the channel walls \pomwc, see \cref{fig_ref_curr_rigid}.
+\Cref{bc_fl_rigid_4_current} ensures that, at the boundary \pomellipsec,  the fluid velocity matches the rotational velocity of \ac{bod}. Given that \ac{bod} can only rotate about its left focal point $\bfocalpoint$, the \ac{bod} rotational velocity of a point $\bxc \in \pomellipseeqc$ is given by
 \be
 \der{[R(\theta)]_{\alpha \beta}}{t}[\psi^{t \, \beta}(\bxc) - c_\beta],
 \ee
@@ -112,7 +112,7 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
 \label{sec_eq_fluid_domain}
 
 
-The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\budom$, which describes how the region---or domain---which contains \ac{flu}, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region as the  \ac{dom}.
+The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\budom$, which describes how the region---or domain---which contains the fluid, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region as the  \ac{dom}.
 We observe that this field has, so far, been left arbitrary, and we have the freedom to choose it.
 
 Here, $\budom$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as \ac{bod} rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium. We will determine $\budom$ as the solution of a \ac{bvp} given by the  elastic model \crefs{eq_mesh_fluid_rigid}, see \cref{sec_fl_mem_dom} for details.
@@ -156,7 +156,7 @@ determine the dynamics of the system.
 
 To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discretize time by setting $\deltat \equiv T/N$, $t_n \equiv n\, \deltat$, with $n = 0, 1, \cdots, N$.
 
-We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for \ac{bod}, \ac{flu} and \ac{dom}---see below.
+We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for \ac{bod}, the fluid and \ac{dom}---see below.
 
 \subsubsection{\Acl{bod}}
 
@@ -181,7 +181,7 @@ where in \cref{eq_fl_rigid_rigid_reference_disc} we used \cref{eq_def_u,eq_def_p
 \subsubsection{\Acl{flu}}
 \label{sec_splitting_scheme_fl_rig_fl}
 
-To discretize in time the \ac{flu} problem, we will apply the \ac{cn} splitting scheme \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} to the \ac{ns} equations \crefs{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} in the \ac{ref} configurations. This splitting scheme is derived form the \acl{ipcs} \cite{godaMultistepTechniqueImplicit1979}, in which the solution of the \ac{ns} equations is split into three intermediate steps. In what follows, we will synonymously use the terms `pressure' and `surface tension'  for conciseness \cite{worthmullerIRENEFluIdLayeR2025}.
+To discretize in time the fluid problem, we will apply the \ac{cn} splitting scheme \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} to the \ac{ns} equations \crefs{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} in the \ac{ref} configurations. This splitting scheme is derived form the \acl{ipcs} \cite{godaMultistepTechniqueImplicit1979}, in which the solution of the \ac{ns} equations is split into three intermediate steps. In what follows, we will synonymously use the terms `pressure' and `surface tension'  for conciseness \cite{worthmullerIRENEFluIdLayeR2025}.
 
 The discrete form of the \acp{pde} \cref{eq_fl_rigid_fl_1_reference,eq_fl_rigid_fl_2_reference} is
 \bw
@@ -293,7 +293,7 @@ The discrete version of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_
         \budomdot  ^n & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr.
 \end{align}\\
 
-We can now iterate in time for the ensemble of fields  of the \ac{flu}-\ac{bod} system as follows.
+We can now iterate in time for the ensemble of fields  of the fluid-\ac{bod} system as follows.
 At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
 \begin{enumerate}
         \titleditem{Update \ac{bod}}{ \label{fl_rigid_step_1}
@@ -302,7 +302,7 @@ At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{
         \titleditem{Update \ac{dom}}{ \label{fl_rigid_step_2}
                 Solve  the \acp{bvp} \crefs{eq_domain_fluid_rigid_disc,bc_ela_1_disc,bc_ela_2_disc,eq_domain_fluid_rigid_disc_dot,bc_ela_1_disc_dot,bc_ela_2_disc_dot} for $\budom^n$ and $\budomdot^n$.
         }
-        \titleditem{Update \ac{flu}}{
+        \titleditem{Update the fluid}{
                 \label{fl_rigid_step_3}
                 Solve the \acp{bvp} \crefs{eq_fl_rigid_fl_1_reference_disc_aux,bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_4_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux} and \crefs{eq_phi_2,bc_phi_1,bc_phi_2}  for $\bvbarf$ and $\sigmafr{\nmhalf}$, and obtain $\bvfr{n}$ from \cref{eq_phi_1}.
         }
@@ -316,7 +316,7 @@ The fields ${\bm \vfc}^{n-1}$, $\sigmafc^{\nmthalf}$ in the \ac{cur} configurati
 \subsection{Characteristic time scale}
 \label{sec_fluid_rigid_timescale}
 
-As shown in \cref{fig_fluid_rigid_timescale}, the dynamics of \cref{fig_fluid_rigid} involves a characteristic time scales $\tbody$, i.e., the period of the angular oscillations of \ac{bod}. This time scale can be estimated by considering the dynamical equation \crefs{eq_fl_rigid_rigid_current_1} for \ac{bod}, and approximating its \ac{lhs} as $I / \tbody^2$ and its \ac{rhs} as $ (\etaf v_0 /a \, 2 \pi a) a$. Here,  $\etaf v_0 /a$ is the viscous component of the force per unit length exerted by \ac{flu} on \ac{bod}, cf. \cref{eq_strees_tensor_fluid}, $2 \pi a$ estimates the total length of the boundary of \ac{bod}, and $a$ approximates the lever arm of the force above. Putting everything together, we obtain
+As shown in \cref{fig_fluid_rigid_timescale}, the dynamics of \cref{fig_fluid_rigid} involves a characteristic time scales $\tbody$, i.e., the period of the angular oscillations of \ac{bod}. This time scale can be estimated by considering the dynamical equation \crefs{eq_fl_rigid_rigid_current_1} for \ac{bod}, and approximating its \ac{lhs} as $I / \tbody^2$ and its \ac{rhs} as $ (\etaf v_0 /a \, 2 \pi a) a$. Here,  $\etaf v_0 /a$ is the viscous component of the force per unit length exerted by the fluid on \ac{bod}, cf. \cref{eq_strees_tensor_fluid}, $2 \pi a$ estimates the total length of the boundary of \ac{bod}, and $a$ approximates the lever arm of the force above. Putting everything together, we obtain
 \be
 \label{eq_expressions_tau_short}
 \tbody \sim \sqrt{\frac{I}{2 \pi a \etaf v_0 }}.

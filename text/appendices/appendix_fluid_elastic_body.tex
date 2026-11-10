@@ -5,9 +5,9 @@
 \subsection{Equations of motion}
 \label{app_sec_fl_elastic_equations_of_motion}
 
-The equations of motion for the dynamics of \ac{flu} and \ac{ela} are the following.
+The equations of motion for the dynamics of the fluid and \ac{ela} are the following.
 
-First, the dynamics of \ac{flu} is governed by the  \ac{ns} and mass-conservation equations \crefs{\eqsbfluc}, respectively. Their \acp{bc} are \cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current}, which stay unchanged with respect to \cref{sec_fl_rigid}. On the other hand,  \ac{bc} \crefs{bc_fl_rigid_4_current}, which ensures that the \ac{flu} velocity matches the \ac{bod} velocity at the interface between \ac{flu} and \ac{bod}, now reads
+First, the dynamics of the fluid is governed by the  \ac{ns} and mass-conservation equations \crefs{\eqsbfluc}, respectively. Their \acp{bc} are \cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current}, which stay unchanged with respect to \cref{sec_fl_rigid}. On the other hand,  \ac{bc} \crefs{bc_fl_rigid_4_current}, which ensures that the fluid velocity matches the \ac{bod} velocity at the interface between the fluid and \ac{bod}, now reads
 \be
 \label{bc_fl_ela_4_current}
 \bvfc(\bxc) = \left. \der{\buela(\bxr)}{t} \right|_{\bxr = \psi^t(\bxc)} \text{ on }  \pomcircouteqc
@@ -31,7 +31,7 @@ where
 \label{eq_def_C}
 C_{\alpha \beta } \equiv \delta_{\alpha \beta} + 2 E_{\alpha \beta}.
 \ee
-We have chosen this model because it is stable under compression, i.e., its potential energy diverges as $\det F \rightarrow 0$ \cite{bazilevsIsogeometricFluidstructureInteraction2008}. As opposed to linear models \cite{landauTheoryElasticity1986} and to the elastic model of  \cref{sec_eq_fluid_domain}, this model  proves to yield a stable dynamics for \ac{ela} as it is compressed  by  \ac{flu}, see below and \cref{fig_fluid_ela}.
+We have chosen this model because it is stable under compression, i.e., its potential energy diverges as $\det F \rightarrow 0$ \cite{bazilevsIsogeometricFluidstructureInteraction2008}. As opposed to linear models \cite{landauTheoryElasticity1986} and to the elastic model of  \cref{sec_eq_fluid_domain}, this model  proves to yield a stable dynamics for \ac{ela} as it is compressed  by  the fluid, see below and \cref{fig_fluid_ela}.
 The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
 \begin{align}
         \label{bc_fl_ela_1_current}
@@ -93,7 +93,7 @@ The system dynamics is obtained as follows: given $\bvfr{n-1}$, $\sigmafr{\nmtha
         }
 
 
-        \titleditem{Update \ac{flu}}{
+        \titleditem{Update the fluid}{
                 \label{fl_ela_step_3}
                 Solve the \acp{bvp} given by  \crefs{eq_fl_rigid_fl_1_reference_disc_aux,eq_poiss_like_phi} and \acp{bc}
                 \crefs{bc_fl_rigid_1_reference_disc_aux,bc_fl_rigid_2_reference_disc_aux,bc_fl_rigid_3_reference_disc_aux,bc_fl_rigid_5_reference_disc_aux,bc_phi_1,bc_phi_2} and

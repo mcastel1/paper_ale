@@ -37,7 +37,7 @@ cp ~/Documents/work/manuscripts/paper_ale/figures/figure_11/solution_parameters.
 
 - to copy from abacus
 
-    INPUT_PATH="rigid_obstacle_remesh_1"
+    INPUT_PATH="paper_ale_figure_11"
     OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
     STRIDE="100"
     cd $OUTPUT_PATH/../
