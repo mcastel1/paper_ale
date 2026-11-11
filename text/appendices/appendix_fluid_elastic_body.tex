@@ -43,14 +43,14 @@ The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
 In the \ac{lhs} of \cref{bc_fl_ela_2_current}, the quantity $\epsilon_{\beta \gamma} \der{\xi^\gamma}{s}$ represents the unit normal to $\pomcircouteqr$, and similarly for the \ac{rhs}.
 
 
-Finally, the equations of motion for \ac{dom} are \crefs{\eqsdom}, with \acp{bc} \crefs{bc_ela_1,bc_ela_1_dot} and
+Finally, the equations of motion for the fluid domain are \crefs{\eqsdom}, with \acp{bc} \crefs{bc_ela_1,bc_ela_1_dot} and
 \begin{align}
         \label{bc_ela_3}
         \budom^t(\bxr)    & = \buela^t(\bxr) \text{ on } \pomcircouteqr,    \\
         \label{bc_ela_3_dot}
         \budomdot^t(\bxr) & = \bueladot^t(\bxr) \text{ on } \pomcircouteqr.
 \end{align}
-\Cref{bc_ela_3} and \cref{bc_ela_3_dot} ensure that the displacement and velocity of the elastic body and  \ac{dom} are conforming at the interface between the body and \ac{dom}, and they replace  \cref{bc_ela_2,bc_ela_2_dot}, respectively.
+\Cref{bc_ela_3} and \cref{bc_ela_3_dot} ensure that the displacement and velocity of the elastic body and  the fluid domain are conforming at the body-domain interface, and they replace  \cref{bc_ela_2,bc_ela_2_dot}, respectively.
 
 
 
@@ -82,7 +82,7 @@ The system dynamics is obtained as follows: given $\bvfr{n-1}$, $\sigmafr{\nmtha
 
 
         }
-        \titleditem{Update \ac{dom}}{ \label{fl_ela_step_2}
+        \titleditem{Update the fluid domain}{ \label{fl_ela_step_2}
                 Solve for $\budom^n$ and $\budomdot^n$ the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot}  with \acp{bc} \crefs{bc_ela_1_disc}, \crefs{bc_ela_1_disc_dot} and
                 \begin{align}
                         \label{bc_ela_3_disc}

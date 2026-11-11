@@ -13,7 +13,7 @@ The geometry of \cref{fig_ref_cur_mem} may represent the fluid being confined in
 
 Both the physical nature and mathematical description of a Helfrich membrane is significantly more complex than that of an elastic body. First, unlike an elastic body, the membrane has a fluid structure: Its material elements can  flow tangentially to the membrane shape, which also moves subjected to  bending-rigidity forces, and to the force exerted on it by the fluid.
 While the tangential motion is naturally suited to an Eulerian description \cite{landauFluidMechanics1987}, the shape motion---reminiscent of that of an elastic body---is best described with a Lagrangian approach \cite{lacarbonaraNonlinearStructuralMechanics2013}.
-Also, such shape motion needs to be connected to the Lagrangian approach used to describe \ac{dom}. Second, the membrane is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}. From  the mathematical and numerical point of view, such \acp{pde} are significantly more complex than the second-order \acp{pde} which describe an elastic body \cite{worthmullerIRENEFluIdLayeR2025}. On top of this, from the physical standpoint, such fourth-order \acp{pde} require more  \acp{bc} than the second-order ones for an elastic body: Such \acp{bc} may specify a number of physical features of the membrane system, such as forces, positions, torques, or stresses.
+Also, such shape motion needs to be connected to the Lagrangian approach used to describe the fluid domain. Second, the membrane is described by fourth-order \acp{pde} \cite{zhong-canBendingEnergyVesicle1989}. From  the mathematical and numerical point of view, such \acp{pde} are significantly more complex than the second-order \acp{pde} which describe an elastic body \cite{worthmullerIRENEFluIdLayeR2025}. On top of this, from the physical standpoint, such fourth-order \acp{pde} require more  \acp{bc} than the second-order ones for an elastic body: Such \acp{bc} may specify a number of physical features of the membrane system, such as forces, positions, torques, or stresses.
 Third, the geometrical description of the membrane requires fixing an appropriate \textit{gauge}.
 In fact, a general parametrization of the membrane shape is given by two functions---the two Cartesian components of $\bxmemc(\xcoord^1)$. Both of these functions  depend on the curvilinear coordinate $\xcoord^1$ which is defined in the \ac{ref} domain of the membrane, $\pomlineeqr$, see \cref{fig_ref_cur_mem}---note that here $\xcoord^i$ differs from the Cartesian coordinate $\xcartesian^\alpha$.
 Despite this pair of functions, a single \ac{pde}  determines the membrane shape \cite{zhong-canBendingEnergyVesicle1989}.
@@ -32,7 +32,7 @@ Two common gauge choices are the Monge  \cite{hsiungFirstCourseDifferential1981,
 \ee
 The arc-length gauge has been used to describe, for instance, the steady state for membrane tubules \cite{derenyiFormationInteractionMembrane2002}. However, while a static constraint such as \crefs{eq_arc_length_gauge} is suited to  static shapes, it cannot describe the  membrane dynamics, such as the one of the membrane interacting with the fluid. In fact, as the membrane is deformed, it will also stretch: as a result, \cref{eq_arc_length_gauge} must be replaced by a time-dependent  gauge---see below.
 
-We describe the membrane with the Lagrangian approach, along the lines of the description of \ac{dom} in \cref{sec_fl_rigid} and an elastic body  in \cref{sec_fl_elastic}.  The membrane displacement field is
+We describe the membrane with the Lagrangian approach, along the lines of the description of the fluid domain in \cref{sec_fl_rigid} and an elastic body  in \cref{sec_fl_elastic}.  The membrane displacement field is
 \be\label{eq_u_mem}
 \bumem(\xcoord^1) \equiv \bxmemc(\xcoord^1) - \bxmemr(\xcoord^1).
 \ee
@@ -233,8 +233,8 @@ We impose the following \acp{bc} for  \cref{\eqsdom}:
     \label{bc_fl_mem_dom_8}
     \budomdot                 & = \bumemdot \text{ on }\pomtopeqr.
 \end{align}
-\Cref{bc_fl_mem_dom_1} ensures that \ac{dom} is not deformed on $\pomineqr \cup \pombottomeqr$, cf. \cref{bc_ela_1}. \Cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3} follow from axial symmetry.
-\Cref{bc_fl_mem_dom_4} derives from the requirement that \ac{dom} and membrane deformations are conforming \cite{kamenskyLectureNotesMAE}: In \cref{bc_fl_mem_dom_4}, $\budom$ is evaluated at a reference coordinate $\bxr \in \pomtopeqr$, and $\bumem$ is evaluated at the curvilinear coordinate $\xcoord^1$ such that $\bxmemr(\xcoord^1) = \bxr$. Finally, the  \acp{bc} for $\budomdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
+\Cref{bc_fl_mem_dom_1} ensures that the fluid domain is not deformed on $\pomineqr \cup \pombottomeqr$, cf. \cref{bc_ela_1}. \Cref{bc_fl_mem_dom_2,bc_fl_mem_dom_3} follow from axial symmetry.
+\Cref{bc_fl_mem_dom_4} derives from the requirement that the fluid-domain and membrane deformations are conforming \cite{kamenskyLectureNotesMAE}: In \cref{bc_fl_mem_dom_4}, $\budom$ is evaluated at a reference coordinate $\bxr \in \pomtopeqr$, and $\bumem$ is evaluated at the curvilinear coordinate $\xcoord^1$ such that $\bxmemr(\xcoord^1) = \bxr$. Finally, the  \acp{bc} for $\budomdot$, \cref{bc_fl_mem_dom_5,bc_fl_mem_dom_6,bc_fl_mem_dom_7,bc_fl_mem_dom_8}, are derived along the same lines as \cref{bc_fl_mem_dom_1,bc_fl_mem_dom_2,bc_fl_mem_dom_3,bc_fl_mem_dom_4}.
 
 
 % We observe that \cref{eq_def_S,eq_ela_1,eq_ela_2,eq_ela_3,eq_ela_4} imply that \cref{\eqsdom} contain up to second derivatives of $\budom$ and $\budomdot$. As a result, the \acp{bc} \crefs{\bcsdom} uniquely determine the solution of the \ac{bvp} \crefs{\eqsdom} \cite{evansPartialDifferentialEquations2010}.
@@ -328,7 +328,7 @@ and $\dint{\lc}$ id the boundary length-element in the \ac{cur} configuration \c
 \Cref{bc_fl_membrane_5_current} implies that the motion of the fluid is geometrically conforming to that of the membrane   \cite{kamenskyLectureNotesMAE}, while allowing for a slip between the tangential flow of membrane and fluid material elements---see \cref{sec_fl_mem_mem}. Also, in \cref{bc_fl_membrane_5_current}, $\bvfc$ is evaluated at a \ac{cur} location $\bxc$, and $\budomdot$ at the corresponding \ac{ref} location $\bxr$ related to $\bxc$ by $\budom$ through \cref{eq_def_u}.
 %
 
-Finally, we discuss \cref{bc_fl_membrane_6_current}. Let us consider the overall \ac{bvp} for the three sectors---membrane, \ac{dom} and fluid---given by \cref{\eqsmembrane,\eqsdom,\eqsbfluc} and the \acp{bc}, \cref{\bcsmembrane,\bcsdom,{bc_fl_membrane_1_current,bc_fl_membrane_2_current,bc_fl_membrane_3_current,bc_fl_membrane_4_current,bc_fl_membrane_5_current}}. Let us consider a translation of the fluid pressure field
+Finally, we discuss \cref{bc_fl_membrane_6_current}. Let us consider the overall \ac{bvp} for the three sectors---membrane, fluid domain and fluid---given by \cref{\eqsmembrane,\eqsdom,\eqsbfluc} and the \acp{bc}, \cref{\bcsmembrane,\bcsdom,{bc_fl_membrane_1_current,bc_fl_membrane_2_current,bc_fl_membrane_3_current,bc_fl_membrane_4_current,bc_fl_membrane_5_current}}. Let us consider a translation of the fluid pressure field
 \be \label{eq_translation_sigma}
 \sigmafc \rightarrow \sigmafc + C,
 \ee
@@ -367,7 +367,7 @@ G_{\alpha \beta}(\bu) \equiv [F(\bu)]^{-1}_{\alpha \beta}.
 
 To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discretize time by setting $\deltat \equiv T/N$, $t_n \equiv n\, \deltat$, with $n = 0, 1, \cdots, N$.
 
-We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for the membrane, \ac{dom} and the fluid.
+We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for the membrane, fluid domain and  fluid.
 The  dynamics of the system is obtained as follows.\\ \vspace{5mm}
 
 
@@ -614,7 +614,7 @@ In \cref{bc_fl_mem_mem_6_disc}, $\bm \normalmem$ is the unit normal to \pomline{
 
 \paragraph{\Acl{dom}}\label{sec_temp_discretization_mem_dom}
 
-The discretization of the equations of motion for  \ac{dom} proceeds along the same lines as in \cref{sec_fl_rigid}---see \cref{sec_splitting_scheme_fl_rig_dom} for details.
+The discretization of the equations of motion for  the fluid domain proceeds along the same lines as in \cref{sec_fl_rigid}---see \cref{sec_splitting_scheme_fl_rig_dom} for details.
 The discrete version of the \acp{pde} \crefs{\eqsdom} is
 
 \begin{align}
@@ -644,7 +644,7 @@ with \acp{bc} given by the discrete version of \cref{\bcsdom}:
 \end{align}
 In \cref{bc_fl_mem_dom_4_disc,bc_fl_mem_dom_8_disc} the \ac{lhs} is evaluated at a \ac{ref} coordinate $\bxr$, and the \ac{rhs} at the corresponding membrane curvilinear coordinate $\xcoord^1$ such that $\bxmemr(\xcoord^1) = \bxr$.
 
-Given the membrane fields $\vmem{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam{\nmthalf}$, $\bumem^{\nmthalf}$, $\nu^{\nmthalf}$, $\psi^{\nmthalf}$, the \ac{dom} fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the fluid fields $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
+Given the membrane fields $\vmem{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam{\nmthalf}$, $\bumem^{\nmthalf}$, $\nu^{\nmthalf}$, $\psi^{\nmthalf}$, the fluid-domain fields $\budom^{n-1}$, $\budomdot^{n-1}$, and the fluid fields $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, we determine the fields at the next time step $n \rightarrow n+1$ as follows:
 
 
 
@@ -658,8 +658,8 @@ Given the membrane fields $\vmem{n-1, i}$, $\wmem^{n-1, \, i}$, $\sigmam{\nmthal
         \cref{eq_fl_mem_mem_disc_1,eq_fl_mem_mem_disc_2,eq_fl_mem_mem_disc_4,eq_fl_mem_mem_disc_5,eq_mem_flu_disc_4,eq_mem_flu_disc_5,eq_mem_flu_disc_6,eq_poisson_like_phi_mem,bc_fl_mem_mem_1_disc,bc_fl_mem_mem_2_disc,bc_fl_mem_mem_3_disc,bc_fl_mem_mem_4_disc,bc_fl_mem_mem_5_disc,bc_fl_mem_mem_6_disc,bc_fl_mem_mem_6_disc_bis,bc_fl_mem_mem_7_disc_bis,bc_fl_mem_mem_8_disc_bis}.
     }
 
-    \titleditem{Update \ac{dom}}{ \label{fl_mem_step_2}
-        We determine the \ac{dom} displacement field and its time derivative, $\budom^n$ and $\budomdot^n$, from the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot,bc_fl_mem_dom_1_disc,bc_fl_mem_dom_2_disc,bc_fl_mem_dom_3_disc,bc_fl_mem_dom_4_disc,bc_fl_mem_dom_5_disc,bc_fl_mem_dom_6_disc,bc_fl_mem_dom_7_disc,bc_fl_mem_dom_8_disc}.
+    \titleditem{Update the fluid domain}{ \label{fl_mem_step_2}
+        We determine the domain displacement field and its time derivative, $\budom^n$ and $\budomdot^n$, from the \acp{bvp} given by \cref{eq_domain_fluid_rigid_disc,eq_domain_fluid_rigid_disc_dot,bc_fl_mem_dom_1_disc,bc_fl_mem_dom_2_disc,bc_fl_mem_dom_3_disc,bc_fl_mem_dom_4_disc,bc_fl_mem_dom_5_disc,bc_fl_mem_dom_6_disc,bc_fl_mem_dom_7_disc,bc_fl_mem_dom_8_disc}.
 
     }
 
@@ -676,7 +676,7 @@ The membrane bending rigidity $\kaptwod$ for a two-dimensional plate  has been e
 Typical values for an elastomer   are $E \sim 10^7 \, \pas$ \cite{fengPreparationCharacterizationSilicone2017} and $\poissonratio \sim 0.5$ \cite{mullerQuickAccurateMethod2019}, yielding $\kaptwod = 10^{-3} \, \kg \, \met^2/\second^2$, and thus $\kap =  10^{-3} \, \kg \, \met^3/\second^2$.
 We chose $\rhom = 1 \, \kg /  \met$ and $\etam = 1 \, \kg\, \met /\second $ as the density \cite{caiSoftPolydimethylsiloxaneElastomers2015} and viscosity \cite{pochivalovDevelopmentVibrationDamping2021} of an elastomer, respectively.
 The fluid parameters have been estimated from the air parameters:  $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-5} \, \kg / \second$ \cite{hilsenrath1955tables}.
-Also, we take $\vfbottom^1 =0$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}, i.e.,  $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc[1] (2 L -\xc[1]) v_0$, where $v_0 = 10^{-1}  \, \met / \second$.  Finally, the \ac{dom} exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
+Also, we take $\vfbottom^1 =0$, and $\vfbottom^2$ corresponds to a Poiseuille flow \cite{landauFluidMechanics1987}, i.e.,  $\vfbottom^2(\bxc) =  \frac{3}{2 L^2}  \xc[1] (2 L -\xc[1]) v_0$, where $v_0 = 10^{-1}  \, \met / \second$.  Finally, the fluid-domain exponent is $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
 
 \Cref{fig_fluid_mem_mem} corresponds to a fully inertial regime. In fact, the length scale to which the fluid flow is constrained is the radius of curvature $r_\mem \sim 1 \, \met$ of the membrane shape in the \ac{cur} configuration. Combined with the parameters of \cref{sec_temp_discretization_mem_dom}, this yields a Reynolds number  $R \sim \rhof v_0 r_\mem / \etaf \sim 10^4$ \cite{landauFluidMechanics1987}.
 

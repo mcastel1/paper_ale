@@ -108,11 +108,11 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
 
 
 
-\subsection{Motion of \acl{dom}}
+\subsection{Motion of the \acl{dom}}
 \label{sec_eq_fluid_domain}
 
 
-The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\budom$, which describes how the region---or domain---which contains the fluid, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region as the  \ac{dom}.
+The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\budom$, which describes how the region---or domain---which contains the fluid, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region by the fluid domain.
 We observe that this field has, so far, been left arbitrary, and we have the freedom to choose it.
 
 Here, $\budom$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as the rigid body rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium. We will determine $\budom$ as the solution of a \ac{bvp} given by the  elastic model \crefs{eq_mesh_fluid_rigid}, see \cref{sec_fl_mem_dom} for details.
@@ -130,7 +130,7 @@ The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
 \Cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2} constitute the \ac{bvp} which determines $\budom$. Along the lines of \acp{bvp} in the theory of elasticity, such \ac{bvp} is already, naturally formulated in the \ac{ref} configuration \cite{landauTheoryElasticity1986}.
 
 
-From  the \ac{bvp} above, we obtain a \ac{bvp} for $\dot{\budom}$, which will be needed in the following to describe the \ac{dom} motion. By deriving both sides of \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, we obtain, respectively, \cref{eq_mesh_fluid_rigid_dot} and
+From  the \ac{bvp} above, we obtain a \ac{bvp} for $\dot{\budom}$, which will be needed in the following to describe the fluid-domain motion. By deriving both sides of \cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2}, we obtain, respectively, \cref{eq_mesh_fluid_rigid_dot} and
 \begin{align}
         \label{bc_ela_1_dot}
         \budomdot & =\bzero \text{ on } \pomsqeqr,                                                         \\
@@ -156,7 +156,7 @@ determine the dynamics of the system.
 
 To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discretize time by setting $\deltat \equiv T/N$, $t_n \equiv n\, \deltat$, with $n = 0, 1, \cdots, N$.
 
-We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for the rigid body, the fluid and \ac{dom}---see below.
+We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for the rigid body, the fluid and the fluid domain---see below.
 
 \subsubsection{\Acl{bod}}
 
@@ -299,7 +299,7 @@ At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{
         \titleditem{Update the rigid body}{ \label{fl_rigid_step_1}
                 Solve the algebraic equations \cref{eq_def_omega_disc,eq_fl_rigid_rigid_reference_disc} for $\theta^n$ and $\omega^n$.
         }
-        \titleditem{Update \ac{dom}}{ \label{fl_rigid_step_2}
+        \titleditem{Update the fluid domain}{ \label{fl_rigid_step_2}
                 Solve  the \acp{bvp} \crefs{eq_domain_fluid_rigid_disc,bc_ela_1_disc,bc_ela_2_disc,eq_domain_fluid_rigid_disc_dot,bc_ela_1_disc_dot,bc_ela_2_disc_dot} for $\budom^n$ and $\budomdot^n$.
         }
         \titleditem{Update the fluid}{
