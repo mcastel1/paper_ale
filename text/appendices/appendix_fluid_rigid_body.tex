@@ -293,7 +293,7 @@ The discrete version of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_
         \budomdot  ^n & =  \omega \der{{\bm R}}{\theta}\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr.
 \end{align}\\
 
-We can now iterate in time for the ensemble of fields  of the fluid-\ac{bod} system as follows.
+We can now iterate in time for the ensemble of fields  of the fluid-body system as follows.
 At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
 \begin{enumerate}
         \titleditem{Update the rigid body}{ \label{fl_rigid_step_1}
@@ -332,9 +332,9 @@ For the parameters of \cref{fig_fluid_rigid}, \cref{eq_expressions_tau_short} yi
                 \label{fig_ref_curr_rigid}
                 \Acf{ref} and \acf{cur} configuration for the interaction between a \acl{flu} and a \acl{bod}.
                 %
-                \plab{A} \ac{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr[1] \leq L$, $0 \leq \xr[2] \leq h$ with the elliptical hole (the rigid body), and is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
+                \plab{A} \ac{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr[1] \leq L$, $0 \leq \xr[2] \leq h$ with the elliptical hole (the  body), and is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
                 %
-                \plab{B} \ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$, $\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The Cartesian coordinates $\bxc$ are also shown.
+                \plab{B} \ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$, $\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the  body is shown as an arc (black dotted line). The Cartesian coordinates $\bxc$ are also shown.
         }
 \end{figure*}
 
