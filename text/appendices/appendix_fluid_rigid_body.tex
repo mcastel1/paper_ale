@@ -3,11 +3,11 @@
 
 \subsection{\Acl{bod} motion}\label{sec_rigid_body_body}
 
-In this Section, we will work out the equations of motion for \ac{bod}.
+In this Section, we will work out the equations of motion for the rigid body.
 
 \subsubsection{Equation of motion in  \acl{cur}-configuration coordinates}\label{sec_rigid_body_body_current}
 
-The dynamics of  \ac{bod} is given by the equations of motion for a rigid body which, in \ac{cur} coordinates, read \cite{goldsteinClassicalMechanics2004}
+The dynamics of  the rigid body is given by the equations of motion for a rigid body which, in \ac{cur} coordinates, read \cite{goldsteinClassicalMechanics2004}
 
 \begin{align}
         \label{eq_fl_rigid_rigid_current_1}
@@ -16,8 +16,8 @@ The dynamics of  \ac{bod} is given by the equations of motion for a rigid body w
         \label{eq_fl_rigid_rigid_current_2}
         \omega & \equiv \der{\theta}{t}.
 \end{align}
-\Cref{eq_fl_rigid_rigid_current_1} relates the angular acceleration of \ac{bod} to the torque of external forces.
-The moment of inertia of \ac{bod} is denoted by $I$. The \ac{rhs} of \cref{eq_fl_rigid_rigid_current_1} contains the line integral along the boundary of \ac{bod}, of the torque of the local force exerted by  the fluid on  \ac{bod} with respect to the left focal point $\bfocalpoint$ of \ac{bod} \cite{landauFluidMechanics1987}, and   $\normalc{}$ is the normal to \pomellipsec pointing towards $\omc$.
+\Cref{eq_fl_rigid_rigid_current_1} relates the angular acceleration of the rigid body to the torque of external forces.
+The moment of inertia of the body is denoted by $I$. The \ac{rhs} of \cref{eq_fl_rigid_rigid_current_1} contains the line integral along the boundary of the body, of the torque of the local force exerted by  the fluid on  the rigid body with respect to the left focal point $\bfocalpoint$ of the body \cite{landauFluidMechanics1987}, and   $\normalc{}$ is the normal to \pomellipsec pointing towards $\omc$.
 
 This force is expressed in terms of the fluid stress tensor \cite{landauFluidMechanics1987} in \ac{cur} coordinates $\bsigmastressc$, given by \cref{eq_strees_tensor_fluid}, where $\etaf$ and $\rhof$ are the two-dimensional viscosity and density of the fluid, respectively.
 Also, $\epsilon_{\alpha \beta \gamma}$ is the three-dimensional Levi-Civita symbol.
@@ -69,7 +69,7 @@ The \acp{bc} for \cref{\eqsbfluc,eq_fl_rigid_rigid_current_1,eq_fl_rigid_rigid_c
         \sigmafc (\bxc)               & = 0 \; \text{ on } \pomouteqc.
 \end{align}
 \Cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current} ensure that the fluid is injected on the boundary \pominc{} in a direction parallel to the $\xc[1]$ axis, and \cref{bc_fl_rigid_3_current} is a no-slip \ac{bc} \cite{landauFluidMechanics1987} along the channel walls \pomwc, see \cref{fig_ref_curr_rigid}.
-\Cref{bc_fl_rigid_4_current} ensures that, at the boundary \pomellipsec,  the fluid velocity matches the rotational velocity of \ac{bod}. Given that \ac{bod} can only rotate about its left focal point $\bfocalpoint$, the \ac{bod} rotational velocity of a point $\bxc \in \pomellipseeqc$ is given by
+\Cref{bc_fl_rigid_4_current} ensures that, at the boundary \pomellipsec,  the fluid velocity matches the rotational velocity of the rigid body. Given that the rigid body can only rotate about its left focal point $\bfocalpoint$, the body rotational velocity of a point $\bxc \in \pomellipseeqc$ is given by
 \be
 \der{[R(\theta)]_{\alpha \beta}}{t}[\psi^{t \, \beta}(\bxc) - c_\beta],
 \ee
@@ -115,7 +115,7 @@ The \acp{bc}  \crefs{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_c
 The equations of motion \crefs{\eqsfluidbodyref} involve the displacement field $\budom$, which describes how the region---or domain---which contains the fluid, is deformed in time, cf. \cref{fig_ref_curr_rigid}. We will denote this region as the  \ac{dom}.
 We observe that this field has, so far, been left arbitrary, and we have the freedom to choose it.
 
-Here, $\budom$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as \ac{bod} rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium. We will determine $\budom$ as the solution of a \ac{bvp} given by the  elastic model \crefs{eq_mesh_fluid_rigid}, see \cref{sec_fl_mem_dom} for details.
+Here, $\budom$ will be determined with an analogy with the theory of elasticity \cite{kamenskyLectureNotesMAE}. We imagine that, as the rigid body rotates about its focal point,  each point $\bxr \in \omr$ moves into a point $\bxc \in \omc$, and that the domain $\omr$ is deformed, e.g., locally stretched and compressed, into $\omc$, like an elastic medium. We will determine $\budom$ as the solution of a \ac{bvp} given by the  elastic model \crefs{eq_mesh_fluid_rigid}, see \cref{sec_fl_mem_dom} for details.
 
 
 The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
@@ -125,7 +125,7 @@ The \acp{bc} for the  \ac{pde} \crefs{eq_mesh_fluid_rigid} are
         \label{bc_ela_2}
         \budom & = \bfocalpoint - \bxr + {\bm R}(\theta)\cdot (\bxr - \bfocalpoint) \text{ on } \pomellipseeqr.
 \end{align}
-\Cref{bc_ela_1} enforces the fact that the mesh is not deformed at the boundary \pomsqr. Finally,  \cref{bc_ela_2} ensures that the mesh deformation at \pomellipser  matches the deformation induced by the rotation of \ac{bod}.
+\Cref{bc_ela_1} enforces the fact that the mesh is not deformed at the boundary \pomsqr. Finally,  \cref{bc_ela_2} ensures that the mesh deformation at \pomellipser  matches the deformation induced by the rotation of the rigid body.
 
 \Cref{eq_mesh_fluid_rigid,bc_ela_1,bc_ela_2} constitute the \ac{bvp} which determines $\budom$. Along the lines of \acp{bvp} in the theory of elasticity, such \ac{bvp} is already, naturally formulated in the \ac{ref} configuration \cite{landauTheoryElasticity1986}.
 
@@ -156,7 +156,7 @@ determine the dynamics of the system.
 
 To numerically solve for the dynamics in a time span $0 \leq t \leq T$, we discretize time by setting $\deltat \equiv T/N$, $t_n \equiv n\, \deltat$, with $n = 0, 1, \cdots, N$.
 
-We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for \ac{bod}, the fluid and \ac{dom}---see below.
+We combine the \ac{cn} discretization method for \ac{ns} equations \cite{loggAutomatedSolutionDifferential2012,crankPracticalMethodNumerical1947} with the \ac{ale} formulation, by discretizing the dynamical equations for the rigid body, the fluid and \ac{dom}---see below.
 
 \subsubsection{\Acl{bod}}
 
@@ -296,7 +296,7 @@ The discrete version of the \ac{bvp} for $\budomdot$, \cref{eq_mesh_fluid_rigid_
 We can now iterate in time for the ensemble of fields  of the fluid-\ac{bod} system as follows.
 At each step $n$, given $\theta^{n-1}$, $\omega^{n-1}$, $\bvfr{n-1}$, $\sigmafr{\nmthalf}$, $\budom^{n-1}$ and $\budomdot^{n-1}$ from the preceding step, we
 \begin{enumerate}
-        \titleditem{Update \ac{bod}}{ \label{fl_rigid_step_1}
+        \titleditem{Update the rigid body}{ \label{fl_rigid_step_1}
                 Solve the algebraic equations \cref{eq_def_omega_disc,eq_fl_rigid_rigid_reference_disc} for $\theta^n$ and $\omega^n$.
         }
         \titleditem{Update \ac{dom}}{ \label{fl_rigid_step_2}
@@ -316,7 +316,7 @@ The fields ${\bm \vfc}^{n-1}$, $\sigmafc^{\nmthalf}$ in the \ac{cur} configurati
 \subsection{Characteristic time scale}
 \label{sec_fluid_rigid_timescale}
 
-As shown in \cref{fig_fluid_rigid_timescale}, the dynamics of \cref{fig_fluid_rigid} involves a characteristic time scales $\tbody$, i.e., the period of the angular oscillations of \ac{bod}. This time scale can be estimated by considering the dynamical equation \crefs{eq_fl_rigid_rigid_current_1} for \ac{bod}, and approximating its \ac{lhs} as $I / \tbody^2$ and its \ac{rhs} as $ (\etaf v_0 /a \, 2 \pi a) a$. Here,  $\etaf v_0 /a$ is the viscous component of the force per unit length exerted by the fluid on \ac{bod}, cf. \cref{eq_strees_tensor_fluid}, $2 \pi a$ estimates the total length of the boundary of \ac{bod}, and $a$ approximates the lever arm of the force above. Putting everything together, we obtain
+As shown in \cref{fig_fluid_rigid_timescale}, the dynamics of \cref{fig_fluid_rigid} involves a characteristic time scales $\tbody$, i.e., the period of the angular oscillations of the rigid body. This time scale can be estimated by considering the dynamical equation \crefs{eq_fl_rigid_rigid_current_1} for the rigid body, and approximating its \ac{lhs} as $I / \tbody^2$ and its \ac{rhs} as $ (\etaf v_0 /a \, 2 \pi a) a$. Here,  $\etaf v_0 /a$ is the viscous component of the force per unit length exerted by the fluid on the rigid body, cf. \cref{eq_strees_tensor_fluid}, $2 \pi a$ estimates the total length of the boundary of the rigid body, and $a$ approximates the lever arm of the force above. Putting everything together, we obtain
 \be
 \label{eq_expressions_tau_short}
 \tbody \sim \sqrt{\frac{I}{2 \pi a \etaf v_0 }}.
@@ -332,9 +332,9 @@ For the parameters of \cref{fig_fluid_rigid}, \cref{eq_expressions_tau_short} yi
                 \label{fig_ref_curr_rigid}
                 \Acf{ref} and \acf{cur} configuration for the interaction between a \acl{flu} and a \acl{bod}.
                 %
-                \plab{A} \ac{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr[1] \leq L$, $0 \leq \xr[2] \leq h$ with the elliptical hole (\ac{bod}), and is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
+                \plab{A} \ac{ref} configuration. The region $\omr$ is given by the rectangle $0 \leq \xr[1] \leq L$, $0 \leq \xr[2] \leq h$ with the elliptical hole (the rigid body), and is delimited by the mesh (gray lines).  Boundaries in the \ac{ref} configuration are denoted by $\pomineqr$, $\pomouteqr$, $\pomtopeqr$, $\pombottomeqr$ and $\pomellipseeqr$ (colored dashed lines). The ellipse focal point $\bfocalpoint$ (light green dot)  is also shown.
                 %
-                \plab{B} \ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$, $\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of \ac{bod} is shown as an arc (black dotted line). The Cartesian coordinates $\bxc$ are also shown.
+                \plab{B} \ac{cur} configuration. The region $\omc$ is delimited by the mesh (gray lines). Boundaries in the \ac{cur} configuration are denoted by $\pomineqc$, $\pomouteqc$, $\pomtopeqc$, $\pombottomeqc$ and $\pomellipseeqc$ (colored dashed lines), and the rotational angle $\theta$ of the rigid body is shown as an arc (black dotted line). The Cartesian coordinates $\bxc$ are also shown.
         }
 \end{figure*}
 

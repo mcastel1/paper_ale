@@ -6,7 +6,7 @@
 We developed a numerical study on the interaction between a fluid and a Helfrich membrane. Our analysis is based on the \ac{fe} method, and it leverages the \ac{fenics} \cite{loggAutomatedSolutionDifferential2012}, combined with the \ac{irene} \cite{worthmullerIRENEFluIdLayeR2025}.
 In order to guide and introduce the reader to the interaction problem between a \acl{flu} and \acl{mem}, we provided two introductory examples of fluid-structure interaction \cite{kamenskyLectureNotesMAE}, in which the \acl{flu} interacts with a \acl{bod} and with an \acl{ela}, see \cref{sec_fl_rigid,sec_fl_elastic}. These Sections allow to introduce the necessary physical an mathematical quantities, as well as to assess the  stability of our numerical scheme.
 
-In particular, the time-iteration scheme that we propose implies a partitioned resolution scheme \cite{felippaPartitionedAnalysisCoupled2001} well known in \ac{fsi} problems. In this regard, we denote by   \ac{bod}, the elastic body or the membrane the `structure' with which the fluid interacts, respectively, in \cref{sec_fl_rigid,sec_fl_elastic,sec_fl_mem}. In such partitioned scheme one solves---for example---for the structure degrees of freedom in a given, fixed  configuration of the fluid and \ac{dom}, and similarly for the fluid and \ac{dom}, see for example \cref{fl_mem_step_3,fl_mem_step_1,fl_mem_step_2} in \cref{sec_temp_discretization_mem}.
+In particular, the time-iteration scheme that we propose implies a partitioned resolution scheme \cite{felippaPartitionedAnalysisCoupled2001} well known in \ac{fsi} problems. In this regard, we denote  the rigid body, the elastic body or the membrane, by the `structure' with which the fluid interacts, in \cref{sec_fl_rigid,sec_fl_elastic,sec_fl_mem}. In such partitioned scheme one solves---for example---for the structure degrees of freedom in a given, fixed  configuration of the fluid and \ac{dom}, and similarly for the fluid and \ac{dom}, see for example \cref{fl_mem_step_3,fl_mem_step_1,fl_mem_step_2} in \cref{sec_temp_discretization_mem}.
 
 
 Partitioned solutions are known to suffer for numerical instabilities \cite{forsterArtificialAddedMass2007}. Qualitatively speaking, as the structure movement displaces
@@ -18,7 +18,7 @@ The partitioned scheme turns out to be stable if such force is significantly sma
 \frac{\madded}{\mstr}\ll 1.
 \ee
 
-First, for the motion of \ac{bod} in the fluid of \cref{sec_fl_rigid}, $\madded \sim \rhof A_\structure \sim 2.3 \times 10^{-2}\, \kg$, and $\mstr = \rhob A_\structure = 1.4 \times 10^{-1} \, \kg $, where $A_\structure = \pi a b$ is the area of \ac{bod}. The stability condition \crefs{eq_added_mass} is thus satisfied  with an accuracy of $\madded/\mstr \sim 10^{-2}$.
+First, for the motion of a rigid body in a fluid of \cref{sec_fl_rigid}, $\madded \sim \rhof A_\structure \sim 2.3 \times 10^{-2}\, \kg$, and $\mstr = \rhob A_\structure = 1.4 \times 10^{-1} \, \kg $, where $A_\structure = \pi a b$ is the area of the body. The stability condition \crefs{eq_added_mass} is thus satisfied  with an accuracy of $\madded/\mstr \sim 10^{-2}$.
 % 
 Second, in the analysis of  \cref{sec_fl_elastic}, where the elastic body moves in a fluid, $\madded \sim \rhof A_\structure \sim 6.2 \times 10^{-2}\, \kg$, and $\mstr = \rhoela A_\structure = \parameter[6.2][1]{\kg}$, where $A_\structure \sim \pi (a b - r^2)$ is the area of the elastic body. The stability condition \crefs{eq_added_mass} is thus satisfied with an accuracy of $\madded/\mstr \sim 0.1$.
 
