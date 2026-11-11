@@ -2,7 +2,7 @@
 
 In this Section, we will build on the analysis of \cref{sec_fl_rigid} and put a fluid into interaction with a more complex physical object---an \acf{ela}; only the main results will be presented here.
 
-The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. Here, the \ac{ela} boundary $\pomcircouteq$ may deform, but the inner \ac{ela} boundary $\pomcircineq$ is pinned to the $\xc[1]$, $\xc[2]$ plane.
+The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. Here, the the elastic-body boundary $\pomcircouteq$ may deform, but the inner elastic-body boundary $\pomcircineq$ is pinned to the $\xc[1]$, $\xc[2]$ plane.
 %M revise to embed in text
 The equations of motion are reported in \cref{app_sec_fl_elastic_equations_of_motion}, and the system dynamics is discussed in \cref{app_sec_fl_elastic_dynamics}.
 
@@ -12,11 +12,11 @@ The equations of motion are reported in \cref{app_sec_fl_elastic_equations_of_mo
 
 
 
-An example of the coupled dynamics of a fluid and \ac{ela} is shown in \cref{fig_fluid_ela}, where we show the interaction of a fluid with a hydrogel (\ac{ela}).
+An example of the coupled dynamics of a fluid and an elastic body is shown in \cref{fig_fluid_ela}, where we show the interaction of a fluid with a hydrogel (the elastic body).
 Here, $\pomcircouteqr$ is an ellipse with semi-axes $a = 0.2\, \met$, $b = 0.1\, \met$ and center located at  $\bxr = (0.4 \, \met, 0.2\, \met)$, and $\pomcircineqr$ has radius $r = 0.0125 \, \met$ and center located at $\bxr$.
 Channel dimensions are the same as in \cref{fig_fluid_rigid}, and fluid parameters have been taken from the \ac{feat2d} DFG 2D-3 benchmark example for a fluid flow around a cylinder \cite{blumFEAT2DFiniteElement1995,schaferBenchmarkComputationsLaminar1996}: $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-3}\, \pas \, \met \, \second$.
-The \ac{ela} density is $\rhoela = 10^3 \,\kg/\met^2$   \cite{xuConcurrentStiffeningSoftening2023}. The storage modulus, which approximates the shear modulus $\mu$ \cite{REHAGE1974161} is $ \sim  10 \, \kg/\second^2$ \cite{lichtSynthetic3DPEGAnisogel2019}.
-Given a \ac{ela} Poisson ratio \cite{landauTheoryElasticity1986} of $\poissonratio \sim 0.49$ \cite{chippadaSimultaneousDeterminationYoungs2010}, we obtain $K \sim 5 \times 10^2 \, \kg/\second^2$ from the relation $K = 2 \mu(1+\poissonratio)/[3(2\poissonratio-1)]$ \cite{landauTheoryElasticity1986}.
+The the elastic-body density is $\rhoela = 10^3 \,\kg/\met^2$   \cite{xuConcurrentStiffeningSoftening2023}. The storage modulus, which approximates the shear modulus $\mu$ \cite{REHAGE1974161} is $ \sim  10 \, \kg/\second^2$ \cite{lichtSynthetic3DPEGAnisogel2019}.
+Given an elastic-body Poisson ratio \cite{landauTheoryElasticity1986} of $\poissonratio \sim 0.49$ \cite{chippadaSimultaneousDeterminationYoungs2010}, we obtain $K \sim 5 \times 10^2 \, \kg/\second^2$ from the relation $K = 2 \mu(1+\poissonratio)/[3(2\poissonratio-1)]$ \cite{landauTheoryElasticity1986}.
 The fluid inflow velocity profile is  a Poiseuille flow, \cref{eq_inflow_profile}, with $ v_0 = 1\, \met / \second$. Finally, the \ac{dom} mesh stiffness exponent has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
 
 
