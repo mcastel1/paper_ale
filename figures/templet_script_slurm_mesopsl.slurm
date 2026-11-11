@@ -1,4 +1,4 @@
-#!/bin/sh
+r#!/bin/sh
 #SBATCH --job-name=ani-FIGURE_TO_PLOT
 #SBATCH --time=02-00:0:00
 #SBATCH --clusters=mesopsl2

@@ -37,7 +37,7 @@ cp ~/Documents/work/manuscripts/paper_ale/figures/figure_11/solution_parameters.
 
 - to copy from abacus
 
-    INPUT_PATH="paper_ale_figure_11"
+    INPUT_PATH="paper_ale_figure_11_omega_0_1e-1"
     OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_11/"
     STRIDE="100"
     cd $OUTPUT_PATH/../
@@ -85,17 +85,17 @@ plt.rcParams.update({
     "text.latex.preamble": preamble,
 })
 
-
+'''
 # 1. read data from local folder
 mesh_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 solution_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'solution')
 
-
 '''
+
 # 2. read data from external folder
 mesh_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d/square/polygon')
 solution_path = os.path.join('/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle', 'solution')
-'''
+
 
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_parameters.csv'))
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(solution_path, 'solution_metadata.csv'))
