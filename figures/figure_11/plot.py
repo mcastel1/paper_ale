@@ -220,7 +220,8 @@ def plot_snapshot(fig, n_file,
 
   
     vp.plot_2d_vector_field(ax, [X, Y], [V_x, V_y], parameters['arrow_length'], parameters['head_over_shaft_length'], 30, 1, 1, 'color_from_map', 0,
-                            clip_on=False)
+                            clip_on=False, 
+                            threshold_arrow_length=0)
     
   
     if not _colorbar_initialized:

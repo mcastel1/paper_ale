@@ -7,20 +7,20 @@
 
 The equations of motion for the dynamics of the fluid and elastic body are the following.
 
-First, the dynamics of the fluid is governed by the  \ac{ns} and mass-conservation equations \crefs{\eqsbfluc}, respectively. Their \acp{bc} are \cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current}, which stay unchanged with respect to \cref{sec_fl_rigid}. On the other hand,  \ac{bc} \crefs{bc_fl_rigid_4_current}, which ensures that the fluid velocity matches the body velocity at the interface between the fluid and the body, now reads
+First, the dynamics of the fluid is governed by the  \ac{ns} and mass-conservation equations \crefs{\eqsbfluc}, respectively. Their \acp{bc} are \cref{bc_fl_rigid_1_current,bc_fl_rigid_2_current,bc_fl_rigid_3_current,bc_fl_rigid_5_current,bc_fl_rigid_6_current}, which stay unchanged with respect to \cref{sec_fl_rigid}. On the other hand, the \ac{bc} \crefs{bc_fl_rigid_4_current}, which ensures that the fluid velocity matches the body velocity at the fluid-body interface, now reads
 \be
 \label{bc_fl_ela_4_current}
-\bvfc(\bxc) = \left. \der{\buela(\bxr)}{t} \right|_{\bxr = \psi^t(\bxc)} \text{ on }  \pomcircouteqc
+\bvfc{}(\bxc) = \left. \der{\buela(\bxr)}{t} \right|_{\bxr = \psi^t(\bxc)} \text{ on }  \pomcircouteqc
 \ee
 
 
-Second,  the motion of the elastic body is governed by Newton's equations of motion for an elastic body \cite{landauTheoryElasticity1986}
+Second,  the motion of the  body is governed by Newton's equations of motion for an elastic medium \cite{landauTheoryElasticity1986}
 \be\label{eq_fl_elastic_ela_current}
 \rhoela \dern{\uela^\alpha(\bxr)}{t}{2} = \pderr{\Sela_{\alpha \beta}(\buela)}{\beta},
 \ee
-where  $\rhoela$ is the density  of the elastic body, which is assumed to be independent of space.
-Also, $\buela$ is the deformation field of the elastic body, which is defined along the lines of \cref{eq_def_u}.
-The the elastic-body stress tensor is derived from a compressible neo-Hookean model \cite{bazilevsIsogeometricFluidstructureInteraction2008}, and it reads
+where  $\rhoela$ is the body density, which is assumed to be independent of space.
+Also, $\buela$ is the body deformation field, which is defined along the lines of \cref{eq_def_u}.
+The  body stress tensor is derived from a compressible neo-Hookean model \cite{bazilevsIsogeometricFluidstructureInteraction2008}, and it reads
 \begin{align}
         \label{eq_def_S_neo_hookean}
         \Sela_{\alpha \beta} \equiv \frac{\muel}{\det F }\left(- \frac{1}{2} C_{\gamma \gamma} G_{\alpha \beta} + F_{\beta \alpha}\right) + & \newlinenn
@@ -31,7 +31,7 @@ where
 \label{eq_def_C}
 C_{\alpha \beta } \equiv \delta_{\alpha \beta} + 2 E_{\alpha \beta}.
 \ee
-We have chosen this model because it is stable under compression, i.e., its potential energy diverges as $\det F \rightarrow 0$ \cite{bazilevsIsogeometricFluidstructureInteraction2008}. As opposed to linear models \cite{landauTheoryElasticity1986} and to the elastic model of  \cref{sec_eq_fluid_domain}, this model  proves to yield a stable dynamics for the elastic body as it is compressed  by  the fluid, see below and \cref{fig_fluid_ela}.
+We have chosen this model because it is stable under compression, i.e., its potential energy diverges as $\det F \rightarrow 0$ \cite{bazilevsIsogeometricFluidstructureInteraction2008}. As opposed to linear models \cite{landauTheoryElasticity1986} and to the elastic model of  \cref{sec_eq_fluid_domain}, this model  yields a stable dynamics for the body as this is compressed  by  the fluid, see below and \cref{fig_fluid_ela}.
 The \acp{bc} for \cref{eq_fl_elastic_ela_current} are
 \begin{align}
         \label{bc_fl_ela_1_current}
@@ -50,7 +50,7 @@ Finally, the equations of motion for the fluid domain are \crefs{\eqsdom}, with 
         \label{bc_ela_3_dot}
         \budomdot^t(\bxr) & = \bueladot^t(\bxr) \text{ on } \pomcircouteqr.
 \end{align}
-\Cref{bc_ela_3} and \cref{bc_ela_3_dot} ensure that the displacement and velocity of the elastic body and  the fluid domain are conforming at the body-domain interface, and they replace  \cref{bc_ela_2,bc_ela_2_dot}, respectively.
+\Cref{bc_ela_3} and \cref{bc_ela_3_dot} ensure that the displacement and velocity of the  body and  fluid domain are conforming at the body-domain interface, and they replace  \cref{bc_ela_2,bc_ela_2_dot}, respectively.
 
 
 

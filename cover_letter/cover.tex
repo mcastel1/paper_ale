@@ -1,0 +1,133 @@
+% editor: Victoria Vitkova
+\documentclass{letter}
+\makeatletter
+\newenvironment{thebibliography}[1]
+     {\list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\newcommand\newblock{\hskip .11em\@plus.33em\@minus.07em}
+\makeatother
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% \usepackage{eurosym}
+\fancyhf{}
+\makeatletter
+\fancyhead[L]{\mtitlecover}
+\makeatother
+\fancyhead[R]{\thepage}
+
+\input{/Users/michelecastellana/Documents/latex_modules/definitions}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/packages}
+\input{/Users/michelecastellana/Documents/latex_modules/acronyms}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/acronyms}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/definitions}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/ale/definitions}
+
+
+\input{../packages}
+\input{../acronyms}
+\input{../definitions}
+
+
+\usepackage{geometry}
+
+\geometry{
+  inner=1in,
+  outer=2.5in,
+  top=2in,
+  bottom=2in,
+  twoside
+}
+\setlength{\parskip}{10pt plus 0pt minus 0pt}
+
+\hypersetup{colorlinks=true,
+  linkcolor=brown,
+  anchorcolor=brown,
+  citecolor=black,
+  urlcolor=brown
+}
+
+\begin{document}
+\begin{letter}{}
+
+
+      \opening{Dear Editor,}
+      We wish to submit our manuscript, `\mtitle' for consideration as a Research Article in \myjournal.
+
+      \cite{worthmullerIRENEFluIdLayeR2025}
+
+      We would thus like to invite  you to consider our manuscript for publication as a `Computer Programs in Physics` paper in \myjournal.
+
+      Suggestions for potential Reviewers are:
+      \begin{itemize}
+
+            \item Markus Deserno,\\
+                  Carnegie Mellon University, Pittsburgh, PA, United States\\
+                  \href{deserno@andrew.cmu.edu}{deserno@andrew.cmu.edu}
+            \item Matthew Turner,\\
+                  The University of Warwick, Coventry, United Kingdom\\
+                  \href{m.s.turner\_warwick@icloud.com}{m.s.turner\_warwick@icloud.com}
+            \item Leonid Berlyand,\\
+                  Penn State University, University Park, PA, United States\\
+                  \href{berlyand@math.psu.edu}{berlyand@math.psu.edu}
+                  % Prof. Beryland is an expert in several mathematical aspects related to partial differential equations. 
+            \item Raph\"ael Voituriez,\\
+                  Laboratoire Jean Perrin, Paris, France\\
+                  \href{raphael.voituriez@upmc.fr}{raphael.voituriez@upmc.fr}
+                  % Prof. Voituriez has a strong expertise in theoretical physics of living systems. 
+      \end{itemize}
+
+
+      Suggestions for opposed Reviewers are:
+      \begin{itemize}
+
+            \item Marino Arroyo,\\
+                  Universitat Politecnica de Catalunya, Barcelona, Spain\\
+                  \href{marino.arroyo@upc.edu }{marino.arroyo@upc.edu},
+            \item Axel Voigt,\\
+                  Technische Universit\"{a}t Dresden, Germany\\
+                  \href{axel.voigt@tu-dresden.de}{axel.voigt@tu-dresden.de}.
+
+      \end{itemize}
+
+
+
+      % None of the material in this submission has been published or is under consideration for publication elsewhere, and there are no potential conflicts of interest to disclose. All data underlying this study is will be deposited, and there are no restrictions on data availability.
+
+
+
+
+
+
+
+      % \vspace{1cm}
+
+      \flushright{
+            Yours Sincerely,\medskip\\
+            Dr. Michele Castellana\\
+            Institut Curie\\
+            11 rue Pierre et Marie Curie\\
+            75005 Paris\\
+            France}
+
+      \vspace{10em}
+      \hrule
+      \vspace{1em}
+
+      \bibliographystyle{unsrt-abbr}
+      \bibliography{~/Zotero/bib_file/bibliography.bib}
+
+\end{letter}
+\end{document}

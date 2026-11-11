@@ -8,7 +8,7 @@ In this Section, we will discuss the interaction between a  \ac{flu} and the sim
 
 
 
-As shown in  \cref{fig_ref_curr_rigid}, in the \ac{ref} configuration the  axis of the ellipse, e..g, \ac{bod}, lies parallel to the $\xc[1]$ axis, while in the \ac{cur} configuration, such axis forms an angle  $\theta$ (red arc) with respect to the $\xc[1]$ axis,
+As shown in  \cref{fig_ref_curr_rigid}, in the \ac{ref} configuration the  axis of the ellipse, e.g., \ac{bod}, lies parallel to the $\xc[1]$ axis, while in the \ac{cur} configuration, such axis forms an angle  $\theta$ (red arc) with respect to the $\xc[1]$ axis,
 
 
 
