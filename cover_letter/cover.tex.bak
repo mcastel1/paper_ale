@@ -1,0 +1,143 @@
+% editor: Victoria Vitkova
+\documentclass{letter}
+\makeatletter
+\newenvironment{thebibliography}[1]
+     {\list{\@biblabel{\@arabic\c@enumiv}}%
+           {\settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth
+            \advance\leftmargin\labelsep
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy
+      \clubpenalty4000
+      \@clubpenalty \clubpenalty
+      \widowpenalty4000%
+      \sfcode`\.\@m}
+     {\def\@noitemerr
+       {\@latex@warning{Empty `thebibliography' environment}}%
+      \endlist}
+\newcommand\newblock{\hskip .11em\@plus.33em\@minus.07em}
+\makeatother
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+% \usepackage{eurosym}
+\fancyhf{}
+\makeatletter
+\fancyhead[L]{\mtitle}
+\makeatother
+\fancyhead[R]{\thepage}
+
+\input{/Users/michelecastellana/Documents/latex_modules/definitions}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/packages}
+\input{/Users/michelecastellana/Documents/latex_modules/acronyms}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/acronyms}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/definitions}
+\input{/Users/michelecastellana/Documents/latex_modules/finite_elements/ale/definitions}
+
+
+\input{../packages}
+\input{../acronyms}
+\input{../definitions}
+\input{../preamble}
+
+
+\usepackage{geometry}
+
+\geometry{
+  inner=1in,
+  outer=2.5in,
+  top=2in,
+  bottom=2in,
+  twoside
+}
+\setlength{\parskip}{10pt plus 0pt minus 0pt}
+
+% \hypersetup{colorlinks=true,
+%   linkcolor=brown,
+%   anchorcolor=brown,
+%   citecolor=blue,
+%   urlcolor=brown
+% }
+
+\begin{document}
+\begin{letter}{}
+
+
+      \opening{Dear Editor,}
+      We wish to submit our manuscript, `\mtitle' for consideration as a Research Article in \myjournal.
+
+
+      Membranes interacting with a surrounding fluid are ubiquitous in physics, biology, and engineering, and they occur across different scales. Microscopic examples include biological membranes in contact with the cell  actin network \cite{Bassereau_2018}, and cell cortices interacting with the cytoplasm \cite{salbreuxActinCortexMechanics2012}. Notable macroscopic examples are soap films in air \cite{Pugh_2016}, and thin elastic plates in contact with a fluid \cite{landauTheoryElasticity1986}.
+      Modeling such membrane-fluid interactions presents substantial challenges; these include  geometric nonlinearities, and the complex nature of the related partial differential equations and mathematical models.
+
+      Here, we focus on  the interaction between a fluid and a one-dimensional \acl{mem}---a deformable fluid layer whose material elements can flow, are subject to tension, and whose elastic energy is given by the long-standing Helfrich model \cite{helfrichElasticPropertiesLipid1973}.
+
+      While a number of  existing studies  rely on the hypothesis that the \acl{flu} surrounding the membrane is inertialess or on simplifying assumptions for the membrane structure,  here, we  present a novel, complete finite-element method for the membrane-fluid dynamics, which allows for fully inertial regimes, and for studying a large variety of physical scenrarios.
+
+      We present the finite-element formulation of our method in its generality,  apply it to the interaction between air and an elastomer, and demonstrate its predictive capabilities. Our method allows for understanding the physical dynamics of the membrane-bulge formation, showing that this is driven by a combination of membrane \aclp{bc} and elastic response.
+      Finally,  we discuss the stability of our numerical solution, as well as its extension to two dimensions and to memebrane parametrizations which would allow for exploring a broader range of  physical regimes.
+
+      Given the novel, broad and interdisciplinary nature of our results, we would like to invite  you to consider our manuscript for publication as a Research Article  in \myjournal.
+
+      Suggestions for potential Reviewers are:
+      \begin{itemize}
+
+            \item Markus Deserno,\\
+                  Carnegie Mellon University, Pittsburgh, PA, United States\\
+                  \href{deserno@andrew.cmu.edu}{deserno@andrew.cmu.edu}
+            \item Matthew Turner,\\
+                  The University of Warwick, Coventry, United Kingdom\\
+                  \href{M.S.Turner@warwick.ac.uk}{M.S.Turner@warwick.ac.uk}
+            \item Leonid Berlyand,\\
+                  Penn State University, University Park, PA, United States\\
+                  \href{berlyand@math.psu.edu}{berlyand@math.psu.edu}
+                  % Prof. Beryland is an expert in several mathematical aspects related to partial differential equations. 
+            \item Rapha\"{e}l Voituriez,\\
+                  Laboratoire Jean Perrin, Paris, France\\
+                  \href{raphael.voituriez@sorbonne-universite.fr}{raphael.voituriez@sorbonne-universite.fr}
+                  % Prof. Voituriez has a strong expertise in theoretical physics of living systems. 
+      \end{itemize}
+
+
+      Suggestions for opposed Reviewers are:
+      \begin{itemize}
+
+            \item Marino Arroyo,\\
+                  Universitat Politecnica de Catalunya, Barcelona, Spain\\
+                  \href{marino.arroyo@upc.edu }{marino.arroyo@upc.edu},
+            \item Axel Voigt,\\
+                  Technische Universit\"{a}t Dresden, Germany\\
+                  \href{axel.voigt@tu-dresden.de}{axel.voigt@tu-dresden.de}.
+
+      \end{itemize}
+
+
+
+      % None of the material in this submission has been published or is under consideration for publication elsewhere, and there are no potential conflicts of interest to disclose. All data underlying this study is will be deposited, and there are no restrictions on data availability.
+
+
+
+
+
+
+
+      % \vspace{1cm}
+
+      \flushright{
+            Yours Sincerely,\medskip\\
+            Dr. Michele Castellana\\
+            Institut Curie\\
+            11 rue Pierre et Marie Curie\\
+            75005 Paris\\
+            France}
+
+      \vspace{10em}
+      \hrule
+      \vspace{1em}
+
+      \bibliographystyle{unsrt-abbr}
+      \bibliography{~/Zotero/bib_file/bibliography.bib}
+
+\end{letter}
+\end{document}

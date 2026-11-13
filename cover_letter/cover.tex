@@ -24,7 +24,7 @@
 % \usepackage{eurosym}
 \fancyhf{}
 \makeatletter
-\fancyhead[L]{\mtitlecover}
+\fancyhead[L]{\mtitle}
 \makeatother
 \fancyhead[R]{\thepage}
 
@@ -39,6 +39,7 @@
 \input{../packages}
 \input{../acronyms}
 \input{../definitions}
+\input{../preamble}
 
 
 \usepackage{geometry}
@@ -55,8 +56,16 @@
 \hypersetup{colorlinks=true,
   linkcolor=brown,
   anchorcolor=brown,
-  citecolor=black,
+  citecolor=blue,
   urlcolor=brown
+}
+\renewcommand*{\glstextformat}[1]{\textcolor{black_color}{#1}}
+\acsetup{
+    make-links = true,
+    format/short = \color{black_color},    % color for the short form
+    format/long = \color{black_color},     % color for the long form
+    list/template=description,
+    pages/display=none
 }
 
 \begin{document}
@@ -66,9 +75,18 @@
       \opening{Dear Editor,}
       We wish to submit our manuscript, `\mtitle' for consideration as a Research Article in \myjournal.
 
-      \cite{worthmullerIRENEFluIdLayeR2025}
 
-      We would thus like to invite  you to consider our manuscript for publication as a `Computer Programs in Physics` paper in \myjournal.
+      Membranes interacting with a surrounding fluid are ubiquitous in physics, biology, and engineering, and they occur across different scales. Microscopic examples include biological membranes in contact with the cell  actin network \cite{Bassereau_2018}, and cell cortices interacting with the cytoplasm \cite{salbreuxActinCortexMechanics2012}. Notable macroscopic examples are soap films in air \cite{Pugh_2016}, and thin elastic plates in contact with a fluid \cite{landauTheoryElasticity1986}.
+      Modeling such membrane-fluid interactions presents substantial challenges; these include  geometric nonlinearities, and the complex nature of their mathematical models and partial differential equations.
+
+      Here, we focus on  the interaction between a fluid and a one-dimensional \acl{mem}---a deformable fluid layer whose material elements can flow, are subject to tension, and whose elastic energy is given by the long-standing Helfrich model \cite{helfrichElasticPropertiesLipid1973}.
+
+      While a number of  existing studies  rely on the hypothesis that the \acl{flu} surrounding the membrane is inertialess, or on simplifying assumptions for the membrane structure,  here we  present a novel, complete finite-element method for the membrane-fluid dynamics, which allows for studying fully inertial regimes, and  a large variety of physical scenarios and \aclp{bc}.
+
+      We present the finite-element formulation of our method in its generality,  apply it to the interaction between air and an elastomer, and demonstrate its predictive capabilities. Our method allows for understanding the physical dynamics of the membrane-bulge formation, showing that this is driven by a combination of membrane \aclp{bc} and elastic response.
+      Finally,  we discuss the stability of our numerical solution, as well as its extension to two dimensions and to membrane parametrizations which would allow for exploring a broader range of  physical regimes.
+
+      Given the novel, broad and interdisciplinary nature of our results, we would like to invite  you to consider our manuscript for publication as a Research Article  in \myjournal.
 
       Suggestions for potential Reviewers are:
       \begin{itemize}
@@ -78,14 +96,14 @@
                   \href{deserno@andrew.cmu.edu}{deserno@andrew.cmu.edu}
             \item Matthew Turner,\\
                   The University of Warwick, Coventry, United Kingdom\\
-                  \href{m.s.turner\_warwick@icloud.com}{m.s.turner\_warwick@icloud.com}
+                  \href{M.S.Turner@warwick.ac.uk}{M.S.Turner@warwick.ac.uk}
             \item Leonid Berlyand,\\
                   Penn State University, University Park, PA, United States\\
                   \href{berlyand@math.psu.edu}{berlyand@math.psu.edu}
                   % Prof. Beryland is an expert in several mathematical aspects related to partial differential equations. 
-            \item Raph\"ael Voituriez,\\
+            \item Rapha\"{e}l Voituriez,\\
                   Laboratoire Jean Perrin, Paris, France\\
-                  \href{raphael.voituriez@upmc.fr}{raphael.voituriez@upmc.fr}
+                  \href{raphael.voituriez@sorbonne-universite.fr}{raphael.voituriez@sorbonne-universite.fr}
                   % Prof. Voituriez has a strong expertise in theoretical physics of living systems. 
       \end{itemize}
 
