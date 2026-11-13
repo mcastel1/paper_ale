@@ -1,0 +1,140 @@
+\input{latex_modules_packages}
+
+
+\providecommand{\plab}[1]{\textbf{#1})}
+\providecommand{\pder}[2]{\frac{\partial {#1}}{\partial {#2}}}
+\providecommand{\ltnorm}[1]{\left\lVert #1 \right\rVert_{2}}
+\providecommand{\ghz}{\text{GHz}}
+
+%  derivative
+\providecommand{\der}[2]{\frac{\dint{#1}}{\dint{#2}}}
+%  n-th derivative
+\providecommand{\dern}[3]{\frac{{\dint{}^#3} #1}{{\dint{#2}^#3}}}
+% partial derivative
+\providecommand{\pder}[2]{\frac{\partial{#1}}{\partial{#2}}}
+
+\providecommand{\bw}{\begin{widetext}}
+        \providecommand{\ew}{\end{widetext}}
+
+\providecommand{\newlinenn}{\\ \nn}
+
+% poisson ratio
+\providecommand{\poissonratio}{\nu_{\scalebox{0.7}{\text{P}}}}
+
+% bold zero vector
+\providecommand{\bzero}{{\bm 0}}
+
+% quotes in italics
+\providecommand{\myquote}[1]{``\textit{#1}''}
+
+
+\ExplSyntaxOn
+\begin{comment}
+prints a collection of units of measure
+Input values:
+- a list of units of the parameter that appear at the numerator, e.g., \met, \second
+- a list of units of the parameter that appear at the denominator (optional), e.g., \met, \second
+- 'f' (optional), to be provided for the units to be displayed as a fraction
+
+Example of usage:
+\units{\pas^2, \second}[\kg, \second][f]
+\end{comment}
+
+\NewDocumentCommand{\units}{moo}
+{
+    \ensuremath{
+
+        \IfNoValueTF{#3}{
+            % print the units of the parameter: print the units at the numerator
+            \tl_if_blank:nTF{#1}{
+                % the first argument (units at the numerator ) is empty -> print `1' at the numerator
+                1
+            }{
+                \clist_use:nn {#1} {\,}
+            }
+            % if the fourth argument was provided, print the units at the denominator
+            \IfValueTF{#2}{
+                / \int_compare:nNnTF { \clist_count:n {#2} } > { 1 }
+                    { ( \clist_use:nn {#2} {\,} ) }
+                    { \clist_use:nn {#2} {\,} }
+            }{
+            }
+        }{
+            % print the units of the parameter: print the units at the numerator
+            \frac{\clist_use:nn {#1} {\,}}{\clist_use:nn {#2} {\,}}
+
+        }
+    }
+}
+
+\begin{comment}
+returns a set of units of measure as in `units', between square braces
+Input values:
+- a list of units of the parameter that appear at the numerator, e.g., \met, \second
+- a list of units of the parameter that appear at the denominator (optional), e.g., \met, \second
+- 'f' (optional), to be provided for the units to be displayed as a fraction
+Return values:
+- [units]
+\end{comment}
+
+\NewDocumentCommand{\unitsbraces}{moo}
+{
+    \, [ \units{#1}[#2][#3] ]
+}
+
+\begin{comment}
+prints  a parameter with its units, where units at the numerator and at the denominator are separated with a slash: this method takes three arguments, the parameter value, the units at the numerator and the units at the denominator
+
+Input values:
+- the mantissa of the parameter (optional): if not provided, the mantissa is assumed to be `1'
+- the exponent of 10^ if the parameter has to be printed in scientific notation (optional)
+- a list of units of the parameter that appear at the numerator, e.g., \met, \second
+- a list of units of the parameter that appear at the denominator (optional), e.g., \met, \second
+- 'f' (optional), to be provided for the units to be displayed as a fraction
+
+Examples of usage:
+
+\parameter[1.3]{\met^2, \second}
+\parameter[1.3]{\met^2, \second}[\pas, \second][f]
+\parameter[1.3][-2]{\met, \second}[\pas, \second]
+\end{comment}
+
+
+\NewDocumentCommand{\parameter}{oomoo}
+{
+    \ensuremath{
+        % print the mantissa of the parameter value
+
+        \tl_if_blank:nTF {#1}{
+            % no mantissa was provided -> print `1' as mantissa
+
+
+
+            % if an exponent was provided, print 10^{#2}
+            \IfValueTF{#2}{
+                10^{\clist_map_inline:nn {#2} {##1}}
+            }{
+                1
+            }
+
+
+
+        }{
+            % a mantissa was provided -> print it
+
+
+            % if an exponent was provided, print 10^{#2}
+            \IfValueTF{#2}{
+                \clist_map_inline:nn {#1} {##1}  \times 10^{\clist_map_inline:nn {#2} {##1}}
+            }{
+                \clist_map_inline:nn {#1} {##1}
+            }
+
+        }
+        % print the units of the parameter: print the units at the numerator
+        \, \units{#3}[#4][#5]
+    }
+}
+\ExplSyntaxOff
+
+

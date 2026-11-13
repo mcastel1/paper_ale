@@ -1,0 +1,80 @@
+\documentclass[
+    superscriptaddress,
+    reprint,
+    floatfix,
+    amsmath,
+    amssymb,
+    aps
+]{revtex4-2}
+
+
+
+
+\input{latex_modules_definitions}
+\input{latex_modules_finite_elements_packages}
+\input{latex_modules_acronyms}
+\input{latex_modules_finite_elements_acronyms}
+\input{latex_modules_finite_elements_definitions}
+\input{latex_modules_finite_elements_ale_definitions}
+
+
+\input{packages}
+\input{acronyms}
+\input{definitions}
+
+\input{preamble}
+
+
+
+
+\date{}
+
+
+\begin{document}
+
+\setlength{\parskip}{5pt plus 0pt minus 0pt}
+
+\title{\mtitle}% Force line breaks with \\
+
+\author{Dennis W\"{o}rthm\"{u}ller}
+\affiliation{Institut Curie, PSL Research University, Paris, France}
+\affiliation{CNRS UMR168, 11 rue Pierre et Marie Curie, 75005, Paris, France}
+
+\author{Pierre Sens}
+\affiliation{Institut Curie, PSL Research University, Paris, France}
+\affiliation{CNRS UMR168, 11 rue Pierre et Marie Curie, 75005, Paris, France}
+
+\author{Michele Castellana}
+\thanks{Corresponding author: \href{mailto:michele.castellana@curie.fr}{michele.castellana@curie.fr}}
+\affiliation{Institut Curie, PSL Research University, Paris, France}
+\affiliation{CNRS UMR168, 11 rue Pierre et Marie Curie, 75005, Paris, France}
+
+
+
+\date{\today}
+
+\begin{abstract}
+    \input{text/abstract}
+\end{abstract}
+
+\maketitle
+
+
+\input{text/introduction}
+\input{text/results}
+
+\input{text/discussion}
+
+\input{text/list_acronyms}
+\input{text/acknowledgments}
+
+\appendix
+
+\input{appendix_preamble}
+\input{text/appendices/appendix_fluid_rigid_body}
+\input{text/appendices/appendix_fluid_elastic_body}
+
+
+\bibliography{bibliography.bib}
+
+\end{document}

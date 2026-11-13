@@ -1,0 +1,26 @@
+\subsection{\Acl{flu} and \acl{ela}}\label{sec_fl_elastic}
+
+In this Section, we will build on the analysis of \cref{sec_fl_rigid} and put the fluid into interaction with a more complex physical object---an \acl{ela}; only the main results will be presented here.
+
+
+
+The \ac{ref} and \ac{cur} configurations are shown in \cref{fig_ref_curr_ela}. We allow the  elastic-body boundary $\pomcircouteq$ to deform, but the inner body boundary $\pomcircineq$ is pinned to the $\xc[1]$, $\xc[2]$ plane.
+The equations of motion are reported in \cref{app_sec_fl_elastic_equations_of_motion}, and the system dynamics is discussed in \cref{app_sec_fl_elastic_dynamics}.
+
+
+An example of such  dynamics  is depicted in \cref{fig_fluid_ela}, where we show the interaction between a fluid and an hydrogel (the elastic body).
+Here, $\pomcircouteqr$ is an ellipse with semi-axes $a = 0.2\, \met$, $b = 0.1\, \met$ and center located at  $\bm{c} = (0.4 \, \met, 0.2\, \met)$, and $\pomcircineqr$ has radius $r = \parameter[1.25][-2]{\met}$ and center located at $\bm{c}$.
+Channel dimensions are the same as in \cref{fig_fluid_rigid}, and fluid parameters have been taken from the \ac{feat2d} DFG 2D-3 benchmark example for a fluid flow around a cylinder \cite{blumFEAT2DFiniteElement1995,schaferBenchmarkComputationsLaminar1996}: $\rhof = 1 \, \kg/\met^2$, $\etaf = 10^{-3}\, \pas \, \met \, \second$.
+The body density is $\rhoela = 10^3 \,\kg/\met^2$   \cite{xuConcurrentStiffeningSoftening2023}. The storage modulus, which approximates the shear modulus $\mu$ \cite{REHAGE1974161} is $ \sim  10 \, \kg/\second^2$ \cite{lichtSynthetic3DPEGAnisogel2019}.
+Given an elastic-body Poisson ratio \cite{landauTheoryElasticity1986} of $\poissonratio \sim 0.49$ \cite{chippadaSimultaneousDeterminationYoungs2010}, we obtain $K \sim 5 \times 10^2 \, \kg/\second^2$ from the relation $K = 2 \mu(1+\poissonratio)/[3(2\poissonratio-1)]$ \cite{landauTheoryElasticity1986}.
+The fluid inflow velocity profile is  a Poiseuille flow, \cref{eq_inflow_profile}, with $ v_0 = 1\, \met / \second$. Finally, the fluid-domain mesh stiffness exponent has been chosen to be $\zeta = 3$ \cite{kamenskyLectureNotesMAE}.
+
+
+\begin{figure*}
+    \centering
+    \includegraphics[width=\textwidth]{figures/figure_10/figure_10.pdf}
+    \caption{
+        \label{fig_fluid_ela}
+        Interaction between a \acf{flu} and an \acl{ela} (a hydrogel). The notation is the same as in \cref{fig_fluid_rigid}, and the body is depicted as a red mesh.  The elastic-body deformation is not symmetric under the mirror symmetry $\xc[2] \rightarrow h-\xc[2]$, where $h$ is the height of the \acl{flu} domain, because the center of the body is not located at $\xc[2] = h/2$. The Reynolds number is $R \sim 2 \times 10^2$.
+    }
+\end{figure*}

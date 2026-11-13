@@ -1,0 +1,49 @@
+\section{Discussion}
+\label{sec_discussion}
+
+\acresetall
+
+We developed a  study on the interaction between a fluid and a \acl{mem}. Our analysis is based on the \ac{fe} method, and it leverages the \ac{fenics} \cite{loggAutomatedSolutionDifferential2012}, combined with the \ac{irene} \cite{worthmullerIRENEFluIdLayeR2025}.
+In order to guide and introduce the reader to the interaction problem between a \acl{flu} and \acl{mem}, we provided two introductory examples of fluid-structure interaction \cite{kamenskyLectureNotesMAE}, in which the \acl{flu} interacts with a \acl{bod} and with an \acl{ela}, see \cref{sec_fl_rigid,sec_fl_elastic}, respectively. These Sections allowed to introduce the necessary physical an mathematical quantities to introduce the interaction between a fluid and a membrane.
+
+In particular, the time-iteration scheme that we propose implies a partitioned resolution scheme \cite{felippaPartitionedAnalysisCoupled2001} well known in \ac{fsi} problems. In this regard, we denote  the rigid body, the elastic body or the membrane, by the `structure' with which the fluid interacts, in \cref{sec_fl_rigid,sec_fl_elastic,sec_fl_mem}. In such partitioned scheme one solves---for example---for the structure degrees of freedom in a given, fixed  configuration of the fluid and fluid domain. A similar partitioned strategy is used for the interaction between a fluid and a membrane---see \cref{fl_mem_step_3,fl_mem_step_1,fl_mem_step_2} in \cref{sec_temp_discretization_mem}.
+
+
+Partitioned solutions are known to suffer for numerical instabilities \cite{forsterArtificialAddedMass2007}. Qualitatively speaking, as the structure movement displaces
+the fluid elements, for the structure to accelerate with an acceleration $\bm a $,
+an effective `added' fluid mass, $\madded$, needs to be displaced.
+This mass results into an effective force  $\sim \bm{a}\,  \madded$ that the fluid exerts on the structure.
+The partitioned scheme turns out to be stable if such force is significantly smaller than the structure inertia, ${\bm a} \, \mstr$ \cite{causinAddedmassEffectDesign2005}, i.e., if
+\be\label{eq_added_mass}
+\frac{\madded}{\mstr}\ll 1.
+\ee
+
+First, for the motion of a rigid body in a fluid of \cref{sec_fl_rigid}, $\madded \sim \rhof A_\structure \sim 2.3 \times 10^{-2}\, \kg$, and $\mstr = \rhob A_\structure = 1.4 \times 10^{-1} \, \kg $, where $A_\structure = \pi a b$ is the area of the body. The stability condition \crefs{eq_added_mass} is thus satisfied  with an accuracy of $\madded/\mstr \sim 10^{-2}$.
+% 
+Second, in the analysis of  \cref{sec_fl_elastic}, where the elastic body moves in a fluid, $\madded \sim \rhof A_\structure \sim 6.2 \times 10^{-2}\, \kg$, and $\mstr = \rhoela A_\structure = \parameter[6.2][1]{\kg}$, where $A_\structure \sim \pi (a b - r^2)$ is the area of the elastic body. The stability condition \crefs{eq_added_mass} is thus satisfied with an accuracy of $\madded/\mstr \sim 0.1$.
+
+Third, we discuss  the added-mass instability for the interaction between a fluid and a Helfrich membrane of \cref{sec_fl_mem}. At the  time shown in  \cref{fig_fluid_mem_mem}, we have $\mstr \sim \rhom l \sim 1 \, \kg$, $\madded \sim \rhof  l^2 \sim 1 \, \kg$, where $l \sim 1 \, \met$ is the average  membrane length in the \acl{cur} configuration.
+As a result,  \cref{eq_added_mass} is  border line; added and structure mass are comparable,   $\madded/\mstr \sim 1$. More importantly,   the \aclp{bc} used in \cref{sec_fl_mem_mem} allow for  membrane elements to freely flow in through the \acl{le} extremity: as a result,  $l$ grows in time.
+Given that  $\mstr$ and $\madded$ scale with $l$ as $\sim l$ and $\sim l^2$, respectively, the longer the system evolves, the more the condition \crefs{eq_added_mass} will be violated. Overcoming this instability is a natural direction for future studies---see below.
+
+Finally, our model allows for understanding  the physics of the bulge formation in \cref{fig_fluid_mem_mem,fig_fluid_mem_bflu}.
+The \acp{bc} \crefs{\bcsmembrane} are such that the \acl{le} extremity of the  membrane, $\pomlineineqr$, is pinned, but its tangent angle $\psi$ is free. As a result, the  membrane tilts upwards under the force exerted on it by the fluid in the vicinity of $\pomlineineqr$, taking advantage of such free angle. The membrane thus bends in the vicinity of the symmetry axis $\pomlineouteqr$, increasing its local curcature, and thus accumulating an elastic stress.
+The normal acceleration $\partial \wmem/\partial t$, which is referred to the outwards direction of the current normal $\normalc{}$ shown in  \cref{fig_ref_cur_mem}, receives contributions from multiple terms, see \cref{eq-dyn-w}. These are the forces, which appear in the \acl{rhs} of \cref{eq-dyn-w}, and inertial terms in the \acl{lhs}. First, the forces are the Laplace force $f_\lapl$, \cref{eq_def_f_lap}, the elastic force $f_\kap$, \cref{eq_def_f_kap}, the viscous force due to the flow of membrane elements $\fetamemn$ \cite{al-izziShearDrivenInstabilitiesMembrane2020}, \cref{eq_def_f_eta_n}, and the force $\fflun$ exerted by the fluid on the membrane, \cref{def_force_norm}. Second, the  inertial terms $I_v$, $I_w$ are given in \crefs{eq_def_I_v,eq_def_I_w}.
+\Cref{fig_force_mem} depicts all such terms in an early stage of the bulge formation, showing that the elastic force $f_\kap$ dominates over all other terms. Such force releases the accumulated elastic stress above: It pushes the membrane downwards in the vicinity of $\pomlineineqr$ and upwards close to $\pomlineouteqr$---see \cref{fig_force_mem}B. Given that the membrane is pinned at $\pomlineineqr$, the force at $\pomlineineqr$ is neutralized by an equal and opposite force, cf. \cref{bc_fl_mem_mem_6}. On the other hand, at $\pomlineouteqr$, the membrane is free to move upwards driven by the elastic force, cf. \cref{bc_fl_mem_mem_7,bc_fl_mem_mem_7}, resulting into an increase of the membrane bulge.
+As a result, the inflation mechanism is due to a combination of the free-angle \ac{bc} and elastic forces.
+
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/figure_24/figure_24.pdf}
+    \caption{
+        \label{fig_force_mem}
+        Forces exerted on the \acf{mem} and membrane inertial terms, for the dynamics of \cref{fig_fluid_mem_mem,fig_fluid_mem_bflu}. The Figure follows the same notation as \cref{fig_fluid_mem_mem}. \plab{A}-\plab{D}: Laplace, elastic and viscous force, and force exerted on the membrane by the \acl{flu}, respectively, see \cref{eq_def_f_lap,eq_def_f_kap,eq_def_f_eta_n,def_force_norm}.
+        \plab{E} and \plab{F}: Inertial membrane terms, see \cref{eq_def_I_v,eq_def_I_w}.
+    }
+\end{figure*}
+
+
+As a future direction of this work, we plan to go beyond the partitioned approach by using a monolithic scheme, where the degrees of freedom of the membrane,  fluid, and fluid domain are solved for at the same time \cite{heilEfficientSolverFully2004}. For a monolithic scheme, no added-mass instability exists, allowing for a characterization of a broader range of physical regimes, e.g.,  deformations larger  than those in \cref{fig_fluid_mem_mem,fig_fluid_mem_bflu}. This would allow for studying a large variety of physically sensible scenarios, e.g., the formation of  spikes in lipid membranes \cite{simonActinDynamicsDrive2019} and  membrane tubes \cite{derenyiFormationInteractionMembrane2002}.
+% 
+Another natural future direction is the extension to three dimensions. Importantly, such extension would require a two-dimensional generalization of the \acl{al} gauge for the membrane, see \cref{sec_fl_mem_mem}. To achieve this, a natural parametrization would be the isothermal gauge \cite{carmoDifferentialGeometryCurves1976,worthmullerIRENEFluIdLayeR2025}. A time-dependent version of the isothermal gauge should then be worked out along the lines of the time-dependent \acl{al} gauge of \cref{sec_fl_mem_mem}.  This extension would allow for studying a large variety of additional phenomena, such non-axisymmetric, three-dimensional vesicle formation \cite{vasanMechanicalModelReveals2020}.

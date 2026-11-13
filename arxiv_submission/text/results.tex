@@ -1,0 +1,46 @@
+\section{Results}\label{sec_results}
+
+
+
+Following the general \ac{ale} framework \cite{doneaChapter14Arbitrary2004}, for all  systems that we will consider we  introduce the \ac{ref} and \ac{cur} configuration \cite{kamenskyLectureNotesMAE,landauTheoryElasticity1986,slaughterLinearizedTheoryElasticity2002}, see \cref{fig_ref_curr_rigid}.
+All quantities relative to the \ac{ref} and \ac{cur} configuration will be denoted by the superscript \ac{ref} and \ac{cur}, respectively.
+In the \ac{ref} and \ac{cur} configuration, the region occupied by the fluid is described by Cartesian coordinates $\bxr$, $\bxc$, respectively.
+
+The \ac{ref} and \ac{cur} configurations are related as follows \cite{kamenskyLectureNotesMAE}, see \cref{fig_ref_curr_rigid}. At  time $t$, the point $\bxc$  corresponds to a point $\bxr$ in the \ac{ref} configuration through the deformation field \cite{landauFluidMechanics1987}
+\be\label{eq_def_u}
+\budom^t(\bxr) \equiv \bxc - \bxr.
+\ee
+The deformation-gradient tensor is defined as \cite{landauTheoryElasticity1986}
+\be
+\label{eq_def_F}
+F_{\alpha \beta}(\bu) \equiv \delta_{\alpha \beta} + \pderr{u^ \alpha}{\beta}.
+\ee
+In what follows, Greek indices $\alpha, \beta, \cdots$ will be used to denote vectors and tensors in  two-dimensional Euclidean space---their position as upper or lower indices is thus immaterial \cite{marchiafavaAppuntiDiGeometria2005,landauTheoryElasticity1986}.
+We will characterize  the mapping between $\bxc$ and $\bxr$ configurations in \cref{eq_def_u} through the fields
+\begin{align}\label{eq_def_phi}
+        \bxc & = \bm{\varphi}^t(\bxr), \\
+        \label{eq_def_psi}
+        \bxr & = \bm{\psi}^t(\bxc).
+\end{align}
+
+We denote the \ac{cur} fluid velocity and surface tension, i.e., the negative of the pressure, by $\vfc(\bxc)$ and $\sigmafc{}(\bxc)$, respectively.
+For each field $\bvfc{}({\bxc}), \sigmafc{}(\bxc)$, we introduce its counterpart in the \ac{ref} configuration:
+\begin{align}
+        \label{eq_vf_ref}
+        \bvfr{}(\bxr, t)    & \equiv \bvfc{}(\bm{\varphi}^t(\bxr), t),      \\
+        \label{eq_sigmaf_ref}
+        \sigmafr{}(\bxr, t) & \equiv  \sigmafc{}( \bm{\varphi}^t(\bxr), t).
+\end{align}
+
+The solution of the interaction dynamics between the fluid and the rigid body, elastic body or membrane, is  involved because the fluid domain has a dynamical, moving boundary, cf. \cref{fig_ref_curr_rigid,fig_ref_curr_ela,fig_ref_cur_mem}, respectively. Following the \ac{ale} procedure, we will  bridge between the Lagrangian   description used to describe the rigid body, elastic body or membrane, and the Eulerian description of the fluid  \cite{kamenskyLectureNotesMAE,doneaChapter14Arbitrary2004}. To achieve this, we will consider the equations of motion for the rigid body, elastic body or membrane and the fluid---which are naturally formulated the \ac{cur} configuration---and  rewrite them in the \ac{ref} configuration \cite{kamenskyLectureNotesMAE}.
+
+
+We will first discuss this procedure in the illustrative examples of interaction between a \acl{flu} and a \acl{bod} and that between a \acl{flu} and an \acl{ela}, and then consider  a fluid  interacting with a \acl{mem}.
+
+
+\input{text/sections/fluid_rigid_body}
+\input{text/sections/fluid_elastic_body}
+\input{text/sections/fluid_membrane}
+
+
+
