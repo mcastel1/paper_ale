@@ -27,16 +27,17 @@ to copy files for this figure from abacus do :
 
 INPUT_PATH="rigid_obstacle_monolithic_2"
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_25/"
-STRIDE="100" 
+STRIDE="10" 
 cd $OUTPUT_PATH/../
 rm -rf $OUTPUT_PATH/solution $OUTPUT_PATH/mesh
-mkdir -p $OUTPUT_PATH/mesh/solution
+mkdir -p $OUTPUT_PATH/mesh/solution/mesh_0/
 ./copy_from_abacus.sh $INPUT_PATH/solution/snapshots/csv 'boundary_points_id_7_n_*' 'line_mesh_n_*' 'def_v_n_*' 'u_n_*'  'def_sigma_n_*' $OUTPUT_PATH 0 100000 $STRIDE; mv $OUTPUT_PATH/$INPUT_PATH/solution $OUTPUT_PATH/; rm -rf $OUTPUT_PATH/$INPUT_PATH
 rsync -avr mcastel1@abacus:$INPUT_PATH/mesh/mesh_parameters.csv $OUTPUT_PATH
 rsync -avr mcastel1@abacus:$INPUT_PATH/solution/solution_metadata.csv $OUTPUT_PATH/solution
 rsync -avr mcastel1@abacus:$INPUT_PATH/solution/data.csv $OUTPUT_PATH/solution
 rsync -avr mcastel1@abacus:$INPUT_PATH/mesh/solution/mesh_metadata.csv $OUTPUT_PATH/mesh/solution/
 rsync -avr mcastel1@abacus:$INPUT_PATH/mesh/solution/mesh_0/mesh_metadata.csv $OUTPUT_PATH/mesh/solution/mesh_0/
+
 
  to copy the parameter files to repdroduce this figure
 
