@@ -25,7 +25,7 @@ import graphics.vector_plot as vec
 '''
 to copy files for this figure from abacus do :
 
-INPUT_PATH="rigid_obstacle_monolithic_2"
+INPUT_PATH="rigid_obstacle_monolithic_1"
 OUTPUT_PATH="/Users/michelecastellana/Documents/work/manuscripts/paper_ale/figures/figure_25/"
 STRIDE="10" 
 cd $OUTPUT_PATH/../
@@ -76,7 +76,7 @@ plt.rcParams.update({
     "text.latex.preamble": preamble,
 })
 
-
+'''
 # define the folder where to read the data
 # 1. read data from local folder 
 path = os.path.dirname( os.path.abspath(__file__))
@@ -85,8 +85,8 @@ mesh_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solu
 sub_mesh_1_path = os.path.join(os.path.dirname( os.path.abspath(__file__)), "mesh/solution/sub_meshes/out/")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'solution_parameters.csv'))
-
 '''
+
 # 2 read data from external folder
 path = '/Users/michelecastellana/Documents/finite_elements/fluid_structure_interaction/rigid_obstacle/monolithic'
 solution_path = os.path.join(path, "solution/")
@@ -94,7 +94,7 @@ mesh_path = "/Users/michelecastellana/Documents/finite_elements/generate_mesh/2d
 sub_mesh_1_path = os.path.join(mesh_path, "sub_meshes/out")
 snapshot_path = os.path.join(solution_path, 'snapshots/csv/')
 solution_parameters = io.read_parameters_from_csv_file(os.path.join(path, 'parameters_bc_square_shape_line.csv'))
-'''
+
 mesh_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_metadata.csv'))
 mesh_0_parameters = io.read_parameters_from_csv_file(os.path.join(mesh_path, 'mesh_0/mesh_metadata.csv'))
 
@@ -113,31 +113,23 @@ snapshot_min, snapshot_max = sys_utils.n_min_max(
 
 number_of_frames = snapshot_max - snapshot_min + 1
 
+if parameters['mode'] == 'animation':
+    # I am plotting the animaition -> select min and max as the global min and max across files
 
+    # sigma
 
+    sigma_min_max = cal.min_max_file(
+                os.path.join(solution_path, 'snapshots/csv', f'def_sigma_n_{snapshot_min + parameters["colorbar_sigma_snapshot_min_offset"]}.csv'
+                 ))
 
-# fork
-# 2) to plot the animation: compute absolute min and max of norm v across  snapshots
-# I compute sigma_min_max from snapshots between snapshot_min + parameters['colorbar_sigma_snapshot_min_offset'] and snapshot_max. I do not use snapshot_min because there is a tension shock at the first few steps of the dynamics that would yield a huge negative value of sigma and an odd colorbars
-sigma_min_max = cal.min_max_files(
-                'def_sigma_n_',
-                os.path.join(solution_path + 'snapshots/csv'),
-                snapshot_min +
-                    parameters['colorbar_sigma_snapshot_min_offset'],
-                snapshot_max,
-                parameters['frame_stride']
-                 )
-
-norm_v_min_max = cal.min_max_interpolated_vector_field(snapshot_min,
+    # v
+    norm_v_min_max = cal.min_max_interpolated_vector_field(snapshot_min,
                                           snapshot_max, parameters['frame_stride'],
                                           os.path.join(
                                               solution_path + 'snapshots/csv'), 'def_v_n_',
                                           parameters['n_bins_v'],
                                           [[0, 0], [mesh_parameters['L'], mesh_parameters['h']]]
                                           )
-
-
-
 
 
 
@@ -173,13 +165,9 @@ v_colorbar = None
 def plot_snapshot(fig, n_file, snapshot_label):
     n_snapshot = str(n_file)
 
-    global sigma_colorbar, v_colorbar
+    global sigma_colorbar, v_colorbar, sigma_min_max, norm_v_min_max
 
 
-    start_time_plot_snapshot = time.time()
-
-
-    start_time = time.time()
 
     # 1 load data
     # 1.1 load boundary points
@@ -194,7 +182,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     # select from data_v_raw only data which belong to sub_mesh_0_1
     data_v = data_v_raw[data_v_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
 
-    data_sigma_raw = pd.read_csv(solution_path + 'snapshots/csv/def_sigma_n_' + n_snapshot + '.csv')
+    data_sigma_raw = pd.read_csv(os.path.join(solution_path, f'snapshots/csv/def_sigma_n_{n_file}.csv'))
     # select from data_sigma_raw only data which belong to sub_mesh_0_1
     data_sigma = data_sigma_raw[data_sigma_raw['tag'] == mesh_parameters['sub_mesh_0_1_id']]
     
@@ -217,6 +205,13 @@ def plot_snapshot(fig, n_file, snapshot_label):
                  U_interp_y(row[':0'], row[':1'])]
             )
         )
+
+    X, Y, V_x, V_y, grid_norm_v, _, _, _ = vec.interpolate_2d_vector_field(
+        data_v,
+        [0, 0],
+        [mesh_parameters['L'], mesh_parameters['h']],
+        parameters['n_bins_v']
+    )
 
 
     # =============
@@ -243,15 +238,14 @@ def plot_snapshot(fig, n_file, snapshot_label):
         margin=parameters['dg_margin']
     )
 
-    '''    # fork
-        # 1) to plot the figure, I set sigma_min_max to the min and max for the current frame
-        #
-        sigma_min, sigma_max, _ = cal.min_max_scalar_field(Z_sigma)
+
+    if parameters['mode'] == 'figure':
+    # I am plotting the figure -> select min and max according to the current frame 
+
+        sigma_min, sigma_max = cal.min_max_file(os.path.join(solution_path, f'snapshots/csv/def_sigma_n_{n_file}.csv'))
         sigma_min_max = [sigma_min, sigma_max]
-        #
-    '''
 
-
+        norm_v_min_max = [np.nanmin(grid_norm_v), np.nanmax(grid_norm_v)]
 
     # plot mesh for elastic problem and for mesh oustide the elastic body
     gr.plot_2d_mesh(ax, data_line_vertices,
@@ -292,11 +286,12 @@ def plot_snapshot(fig, n_file, snapshot_label):
             max_value=sigma_min_max[1],
             position=parameters['sigma_colorbar_position'],
             size=parameters['sigma_colorbar_size'],
-            label_pad=parameters['sigma_colorbar_label_offset'],
+            label_pad=parameters['colorbar_label_offset'],
             tick_label_offset=parameters['sigma_colorbar_tick_label_offset'],
             line_width=parameters['sigma_colorbar_tick_line_width'],
             tick_length=parameters['sigma_colorbar_tick_length'],
             tick_label_angle=parameters['sigma_colorbar_tick_label_angle'],
+            tick_label_format=parameters['sigma_colorbar_tick_label_format'],
             label=parameters['sigma_colorbar_axis_label'],
             axis=sigma_colorbar_axis
         )
@@ -353,12 +348,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
     ax.add_patch(partial_omega_circle_out_cur)
 
     
-    X, Y, V_x, V_y, grid_norm_v, _, _, _ = vec.interpolate_2d_vector_field(
-        data_v,
-        [0, 0],
-        [mesh_parameters['L'], mesh_parameters['h']],
-        parameters['n_bins_v']
-    )
+
     
     # set to nan the values of V_x V_y lying in the shape
     vp.set_in_polygon(data_cur_boundary_vertices_shape,
@@ -372,28 +362,8 @@ def plot_snapshot(fig, n_file, snapshot_label):
                     column_labels=[['start:0','start:1','start:2'], ['end:0','end:1','end:2']])
     
     
-    # fork
-    # 1) to plot the figure, I set norm_v_min_max to the min and max for the current frame
 
-    _, _, U_msh_x, U_msh_y, _, _, _, _ = vec.interpolate_2d_vector_field(data_u_cur,
-                                                                         [0, 0],
-                                                                         [mesh_parameters['L'], mesh_parameters['h']],
-                                                                         parameters['n_bins_v'],
-                                                                         clab.label_x_column,
-                                                                         clab.label_y_column,
-                                                                         clab.label_v_column)
 
-    # set to nan the values of the velocity vector field which lie within the elliipse at step 'n_file', where I read the rotation angle of the ellipse from data_theta_omega
-    # 1. obtain the coordinates of the points X, Y of the vector field V_x, V_y in the reference configuration of the mesh
-    X_ref = np.array(lis.substract_lists_of_lists(X, U_msh_x))
-    Y_ref = np.array(lis.substract_lists_of_lists(Y, U_msh_y))
-    # 2. once the coordinates in the reference configuration are known, assess whether they fall within the elastic body by checking whether they fall wihin the ellipse
-    # gr.set_inside_ellipse(
-    #     X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_x, np.nan)
-    # gr.set_inside_ellipse(
-    #     X_ref, Y_ref, mesh_parameters['c'], mesh_parameters['a'], mesh_parameters['b'], 0, V_y, np.nan)
-
-    # norm_v_min_max = [norm_v_min, norm_v_max]
 
     # plot velocity of fluid
     vec.plot_2d_vector_field(ax, [X, Y], [V_x, V_y],
@@ -416,7 +386,7 @@ def plot_snapshot(fig, n_file, snapshot_label):
         # first frame: create with real data, axis already positioned by ProPlot
         v_colorbar, _ = gr.cb.make_colorbar(fig, grid_norm_v, norm_v_min_max[0], norm_v_min_max[1],
                         parameters['v_colorbar_position'], parameters['v_colorbar_size'],
-                        label_pad=parameters['v_colorbar_label_offset'],
+                        label_pad=parameters['colorbar_label_offset'],
                         label=parameters['v_colorbar_axis_label'],
                         font_size=parameters['color_map_font_size'],
                         tick_label_offset=parameters['v_colorbar_tick_label_offset'],
@@ -458,7 +428,9 @@ plot_snapshot(fig, snapshot_max, rf'$t = \,$' + io.time_to_string(snapshot_max *
 # plot_snapshot(fig, parameters['snapshot_to_plot'], rf'$t = \,$' + io.time_to_string(parameters['snapshot_to_plot'] *
 #               solution_parameters['T'] / solution_parameters['num_steps'], 'min_s', parameters['n_decimals_snapshot_label']))
 
-# keep this also for the animation: it allows for setting the right dimensions to the animation frame
-plt.savefig(figure_path + '_large.pdf')
-os.system(
-    f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf')
+
+if parameters['mode'] == 'figure':
+
+    plt.savefig(figure_path + '_large.pdf')
+    os.system(
+        f'magick -density {parameters["compression_density"]} {figure_path}_large.pdf -quality {parameters["compression_quality"]} -compress JPEG {figure_path}.pdf')
